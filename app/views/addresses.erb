@@ -1,0 +1,89 @@
+<% content_for :menu do %>
+  <li><a href="/">Home</a></li>
+  <li id="active"><a href="/regions">Addresses</a></li>
+  <li><a href="/manage">Manage</a></li>
+<% end %>
+
+<% content_for :breadcrumbs do %>
+  <a href="/regions">Regions</a> &gt; <a href="/regions/<%=h region_code %>/las">Region <%=h region_code %></a> &gt; <a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/caseloads">LA <%=h local_authority_code %></a> &gt; Caseload <%=h caseload_code %>
+<% end %>
+
+<% content_for :sub_heading do %>
+  Click an Address ID to view questionnaires for that address.
+<% end %>
+
+<div id="newaddress">
+  <form action="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/caseloads/<%=h caseload_code %>/addresses/new" method="get">
+    <input class="button" type="submit" value="Create Address&hellip;"> or <% if params[:page].present? %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/caseloads/<%=h caseload_code %>/addresses?page=<%=h params[:page] %>"><% else %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/caseloads/<%=h caseload_code %>/addresses"><% end %>Refresh</a>
+  <% if params[:page].present? %>
+    <input type="hidden" name="page" value="<%=h params[:page] %>">
+  <% end %>
+  </form>
+</div>
+<%= will_paginate addresses, :previous_label => '&lt; Prev', :next_label => 'Next &gt;' %>
+<% addresses.each do |address| %>
+  <table class="address">
+    <thead>
+      <tr>
+        <th>Address ID</th>
+        <th>Address Type</th>
+        <th>Enumeration Type</th>
+        <th>Establishment Type</th>
+        <th>Hard to Count</th>
+        <th>Grid Reference</th>
+        <th>Establishment Name</th>
+        <th>Manager</th>
+        <th>Telephone</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/caseloads/<%=h caseload_code %>/addresses/<%=h address['addressid'] %>/questionnaires"><%=h address['addressid'] %></a></td>
+      <% if address['addresstype'].present? %>
+        <td><%=h address['addresstype'].to_address_type %></td>
+      <% else %>
+        <td>-</td>
+      <% end %>
+      <% if address['enumerationtype'].present? %>
+        <td><%=h address['enumerationtype'] %></td>
+      <% else %>
+        <td>-</td>
+      <% end %>
+      <% if address['estabtype'].present? %>
+        <td><%=h address['estabtype'] %></td>
+      <% else %>
+        <td>-</td>
+      <% end %>
+      <% if address['hardtocount'].present? %>
+        <td><%=h address['hardtocount'] %></td>
+      <% else %>
+        <td>-</td>
+      <% end %>
+      <% if address['addgridref'].present? %>
+        <td><%=h address['addgridref'] %></td>
+      <% else %>
+        <td-</td>
+      <% end %>
+      <% if address['estabname'].present? %>
+        <td><%=h address['estabname'].to_title_case %></td>
+      <% else %>
+        <td>-</td>
+      <% end %>
+      <% if address['namemanager'].present? %>
+        <td><%=h address['namemanager'].to_title_case %></td>
+      <% else %>
+        <td>-</td>
+      <% end %>
+      <% if address['telnumber'].present? %>
+        <td><%=h address['telnumber'].to_phone_number %></td>
+      <% else %>
+        <td>-</td>
+      <% end %>
+        <td><% if params[:page].present? %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/caseloads/<%= caseload_code %>/addresses/<%=h address['addressid'] %>/edit?page=<%=h params[:page] %>"><% else %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/caseloads/<%= caseload_code %>/addresses/<%=h address['addressid'] %>/edit"><% end %>Edit</a></td>
+      </tr>
+    </tbody>
+    <%= erb :addresslines_partial, locals: { address: address } %>
+  </table>
+<% end %>
+<%= will_paginate addresses, :previous_label => '&lt; Prev', :next_label => 'Next &gt;' %>

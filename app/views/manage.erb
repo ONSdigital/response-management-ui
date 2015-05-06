@@ -1,0 +1,21 @@
+<% content_for :menu do %>
+<li><a href="/">Home</a></li>
+<li><a href="/regions">Addresses</a></li>
+<li id="active"><a href="/manage">Manage</a></li>
+<% end %>
+
+<% content_for :breadcrumbs do %>
+Manage
+<% end %>
+
+<% content_for :sub_heading do %>
+Select an administration option below:
+<% end %>
+
+<ul id="manage">
+  <li><a href="/manage/regions">Manage survey access tokens</a></li>
+  <li><a href="/manage/responsegenerator">Response generator control</a></li>
+  <li><a href="/manage/gateway">Redmine gateway status</a></li>
+  <li><a href="/manage/products">Manage Products</a></li>
+  <li><a href="/manage/drools">Run Drools rules</a></li>
+</ul>

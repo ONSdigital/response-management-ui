@@ -1,0 +1,72 @@
+<% content_for :menu do %>
+<li><a href="/">Home</a></li>
+<li><a href="/regions">Addresses</a></li>
+<li id="active"><a href="/manage">Manage</a></li>
+<% end %>
+
+<% content_for :breadcrumbs do %>
+<a href="/manage">Manage</a> &gt; Products
+<% end %>
+
+<% content_for :sub_heading do %>
+Create a new product job or view the status of existing jobs.
+<% end %>
+
+<form action="/manage/manageproducts" method="post">
+  <fieldset>
+    <table>
+      <tr>
+        <td><label for="product">Product</label></td>
+      </tr>
+      <tr>
+        <td>
+          <select id="product" name="product">
+          <% products.each do |product| %>
+            <option value="<%= product['code'] %>"><%= product['code']%>: <%= product['title']%> </option>
+          <% end %>
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <input type="radio" name="productAction" value="compile" checked> Compile
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <input type="radio" name="productAction" value="release"> Release
+        </td>
+      </tr>
+    </table>
+    <p class="buttons">
+      <input class="button" type="submit" value="Create"> or <a href="/manage">Cancel</a>
+    </p>
+  </fieldset>
+</form>
+
+<h3 style="margin-top: 20px;">Product Jobs</h3>
+
+<%= will_paginate product_jobs, :previous_label => '&lt; Prev', :next_label => 'Next &gt;' %>
+<table class="productjobs">
+  <thead>
+    <tr>
+      <th>Product Code</th>
+      <th>State</th>
+      <th>Date</th>
+      <th>Information</th>
+      <th>Type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% product_jobs.each_with_index do |job, i| %>
+    <tr class="<%= i.even? ? 'even' : 'odd ' %>" >
+      <td><%=h job.code %></td>
+      <td><%=h job.state %></td>
+      <td><%=h job.date.strftime('%e %b %Y %H:%M:%S') %></td>
+      <td><%=h job.information %></td>
+      <td><%=h job.type.capitalize %></td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>
+<%= will_paginate product_jobs, :previous_label => '&lt; Prev', :next_label => 'Next &gt;' %>

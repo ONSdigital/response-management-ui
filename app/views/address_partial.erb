@@ -1,0 +1,30 @@
+<tbody>
+  <tr>
+    <td><%=h address['addressid'] %></a></td>
+  <% if address['addresstype'].present? %>
+    <td><%=h address['addresstype'].to_address_type %></td>
+  <% else %>
+    <td>-</td>
+  <% end %>
+  <% if address['addgridref'].present? %>
+    <td><%=h address['addgridref'] %></td>
+  <% else %>
+    <td-</td>
+  <% end %>
+  <% if address['estabname'].present? %>
+    <td><%=h address['estabname'].to_title_case %></td>
+  <% else %>
+    <td>-</td>
+  <% end %>
+  <% if address['namemanager'].present? %>
+    <td><%=h address['namemanager'].to_title_case %></td>
+  <% else %>
+    <td>-</td>
+  <% end %>
+  <% if address['telnumber'].present? %>
+    <td><%=h address['telnumber'].to_phone_number %></td>
+  <% else %>
+    <td>-</td>
+  <% end %>
+  </tr>
+</tbody>

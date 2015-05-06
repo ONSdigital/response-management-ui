@@ -1,0 +1,46 @@
+<% content_for :menu do %>
+<li><a href="/">Home</a></li>
+<li><a href="/regions">Addresses</a></li>
+<li id="active"><a href="/manage">Manage</a></li>
+<% end %>
+
+<% content_for :breadcrumbs do %>
+<a href="/">Manage</a> &gt; <a href="/manage/regions">Regions</a> &gt; <a href="/manage/regions/<%=h region_code %>/las">Region <%=h region_code %></a> &gt; LA <%=h local_authority_code %>
+<% end %>
+
+<% content_for :sub_heading do %>
+Click Activate to generate survey access tokens for all the questionnaires within that caseload.
+<% end %>
+
+<% if caseloads.any? %>
+  <%= will_paginate caseloads, :previous_label => '&lt; Prev', :next_label => 'Next &gt;' %>
+  <table class="caseloads">
+    <thead>
+      <tr>
+        <th>Caseload</th>
+        <th>Unactivated</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% caseloads.each_with_index do |caseload, i| %>
+      <tr class="<%= i.even? ? 'even' : 'odd ' %>">
+        <td><%=h caseload['caseload'] %></td>
+        <td class="number"><%=h caseload['questionnairecount'].to_comma_formatted %></td>
+        <td>
+          <form method="post" action="/manage/regions/<%=h region_code %>/las/<%=h local_authority_code %>/caseloads/<%=h caseload['caseload'] %>">
+            <input type="hidden" name="_method" value="put">
+            <% if params[:page].present? %>
+            <input type="hidden" name="page" value="<%=h params[:page] %>">
+            <% end %>
+            <input class="button" type="submit" value="Activate">
+          </form>
+        </td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <%= will_paginate caseloads, :previous_label => '&lt; Prev', :next_label => 'Next &gt;' %>
+<% else %>
+  <p id="information"><strong>There are no caseloads within this local authority.</strong></p>
+<% end %>

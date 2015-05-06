@@ -1,0 +1,61 @@
+<% content_for :menu do %>
+<li><a href="/">Home</a></li>
+<li><a href="/regions">Addresses</a></li>
+<li id="active"><a href="/manage">Manage</a></li>
+<% end %>
+
+<% content_for :breadcrumbs do %>
+<a href="/manage">Manage</a> &gt; Response Generator Control
+<% end %>
+
+<% content_for :sub_heading do %>
+Edit the following configuration to schedule response generation.
+<% end %>
+
+<form action="/manage/responsegenerator" method="post">
+<fieldset>
+  <table>
+    <tbody>
+      <tr>
+        <td><label for="active">Active</label> <span class="required"></span></td>
+        <td>
+          <select name="activeValue" tabindex="1">
+            <% if response_generator.active == "t" %>
+            <option selected="selected">Yes</option>
+            <option>No</option>
+            <% else %>
+            <option>Yes</option>
+            <option selected="selected">No</option>
+            <% end %>
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <td><label for="run_until">Run until (hh:mm)</label> <span class="required"></span></td>
+        <td><input id="run_untilValue" name="run_untilValue" type="text" tabindex="2" style="width:35px" value="<%=h response_generator.run_until.slice(response_generator.run_until.index(" ") + 1, 5) %>"</td>
+      </tr>
+      <tr>
+        <td><label for="responses_per_minute">Responses per minute</label> <span class="required"></span></td>
+        <td><input id="responses_per_minuteValue" name="responses_per_minuteValue" type="text" tabindex="3" style="width:23px" value="<%=h response_generator.responses_per_minute %>"</td>
+    </tr>
+      <tr>
+        <td><label for="filter">Filter</label></span></td>
+        <td>
+          <select name="filterName" tabindex="4">
+        <% response_generator.filter_names.each do |name| %>
+          <% if response_generator.filter == name["name"] %>
+            <option selected="selected"><%=h name["name"] %></option>
+          <% else %>
+            <option><%=h name["name"] %></option>
+          <% end %>
+        <% end %>
+          </select>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <input class="button" type="submit" tabindex="6" value="Save"> or <a href="/manage">Cancel</a>
+
+</fieldset>
+</form>

@@ -1,0 +1,29 @@
+<% content_for :menu do %>
+<li><a href="/">Home</a></li>
+<li><a href="/regions">Addresses</a></li>
+<li id="active"><a href="/manage">Manage</a></li>
+<% end %>
+
+<% content_for :breadcrumbs do %>
+<a href="/manage">Manage</a> &gt; Run Drools Rules
+<% end %>
+
+<% content_for :javascript do %>
+<script type="text/javascript">
+  $(document).ready(function(event) {
+    $("#command").focus();
+  });
+</script>
+<% end %>
+
+<form action="/manage/drools" method="post">
+  <fieldset>
+    <p><label for="command">Ruleset</label></p>
+    <p><input id="command" name="command" type="text" size="50"></p>
+    <p><label for="factfiltercode">LA Code</label></p>
+    <p><input id="factfiltercode" name="factfiltercode" type="text" size="50"></p>
+  </fieldset>
+  <p class="buttons">
+    <input class="button" type="submit" value="Run">
+  </p>
+</form>

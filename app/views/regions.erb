@@ -1,0 +1,32 @@
+<% content_for :menu do %>
+  <li><a href="/">Home</a></li>
+  <li id="active"><a href="/regions">Addresses</a></li>
+  <li><a href="/manage">Manage</a></li>
+<% end %>
+
+<% content_for :breadcrumbs do %>
+  Regions
+<% end %>
+
+<% content_for :sub_heading do %>
+  Click a region name to view its local authorities.
+<% end %>
+
+<%= will_paginate regions, :previous_label => '&lt; Prev', :next_label => 'Next &gt;' %>
+<table class="regions">
+  <thead>
+    <tr>
+      <th>Region Code</th>
+      <th>Region Name</th>
+    </tr>
+  </thead>
+  <tbody>
+  <% regions.each_with_index do |region, i| %>
+    <tr class="<%= i.even? ? 'even' : 'odd ' %>">
+      <td><%=h region['rgn11cd'] %></td>
+      <td><a href="/regions/<%=h region['rgn11cd'] %>/las"><%=h region['rgn11nm'] %></a></td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
+<%= will_paginate regions, :previous_label => '&lt; Prev', :next_label => 'Next &gt;' %>

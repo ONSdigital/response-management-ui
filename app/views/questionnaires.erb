@@ -1,0 +1,99 @@
+<% content_for :menu do %>
+  <li><a href="/">Home</a></li>
+  <li id="active"><a href="/regions">Addresses</a></li>
+  <li><a href="/manage">Manage</a></li>
+<% end %>
+
+<% content_for :breadcrumbs do %>
+  <a href="/regions">Regions</a> &gt; <a href="/regions/<%=h region_code %>/las">Region <%=h region_code %></a> &gt; <a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/caseloads">LA <%=h local_authority_code %></a> &gt; <a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/caseloads/<%=h caseload_code %>/addresses">Caseload <%=h caseload_code %></a> &gt; Address <%=h address_id %>
+<% end %>
+
+<% content_for :sub_heading do %>
+  Click a questionnaire to create or view follow-ups.
+<% end %>
+
+<% content_for :sidebar do %>
+  <%= erb :googlemaps_partial, locals: { coordinates: coordinates } %>
+<% end %>
+
+<% addresses.each do |address| %>
+  <table class="address" style="margin-top: 0px;">
+    <thead>
+      <tr>
+        <th>Address ID</th>
+        <th>Address Type</th>
+        <th>Grid Reference</th>
+        <th>Establishment Name</th>
+        <th>Manager</th>
+        <th>Telephone</th>
+      </tr>
+    </thead>
+    <%= erb :address_partial, locals: { address: address } %>
+    <%= erb :addresslines_partial, locals: { address: address } %>
+  </table>
+<% end %>
+
+<% content_for :footer do %>
+  <h3>Questionnaires</h3>
+  <div id="newquestionnaire">
+    <form action="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/caseloads/<%=h caseload_code %>/addresses/<%=h address_id %>/questionnaires/new" method="get">
+      <input class="button" type="submit" value="Create Questionnaire&hellip;"> or <% if params[:page].present? %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/caseloads/<%=h caseload_code %>/addresses/<%=h address_id %>/questionnaires?page=<%=h params[:page] %>"><% else %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/caseloads/<%=h caseload_code %>/addresses/<%=h address_id %>/questionnaires"><% end %>Refresh</a>
+    <% if params[:page].present? %>
+      <input type="hidden" name="page" value="<%=h params[:page] %>">
+    <% end %>
+    </form>
+  </div>
+
+  <% if questionnaires.any? %>
+    <%= will_paginate questionnaires, :class => 'questionnairepagination', :previous_label => '&lt; Prev', :next_label => 'Next &gt;' %>
+    <table class="questionnaire">
+      <thead>
+        <tr>
+          <th>Questionnaire ID</th>
+          <th>Survey Token</th>
+          <th>Form Type</th>
+          <th>Form Status</th>
+          <th>Receipt Status</th>
+          <th>Receipt Date</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+      <% questionnaires.each_with_index do |questionnaire, i| %>
+        <tr class="<%= i.even? ? 'even' : 'odd ' %>">
+          <td><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/caseloads/<%=h caseload_code %>/addresses/<%=h address_id %>/questionnaires/<%=h questionnaire['questionnaireid'] %>"><%=h questionnaire['questionnaireid'] %></a></td>
+        <% if questionnaire['token'] %>
+          <td class="surveytoken"><%=h questionnaire['token'] %></td>
+        <% else %>
+          <td>Not activated</td>
+        <% end %>
+        <% if questionnaire['questionnaireid'].present? %>
+          <td><%=h questionnaire['questionnaireid'].slice(0,2).to_form_type %></td>
+        <% else %>
+          <td>-</td>
+        <% end %>
+        <% if questionnaire['formstatus'].present? %>
+          <td><%=h questionnaire['formstatus'].to_form_status %></td>
+        <% else %>
+          <td>-</td>
+        <% end %>
+        <% if questionnaire['receiptstatus'].present? %>
+          <td><%=h questionnaire['receiptstatus'] == 0 ? 'Not returned' : 'Returned' %></td>
+        <% else %>
+          <td>-</td>
+        <% end %>
+        <% if questionnaire['receiptdatetime'].present? %>
+          <td><%=h questionnaire['receiptdatetime'].to_date %></td>
+        <% else %>
+          <td>-</td>
+        <% end %>
+          <td><% if params[:page].present? %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/caseloads/<%=h caseload_code %>/addresses/<%=h address_id %>/questionnaires/<%=h questionnaire['questionnaireid'] %>/edit?page=<%=h params[:page] %>"><% else %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/caseloads/<%=h caseload_code %>/addresses/<%=h address_id %>/questionnaires/<%=h questionnaire['questionnaireid'] %>/edit"><% end %>Edit</a></td>
+        </tr>
+      <% end %>
+        </tbody>
+      </table>
+      <%= will_paginate questionnaires, :previous_label => '&lt; Prev', :next_label => 'Next &gt;' %>
+  <% else %>
+    <p id="information"><strong>There are no questionnaires for this address.</strong></p>
+  <% end %>
+<% end %>

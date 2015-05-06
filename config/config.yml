@@ -1,0 +1,20 @@
+follow-up-webservice:
+  host: collect-server
+  port: 8177
+
+frame-webservice:
+  host: collect-server
+  port: 8171
+
+product-webservice:
+  host: process-server
+  port: 8170
+
+google-maps:
+  api-key: AIzaSyAtKmYXuijfiPsstjNsczBocKw149--fqM
+
+database:
+  host: fuse-server
+  name: postgres
+  user: postgres
+  password: p0stgr3s

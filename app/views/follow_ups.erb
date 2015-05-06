@@ -1,0 +1,166 @@
+<% content_for :menu do %>
+  <li><a href="/">Home</a></li>
+  <li id="active"><a href="/regions">Addresses</a></li>
+  <li><a href="/manage">Manage</a></li>
+<% end %>
+
+<% content_for :breadcrumbs do %>
+  <a href="/regions">Regions</a> &gt; <a href="/regions/<%=h region_code %>/las">Region <%=h region_code %></a> &gt; <a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/caseloads">LA <%=h local_authority_code %></a> &gt; <a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/caseloads/<%=h caseload_code %>/addresses">Caseload <%=h caseload_code %></a> &gt; <a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/caseloads/<%=h caseload_code %>/addresses/<%=h address_id %>/questionnaires">Address <%=h address_id %></a> &gt; Questionnaire <%=h questionnaire_id %>
+<% end %>
+
+<% content_for :sidebar do %>
+  <%= erb :googlemaps_partial, locals: { coordinates: coordinates } %>
+<% end %>
+
+<% addresses.each do |address| %>
+  <table class="address" style="margin-top: 0px;">
+    <thead>
+      <tr>
+        <th>Address ID</th>
+        <th>Address Type</th>
+        <th>Grid Reference</th>
+        <th>Establishment Name</th>
+        <th>Manager</th>
+        <th>Telephone</th>
+      </tr>
+    </thead>
+    <%= erb :address_partial, locals: { address: address } %>
+    <%= erb :addresslines_partial, locals: { address: address } %>
+  </table>
+<% end %>
+
+<table class="questionnaire">
+  <thead>
+    <tr>
+      <th>Questionnaire ID</th>
+      <th>Survey Token</th>
+      <th>Form Type</th>
+      <th>Form Status</th>
+      <th>Receipt Status</th>
+      <th>Receipt Date</th>
+    </tr>
+  </thead>
+  <tbody>
+  <% questionnaires.each do |questionnaire| %>
+    <tr class="even">
+      <td><%=h questionnaire['questionnaireid'] %></td>
+    <% if questionnaire['token'] %>
+      <td class="surveytoken"><%=h questionnaire['token'] %></td>
+    <% else %>
+      <td>Not activated</td>
+    <% end %>
+    <% if questionnaire['questionnaireid'] %>
+      <td><%=h questionnaire['questionnaireid'].slice(0,2).to_form_type %></td>
+    <% else %>
+      <td>-</td>
+    <% end %>
+    <% if questionnaire['formstatus'] %>
+      <td><%=h questionnaire['formstatus'].to_form_status %></td>
+    <% else %>
+      <td>-</td>
+    <% end %>
+    <% if questionnaire['receiptstatus'] %>
+      <td><%=h questionnaire['receiptstatus'] == 0 ? 'Not returned' : 'Returned' %></td>
+    <% else %>
+      <td>-</td>
+    <% end %>
+    <% if questionnaire['receiptdatetime'] %>
+      <td><%=h questionnaire['receiptdatetime'].to_date %></td>
+    <% else %>
+      <td>-</td>
+    <% end %>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
+
+<% content_for :footer do %>
+  <h3>Follow-Ups</h3>
+  <div id="newfollowup">
+    <form action="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/caseloads/<%=h caseload_code %>/addresses/<%=h address_id %>/questionnaires/<%=h questionnaire_id %>/followups/new" method="get">
+      <input class="button" type="submit" value="Create Follow-Up&hellip;"> or <% if params[:page].present? %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/caseloads/<%=h caseload_code %>/addresses/<%=h address_id %>/questionnaires/<%=h questionnaire_id %>?page=<%=h params[:page] %>"><% else %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/caseloads/<%=h caseload_code %>/addresses/<%=h address_id %>/questionnaires/<%=h questionnaire_id %>"><% end %>Refresh</a>
+    <% if params[:page].present? %>
+      <input type="hidden" name="page" value="<%=h params[:page] %>">
+    <% end %>
+    </form>
+  </div>
+
+  <% if follow_ups.any? %>
+    <%= will_paginate follow_ups, :previous_label => '&lt; Prev', :next_label => 'Next &gt;' %>
+    <table class="followup">
+      <thead>
+        <tr>
+          <th>Contact Name</th>
+          <th>Case Notes</th>
+          <th>Field Notes</th>
+          <th>Priority</th>
+          <th>Language</th>
+          <th>Type</th>
+          <th>Visit Date</th>
+          <th>Status</th>
+          <th></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+      <% follow_ups.each_with_index do |follow_up, i| %>
+        <tr class="<%= i.even? ? 'even' : 'odd ' %>">
+        <% if follow_up['contactname'].present? %>
+          <td><%=h follow_up['contactname'] %></td>
+        <% else %>
+          <td>-</td>
+        <% end %>
+        <% if follow_up['casenotes'].present? %>
+          <td class="multiline"><%=h follow_up['casenotes'] %></td>
+        <% else %>
+          <td>-</td>
+        <% end %>
+        <% if follow_up['fieldnotes'].present? %>
+          <td class="multiline"><%=h follow_up['fieldnotes'] %></td>
+        <% else %>
+          <td>-</td>
+        <% end %>
+        <% if follow_up['priority'].present? %>
+          <td><%=h follow_up['priority'] %></td>
+        <% else %>
+          <td>-</td>
+        <% end %>
+        <% if follow_up['language'].present? %>
+          <td><%=h follow_up['language'].capitalize %></td>
+        <% else %>
+          <td>-</td>
+        <% end %>
+          <td><%=h follow_up['type'].capitalize %></td>
+        <% if follow_up['visittime'].present? %>
+          <td><%=h follow_up['visittime'].to_date %></td>
+        <% else %>
+          <td>-</td>
+        <% end %>
+          <td><%=h follow_up['status'].capitalize %></td>
+        <% if active follow_up %>
+          <td><% if params[:page].present? %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/caseloads/<%=h caseload_code %>/addresses/<%=h address_id %>/questionnaires/<%=h questionnaire_id %>/followups/<%=h follow_up['correlationid'] %>/edit?page=<%=h params[:page] %>"><% else %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/caseloads/<%=h caseload_code %>/addresses/<%=h address_id %>/questionnaires/<%=h questionnaire_id %>/followups/<%=h follow_up['correlationid'] %>/edit"><% end %>Edit</a></td>
+        <% else %>
+          <td></td>
+        <% end %>
+          <td>
+          <% if cancelling follow_up %>
+            Cancelling&hellip;
+          <% elsif active follow_up %>
+            <form method="post" action="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/caseloads/<%=h caseload_code %>/addresses/<%=h address_id %>/questionnaires/<%=h questionnaire_id %>/followups/<%=h follow_up['correlationid'] %>">
+              <input type="hidden" name="_method" value="delete">
+            <% if params[:page].present? %>
+              <input type="hidden" name="page" value="<%=h params[:page] %>">
+            <% end %>
+              <input class="button" type="submit" value="Cancel">
+            </form>
+          <% end %>
+          </td>
+        </tr>
+      <% end %>
+        </tbody>
+      </table>
+      <%= will_paginate follow_ups, :previous_label => '&lt; Prev', :next_label => 'Next &gt;' %>
+  <% else %>
+    <p id="information"><strong>There are no follow-ups for this questionnaire.</strong></p>
+  <% end %>
+<% end %>

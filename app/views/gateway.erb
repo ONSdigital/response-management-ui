@@ -1,0 +1,26 @@
+<% content_for :menu do %>
+<li><a href="/">Home</a></li>
+<li><a href="/regions">Addresses</a></li>
+<li id="active"><a href="/manage">Manage</a></li>
+<% end %>
+
+<% content_for :breadcrumbs do %>
+<a href="/manage">Manage</a> &gt; Redmine Gateway Status
+<% end %>
+
+<div id="gateway">
+  <div id="status">
+  <% if gateway.active? %>
+    <img src="/images/up.png" alt="Up"> Up
+  <% else %>
+    <img src="/images/down.png" alt="Down"> Down
+  <% end %>
+    <form action="/manage/gateway" method="post">
+      <input type="hidden" name="active" value="<%= gateway.active? %>">
+      <% if gateway.active? %><input class="button" type="submit" value="Stop"><% else %><input class="button" type="submit" value="Start"><% end %>
+    </form>
+  </div>
+  <p>Last updated <span class="value"><%= gateway.updated %></span></p>
+  <p>Last polled <span class="value"><%= gateway.polled %></span></p>
+  <p><a href="/manage/gateway">Refresh</a>
+</div>
