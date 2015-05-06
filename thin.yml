@@ -1,7 +1,0 @@
-chdir: /home/ec2-user/beyondweb
-daemonize: true
-environment: production
-log: /home/ec2-user/beyondweb/log/thin.log
-pid: /home/ec2-user/beyondweb/tmp/pids/thin.pid
-port: 8179
-tag: beyondweb
