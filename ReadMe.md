@@ -1,7 +1,7 @@
-Ruby Sinatra Web Application
-============================
+Response Operations Ruby Web Application
+========================================
 
-This Ruby application demonstrates using a Java web service to provide Region, LA, Caseload and associated Address and Questionnaire information.
+This Ruby Sinatra application demonstrates using Java web services to provide Region, LA, Caseload and associated Address and Questionnaire information.
 
 Prerequisites
 -------------
