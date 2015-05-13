@@ -1,6 +1,6 @@
 require 'pg'
+
 require_relative '../models/response_generator'
-require_relative '../models/product_job'
 
 module Beyond
   class Gateway
