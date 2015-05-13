@@ -18,8 +18,6 @@ module Beyond
         set :frame_service_port, config['frame-webservice']['port']
         set :follow_up_service_host, config['follow-up-webservice']['host']
         set :follow_up_service_port, config['follow-up-webservice']['port']
-        set :product_service_host, config['product-webservice']['host']
-        set :product_service_port, config['product-webservice']['port']
         set :google_maps_api_key, config['google-maps']['api-key']
 
         # Need to enable sessions for the flash to work.
