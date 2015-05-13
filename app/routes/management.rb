@@ -146,40 +146,6 @@ module Beyond
 
         redirect '/manage/gateway'
       end
-
-      # Manage Products screen
-      get '/manage/products/?' do
-
-        # Get list of available products
-        products = JSON.parse(RestClient.get("http://#{settings.product_service_host}:#{settings.product_service_port}/productservice/products"))
-
-        # Get list of in flight product Jobs with status information
-        all_jobs = JSON.parse(RestClient.get("http://#{settings.product_service_host}:#{settings.product_service_port}/productservice/products/jobs"))
-
-        product_jobs = []
-        all_jobs.each do |job|
-          product_jobs << ProductJob.new(job['code'], job['state'], job['timestamp'], job['data'], job['type'])
-        end
-
-        product_jobs.sort!
-        erb :manage_products, locals: { title: 'Manage Products', products: products, product_jobs: product_jobs.paginate(page: params[:page]) }
-      end
-
-      post '/manage/manageproducts' do
-        product = params[:product]
-        action = params[:productAction]
-
-        RestClient.post("http://#{settings.product_service_host}:#{settings.product_service_port}/productservice/products/jobs",
-                        { code: product, type: action }.to_json, content_type: :json, accept: :json) do |response, _request, _result, &_block|
-          if response.code == 200
-            flash[:notice] = "Successfully created #{action} job for product #{product}"
-          else
-            flash[:notice] = "Unable to issue job creation request (HTTP #{response.code} received)."
-          end
-        end
-
-        redirect '/manage/products'
-      end
     end
   end
 end
