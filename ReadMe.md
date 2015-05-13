@@ -6,7 +6,7 @@ This Ruby application demonstrates using a Java web service to provide Region, L
 Prerequisites
 -------------
 
-The application's `config.yml` configuration file references the Java web service using a `fuse-server` name which needs to be present in your hosts file. The application depends on the following RubyGems:
+The application's `config.yml` configuration file references the Java web services using a `collect-server` name which needs to be present in your hosts file. The application depends on the following RubyGems:
 
 * [json](http://flori.github.io/json/)
 * [rest-client](https://github.com/rest-client/rest-client)
