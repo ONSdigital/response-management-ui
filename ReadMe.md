@@ -32,9 +32,9 @@ To daemonise the Rack process and use production mode, use:
 Running Using the Mock Backend
 ------------------------------
 
-This project includes three Sinatra applications that provide mock versions of the FrameService, FollowUpService and ProductService web services. To run them, edit your hosts file so that `fuse-server` uses 127.0.0.1. Then run:
+This project includes two Sinatra applications that provide mock versions of the FrameService and FollowUpService web services. To run them, edit your hosts file so that `collect-server` uses 127.0.0.1. Then run:
 
-  `rackup -p 8178` from within the `mock\frameservice` directory, `rackup -p 8177` within the `mock\followupservice` directory and `rackup -p 8170` within the `mock\productservice` directory respectively. Alternatively, for an easy life, simply run `mock\run.cmd`.
+  `rackup -p 8178` from within the `mock\frameservice` directory and `rackup -p 8177` within the `mock\followupservice` directory. Alternatively, for an easy life, simply run `mock\run.cmd`.
 
 Start the user interface normally as described above.
 
