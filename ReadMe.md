@@ -14,7 +14,6 @@ The application's `config.yml` configuration file references the Java web servic
 * [sinatra-content-for2](https://github.com/Undev/sinatra-content-for2)
 * [sinatra-flash](https://github.com/SFEley/sinatra-flash)
 * [sinatra-formkeeper](https://github.com/lyokato/sinatra-formkeeper)
-* [thin](https://github.com/macournoyer/thin/) (Web server for running in production)
 * [will_paginate](https://github.com/mislav/will_paginate)
 
 Running
