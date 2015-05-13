@@ -285,13 +285,13 @@ strong {
   width: 100%;
 }
 
-.address, .caseloads, .localauthorities, .regions, .productjobs {
+.address, .caseloads, .localauthorities, .regions {
   background-color: $primary-light;
   border: 2px solid $primary-light;
   font-size: 90%;
 }
 
-.address tbody, .caseloads tbody, .localauthorities tbody, .regions tbody, .productjobs tbody {
+.address tbody, .caseloads tbody, .localauthorities tbody, .regions tbody {
   background-color: $white;
 }
 
