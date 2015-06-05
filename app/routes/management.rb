@@ -82,8 +82,8 @@ module Beyond
 
       # Activate the questionnaires within the selected caseload.
       put '/manage/regions/:region_code/las/:local_authority_code/caseloads/:caseload_code' do |region_code, local_authority_code, caseload_code|
-        RestClient.put("http://#{settings.frame_service_host}:#{settings.frame_service_port}/frameservice/caseloads?ladid=#{local_authority_code}&caseload=#{caseload_code}",
-                       {}.to_json, content_type: :json, accept: :json) do |response, _request, _result, &_block|
+        RestClient.patch("http://#{settings.frame_service_host}:#{settings.frame_service_port}/frameservice/caseloads/#{caseload_code}/activate",
+                         {}.to_json, content_type: :json, accept: :json) do |response, _request, _result, &_block|
           if response.code == 200
             flash[:notice] = "Activating caseload #{caseload_code}."
           else
