@@ -137,6 +137,7 @@
           <td>-</td>
         <% end %>
           <td><%=h follow_up['status'].capitalize %></td>
+          <td><%=h follow_up['situation'].capitalize %></td>
         <% if active follow_up %>
           <td><% if params[:page].present? %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/caseloads/<%=h caseload_code %>/addresses/<%=h address_id %>/questionnaires/<%=h questionnaire_id %>/followups/<%=h follow_up['correlationid'] %>/edit?page=<%=h params[:page] %>"><% else %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/caseloads/<%=h caseload_code %>/addresses/<%=h address_id %>/questionnaires/<%=h questionnaire_id %>/followups/<%=h follow_up['correlationid'] %>/edit"><% end %>Edit</a></td>
         <% else %>
