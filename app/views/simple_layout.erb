@@ -7,32 +7,14 @@
     <link rel="stylesheet" href="/css/fonts.css" media="all" type="text/css">
     <link rel="stylesheet" href="/css/grids.css" media="all" type="text/css">
     <link rel="stylesheet" href="/css/screen.css" media="screen" type="text/css">
-    <%= yield_content :stylesheet %>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js" type="text/javascript"></script>
-    <script src="/javascripts/beyondweb.js" type="text/javascript"></script>
     <%= yield_content :javascript %>
   </head>
   <body>
-    <div id="doc" class="yui-t6">
+    <div id="doc" class="yui-t7">
       <div id="hd">
         <img id="onslogo" src="/images/onslogo.gif" alt="ONS logo">
         <h2><span class="heavy">Response</span>Operations</h2>
-        <div id="menucontainer">
-          <ul id="menu">
-            <%= yield_content :menu %>
-          </ul>
-          <div id="questionnairelookup">
-            <input id="questionnaireid" type="text" size="17" maxlength="16" placeholder="Enter questionnaire ID">
-          </div>
-        <% if session[:user] %>
-          <div id="signoutlink">
-            <a href="/signout">Sign out <%=h session[:user].name %></a>
-          </div>
-        <% end %>
-        </div>
-        <p id="breadcrumbs">
-          <%= yield_content :breadcrumbs %>
-        </p>
         <h1><%=h title %></h1>
       <% if content_for? :sub_heading %>
         <p class="subhead">
@@ -43,22 +25,15 @@
       <div id="bd">
         <div id="yui-main">
           <div class="yui-b">
-        <% [:error, :notice].each do |key| %>
-          <% if flash[key] %>
+            <% [:error, :notice].each do |key| %>
+        <% if flash[key] %>
             <p class="message"><%= flash[key] %></p>
           <% end %>
         <% end %>
-        <%= yield_content :form_errors %>
             <%= yield %>
           </div> <!-- .yui-b -->
         </div> <!-- #yui-main -->
-        <div class="yui-b">
-          <%= yield_content :sidebar %>
-        </div> <!--  .yui-b -->
       </div> <!-- #bd -->
-      <div id="ft">
-        <%= yield_content :footer %>
-      </div> <!-- #ft -->
-    </div> <!-- #doc.yui-t6 -->
+    </div> <!-- #doc.yui-t7 -->
   </body>
 </html>

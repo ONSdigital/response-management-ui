@@ -6,6 +6,10 @@ frame-webservice:
   host: collect-server
   port: 8171
 
+ldap-directory:
+  host: ldap-server
+  port: 389
+
 google-maps:
   api-key: AIzaSyAtKmYXuijfiPsstjNsczBocKw149--fqM
 

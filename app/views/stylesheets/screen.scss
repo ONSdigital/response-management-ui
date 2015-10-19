@@ -38,6 +38,15 @@ form td {
   padding: 0 50px 5px 0;
 }
 
+form[action="/signin"] input, form[action="/signin/secondfactor"] input {
+  margin-bottom: 5px;
+}
+
+form[action="/signin/secondfactor"] label {
+  font-weight: normal;
+  margin-left: 10px;
+}
+
 h1, h3 {
   color: $alternate;
   font-family: $secondary-fonts;
@@ -78,7 +87,7 @@ iframe {
   width: 380px;
 }
 
-input[type="text"], select, textarea {
+input[type="text"], input[type="password"], select, textarea {
   @include border-radius-medium;
   border: 1px solid $secondary-light;
   padding: 2px 4px 2px;
@@ -124,12 +133,12 @@ strong {
   text-align: right;
 }
 
-#breadcrumbs a {
+#breadcrumbs a, #signoutlink a {
   color: $secondary-light;
   text-decoration: none;
 }
 
-#breadcrumbs a:hover {
+#breadcrumbs a:hover, #signoutlink a:hover {
   text-decoration: underline;
 }
 

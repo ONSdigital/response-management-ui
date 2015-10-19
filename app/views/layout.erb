@@ -24,6 +24,11 @@
           <div id="questionnairelookup">
             <input id="questionnaireid" type="text" size="17" maxlength="16" placeholder="Enter questionnaire ID">
           </div>
+        <% if session[:user] %>
+          <div id="signoutlink">
+            <a href="/signout">Sign out <%=h session[:user].name %></a>
+          </div>
+        <% end %>
         </div>
         <p id="breadcrumbs">
           <%= yield_content :breadcrumbs %>

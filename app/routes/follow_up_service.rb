@@ -4,6 +4,7 @@ module Beyond
 
       # Get all follow-ups for the selected questionnaire.
       get '/regions/:region_code/las/:local_authority_code/caseloads/:caseload_code/addresses/:address_id/questionnaires/:questionnaire_id' do |region_code, local_authority_code, caseload_code, address_id, questionnaire_id|
+        authenticate!
         follow_ups = JSON.parse(RestClient.get("http://#{settings.follow_up_service_host}:#{settings.follow_up_service_port}/FollowUpService/FollowUp/QuestionnaireId=#{questionnaire_id}")).paginate(page: params[:page])
 
         # Get the selected address and quesionnaire details so they can be redisplayed for reference.
@@ -25,6 +26,7 @@ module Beyond
 
       # Present a form for creating a new follow-up.
       get '/regions/:region_code/las/:local_authority_code/caseloads/:caseload_code/addresses/:address_id/questionnaires/:questionnaire_id/followups/new' do |region_code, local_authority_code, caseload_code, address_id, questionnaire_id|
+        authenticate!
         action = "/regions/#{region_code}/las/#{local_authority_code}/caseloads/#{caseload_code}/addresses/#{address_id}/questionnaires/#{questionnaire_id}/followups"
         erb :follow_up, locals: { title: "Create Follow-Up for Questionnaire #{questionnaire_id}",
                                   action: action,
@@ -47,6 +49,7 @@ module Beyond
 
       # Create a new follow-up.
       post '/regions/:region_code/las/:local_authority_code/caseloads/:caseload_code/addresses/:address_id/questionnaires/:questionnaire_id/followups' do |region_code, local_authority_code, caseload_code, address_id, questionnaire_id|
+        authenticate!
         form do
           field :contactname, present: true
         end
@@ -102,6 +105,7 @@ module Beyond
 
       # Present a form for editing an existing follow-up.
       get '/regions/:region_code/las/:local_authority_code/caseloads/:caseload_code/addresses/:address_id/questionnaires/:questionnaire_id/followups/:follow_up_id/edit' do |region_code, local_authority_code, caseload_code, address_id, questionnaire_id, follow_up_id|
+        authenticate!
         follow_ups = JSON.parse(RestClient.get("http://#{settings.follow_up_service_host}:#{settings.follow_up_service_port}/FollowUpService/FollowUp/CorrelationId=#{follow_up_id}"))
         follow_up = follow_ups.first
         action = "/regions/#{region_code}/las/#{local_authority_code}/caseloads/#{caseload_code}/addresses/#{address_id}/questionnaires/#{questionnaire_id}/followups/#{follow_up_id}"
@@ -137,6 +141,7 @@ module Beyond
 
       # Update an existing follow-up.
       put '/regions/:region_code/las/:local_authority_code/caseloads/:caseload_code/addresses/:address_id/questionnaires/:questionnaire_id/followups/:follow_up_id' do |region_code, local_authority_code, caseload_code, address_id, questionnaire_id, follow_up_id|
+        authenticate!
         form do
           field :contactname, present: true
         end
@@ -192,6 +197,7 @@ module Beyond
 
       # Delete (i.e. cancel) the selected follow-up.
       delete '/regions/:region_code/las/:local_authority_code/caseloads/:caseload_code/addresses/:address_id/questionnaires/:questionnaire_id/followups/:follow_up_id' do |region_code, local_authority_code, caseload_code, address_id, questionnaire_id, follow_up_id|
+        authenticate!
         RestClient.put("http://#{settings.follow_up_service_host}:#{settings.follow_up_service_port}/FollowUpService/FollowUp/#{follow_up_id}",
                        { updateAction: 'CANCEL' }.to_json, content_type: :json, accept: :json
                       ) do |response, _request, _result, &_block|

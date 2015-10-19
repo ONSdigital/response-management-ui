@@ -7,8 +7,17 @@ require 'rest_client'
 require 'json'
 require 'yaml'
 
+require_relative '../lib/authentication'
+require_relative '../lib/ldap_connection'
+require_relative '../models/user'
+
 module Beyond
   module Routes
+    NO_2FA_COOKIE = 'response_operations_no_2fa'
+    CLOCK_DRIFT   = 120
+    TEN_MINUTES   = 60 * 10
+    THIRTY_DAYS   = 60 * 60 * 24 * 30
+
     class Base < Sinatra::Application
       configure do
 
@@ -18,14 +27,15 @@ module Beyond
         set :frame_service_port, config['frame-webservice']['port']
         set :follow_up_service_host, config['follow-up-webservice']['host']
         set :follow_up_service_port, config['follow-up-webservice']['port']
+        set :ldap_directory_host, config['ldap-directory']['host']
+        set :ldap_directory_port, config['ldap-directory']['port']
         set :google_maps_api_key, config['google-maps']['api-key']
 
-        # Need to enable sessions for the flash to work.
-        enable :sessions
-        set :session_secret, 'fb7eea3c119e11e483d5b2227cce2b54'
+        # Expire sessions after ten minutes of inactivity.
+        use Rack::Session::Pool, expire_after: TEN_MINUTES
 
         # Set global view options.
-        set :erb, escape_html: true
+        set :erb, escape_html: false
         set :views, File.dirname(__FILE__) + '/../views'
         set :public_folder, File.dirname(__FILE__) + '/../../public'
 
@@ -35,7 +45,7 @@ module Beyond
 
       # View helper for defining blocks inside views for rendering in templates.
       helpers Sinatra::ContentFor2
-
+      helpers Authentication
       helpers do
 
         # Follow-up helpers.
@@ -50,6 +60,14 @@ module Beyond
         # View helper for escaping HTML output.
         def h(text)
           Rack::Utils.escape_html(text)
+        end
+
+        def redirect_to_original_request
+          user = session[:user]
+          flash[:notice] = "Welcome back #{user.name}."
+          original_request = session[:original_request]
+          session[:original_request] = nil
+          redirect original_request
         end
       end
 
@@ -69,7 +87,62 @@ module Beyond
 
       # Home page.
       get '/' do
+        authenticate!
         erb :index, locals: { title: 'Home' }
+      end
+
+      get '/signin/?' do
+        erb :signin, layout: :simple_layout, locals: { title: 'Sign In' }
+      end
+
+      post '/signin/?' do
+        ldap_connection = LDAPConnection.new(settings.ldap_directory_host, settings.ldap_directory_port)
+        if user = User.authenticate(ldap_connection, params)
+          session[:user] = user
+          if request.cookies[NO_2FA_COOKIE]
+            session[:valid_token] = true
+            redirect_to_original_request
+          else
+            redirect '/signin/secondfactor'
+          end
+        else
+          flash[:notice] = 'You could not be signed in. Did you enter the correct credentials?'
+          redirect '/signin'
+        end
+      end
+
+      get '/signin/secondfactor/?' do
+        unless session[:user]
+          flash[:notice] = 'Please sign in first.'
+          redirect '/signin'
+        end
+        erb :second_factor, layout: :simple_layout, locals: { title: 'Sign In' }
+      end
+
+      post '/signin/secondfactor/?' do
+        unless session[:user]
+          flash[:notice] = 'Your session has expired. please sign in again.'
+          redirect '/signin'
+        end
+        if session[:user].valid_code?(CLOCK_DRIFT, params)
+          if params[:rememberme]
+            response.set_cookie(NO_2FA_COOKIE, value: '1', max_age: THIRTY_DAYS.to_s)
+          else
+            response.delete_cookie(NO_2FA_COOKIE)
+          end
+          session[:valid_token] = true
+          redirect_to_original_request
+        else
+          flash[:notice] = 'The code you entered is incorrect. Please try again.'
+          redirect '/signin/secondfactor'
+        end
+      end
+
+      get '/signout' do
+        session[:user]  = nil
+        session[:valid_token] = nil
+        flash[:notice] = 'You have been signed out.'
+        redirect '/'
       end
 
       use Rack::ETag           # Add an ETag
