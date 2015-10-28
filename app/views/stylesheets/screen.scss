@@ -278,6 +278,16 @@ strong {
   color: $secondary-light;
 }
 
+#signoutlink {
+  float: right;
+  margin: 5px 10px 0 0;
+}
+
+#signoutlink a:active {
+  background-color: $secondary-lightest;
+  color: $secondary-light;
+}
+
 #questionnairelookup {
   @include border-radius-small;
   border: 1px solid $secondary-light;
