@@ -1,5 +1,7 @@
 require 'net/ldap'
 
+UserEntry = Struct.new(:display_name, :token)
+
 class LDAPConnection
   TOKEN_ATTRIBUTE = 'employeeNumber'
 
@@ -13,14 +15,16 @@ class LDAPConnection
     ldap = Net::LDAP.new(host: @host, port: @port, base: @base)
     ldap.auth(@base, password)
     entries = ldap.bind_as(filter: "(cn=#{username})", password: password)
-    token = nil
+    user_entry = nil
 
     if entries && entries.any?
+      display_name = entries.first.displayName.first
       token = entries.first.send(TOKEN_ATTRIBUTE.to_sym).first
+      user_entry = UserEntry.new(display_name, token)
     else
       puts 'failed'
     end
 
-    token
+    user_entry
   end
 end

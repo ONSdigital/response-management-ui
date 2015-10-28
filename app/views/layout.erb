@@ -26,7 +26,7 @@
           </div>
         <% if session[:user] %>
           <div id="signoutlink">
-            <a href="/signout">Sign out <%=h session[:user].name %></a>
+            <a href="/signout">Sign out <%=h session[:user].display_name %></a>
           </div>
         <% end %>
         </div>

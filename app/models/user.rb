@@ -1,20 +1,20 @@
 require 'rotp'
 
 class User
-  attr_reader :name
+  attr_reader :display_name
 
   def self.authenticate(ldap_connection, params = {})
     username = params[:username]
     password = params[:password]
     return nil if username.blank? || password.blank?
 
-    token = ldap_connection.bind(username, password)
-    User.new(username, token) unless token.nil?
+    user_entry = ldap_connection.bind(username, password)
+    User.new(user_entry.display_name, user_entry.token) unless user_entry.nil?
   end
 
-  def initialize(username, token)
-    @name  = username.to_title_case
-    @token = token
+  def initialize(display_name, token)
+    @display_name = display_name
+    @token        = token
   end
 
   def valid_code?(drift, params = {})
