@@ -33,7 +33,9 @@ module Beyond
         set :google_maps_api_key, config['google-maps']['api-key']
 
         # Expire sessions after ten minutes of inactivity.
-        use Rack::Session::Pool, expire_after: TEN_MINUTES
+        use Rack::Session::Cookie, key: 'rack.session', path: '/',
+                                   secret: 'eb46fa947d8411e5996329c9ef0ba35d',
+                                   expire_after: TEN_MINUTES
 
         # Set global view options.
         set :erb, escape_html: false
