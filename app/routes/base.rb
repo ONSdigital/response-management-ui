@@ -101,7 +101,8 @@ module Beyond
       post '/signin/?' do
         ldap_connection = LDAPConnection.new(settings.ldap_directory_host,
                                              settings.ldap_directory_port,
-                                             settings.ldap_directory_base)
+                                             settings.ldap_directory_base,
+                                             logger)
 
         if user = User.authenticate(ldap_connection, params)
           session[:user] = user
@@ -131,6 +132,7 @@ module Beyond
           redirect '/signin'
         end
         if session[:user].valid_code?(CLOCK_DRIFT, params)
+          logger.info "'#{session[:user].display_name}' entered a valid 2FA token"
           if params[:rememberme]
             response.set_cookie(NO_2FA_COOKIE, value: '1', max_age: THIRTY_DAYS.to_s)
           else
@@ -139,12 +141,14 @@ module Beyond
           session[:valid_token] = true
           redirect_to_original_request
         else
+          logger.info "'#{session[:user].display_name}' entered an invalid 2FA token"
           flash[:notice] = 'The code you entered is incorrect. Please try again.'
           redirect '/signin/secondfactor'
         end
       end
 
       get '/signout' do
+        logger.info "'#{session[:user].display_name}' signed out"
         session[:user]  = nil
         session[:valid_token] = nil
         flash[:notice] = 'You have been signed out.'

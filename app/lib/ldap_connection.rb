@@ -5,10 +5,11 @@ UserEntry = Struct.new(:display_name, :token)
 class LDAPConnection
   TOKEN_ATTRIBUTE = 'employeeNumber'
 
-  def initialize(host, port, base)
-    @host = host
-    @port = port.to_i
-    @base = base
+  def initialize(host, port, base, logger)
+    @host   = host
+    @port   = port.to_i
+    @base   = base
+    @logger = logger
   end
 
   def bind(username, password)
@@ -18,11 +19,12 @@ class LDAPConnection
     user_entry = nil
 
     if entries && entries.any?
+      @logger.info "LDAP authentication succeeded for '#{username}'"
       display_name = entries.first.displayName.first
       token = entries.first.send(TOKEN_ATTRIBUTE.to_sym).first
       user_entry = UserEntry.new(display_name, token)
     else
-      puts 'failed'
+      @logger.info "LDAP authentication failed for '#{username}'"
     end
 
     user_entry
