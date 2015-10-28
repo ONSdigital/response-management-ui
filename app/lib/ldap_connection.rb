@@ -2,24 +2,25 @@ require 'net/ldap'
 
 class LDAPConnection
   TOKEN_ATTRIBUTE = 'employeeNumber'
-  TREE_BASE       = 'dc=ctp,dc=ons,dc=gov,dc=uk'
 
-  def initialize(host, port)
+  def initialize(host, port, base)
     @host = host
-    @port = port
+    @port = port.to_i
+    @base = base
   end
 
   def bind(username, password)
-    ldap = Net::LDAP.new(host: @host, port: @port,
-                         auth: { method: :simple,
-                                 username: "cn=#{username},ou=Users,#{TREE_BASE}",
-                                 password: password })
-
+    ldap = Net::LDAP.new(host: @host, port: @port, base: @base)
+    ldap.auth(@base, password)
+    entries = ldap.bind_as(filter: "(cn=#{username})", password: password)
     token = nil
-    filter = Net::LDAP::Filter.eq('cn', username)
-    ldap.search(base: TREE_BASE, filter: filter, attributes: [TOKEN_ATTRIBUTE]) do |entry|
-      token = entry.send(TOKEN_ATTRIBUTE.to_sym).first
+
+    if entries && entries.any?
+      token = entries.first.send(TOKEN_ATTRIBUTE.to_sym).first
+    else
+      puts 'failed'
     end
+
     token
   end
 end

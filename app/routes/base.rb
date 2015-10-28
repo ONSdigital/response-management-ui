@@ -29,6 +29,7 @@ module Beyond
         set :follow_up_service_port, config['follow-up-webservice']['port']
         set :ldap_directory_host, config['ldap-directory']['host']
         set :ldap_directory_port, config['ldap-directory']['port']
+        set :ldap_directory_base, config['ldap-directory']['base']
         set :google_maps_api_key, config['google-maps']['api-key']
 
         # Expire sessions after ten minutes of inactivity.
@@ -96,7 +97,10 @@ module Beyond
       end
 
       post '/signin/?' do
-        ldap_connection = LDAPConnection.new(settings.ldap_directory_host, settings.ldap_directory_port)
+        ldap_connection = LDAPConnection.new(settings.ldap_directory_host,
+                                             settings.ldap_directory_port,
+                                             settings.ldap_directory_base)
+
         if user = User.authenticate(ldap_connection, params)
           session[:user] = user
           if request.cookies[NO_2FA_COOKIE]
