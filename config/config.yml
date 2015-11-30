@@ -6,6 +6,11 @@ frame-webservice:
   host: collect-server
   port: 8171
 
+response-gen-webservice:
+  host: collect-server
+  port: 8168
+
+
 google-maps:
   api-key: AIzaSyAtKmYXuijfiPsstjNsczBocKw149--fqM
 
