@@ -1,6 +1,5 @@
-require 'pg'
-
-require_relative '../models/response_generator'
+require 'pry'
+require_relative '../service/response_generator'
 
 module Beyond
   class Gateway
@@ -62,20 +61,20 @@ module Beyond
 
       get '/manage/responsegenerator/?' do
         authenticate!
-        rg = ResponseGenerator.new
+        rg = ResponseGenerator.read
         erb :manage_response_generator, locals: { title: 'Response Generator Control', response_generator: rg }
       end
 
       post '/manage/responsegenerator/?' do
         authenticate!
-        rg = ResponseGenerator.new
-        rg.active = params['activeValue']
-        rg.responses_per_minute = params['responses_per_minuteValue']
-        rg.run_until = Date.today.to_s + ' ' + params['run_untilValue']
-        rg.filter = params['filterName']
+        rgi = ResponseGeneratorInstruction.new
+        rgi.active = params['activeValue'] == 'Yes' ? true : false
+        rgi.responses_per_minute = params['responses_per_minuteValue']
+        rgi.run_until = Date.today.to_s + ' ' + params['run_untilValue']
+        rgi.filter = params['filterName']
 
         begin
-          result = rg.save!
+          result = ResponseGenerator.save(rgi)
           unless result.nil?
             flash[:notice] = 'Successfully reconfigured the Response Generator.'
           end
@@ -86,7 +85,7 @@ module Beyond
         redirect '/manage/responsegenerator'
       end
 
-      # Activate the questionnaires within the selected caseload.      
+      # Activate the questionnaires within the selected caseload.
       put '/manage/regions/:region_code/las/:local_authority_code/caseloads/:caseload_code' do |region_code, local_authority_code, caseload_code|
         authenticate!
         RestClient.patch("http://#{settings.frame_service_host}:#{settings.frame_service_port}/frameservice/caseloads/#{caseload_code}/activate",

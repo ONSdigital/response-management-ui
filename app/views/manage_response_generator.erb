@@ -20,7 +20,7 @@ Edit the following configuration to schedule response generation.
         <td><label for="active">Active</label> <span class="required"></span></td>
         <td>
           <select name="activeValue" tabindex="1">
-            <% if response_generator.active == "t" %>
+            <% if response_generator.active? %>
             <option selected="selected">Yes</option>
             <option>No</option>
             <% else %>
@@ -42,7 +42,7 @@ Edit the following configuration to schedule response generation.
         <td><label for="filter">Filter</label></span></td>
         <td>
           <select name="filterName" tabindex="4">
-        <% response_generator.filter_names.each do |name| %>
+        <% response_generator.filters.each do |name| %>
           <% if response_generator.filter == name["name"] %>
             <option selected="selected"><%=h name["name"] %></option>
           <% else %>
