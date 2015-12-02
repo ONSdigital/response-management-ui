@@ -1,5 +1,4 @@
-require 'pry'
-require_relative '../service/response_generator'
+require_relative '../../../common/service/response_generator'
 
 module Beyond
   class Gateway
@@ -56,11 +55,13 @@ module Beyond
       end
 
       get '/manage/responsegenerator/?' do
-        rg = ResponseGenerator.read
-        erb :manage_response_generator, locals: { title: 'Response Generator Control', response_generator: rg }
+        rg_service = ResponseGenerator.new(generator_host: settings.respgen_service_host, generator_port: settings.respgen_service_port)
+        rgi = rg_service.read
+        erb :manage_response_generator, locals: { title: 'Response Generator Control', response_generator: rgi }
       end
 
       post '/manage/responsegenerator/?' do
+        rg_service = ResponseGenerator.new(generator_host: settings.respgen_service_host, generator_port: settings.respgen_service_port)
         rgi = ResponseGeneratorInstruction.new
         rgi.active = params['activeValue'] == 'Yes' ? true : false
         rgi.responses_per_minute = params['responses_per_minuteValue']
@@ -68,7 +69,7 @@ module Beyond
         rgi.filter = params['filterName']
 
         begin
-          result = ResponseGenerator.save(rgi)
+          result = rg_service.save(rgi)
           unless result.nil?
             flash[:notice] = 'Successfully reconfigured the Response Generator.'
           end
