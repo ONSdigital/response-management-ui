@@ -1,4 +1,4 @@
-require_relative '../../../common/service/response_generator'
+require 'ctp-common'
 
 module Beyond
   class Gateway
