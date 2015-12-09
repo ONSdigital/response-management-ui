@@ -1,18 +1,23 @@
 <tbody>
   <tr>
-    <td><%=h address['addressid'] %></a></td>
+    <td><%=h address['uprn'] %></td>
   <% if address['addresstype'].present? %>
     <td><%=h address['addresstype'].to_address_type %></td>
   <% else %>
     <td>-</td>
   <% end %>
-  <% if address['addgridref'].present? %>
-    <td><%=h address['addgridref'] %></td>
+  <% if address['eastings'].present? %>
+    <td><%=h address['eastings'] %></td>
   <% else %>
-    <td-</td>
+    <td>-</td>
   <% end %>
-  <% if address['estabname'].present? %>
-    <td><%=h address['estabname'].to_title_case %></td>
+  <% if address['northings'].present? %>
+    <td><%=h address['northings'] %></td>
+  <% else %>
+    <td>-</td>
+  <% end %>
+  <% if address['address_line1'].present? %>
+    <td><%=h address['address_line1'] %></td>
   <% else %>
     <td>-</td>
   <% end %>
