@@ -6,7 +6,7 @@ frame-webservice:
   host: collect-server
   port: 8171
 
-response-gen-webservice:
+response-generator-webservice:
   host: collect-server
   port: 8168
 

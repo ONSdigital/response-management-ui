@@ -1,5 +1,4 @@
-require 'pry'
-require_relative '../service/response_generator'
+require 'ctp-common'
 
 module Beyond
   class Gateway
@@ -67,6 +66,7 @@ module Beyond
 
       post '/manage/responsegenerator/?' do
         authenticate!
+        rg_service = ResponseGenerator.new(generator_host: settings.respgen_service_host, generator_port: settings.respgen_service_port)
         rgi = ResponseGeneratorInstruction.new
         rgi.active = params['activeValue'] == 'Yes' ? true : false
         rgi.responses_per_minute = params['responses_per_minuteValue']
@@ -74,7 +74,7 @@ module Beyond
         rgi.filter = params['filterName']
 
         begin
-          result = ResponseGenerator.save(rgi)
+          result = rg_service.save(rgi)
           unless result.nil?
             flash[:notice] = 'Successfully reconfigured the Response Generator.'
           end
