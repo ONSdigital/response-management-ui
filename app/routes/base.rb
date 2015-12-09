@@ -14,8 +14,8 @@ module Beyond
 
         # Load various settings from a configuration file.
         config = YAML.load_file(File.join(__dir__, '../../config/config.yml'))
-        set :respgen_service_host, config['response-gen-webservice']['host']
-        set :respgen_service_port, config['response-gen-webservice']['port']
+        set :respgen_service_host, config['response-generator-webservice']['host']
+        set :respgen_service_port, config['response-generator-webservice']['port']
         set :frame_service_host, config['frame-webservice']['host']
         set :frame_service_port, config['frame-webservice']['port']
         set :follow_up_service_host, config['follow-up-webservice']['host']
