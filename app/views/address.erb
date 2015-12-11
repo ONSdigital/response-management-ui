@@ -14,13 +14,13 @@
 
 <% if form.failed_on? :eastings %>
   <% content_for :form_errors do %>
-    <p class="message">&bull; Easting is required and must be a 6 character number</p>
+    <p class="message">&bull; Easting is required and must be a number</p>
   <% end %>
 <% end %>
 
 <% if form.failed_on? :northings %>
   <% content_for :form_errors do %>
-    <p class="message">&bull; Northing is required and must be a 6 character number</p>
+    <p class="message">&bull; Northing is required and must be a number</p>
   <% end %>
 <% end %>
 
@@ -30,9 +30,21 @@
   <% end %>
 <% end %>
 
+<% if form.failed_on? :address_line2 %>
+  <% content_for :form_errors do %>
+    <p class="message">&bull; Address Line2 is required</p>
+  <% end %>
+<% end %>
+
 <% if form.failed_on? :postcode %>
   <% content_for :form_errors do %>
     <p class="message">&bull; Postcode is required</p>
+  <% end %>
+<% end %>
+
+<% if form.failed_on? :hardtocount %>
+  <% content_for :form_errors do %>
+    <p class="message">&bull; Hardtocount is required</p>
   <% end %>
 <% end %>
 

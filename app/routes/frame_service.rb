@@ -208,25 +208,25 @@ module Beyond
       end
 
       # Update an existing address (either directly or by reviewing its address notes).
-      ['/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/addresses/:address_id',
-       '/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/addresses/:address_id/review'].each do |path|
+      ['/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/addresses/:uprn_code',
+       '/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/addresses/:uprn_code/review'].each do |path|
         put path do
           reviewing = path.end_with? 'review'
 
           if (params[:addresstype] == 'CE')
             form do
               filters :upcase
-              field :eastings, present: true, int: true, length: 6
-              field :westings, present: true, int: true, length: 6
               field :estabtype, present: true, int: true
               field :postcode, present: true
             end
           else
             form do
               filters :upcase
-              field :eastings, present: true, int: true, length: 6
-              field :westings, present: true, int: true, length: 6
-              field :postcode, present: true
+              field :eastings, :present =>true, :int =>true
+              field :northings, :present =>true, :int =>true
+              field :address_line2, :present =>true
+              field :postcode, :present =>true
+              field :hardtocount, :present => true
             end
           end
 
@@ -234,6 +234,8 @@ module Beyond
             action = "/regions/#{params[:region_code]}/las/#{params[:local_authority_code]}/msoas/#{params[:msoa_code]}/addresses/#{params[:uprn_code]}"
             locals = { method: :put,
                        page: params[:page],
+                       eastings: params['eastings'],
+                       northings: params['northings'],
                        region_code: params[:region_code],
                        local_authority_code: params[:local_authority_code],
                        msoa_code: params[:msoa_code],
@@ -287,7 +289,7 @@ module Beyond
               end
             end
 
-            addresses_url = "/regions/#{params[:region_code]}/las/#{params[:local_authority_code]}/caseloads/#{params[:caseload_code]}/addresses"
+            addresses_url = "/regions/#{params[:region_code]}/las/#{params[:local_authority_code]}/msoas/#{params[:msoa_code]}/addresses"
             addresses_url += '/review' if reviewing
             addresses_url += "?page=#{params[:page]}" if params[:page].present?
             redirect addresses_url
