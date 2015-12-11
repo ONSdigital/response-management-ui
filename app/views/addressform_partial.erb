@@ -3,7 +3,7 @@
     <tbody>
       <tr>
         <td><label for="addresstype">Address Type</label> <span class="required">*</span></td>
-        <td><label for="buildingname">Building Name</label></td>
+        <td><label for="address_line1">Address Line1</label></td>
       </tr>
       <tr>
         <td>
@@ -23,64 +23,56 @@
           <% end %>
           </select>
         </td>
-        <td><input id="buildingname" name="buildingname" type="text" size="50" tabindex="8" value="<%=h buildingname %>"></td>
+        <td><input id="address_line1" name="address_line1" type="text" size="60" tabindex="6" value="<%=h address_line1 %>"></td>
       </tr>
       <tr>
-        <td><label for="addgridref">Grid Reference</label> <span class="required">*</span></td>
-        <td><label for="subbuildingname">Sub-Building Name</label></td>
+        <td><label for="eastings">Eastings</label> <span class="required">*</span></td>
+        <td><label for="northings">Northings</label> <span class="required">*</span></td>
       </tr>
       <tr>
-        <td><input id="addgridref" name="addgridref" type="text" size="50" tabindex="2" value="<%=h addgridref %>"></td>
-        <td><input id="subbuildingname" name="subbuildingname" type="text" size="50" tabindex="9" value="<%=h subbuildingname %>"></td>
+        <td><input id="eastings" name="eastings" type="number" tabindex="2" value="<%=h eastings %>"></td>
+        <td><input id="northings" name="northings" type="number" tabindex="7" value="<%=h northings %>"></td>
       </tr>
       <tr>
-        <td><label for="enumerationtype">Enumeration Type</label> <span class="required">*</span></td>
-        <td><label for="buildingnumber">Building Number</label></td>
-      </tr>
-      <tr>
-        <td><input id="enumerationtype" name="enumerationtype" type="text" size="2" tabindex="3" value="<%=h enumerationtype %>"></td>
-        <td><input id="buildingnumber" name="buildingnumber" type="text" size="2" tabindex="10" value="<%=h buildingnumber %>"></td>
-      </tr>
-      <tr>
+        <td><label for="address_line2">Address Line2</label> <span class="required">*</span></td>
         <td><label for="estabtype">Establishment Type</label></td>
-        <td><label for="thoroughfarename">Thoroughfare Name</label></td>
       </tr>
       <tr>
-        <td><input id="estabtype" name="estabtype" type="text" size="2" tabindex="4" value="<%=h estabtype %>"></td>
-        <td><input id="thoroughfarename" name="thoroughfarename" type="text" size="50" tabindex="11" value="<%=h thoroughfarename %>"></td>
+        <td><input id="address_line2" name="address_line2" type="text" size="60" tabindex="3" value="<%=h address_line2 %>"></td>
+        <td><input id="estabtype" name="estabtype" type="text" size="2" tabindex="8" value="<%=h estabtype %>"></td>
       </tr>
       <tr>
         <td><label for="hardtocount">Hard to Count</label> <span class="required">*</span></td>
-        <td><label for="posttown">Postal Town</label></td>
+        <td><label for="posttown">Town Name</label></td>
       </tr>
       <tr>
         <td>
-          <select id="hardtocount" name="hardtocount" tabindex="5">
+          <select id="hardtocount" name="hardtocount" tabindex="4">
           <% if hardtocount.to_s == '1' %>
             <option selected="selected">1</option>
             <option>2</option>
             <option>3</option>
             <option>4</option>
             <option>5</option>
-          <% elsif hardtocount == '2' %>
+          <% elsif hardtocount.to_s == '2' %>
             <option>1</option>
             <option selected="selected">2</option>
             <option>3</option>
             <option>4</option>
             <option>5</option>
-          <% elsif hardtocount == '3' %>
+          <% elsif hardtocount.to_s == '3' %>
             <option>1</option>
             <option>2</option>
             <option selected="selected">3</option>
             <option>4</option>
             <option>5</option>
-          <% elsif hardtocount == '4' %>
+          <% elsif hardtocount.to_s == '4' %>
             <option>1</option>
             <option>2</option>
             <option>3</option>
             <option selected="selected">4</option>
             <option>5</option>
-          <% elsif hardtocount == '5' %>
+          <% elsif hardtocount.to_s == '5' %>
             <option>1</option>
             <option>2</option>
             <option>3</option>
@@ -89,23 +81,15 @@
           <% end %>
           </select>
         </td>
-        <td><input id="posttown" name="posttown" type="text" size="50" tabindex="12" value="<%=h posttown %>"></td>
+        <td><input id="town_name" name="town_name" type="text" size="30" tabindex="9" value="<%=h town_name %>"></td>
       </tr>
       <tr>
-        <td><label for="estabname">Establishment Name</label></td>
         <td><label for="postcode">Postcode</label> <span class="required">*</span></td>
+        <td></td>
       </tr>
       <tr>
-        <td><input id="estabname" name="estabname" type="text" size="50" tabindex="6" value="<%=h estabname %>"></td>
-        <td><input id="postcode" name="postcode" type="text" size="20" tabindex="13" value="<%=h postcode %>"></td>
-      </tr>
-      <tr>
-        <td><label for="namemanager">Manager</label></td>
-        <td><label for="telnumber">Telephone</label></td>
-      </tr>
-      <tr>
-        <td><input id="namemanager" name="namemanager" type="text" size="50" tabindex="7" value="<%=h namemanager %>"></td>
-        <td><input id="telnumber" name="telnumber" type="text" size="20" tabindex="14" value="<%=h telnumber %>"></td>
+        <td><input id="postcode" name="postcode" type="text" size="8" tabindex="5" value="<%=h postcode %>"></td>
+        <td></td>
       </tr>
     </tbody>
   </table>

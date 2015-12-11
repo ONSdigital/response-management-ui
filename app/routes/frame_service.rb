@@ -35,7 +35,7 @@ module Beyond
                                   addresses: addresses }
       end
 
-      # Get all the addresses to review for the selected msoa. - TODO
+      # Get all the addresses to review for the selected msoa. -
       get '/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/addresses/review' do |region_code, local_authority_code, msoa_code|
         addresses = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/frameservice/addresses?msoa11cd=#{msoa_code}&notestoreview=true")).paginate(page: params[:page])
         erb :review_addresses, locals: { title: "Review Addresses Notes for Caseload #{caseload_code}",
@@ -45,42 +45,39 @@ module Beyond
                                          addresses: addresses }
       end
 
-      # Present a form for reviewing the address notes for an existing address. - TODO
-      get '/regions/:region_code/las/:local_authority_code/caseloads/:caseload_code/addresses/:address_id/review' do |region_code, local_authority_code, caseload_code, address_id|
-        addresses = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/frameservice/addresses/#{address_id}"))
+      # Present a form for reviewing the address notes for an existing address.
+      get '/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/addresses/:uprn_code/review' do |region_code, local_authority_code, msoa_code, uprn_code|
+        addresses = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/frameservice/addresses/#{uprn_code}"))
         address = addresses.first
         coordinates = "#{address['latitude']},#{address['longitude']}"
-        follow_ups = JSON.parse(RestClient.get("http://#{settings.follow_up_service_host}:#{settings.follow_up_service_port}/FollowUpService/FollowUp/AddressId=#{address_id}")).paginate(page: params[:page])
-        action = "/regions/#{region_code}/las/#{local_authority_code}/caseloads/#{caseload_code}/addresses/#{address_id}/review"
+        follow_ups = JSON.parse(RestClient.get("http://#{settings.follow_up_service_host}:#{settings.follow_up_service_port}/FollowUpService/FollowUp/AddressId=#{uprn_code}")).paginate(page: params[:page])
+        action = "/regions/#{region_code}/las/#{local_authority_code}/msoas/#{msoa_code}/addresses/#{uprn_code}/review"
 
         erb :review_address, layout: :sidebar_layout,
-                             locals: { title: "Review Address #{address_id} for Caseload #{caseload_code}",
+                             locals: { title: "Review Address #{uprn_code} for MSOA #{msoa_code}",
                                        action: action,
                                        method: :put,
                                        page: params[:page],
                                        region_code: region_code,
                                        local_authority_code: local_authority_code,
-                                       caseload_code: caseload_code,
+                                       msoa_code: msoa_code,
                                        addresstype: address['addresstype'],
-                                       addgridref: address['addgridref'],
-                                       enumerationtype: address['enumerationtype'],
+                                       eastings: address['eastings'],
+                                       northings: address['northings'],
                                        estabtype: address['estabtype'],
-                                       hardtocount: address['hardtocount'],
-                                       estabname: address['estabname'].to_title_case,
-                                       namemanager: address['namemanager'].to_title_case,
-                                       buildingname: address['buildingname'].to_title_case,
-                                       subbuildingname: address['subbuildingname'].to_title_case,
-                                       buildingnumber: address['buildingnumber'],
-                                       thoroughfarename: address['thoroughfarename'].to_title_case,
-                                       posttown: address['posttown'].to_title_case,
+                                       hardtocount: address['htc'],
+                                       address_line1: address['address_line1'].to_title_case,
+                                       address_line2: address['address_line2'].to_title_case,
+                                       town_name: address['town_name'].to_title_case,
                                        postcode: address['postcode'],
-                                       telnumber: address['telnumber'].to_phone_number,
+                                       oa11cd: address['oa11cd'],
+                                       lsoa11cd: address[lsoa11cd],
                                        coordinates: coordinates,
                                        follow_ups: follow_ups,
                                        address_id: address['addressid'] }
       end
 
-      # Present a form for creating a new address. - TODO
+      # Present a form for creating a new address. -TODO
       get '/regions/:region_code/las/:local_authority_code/caseloads/:caseload_code/addresses/new' do |region_code, local_authority_code, caseload_code|
         action = "/regions/#{region_code}/las/#{local_authority_code}/caseloads/#{caseload_code}/addresses"
         erb :address, locals: { title: "Create Address for Caseload #{caseload_code}",
@@ -183,110 +180,94 @@ module Beyond
         end
       end
 
-      # Present a form for editing an existing address. TODO
-      get '/regions/:region_code/las/:local_authority_code/caseloads/:caseload_code/addresses/:address_id/edit' do |region_code, local_authority_code, caseload_code, address_id|
-        addresses = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/frameservice/addresses/#{address_id}"))
+      # Present a form for editing an existing address.
+      get '/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/addresses/:uprn_code/edit' do |region_code, local_authority_code, msoa_code, uprn_code|
+        addresses = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/frameservice/addresses/#{uprn_code}"))
         address = addresses.first
         coordinates = "#{address['latitude']},#{address['longitude']}"
-        action = "/regions/#{region_code}/las/#{local_authority_code}/caseloads/#{caseload_code}/addresses/#{address_id}"
+        action = "/regions/#{region_code}/las/#{local_authority_code}/msoas/#{msoa_code}/addresses/#{uprn_code}"
 
         erb :address, layout: :sidebar_layout,
-                      locals: { title: "Edit Address #{address_id} for Caseload #{caseload_code}",
+                      locals: { title: "Edit Address #{uprn_code} for MSOA #{msoa_code}",
                                 action: action,
                                 method: :put,
                                 page: params[:page],
+                                eastings: address['eastings'],
+                                northings: address['northings'],
                                 region_code: region_code,
                                 local_authority_code: local_authority_code,
-                                caseload_code: caseload_code,
+                                msoa_code: msoa_code,
                                 addresstype: address['addresstype'],
-                                addgridref: address['addgridref'],
-                                enumerationtype: address['enumerationtype'],
                                 estabtype: address['estabtype'],
-                                hardtocount: address['hardtocount'],
-                                estabname: address['estabname'].to_title_case,
-                                namemanager: address['namemanager'].to_title_case,
-                                buildingname: address['buildingname'].to_title_case,
-                                subbuildingname: address['subbuildingname'].to_title_case,
-                                buildingnumber: address['buildingnumber'],
-                                thoroughfarename: address['thoroughfarename'].to_title_case,
-                                posttown: address['posttown'].to_title_case,
+                                hardtocount: address['htc'],
+                                address_line1: address['address_line1'].to_title_case,
+                                address_line2: address['address_line2'].to_title_case,
+                                town_name: address['town_name'].to_title_case,
                                 postcode: address['postcode'],
-                                telnumber: address['telnumber'].to_phone_number,
                                 coordinates: coordinates }
       end
 
-      # Update an existing address (either directly or by reviewing its address notes). -TODO
-      ['/regions/:region_code/las/:local_authority_code/caseloads/:caseload_code/addresses/:address_id',
-       '/regions/:region_code/las/:local_authority_code/caseloads/:caseload_code/addresses/:address_id/review'].each do |path|
+      # Update an existing address (either directly or by reviewing its address notes).
+      ['/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/addresses/:address_id',
+       '/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/addresses/:address_id/review'].each do |path|
         put path do
           reviewing = path.end_with? 'review'
 
           if (params[:addresstype] == 'CE')
             form do
               filters :upcase
-              field :addgridref, present: true, int: true, length: 13
-              field :enumerationtype, present: true, int: true
+              field :eastings, present: true, int: true, length: 6
+              field :westings, present: true, int: true, length: 6
               field :estabtype, present: true, int: true
               field :postcode, present: true
             end
           else
             form do
               filters :upcase
-              field :addgridref, present: true, int: true, length: 13
-              field :enumerationtype, present: true, int: true
+              field :eastings, present: true, int: true, length: 6
+              field :westings, present: true, int: true, length: 6
               field :postcode, present: true
             end
           end
 
           if form.failed?
-            action = "/regions/#{params[:region_code]}/las/#{params[:local_authority_code]}/caseloads/#{params[:caseload_code]}/addresses/#{params[:address_id]}"
+            action = "/regions/#{params[:region_code]}/las/#{params[:local_authority_code]}/msoas/#{params[:msoa_code]}/addresses/#{params[:uprn_code]}"
             locals = { method: :put,
                        page: params[:page],
                        region_code: params[:region_code],
                        local_authority_code: params[:local_authority_code],
-                       caseload_code: params[:caseload_code],
+                       msoa_code: params[:msoa_code],
                        addresstype: params[:addresstype],
-                       addgridref: params[:addgridref],
-                       enumerationtype: params[:enumerationtype],
                        estabtype: params[:estabtype],
                        hardtocount: params[:hardtocount],
-                       estabname: params[:estabname],
-                       namemanager: params[:namemanager],
-                       buildingname: params[:buildingname],
-                       subbuildingname: params[:subbuildingname],
-                       buildingnumber: params[:buildingnumber],
-                       thoroughfarename: params[:thoroughfarename],
-                       posttown: params[:posttown],
-                       postcode: params[:postcode],
-                       telnumber: params[:telnumber] }
+                       address_line1: params[:address_line1],
+                       address_line2: params[:address_line2],
+                       town_name: params[:town_name],
+                       postcode: params[:postcode] }
 
             if reviewing
               action += '/review'
-              addresses = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/frameservice/addresses/#{params[:address_id]}"))
+              addresses = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/frameservice/addresses/#{params[:uprn_code]}"))
               address = addresses.first
               coordinates = "#{address['latitude']},#{address['longitude']}"
-              follow_ups = JSON.parse(RestClient.get("http://#{settings.follow_up_service_host}:#{settings.follow_up_service_port}/FollowUpService/FollowUp/AddressId=#{params[:address_id]}")).paginate(page: params[:page])
+              follow_ups = JSON.parse(RestClient.get("http://#{settings.follow_up_service_host}:#{settings.follow_up_service_port}/FollowUpService/FollowUp/uprn=#{params[:uprn_code]}")).paginate(page: params[:page])
               output = erb :review_address, layout: :sidebar_layout,
-                                            locals: { title: "Review Address #{params[:address_id]} for Caseload #{params[:caseload_code]}",
+                                            locals: { title: "Review Address #{params[:uprn__code]} for MSOA #{params[:msoa_code]}",
                                                       action: action,
                                                       coordinates: coordinates,
                                                       follow_ups: follow_ups,
-                                                      address_id: address['addressid'] }.merge(locals)
+                                                      uprn_code: address['uprn_code'] }.merge(locals)
             else
-              output = erb :address, locals: { title: "Edit Address for Caseload #{params[:caseload_code]}",
+              output = erb :address, locals: { title: "Edit Address for MSOA #{params[:msoa_code]}",
                                                action: action }.merge(locals)
             end
 
             fill_in_form(output)
           else
-            RestClient.put("http://#{settings.frame_service_host}:#{settings.frame_service_port}/frameservice/addresses/#{params[:address_id]}",
-                           { addgridref: params[:addgridref],
-                             addresstype: params[:addresstype],
-                             buildingname: params[:buildingname],
-                             buildingnumber: params[:buildingnumber],
-                             caseload: params[:caseload_code],
-                             enumerationtype: params[:enumerationtype],
-                             estabname: params[:estabname],
+            RestClient.put("http://#{settings.frame_service_host}:#{settings.frame_service_port}/frameservice/addresses/#{params[:uprn_code]}",
+                           { addresstype: params[:addresstype],
+                             msoa11cd: params[:msoa_code],
+                             address_line1: params[:bname],
                              estabtype: params[:estabtype],
                              hardtocount: params[:hardtocount].to_i,
                              lad12cd: params[:local_authority_code],
@@ -314,7 +295,7 @@ module Beyond
         end
       end
 
-      # Get all questionnaires for the selected address.  TODO
+      # Get all questionnaires for the selected address.
       get '/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/addresses/:uprn_code/questionnaires' do |region_code, local_authority_code, msoa_code, uprn_code|
         questionnaires = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/frameservice/questionnaires?uprn=#{uprn_code}")).paginate(page: params[:page])
 
@@ -332,7 +313,7 @@ module Beyond
                                        coordinates: coordinates }
       end
 
-      # Get a specific questionnaire. TODO
+      # Get a specific questionnaire.
       get '/questionnaires/:questionnaire_id' do |questionnaire_id|
         questionnaires = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/frameservice/questionnaires/#{questionnaire_id}"))
 
@@ -340,15 +321,15 @@ module Beyond
           erb :questionnaire_not_found, locals: { title: 'Questionnaire Not Found' }
         else
           follow_ups = JSON.parse(RestClient.get("http://#{settings.follow_up_service_host}:#{settings.follow_up_service_port}/FollowUpService/FollowUp/QuestionnaireId=#{questionnaire_id}")).paginate(page: params[:page])
-          addresses = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/frameservice/addresses/#{questionnaires.first['addressid']}"))
+          addresses = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/frameservice/addresses/#{questionnaires.first['uprn']}"))
           address = addresses.first
           coordinates = "#{address['latitude']},#{address['longitude']}"
           erb :follow_ups, layout: :sidebar_layout,
                            locals: { title: "Questionnaire #{questionnaire_id}",
-                                     region_code: address['rgn11cd'],
+                                     region_code: address['region11cd'],
                                      local_authority_code: address['lad12cd'],
-                                     caseload_code: address['caseload'],
-                                     address_id: address['addressid'],
+                                     msoa_code: address['msoa11cd'],
+                                     uprn_code: address['uprn'],
                                      questionnaire_id: questionnaire_id,
                                      follow_ups: follow_ups,
                                      questionnaires: questionnaires,
@@ -357,25 +338,25 @@ module Beyond
         end
       end
 
-      # Present a form for creating a new questionnaire. TODO
-      get '/regions/:region_code/las/:local_authority_code/caseloads/:caseload_code/addresses/:address_id/questionnaires/new' do |region_code, local_authority_code, caseload_code, address_id|
-        action = "/regions/#{region_code}/las/#{local_authority_code}/caseloads/#{caseload_code}/addresses/#{address_id}/questionnaires"
-        erb :questionnaire, locals: { title: "Create Questionnaire for Address #{address_id}",
+      # Present a form for creating a new questionnaire.
+      get '/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/addresses/:uprn_code/questionnaires/new' do |region_code, local_authority_code, msoa_code, uprn_code|
+        action = "/regions/#{region_code}/las/#{local_authority_code}/msoas/#{msoa_code}/addresses/#{uprn_code}/questionnaires"
+        erb :questionnaire, locals: { title: "Create Questionnaire for Address #{uprn_code}",
                                       action: action,
                                       method: :post,
                                       page: params[:page],
                                       region_code: region_code,
                                       local_authority_code: local_authority_code,
-                                      caseload_code: caseload_code,
-                                      address_id: address_id,
+                                      msoa_code: msoa_code,
+                                      uprn_code: uprn_code,
                                       formtype: '01',
                                       formstatus: 0 }
       end
 
-      # Create a new questionnaire. TODO
-      post '/regions/:region_code/las/:local_authority_code/caseloads/:caseload_code/addresses/:address_id/questionnaires' do |region_code, local_authority_code, caseload_code, address_id|
+      # Create a new questionnaire.
+      post '/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/addresses/:uprn_code/questionnaires' do |region_code, local_authority_code, msoa_code, uprn_code|
         RestClient.post("http://#{settings.frame_service_host}:#{settings.frame_service_port}/frameservice/#{params[:formtype]}/questionnaires",
-                        { addressid: address_id,
+                        { uprn: uprn_code,
                           formtype: params[:formtype],
                           formstatus: params[:formstatus].to_i
                         }.to_json, content_type: :json, accept: :json
@@ -387,33 +368,33 @@ module Beyond
           end
         end
 
-        questionnaires_url = "/regions/#{region_code}/las/#{local_authority_code}/caseloads/#{caseload_code}/addresses/#{address_id}/questionnaires"
+        questionnaires_url = "/regions/#{region_code}/las/#{local_authority_code}/msoas/#{msoa_code}/addresses/#{uprn_code}/questionnaires"
         questionnaires_url += "?page=#{params[:page]}" if params[:page].present?
         redirect questionnaires_url
       end
 
       # Present a form for editing an existing questionnaire.
-      get '/regions/:region_code/las/:local_authority_code/caseloads/:caseload_code/addresses/:address_id/questionnaires/:questionnaire_id/edit' do |region_code, local_authority_code, caseload_code, address_id, questionnaire_id|
+      get '/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/addresses/:uprn_code/questionnaires/:questionnaire_id/edit' do |region_code, local_authority_code, msoa_code, uprn_code, questionnaire_id|
         questionnaires = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/frameservice/questionnaires/#{questionnaire_id}"))
         questionnaire = questionnaires.first
-        action = "/regions/#{region_code}/las/#{local_authority_code}/caseloads/#{caseload_code}/addresses/#{address_id}/questionnaires/#{questionnaire_id}"
+        action = "/regions/#{region_code}/las/#{local_authority_code}/msoas/#{msoa_code}/addresses/#{uprn_code}/questionnaires/#{questionnaire_id}"
 
-        erb :questionnaire, locals: { title: "Edit Questionnaire #{questionnaire_id} for Address #{address_id}",
+        erb :questionnaire, locals: { title: "Edit Questionnaire #{questionnaire_id} for Address #{uprn_code}",
                                       action: action,
                                       method: :put,
                                       page: params[:page],
                                       region_code: region_code,
                                       local_authority_code: local_authority_code,
-                                      caseload_code: caseload_code,
-                                      address_id: address_id,
+                                      msoa_code: msoa_code,
+                                      uprn_code: uprn_code,
                                       formtype: questionnaire['formtype'],
                                       formstatus: questionnaire['formstatus'].to_i }
       end
 
-      # Update an existing questionnaire. TODO
-      put '/regions/:region_code/las/:local_authority_code/caseloads/:caseload_code/addresses/:address_id/questionnaires/:questionnaire_id' do |region_code, local_authority_code, caseload_code, address_id, questionnaire_id|
+      # Update an existing questionnaire
+      put '/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/addresses/:uprn_code/questionnaires/:questionnaire_id' do |region_code, local_authority_code, msoa_code, uprn_code, questionnaire_id|
         RestClient.put("http://#{settings.frame_service_host}:#{settings.frame_service_port}/frameservice/questionnaires/#{questionnaire_id}",
-                       { addressid: address_id,
+                       { uprn: uprn_code,
                          formtype: params[:formtype],
                          formstatus: params[:formstatus].to_i
                        }.to_json, content_type: :json, accept: :json
@@ -425,7 +406,7 @@ module Beyond
           end
         end
 
-        questionnaires_url = "/regions/#{region_code}/las/#{local_authority_code}/caseloads/#{caseload_code}/addresses/#{address_id}/questionnaires"
+        questionnaires_url = "/regions/#{region_code}/las/#{local_authority_code}/msoas/#{msoa_code}/addresses/#{uprn_code}/questionnaires"
         questionnaires_url += "?page=#{params[:page]}" if params[:page].present?
         redirect questionnaires_url
       end
