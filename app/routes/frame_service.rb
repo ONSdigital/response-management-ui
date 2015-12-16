@@ -38,7 +38,7 @@ module Beyond
       # Get all the addresses to review for the selected msoa. -
       get '/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/addresses/review' do |region_code, local_authority_code, msoa_code|
         addresses = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/frameservice/addresses?msoa11cd=#{msoa_code}&notestoreview=true")).paginate(page: params[:page])
-        erb :review_addresses, locals: { title: "Review Addresses Notes for Caseload #{caseload_code}",
+        erb :review_addresses, locals: { title: "Review Addresses Notes for MSOA #{msoa_code}",
                                          region_code: region_code,
                                          local_authority_code: local_authority_code,
                                          msoa_code: msoa_code,
@@ -50,7 +50,7 @@ module Beyond
         addresses = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/frameservice/addresses/#{uprn_code}"))
         address = addresses.first
         coordinates = "#{address['latitude']},#{address['longitude']}"
-        follow_ups = JSON.parse(RestClient.get("http://#{settings.follow_up_service_host}:#{settings.follow_up_service_port}/FollowUpService/FollowUp/AddressId=#{uprn_code}")).paginate(page: params[:page])
+        follow_ups = JSON.parse(RestClient.get("http://#{settings.follow_up_service_host}:#{settings.follow_up_service_port}/FollowUpService/FollowUp/uprn=#{uprn_code}")).paginate(page: params[:page])
         action = "/regions/#{region_code}/las/#{local_authority_code}/msoas/#{msoa_code}/addresses/#{uprn_code}/review"
 
         erb :review_address, layout: :sidebar_layout,
@@ -71,11 +71,13 @@ module Beyond
                                        town_name: address['town_name'].to_title_case,
                                        postcode: address['postcode'],
                                        oa11cd: address['oa11cd'],
-                                       lsoa11cd: address[lsoa11cd],
+                                       lsoa11cd: address['lsoa11cd'],
                                        coordinates: coordinates,
                                        follow_ups: follow_ups,
-                                       address_id: address['addressid'] }
+                                       uprn_code: address['uprn'] }
       end
+
+=begin  Creation of Addresses is no longer valid until decisions on interaction with supplied address frame and unique uprn are understood
 
       # Present a form for creating a new address. -TODO
       get '/regions/:region_code/las/:local_authority_code/caseloads/:caseload_code/addresses/new' do |region_code, local_authority_code, caseload_code|
@@ -179,6 +181,7 @@ module Beyond
           redirect addresses_url
         end
       end
+=end
 
       # Present a form for editing an existing address.
       get '/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/addresses/:uprn_code/edit' do |region_code, local_authority_code, msoa_code, uprn_code|
@@ -192,18 +195,20 @@ module Beyond
                                 action: action,
                                 method: :put,
                                 page: params[:page],
-                                eastings: address['eastings'],
-                                northings: address['northings'],
-                                region_code: region_code,
-                                local_authority_code: local_authority_code,
-                                msoa_code: msoa_code,
-                                addresstype: address['addresstype'],
-                                estabtype: address['estabtype'],
-                                hardtocount: address['htc'],
                                 address_line1: address['address_line1'].to_title_case,
                                 address_line2: address['address_line2'].to_title_case,
-                                town_name: address['town_name'].to_title_case,
+                                addresstype: address['addresstype'],
+                                eastings: address['eastings'],
+                                estabtype: address['estabtype'],
+                                hardtocount: address['htc'],
+                                local_authority_code: local_authority_code,
+                                lsoa11cd: address['lsoa11cd'],
+                                msoa_code: msoa_code,
+                                northings: address['northings'],
+                                oa11cd: address['oa11cd'],
                                 postcode: address['postcode'],
+                                region_code: region_code,
+                                town_name: address['town_name'].to_title_case,
                                 coordinates: coordinates }
       end
 
@@ -216,36 +221,42 @@ module Beyond
           if (params[:addresstype] == 'CE')
             form do
               filters :upcase
-              field :estabtype, present: true, int: true
-              field :postcode, present: true
+              field :address_line2, :present=>true
+              field :eastings, :present=>true, :int=>true
+              field :estabtype, :present=>true
+              field :northings, :present=>true, :int=>true
+              field :postcode, :present=>true
             end
           else
             form do
               filters :upcase
-              field :eastings, :present =>true, :int =>true
-              field :northings, :present =>true, :int =>true
-              field :address_line2, :present =>true
-              field :postcode, :present =>true
-              field :hardtocount, :present => true
+              field :address_line2, :present=>true
+              field :addresstype, :present=>true
+              field :eastings, :present=>true, :int=>true
+              field :hardtocount, :present=>true
+              field :northings, :present=>true, :int=>true
+              field :postcode, :present=>true
             end
           end
 
           if form.failed?
             action = "/regions/#{params[:region_code]}/las/#{params[:local_authority_code]}/msoas/#{params[:msoa_code]}/addresses/#{params[:uprn_code]}"
-            locals = { method: :put,
+            locals =  { method: :put,
                        page: params[:page],
-                       eastings: params['eastings'],
-                       northings: params['northings'],
-                       region_code: params[:region_code],
-                       local_authority_code: params[:local_authority_code],
-                       msoa_code: params[:msoa_code],
-                       addresstype: params[:addresstype],
-                       estabtype: params[:estabtype],
-                       hardtocount: params[:hardtocount],
                        address_line1: params[:address_line1],
                        address_line2: params[:address_line2],
-                       town_name: params[:town_name],
-                       postcode: params[:postcode] }
+                       addresstype: params[:addresstype],
+                       eastings: params[:eastings],
+                       estabtype: params[:estabtype],
+                       hardtocount: params[:hardtocount],
+                       local_authority_code: params[:local_authority_code],
+                       lsoa11cd: params[:lsoa11cd],
+                       msoa_code: params[:msoa_code],
+                       northings: params[:northings],
+                       oa11cd: params[:oa11cd],
+                       postcode: params[:postcode],
+                       region_code: params[:region_code],
+                       town_name: params[:town_name] }
 
             if reviewing
               action += '/review'
@@ -268,18 +279,19 @@ module Beyond
           else
             RestClient.put("http://#{settings.frame_service_host}:#{settings.frame_service_port}/frameservice/addresses/#{params[:uprn_code]}",
                            { addresstype: params[:addresstype],
-                             msoa11cd: params[:msoa_code],
-                             address_line1: params[:bname],
                              estabtype: params[:estabtype],
-                             hardtocount: params[:hardtocount].to_i,
+                             msoa11cd: params[:msoa_code],
+                             lsoa11cd: params[:lsoa11cd],
+                             oa11cd: params[:oa11cd],
+                             eastings: params[:eastings].to_i,
+                             northings: params[:northings].to_i,
+                             address_line1: params[:address_line1],
+                             address_line2: params[:address_line2],
+                             htc: params[:hardtocount].to_i,
                              lad12cd: params[:local_authority_code],
-                             namemanager: params[:namemanager],
+                             town_name: params[:town_name],
                              postcode: params[:postcode],
-                             posttown: params[:posttown],
-                             rgn11cd: params[:region_code],
-                             subbuildingname: params[:subbuildingname],
-                             telnumber: params[:telnumber],
-                             thoroughfarename: params[:thoroughfarename]
+                             region11cd: params[:region_code],
                            }.to_json, content_type: :json, accept: :json
                           ) do |response, _request, _result, &_block|
               if response.code == 200

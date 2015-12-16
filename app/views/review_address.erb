@@ -24,6 +24,12 @@
   <% end %>
 <% end %>
 
+<% if form.failed_on? :addresstype %>
+  <% content_for :form_errors do %>
+    <p class="message">&bull; Address type is required for communal establishments and must be a number</p>
+  <% end %>
+<% end %>
+
 <% if form.failed_on? :estabtype %>
   <% content_for :form_errors do %>
     <p class="message">&bull; Establishment type is required for communal establishments and must be a number</p>
@@ -35,6 +41,13 @@
     <p class="message">&bull; Postcode is required</p>
   <% end %>
 <% end %>
+
+<% if form.failed_on? :hardtocount %>
+  <% content_for :form_errors do %>
+    <p class="message">&bull; Hard to count is required</p>
+  <% end %>
+<% end %>
+
 
 <form action="<%= action %>" method="post">
 <% if method.present? %>

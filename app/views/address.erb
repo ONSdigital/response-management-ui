@@ -55,6 +55,14 @@
 <% if params[:page].present? %>
   <input type="hidden" name="page" value="<%=h params[:page] %>">
 <% end %>
+
+<%# Hidden fields used to hold values to be sent to frameservice, but not edited, could be displayed in the furture below for editing of course %>
+<% if lsoa11cd.present? %>
+  <input type="hidden" name="lsoa11cd" value="<%= lsoa11cd %>">
+<% end %><% if oa11cd.present? %>
+  <input type="hidden" name="oa11cd" value="<%= oa11cd %>">
+<% end %>
+
 <%= erb :addressform_partial, locals: { addresstype: addresstype, eastings: eastings, northings: northings, address_line1: address_line1, address_line2: address_line2,
                                         estabtype: estabtype, hardtocount: hardtocount, town_name: town_name,  postcode: postcode } %>
   <p id="requiredfields"><span class="required">*</span> Required fields</p>

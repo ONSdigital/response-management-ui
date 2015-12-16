@@ -5,7 +5,7 @@
 <% end %>
 
 <% content_for :breadcrumbs do %>
-  <a href="/regions">Regions</a> &gt; <a href="/regions/<%=h region_code %>/las">Region <%=h region_code %></a> &gt; <a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/caseloads">LA <%=h local_authority_code %></a> &gt; Review Caseload <%=h caseload_code %>
+  <a href="/regions">Regions</a> &gt; <a href="/regions/<%=h region_code %>/las">Region <%=h region_code %></a> &gt; <a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas">LA <%=h local_authority_code %></a> &gt; Review MSOA <%=h msoa_code %>
 <% end %>
 
 <% content_for :sub_heading do %>
@@ -20,25 +20,19 @@
         <tr>
           <th>Address ID</th>
           <th>Address Type</th>
-          <th>Enumeration Type</th>
           <th>Establishment Type</th>
           <th>Hard to Count</th>
-          <th>Grid Reference</th>
-          <th>Establishment Name</th>
+          <th>Easting</th>
+          <th>Northing</th>
           <th>Manager</th>
           <th>Telephone</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/caseloads/<%=h caseload_code %>/addresses/<%=h address['addressid'] %>/review"><%=h address['addressid'] %></a></td>
+          <td><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h address['uprn'] %>/review"><%=h address['uprn'] %></a></td>
         <% if address['addresstype'].present? %>
           <td><%=h address['addresstype'].to_address_type %></td>
-        <% else %>
-          <td>-</td>
-        <% end %>
-        <% if address['enumerationtype'].present? %>
-          <td><%=h address['enumerationtype'] %></td>
         <% else %>
           <td>-</td>
         <% end %>
@@ -47,18 +41,18 @@
         <% else %>
           <td>-</td>
         <% end %>
-        <% if address['hardtocount'].present? %>
-          <td><%=h address['hardtocount'] %></td>
+        <% if address['htc'].present? %>
+          <td><%=h address['htc'] %></td>
         <% else %>
           <td>-</td>
         <% end %>
-        <% if address['addgridref'].present? %>
-          <td><%=h address['addgridref'] %></td>
+        <% if address['eastings'].present? %>
+          <td><%=h address['eastings'] %></td>
         <% else %>
           <td-</td>
         <% end %>
-        <% if address['estabname'].present? %>
-          <td><%=h address['estabname'].to_title_case %></td>
+        <% if address['northings'].present? %>
+          <td><%=h address['northings'] %></td>
         <% else %>
           <td>-</td>
         <% end %>
@@ -75,23 +69,18 @@
         </tr>
       </tbody>
       <tbody class="addresslines">
-      <% if address['buildingname'].present? %>
+      <% if address['address_line1'].present? %>
         <tr>
-          <td colspan="10"><%=h address['buildingname'].to_title_case %></td>
+          <td colspan="10"><%=h address['address_line1'].to_title_case %></td>
         </tr>
       <% end %>
-      <% if address['subbuildingname'].present? %>
+      <% if address['address_line2'].present? %>
         <tr>
-          <td colspan="10"><%=h address['subbuildingname'].to_title_case %></td>
-        </tr>
-      <% end %>
-      <% if address['buildingnumber'].present? || address['thoroughfarename'].present? %>
-        <tr>
-          <td colspan="10"><% if address['buildingnumber'].present? %><%=h address['buildingnumber'] %><% end %> <% if address['thoroughfarename'].present? %><%=h address['thoroughfarename'].to_title_case %><% end %></td>
+          <td colspan="10"><%=h address['address_line2'].to_title_case %></td>
         </tr>
       <% end %>
         <tr>
-          <td colspan="10"><%=h address['posttown'].to_title_case %></td>
+          <td colspan="10"><%=h address['town_name'].to_title_case %></td>
         </tr>
         <tr>
           <td colspan="10"><%=h address['postcode'] %></td>
@@ -101,5 +90,5 @@
   <% end %>
   <%= will_paginate addresses, :previous_label => '&lt; Prev', :next_label => 'Next &gt;' %>
 <% else %>
-  <p id="information"><strong>There are no address notes to view for this caseload.</strong></p>
+  <p id="information"><strong>There are no address notes to view for this MSOA.</strong></p>
 <% end %>
