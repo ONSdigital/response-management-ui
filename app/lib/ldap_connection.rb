@@ -36,7 +36,17 @@ class LDAPConnection
   private
 
   def group_member?(group, username)
-    @@logger.info group
-    true
+    filter = Net::LDAP::Filter.construct("(&(cn=#{group})(memberUid=#{username}))")
+    puts filter
+    @ldap.search(filter: filter) do |entry|
+      entry.each do |attribute, values|
+        puts "   #{attribute}:"
+          values.each do |value|
+            puts "      --->#{value}"
+        end
+      end
+    end
+    puts @ldap.get_operation_result
+    false
   end
 end
