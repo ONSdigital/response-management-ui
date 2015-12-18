@@ -14,6 +14,9 @@ ldap-directory:
   host: ldap-server
   port: 389
   base: dc=ctp,dc=ons,dc=gov,dc=uk
+  groups:
+    admins: collect-admins
+    users: collect-users
 
 google-maps:
   api-key: AIzaSyAtKmYXuijfiPsstjNsczBocKw149--fqM
