@@ -17,9 +17,3 @@ ldap-directory:
 
 google-maps:
   api-key: AIzaSyAtKmYXuijfiPsstjNsczBocKw149--fqM
-
-database:
-  host: fuse-server
-  name: postgres
-  user: postgres
-  password: p0stgr3s
