@@ -32,6 +32,7 @@ module Beyond
         set :ldap_directory_host, config['ldap-directory']['host']
         set :ldap_directory_port, config['ldap-directory']['port']
         set :ldap_directory_base, config['ldap-directory']['base']
+        set :ldap_groups, config['ldap-directory']['groups']
         set :google_maps_api_key, config['google-maps']['api-key']
 
         # Expire sessions after ten minutes of inactivity.
@@ -104,6 +105,7 @@ module Beyond
         ldap_connection = LDAPConnection.new(settings.ldap_directory_host,
                                              settings.ldap_directory_port,
                                              settings.ldap_directory_base,
+                                             settings.ldap_groups,
                                              logger)
 
         if user = User.authenticate(ldap_connection, params)
