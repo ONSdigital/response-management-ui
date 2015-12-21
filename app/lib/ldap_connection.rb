@@ -43,11 +43,17 @@ class LDAPConnection
 
   # Returns the LDAP directory entry for a user.
   def entry_for(username, ldap)
-    filter = Net::LDAP::Filter.construct("(cn=#{username})")
+    filter     = Net::LDAP::Filter.construct("(cn=#{username})")
+    attributes = ['displayName', 'employeeNumber'] # employeeNumber is used to store the 2FA token.
     user_entry = nil
 
-    ldap.search(filter: filter, attributes: ['displayName', 'employeeNumber']) do |entry|
+    succeeded = ldap.search(filter: filter, attributes: attributes, return_result: false) do |entry|
       user_entry = UserEntry.new(entry.displayName.first, entry.employeeNumber.first)
+    end
+
+    unless succeeded
+      result = ldap.get_operation_result
+      @@logger.error "Error searching the LDAP directory using filter '#{filter}': #{result.message} (#{result.code})"
     end
 
     user_entry
@@ -55,9 +61,19 @@ class LDAPConnection
 
   # Returns whether a user is a member of a group.
   def group_member?(group, username, ldap)
-    filter = Net::LDAP::Filter.construct("(&(cn=#{group})(memberUid=#{username}))")
-    group_cn = nil
-    ldap.search(filter: filter, attributes: ['cn']) { |entry| group_cn = entry.cn.first }
+    filter     = Net::LDAP::Filter.construct("(&(cn=#{group})(memberUid=#{username}))")
+    attributes = ['cn']
+    group_cn   = nil
+
+    succeeded = ldap.search(filter: filter, attributes: attributes, return_result: false) do |entry|
+      group_cn = entry.cn.first
+    end
+
+    unless succeeded
+      result = ldap.get_operation_result
+      @@logger.error "Error searching the LDAP directory using filter '#{filter}': #{result.message} (#{result.code})"
+    end
+
     group_cn == group
   end
 end
