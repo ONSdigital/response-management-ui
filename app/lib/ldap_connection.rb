@@ -11,7 +11,7 @@ class LDAPConnection
     @@logger = logger
   end
 
-  def bind(username, password)
+  def authenticate(username, password)
     user_entry = nil
     auth = { method: :simple, username: username, password: password }
 

@@ -10,7 +10,7 @@ class User
     password = params[:password]
     return nil if username.blank? || password.blank?
 
-    user_entry = ldap_connection.bind(username, password)
+    user_entry = ldap_connection.authenticate(username, password)
     User.new(user_entry.display_name, user_entry.token, user_entry.admin) unless user_entry.nil?
   end
 
