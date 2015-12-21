@@ -45,7 +45,7 @@ class LDAPConnection
 
   # Returns the LDAP directory entry for a user.
   def entry_for(username, ldap)
-    filter     = Net::LDAP::Filter.construct("(cn=#{username})")
+    filter     = Net::LDAP::Filter.construct("cn=#{username}")
     attributes = ['displayName', 'employeeNumber'] # employeeNumber is used to store the 2FA token.
     user_entry = nil
 
