@@ -13,14 +13,15 @@ class LDAPConnection
 
   def authenticate(username, password)
     user_entry = nil
-    auth = { method: :simple, username: username, password: password }
+    auth = { method: :simple, username: "uid=#{username},ou=Users,#{@@base}", password: password }
 
     # TODO Auth seems to accept any password.
     Net::LDAP.open(host: @@host, port: @@port, base: @@base, auth: auth) do |ldap|
-      # unless ldap.bind
-      #   @@logger.error "LDAP authentication failed for '#{username}'"
-      #   return nil
-      # end
+      unless ldap.bind
+        result = ldap.get_operation_result
+        @@logger.error "LDAP authentication failed for '#{username}': #{result.message} (#{result.code})"
+        return nil
+      end
 
       @@logger.info "LDAP authentication succeeded for '#{username}'"
       user_entry = entry_for(username, ldap) || nil
