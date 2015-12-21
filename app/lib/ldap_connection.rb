@@ -13,9 +13,10 @@ class LDAPConnection
 
   def authenticate(username, password)
     user_entry = nil
+
+    # Have to use the username format below for the bind operation to succeed.
     auth = { method: :simple, username: "uid=#{username},ou=Users,#{@@base}", password: password }
 
-    # TODO Auth seems to accept any password.
     Net::LDAP.open(host: @@host, port: @@port, base: @@base, auth: auth) do |ldap|
       unless ldap.bind
         result = ldap.get_operation_result
@@ -26,7 +27,7 @@ class LDAPConnection
       @@logger.info "LDAP authentication succeeded for '#{username}'"
       user_entry = entry_for(username, ldap) || nil
 
-      # The user must be a member of at least the "<zone>-users" group for authentication to succeed.
+      # The user must be a member of at least the "<zone>-users" group for authentication to be considered successful.
       users_group = @@groups['users']
       unless group_member?(users_group, username, ldap)
         @@logger.error "LDAP authentication failed: '#{username}' is not a member of the '#{users_group}' group"
