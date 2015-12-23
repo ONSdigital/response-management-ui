@@ -11,26 +11,26 @@
 <% end %>
 
 <% content_for :sub_heading do %>
-Click Activate to generate survey access tokens for all the questionnaires within that caseload.
+Click Activate to generate survey access tokens for all the questionnaires within that MSOA.
 <% end %>
 
-<% if caseloads.any? %>
-  <%= will_paginate caseloads, :previous_label => '&lt; Prev', :next_label => 'Next &gt;' %>
+<% if msoas.any? %>
+  <%= will_paginate msoas, :previous_label => '&lt; Prev', :next_label => 'Next &gt;' %>
   <table class="caseloads">
     <thead>
       <tr>
-        <th>Caseload</th>
+        <th>MSOA</th>
         <th>Unactivated</th>
         <th></th>
       </tr>
     </thead>
     <tbody>
-      <% caseloads.each_with_index do |caseload, i| %>
+      <% msoas.each_with_index do |msoa, i| %>
       <tr class="<%= i.even? ? 'even' : 'odd ' %>">
-        <td><%=h caseload['caseload'] %></td>
-        <td class="number"><%=h caseload['questionnairecount'].to_comma_formatted %></td>
+        <td><%=h msoa['msoa11cd'] %></td>
+        <td class="number"><%=h msoa['questionnairecount'].to_comma_formatted %></td>
         <td>
-          <form method="post" action="/manage/regions/<%=h region_code %>/las/<%=h local_authority_code %>/caseloads/<%=h caseload['caseload'] %>">
+          <form method="post" action="/manage/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa['msoa11cd'] %>">
             <input type="hidden" name="_method" value="put">
             <% if params[:page].present? %>
             <input type="hidden" name="page" value="<%=h params[:page] %>">
@@ -42,7 +42,7 @@ Click Activate to generate survey access tokens for all the questionnaires withi
       <% end %>
     </tbody>
   </table>
-  <%= will_paginate caseloads, :previous_label => '&lt; Prev', :next_label => 'Next &gt;' %>
+  <%= will_paginate msoas, :previous_label => '&lt; Prev', :next_label => 'Next &gt;' %>
 <% else %>
-  <p id="information"><strong>There are no caseloads within this local authority.</strong></p>
+  <p id="information"><strong>There are no MSOAs within this local authority.</strong></p>
 <% end %>

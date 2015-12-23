@@ -11,7 +11,7 @@
 <% end %>
 
 <% content_for :sub_heading do %>
-Click a local authority name to view its caseloads.
+Click a local authority name to view its MSOAs.
 <% end %>
 
 <%= will_paginate local_authorities, :previous_label => '&lt; Prev', :next_label => 'Next &gt;' %>
@@ -26,7 +26,7 @@ Click a local authority name to view its caseloads.
     <% local_authorities.each_with_index do |local_authority, i| %>
     <tr class="<%= i.even? ? 'even' : 'odd ' %>">
       <td><%=h local_authority['lad12cd'] %></td>
-      <td><a href="/manage/regions/<%=h region_code %>/las/<%=h local_authority['lad12cd'] %>/caseloads"><%=h local_authority['lad12nm'] %></a></td>
+      <td><a href="/manage/regions/<%=h region_code %>/las/<%=h local_authority['lad12cd'] %>/msoas"><%=h local_authority['lad12nm'] %></a></td>
     </tr>
     <% end %>
   </tbody>

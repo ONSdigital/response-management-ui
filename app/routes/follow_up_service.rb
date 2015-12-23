@@ -3,20 +3,20 @@ module Beyond
     class FollowUpService < Base
 
       # Get all follow-ups for the selected questionnaire.
-      get '/regions/:region_code/las/:local_authority_code/caseloads/:caseload_code/addresses/:address_id/questionnaires/:questionnaire_id' do |region_code, local_authority_code, caseload_code, address_id, questionnaire_id|
+      get '/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/addresses/:uprn_code/questionnaires/:questionnaire_id' do |region_code, local_authority_code, msoa_code, uprn_code, questionnaire_id|
         authenticate!
         follow_ups = JSON.parse(RestClient.get("http://#{settings.follow_up_service_host}:#{settings.follow_up_service_port}/FollowUpService/FollowUp/QuestionnaireId=#{questionnaire_id}")).paginate(page: params[:page])
 
         # Get the selected address and quesionnaire details so they can be redisplayed for reference.
-        addresses = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/frameservice/addresses/#{address_id}"))
+        addresses = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/frameservice/addresses/#{uprn_code}"))
         coordinates = "#{addresses.first['latitude']},#{addresses.first['longitude']}"
         questionnaires = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/frameservice/questionnaires/#{questionnaire_id}"))
         erb :follow_ups, layout: :sidebar_layout,
                          locals: { title: "Follow-Ups for Questionnaire #{questionnaire_id}",
                                    region_code: region_code,
                                    local_authority_code: local_authority_code,
-                                   caseload_code: caseload_code,
-                                   address_id: address_id,
+                                   msoa_code: msoa_code,
+                                   uprn_code: uprn_code,
                                    questionnaire_id: questionnaire_id,
                                    follow_ups: follow_ups,
                                    questionnaires: questionnaires,
@@ -25,17 +25,17 @@ module Beyond
       end
 
       # Present a form for creating a new follow-up.
-      get '/regions/:region_code/las/:local_authority_code/caseloads/:caseload_code/addresses/:address_id/questionnaires/:questionnaire_id/followups/new' do |region_code, local_authority_code, caseload_code, address_id, questionnaire_id|
+      get '/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/addresses/:uprn_code/questionnaires/:questionnaire_id/followups/new' do |region_code, local_authority_code, msoa_code, uprn_code, questionnaire_id|
         authenticate!
-        action = "/regions/#{region_code}/las/#{local_authority_code}/caseloads/#{caseload_code}/addresses/#{address_id}/questionnaires/#{questionnaire_id}/followups"
+        action = "/regions/#{region_code}/las/#{local_authority_code}/msoas/#{msoa_code}/addresses/#{uprn_code}/questionnaires/#{questionnaire_id}/followups"
         erb :follow_up, locals: { title: "Create Follow-Up for Questionnaire #{questionnaire_id}",
                                   action: action,
                                   method: :post,
                                   page: params[:page],
                                   region_code: region_code,
                                   local_authority_code: local_authority_code,
-                                  caseload_code: caseload_code,
-                                  address_id: address_id,
+                                  msoa_code: msoa_code,
+                                  uprn_code: uprn_code,
                                   questionnaire_id: questionnaire_id,
                                   contactname: '',
                                   type: 'Visit',
@@ -48,22 +48,22 @@ module Beyond
       end
 
       # Create a new follow-up.
-      post '/regions/:region_code/las/:local_authority_code/caseloads/:caseload_code/addresses/:address_id/questionnaires/:questionnaire_id/followups' do |region_code, local_authority_code, caseload_code, address_id, questionnaire_id|
+      post '/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/addresses/:uprn_code/questionnaires/:questionnaire_id/followups' do |region_code, local_authority_code, msoa_code, uprn_code, questionnaire_id|
         authenticate!
         form do
           field :contactname, present: true
         end
 
         if form.failed?
-          action = "/regions/#{region_code}/las/#{local_authority_code}/caseloads/#{caseload_code}/addresses/#{address_id}/questionnaires/#{questionnaire_id}/followups"
+          action = "/regions/#{region_code}/las/#{local_authority_code}/msoas/#{msoa_code}/addresses/#{uprn_code}/questionnaires/#{questionnaire_id}/followups"
           output = erb :follow_up, locals: { title: "Create Follow-Up for Questionnaire #{questionnaire_id}",
                                              action: action,
                                              method: :post,
                                              page: params[:page],
                                              region_code: region_code,
                                              local_authority_code: local_authority_code,
-                                             caseload_code: caseload_code,
-                                             address_id: address_id,
+                                             msoa_code: msoa_code,
+                                             uprn_code: uprn_code,
                                              questionnaire_id: questionnaire_id,
                                              contactname: params[:contactname],
                                              type: params[:type],
@@ -97,18 +97,18 @@ module Beyond
             end
           end
 
-          follow_ups_url = "/regions/#{region_code}/las/#{local_authority_code}/caseloads/#{caseload_code}/addresses/#{address_id}/questionnaires/#{questionnaire_id}"
+          follow_ups_url = "/regions/#{region_code}/las/#{local_authority_code}/msoas/#{msoa_code}/addresses/#{uprn_code}/questionnaires/#{questionnaire_id}"
           follow_ups_url += "?page=#{params[:page]}" if params[:page].present?
           redirect follow_ups_url
         end
       end
 
       # Present a form for editing an existing follow-up.
-      get '/regions/:region_code/las/:local_authority_code/caseloads/:caseload_code/addresses/:address_id/questionnaires/:questionnaire_id/followups/:follow_up_id/edit' do |region_code, local_authority_code, caseload_code, address_id, questionnaire_id, follow_up_id|
+      get '/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/addresses/:uprn_code/questionnaires/:questionnaire_id/followups/:follow_up_id/edit' do |region_code, local_authority_code, msoa_code, uprn_code, questionnaire_id, follow_up_id|
         authenticate!
         follow_ups = JSON.parse(RestClient.get("http://#{settings.follow_up_service_host}:#{settings.follow_up_service_port}/FollowUpService/FollowUp/CorrelationId=#{follow_up_id}"))
         follow_up = follow_ups.first
-        action = "/regions/#{region_code}/las/#{local_authority_code}/caseloads/#{caseload_code}/addresses/#{address_id}/questionnaires/#{questionnaire_id}/followups/#{follow_up_id}"
+        action = "/regions/#{region_code}/las/#{local_authority_code}/msoas/#{msoa_code}/addresses/#{uprn_code}/questionnaires/#{questionnaire_id}/followups/#{follow_up_id}"
 
         visit_date = ''
         visit_hours = '9'
@@ -126,8 +126,8 @@ module Beyond
                                   page: params[:page],
                                   region_code: region_code,
                                   local_authority_code: local_authority_code,
-                                  caseload_code: caseload_code,
-                                  address_id: address_id,
+                                  msoa_code: msoa_code,
+                                  uprn_code: uprn_code,
                                   questionnaire_id: questionnaire_id,
                                   contactname: follow_up['contactname'],
                                   type: follow_up['type'],
@@ -140,22 +140,22 @@ module Beyond
       end
 
       # Update an existing follow-up.
-      put '/regions/:region_code/las/:local_authority_code/caseloads/:caseload_code/addresses/:address_id/questionnaires/:questionnaire_id/followups/:follow_up_id' do |region_code, local_authority_code, caseload_code, address_id, questionnaire_id, follow_up_id|
+      put '/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/addresses/:uprn_code/questionnaires/:questionnaire_id/followups/:follow_up_id' do |region_code, local_authority_code, msoa_code, uprn_code, questionnaire_id, follow_up_id|
         authenticate!
         form do
           field :contactname, present: true
         end
 
         if form.failed?
-          action = "/regions/#{region_code}/las/#{local_authority_code}/caseloads/#{caseload_code}/addresses/#{address_id}/questionnaires/#{questionnaire_id}/followups/#{follow_up_id}"
+          action = "/regions/#{region_code}/las/#{local_authority_code}/msoas/#{msoa_code}/addresses/#{uprn_code}/questionnaires/#{questionnaire_id}/followups/#{follow_up_id}"
           output = erb :follow_up, locals: { title: "Edit Follow-Up for Questionnaire #{questionnaire_id}",
                                              action: action,
                                              method: :put,
                                              page: params[:page],
                                              region_code: region_code,
                                              local_authority_code: local_authority_code,
-                                             caseload_code: caseload_code,
-                                             address_id: address_id,
+                                             msoa_code: msoa_code,
+                                             uprn_code: uprn_code,
                                              questionnaire_id: questionnaire_id,
                                              contactname: params[:contactname],
                                              type: params[:type],
@@ -189,14 +189,14 @@ module Beyond
             end
           end
 
-          follow_ups_url = "/regions/#{region_code}/las/#{local_authority_code}/caseloads/#{caseload_code}/addresses/#{address_id}/questionnaires/#{questionnaire_id}"
+          follow_ups_url = "/regions/#{region_code}/las/#{local_authority_code}/msoas/#{msoa_code}/addresses/#{uprn_code}/questionnaires/#{questionnaire_id}"
           follow_ups_url += "?page=#{params[:page]}" if params[:page].present?
           redirect follow_ups_url
         end
       end
 
       # Delete (i.e. cancel) the selected follow-up.
-      delete '/regions/:region_code/las/:local_authority_code/caseloads/:caseload_code/addresses/:address_id/questionnaires/:questionnaire_id/followups/:follow_up_id' do |region_code, local_authority_code, caseload_code, address_id, questionnaire_id, follow_up_id|
+      delete '/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/addresses/:uprn_code/questionnaires/:questionnaire_id/followups/:follow_up_id' do |region_code, local_authority_code, msoa_code, uprn_code, questionnaire_id, follow_up_id|
         authenticate!
         RestClient.put("http://#{settings.follow_up_service_host}:#{settings.follow_up_service_port}/FollowUpService/FollowUp/#{follow_up_id}",
                        { updateAction: 'CANCEL' }.to_json, content_type: :json, accept: :json
@@ -208,13 +208,14 @@ module Beyond
           end
         end
 
-        follow_ups_url = "/regions/#{region_code}/las/#{local_authority_code}/caseloads/#{caseload_code}/addresses/#{address_id}/questionnaires/#{questionnaire_id}"
+        follow_ups_url = "/regions/#{region_code}/las/#{local_authority_code}/msoas/#{msoa_code}/addresses/#{uprn_code}/questionnaires/#{questionnaire_id}"
         follow_ups_url += "?page=#{params[:page]}" if params[:page].present?
         redirect follow_ups_url
       end
 
       # Delete (i.e. mark as reviewed) the selected follow-up review.
-      delete '/regions/:region_code/las/:local_authority_code/caseloads/:caseload_code/addresses/:address_id/followups/:follow_up_id/review' do |region_code, local_authority_code, caseload_code, follow_up_id|
+      delete '/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/addresses/:uprn_code/followups/:follow_up_id/review' do |region_code, local_authority_code, msoa_code, uprn_code, follow_up_id|
+        authenticate!
         RestClient.put("http://#{settings.follow_up_service_host}:#{settings.follow_up_service_port}/FollowUpService/FollowUp/#{follow_up_id}",
                        { updateAction: 'REVIEWED_ALL_ADDRESSNOTES' }.to_json, content_type: :json, accept: :json
                       ) do |response, _request, _result, &_block|
@@ -225,7 +226,7 @@ module Beyond
           end
         end
 
-        addresses_url = "/regions/#{region_code}/las/#{local_authority_code}/caseloads/#{caseload_code}/addresses/review"
+        addresses_url = "/regions/#{region_code}/las/#{local_authority_code}/msoas/#{msoa_code}/addresses/review"
         addresses_url += "?page=#{params[:page]}" if params[:page].present?
         redirect addresses_url
       end

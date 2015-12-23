@@ -3,34 +3,28 @@ module BeyondMock
     class FrameService < Base
 
       # Get all regions.
-      get '/frameservice/regions' do
+      get '/frameservice/regions/?' do
         erb :regions
       end
 
-      # Get all LAs for the specified region.
-      get '/frameservice/lads?regionid=:region_code' do
-        erb :local_authorities
+      # Get all LAs for the selected region.
+      get '/frameservice/lads' do
+        # URL would pass query string regionid=region_code, Sinatra parses query string and makes data avialable in params object
+        # but only works on URL path
+        erb :local_authorities, locals: { region_code: params['regionid'] }
       end
 
-      # Get all caseloads for the specified LA.
-      get '/frameservice/caseloads?ladid=:local_authority_code' do
-        erb :caseloads
+      # Get all MSOAs for the specified LA.
+            get '/frameservice/msoas' do
+        erb :msoas, locals: { local_authority_code: params['ladid'], questionnairecounts: params['questionnairecounts'] }
       end
 
-      # Get all addresses for the specified caseload.
-      get '/frameservice/addresses?caseload=:caseload_code' do
-        erb :addresses
+      # Get all addresses for the specified MSOA, UPRN or QuestionnaireId as query parameter
+      get '/frameservice/addresses' do
+        erb :addresses, locals: { questionnaireid: params['questionnaireid'], uprn: params['uprn'], msoa11cd: params['msoa11cd'], notestoreview: params['notestoreview'] }
       end
 
-      # Get all the addresses to review for the selected caseload.
-      get '/frameservice/addresse?caseloadid=:caseload_code&notestoreview=true' do
-        erb :addresses
-      end
-
-      # Create a new address.
-      post '/frameservice/addresses' do
-        erb :new_address
-      end
+      # Get the address for the specified UPRN.
 
       # Update an existing address.
       put '/frameservice/addresses/:address_id' do

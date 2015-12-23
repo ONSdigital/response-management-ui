@@ -1,21 +1,11 @@
 <tbody class="addresslines">
-<% if address['buildingname'].present? %>
+<% if address['address_line2'].present? %>
   <tr>
-    <td colspan="10"><%=h address['buildingname'].to_title_case %></td>
-  </tr>
-<% end %>
-<% if address['subbuildingname'].present? %>
-  <tr>
-    <td colspan="10"><%=h address['subbuildingname'].to_title_case %></td>
-  </tr>
-<% end %>
-<% if address['buildingnumber'].present? || address['thoroughfarename'].present? %>
-  <tr>
-    <td colspan="10"><% if address['buildingnumber'].present? %><%=h address['buildingnumber'] %><% end %> <% if address['thoroughfarename'].present? %><%=h address['thoroughfarename'].to_title_case %><% end %></td>
+    <td colspan="10"><%=h address['address_line2'].to_title_case %></td>
   </tr>
 <% end %>
   <tr>
-    <td colspan="10"><%=h address['posttown'].to_title_case %></td>
+    <td colspan="10"><%=h address['town_name'].to_title_case %></td>
   </tr>
   <tr>
     <td colspan="10"><%=h address['postcode'] %></td>

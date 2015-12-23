@@ -7,22 +7,22 @@
 <% end %>
 
 <% content_for :breadcrumbs do %>
-  <a href="/regions">Regions</a> &gt; <a href="/regions/<%=h region_code %>/las">Region <%=h region_code %></a> &gt; <a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/caseloads">LA <%=h local_authority_code %></a> &gt; <a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/caseloads/<%=h caseload_code %>/addresses">Caseload <%=h caseload_code %></a> &gt; <% if method.eql? :post %>Create Address<% elsif method.eql? :put %>Edit Address<% end %>
+  <a href="/regions">Regions</a> &gt; <a href="/regions/<%=h region_code %>/las">Region <%=h region_code %></a> &gt; <a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas">LA <%=h local_authority_code %></a> &gt; <a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses">MSOA <%=h msoa_code %></a> &gt; <% if method.eql? :post %>Create Address<% elsif method.eql? :put %>Edit Address<% end %>
 <% end %>
 
 <% content_for :javascript do %>
   <script src="/javascripts/address.js" type="text/javascript"></script>
 <% end %>
 
-<% if form.failed_on? :addgridref %>
+<% if form.failed_on? :eastings %>
   <% content_for :form_errors do %>
-    <p class="message">&bull; Grid reference is required and must be a 13 character number</p>
+    <p class="message">&bull; Easting is required and must be a number</p>
   <% end %>
 <% end %>
 
-<% if form.failed_on? :enumerationtype %>
+<% if form.failed_on? :northings %>
   <% content_for :form_errors do %>
-    <p class="message">&bull; Enumeration type is required and must be a number</p>
+    <p class="message">&bull; Northing is required and must be a number</p>
   <% end %>
 <% end %>
 
@@ -32,9 +32,21 @@
   <% end %>
 <% end %>
 
+<% if form.failed_on? :address_line2 %>
+  <% content_for :form_errors do %>
+    <p class="message">&bull; Address Line 2 is required</p>
+  <% end %>
+<% end %>
+
 <% if form.failed_on? :postcode %>
   <% content_for :form_errors do %>
     <p class="message">&bull; Postcode is required</p>
+  <% end %>
+<% end %>
+
+<% if form.failed_on? :hardtocount %>
+  <% content_for :form_errors do %>
+    <p class="message">&bull; Hardtocount is required</p>
   <% end %>
 <% end %>
 
@@ -45,11 +57,18 @@
 <% if params[:page].present? %>
   <input type="hidden" name="page" value="<%=h params[:page] %>">
 <% end %>
-<%= erb :addressform_partial, locals: { addresstype: addresstype, buildingname: buildingname, addgridref: addgridref, subbuildingname: subbuildingname, enumerationtype: enumerationtype,
-                                        buildingnumber: buildingnumber, estabtype: estabtype, thoroughfarename: thoroughfarename, hardtocount: hardtocount, posttown: posttown,
-                                        estabname: estabname, postcode: postcode, namemanager: namemanager, telnumber: telnumber } %>
+
+<%# Hidden fields used to hold values to be sent to frameservice, but not edited, could be displayed in the furture below for editing of course %>
+<% if lsoa11cd.present? %>
+  <input type="hidden" name="lsoa11cd" value="<%= lsoa11cd %>">
+<% end %><% if oa11cd.present? %>
+  <input type="hidden" name="oa11cd" value="<%= oa11cd %>">
+<% end %>
+
+<%= erb :addressform_partial, locals: { addresstype: addresstype, eastings: eastings, northings: northings, address_line1: address_line1, address_line2: address_line2,
+                                        estabtype: estabtype, hardtocount: hardtocount, town_name: town_name,  postcode: postcode } %>
   <p id="requiredfields"><span class="required">*</span> Required fields</p>
   <p class="buttons">
-    <input class="button" type="submit" value="Save"> or <% if params[:page].present? %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/caseloads/<%=h caseload_code %>/addresses?page=<%=h params[:page] %>"><% else %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/caseloads/<%=h caseload_code %>/addresses"><% end %>Cancel</a>
+    <input class="button" type="submit" value="Save"> or <% if params[:page].present? %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses?page=<%=h params[:page] %>"><% else %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses"><% end %>Cancel</a>
   </p>
 </form>

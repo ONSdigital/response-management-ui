@@ -48,14 +48,14 @@ module Beyond
                                                  local_authorities: local_authorities }
       end
 
-      # Get all caseloads and associated unactivated questionnaire counts for the selected LA.
-      get '/manage/regions/:region_code/las/:local_authority_code/caseloads' do |region_code, local_authority_code|
+      # Get all msoas and associated unactivated questionnaire counts for the selected LA.
+      get '/manage/regions/:region_code/las/:local_authority_code/msoas' do |region_code, local_authority_code|
         authenticate!
-        caseloads = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/frameservice/caseloads?ladid=#{local_authority_code}&questionnairecounts=true")).paginate(page: params[:page])
-        erb :manage_caseloads, locals: { title: "Survey Access Token Management: Caseloads for LA #{local_authority_code}",
-                                         region_code: region_code,
-                                         local_authority_code: local_authority_code,
-                                         caseloads: caseloads }
+        msoas = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/frameservice/msoas?ladid=#{local_authority_code}&questionnairecounts=true")).paginate(page: params[:page])
+        erb :manage_msoas, locals: { title: "Survey Access Token Management: MSOAs for LA #{local_authority_code}",
+                                     region_code: region_code,
+                                     local_authority_code: local_authority_code,
+                                     msoas: msoas }
       end
 
       get '/manage/responsegenerator/?' do
@@ -85,21 +85,21 @@ module Beyond
         redirect '/manage/responsegenerator'
       end
 
-      # Activate the questionnaires within the selected caseload.
-      put '/manage/regions/:region_code/las/:local_authority_code/caseloads/:caseload_code' do |region_code, local_authority_code, caseload_code|
+      # Activate the questionnaires within the selected MSOA.
+      put '/manage/regions/:region_code/las/:local_authority_code/msoas/:msoa_code' do |region_code, local_authority_code, msoa_code|
         authenticate!
-        RestClient.patch("http://#{settings.frame_service_host}:#{settings.frame_service_port}/frameservice/caseloads/#{caseload_code}/activate",
+        RestClient.patch("http://#{settings.frame_service_host}:#{settings.frame_service_port}/frameservice/msoas/#{msoa_code}/activate",
                          {}.to_json, content_type: :json, accept: :json) do |response, _request, _result, &_block|
           if response.code == 200
-            flash[:notice] = "Activating caseload #{caseload_code}."
+            flash[:notice] = "Activating MSOA #{msoa_code}."
           else
-            flash[:error] = "Unable to activate caseload #{caseload_code} (HTTP #{response.code} received)."
+            flash[:error] = "Unable to activate MSOA #{msoa_code} (HTTP #{response.code} received)."
           end
         end
 
-        caseloads_url = "/manage/regions/#{region_code}/las/#{local_authority_code}/caseloads"
-        caseloads_url += "?page=#{params[:page]}" if params[:page].present?
-        redirect caseloads_url
+        msoas_url = "/manage/regions/#{region_code}/las/#{local_authority_code}/msoas"
+        msoas_url += "?page=#{params[:page]}" if params[:page].present?
+        redirect msoas_url
       end
 
       # Present a form for issuing a Drools command.
