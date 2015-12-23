@@ -82,7 +82,16 @@ module Beyond
         headers 'Content-Type' => 'text/html; charset=utf-8'
       end
 
+      # Only administrators can access the management screens.
+      before '/manage*' do
+        halt 403 unless authorised?
+      end
+
       # Error pages.
+      error 403 do
+        erb :forbidden, locals: { title: '403 Forbidden' }
+      end
+
       error 404 do
         erb :not_found, locals: { title: '404 Not Found' }
       end
