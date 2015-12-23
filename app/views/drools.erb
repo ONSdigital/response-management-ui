@@ -1,7 +1,7 @@
 <% content_for :menu do %>
   <li><a href="/">Home</a></li>
   <li><a href="/regions">Addresses</a></li>
-<% if session[:user].admin? %>
+<% if authorised? %>
   <li id="active"><a href="/manage">Manage</a></li>
 <% end %>
 <% end %>

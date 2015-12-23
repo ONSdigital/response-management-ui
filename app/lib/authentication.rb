@@ -5,4 +5,8 @@ module Authentication
       redirect '/signin'
     end
   end
+
+  def authorised?
+    session[:user].admin?
+  end
 end
