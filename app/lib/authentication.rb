@@ -7,6 +7,6 @@ module Authentication
   end
 
   def authorised?
-    session[:user].admin?
+    session[:user].present? && session[:user].admin?
   end
 end
