@@ -4,11 +4,11 @@ require 'sinatra/formkeeper'
 require 'will_paginate'
 require 'will_paginate/array'
 require 'rest_client'
+require 'ons-ldap'
 require 'json'
 require 'yaml'
 
 require_relative '../lib/authentication'
-require_relative '../lib/ldap_connection'
 require_relative '../models/user'
 
 module Beyond
