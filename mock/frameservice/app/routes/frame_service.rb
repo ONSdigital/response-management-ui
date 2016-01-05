@@ -24,11 +24,14 @@ module BeyondMock
         erb :addresses, locals: { questionnaireid: params['questionnaireid'], uprn: params['uprn'], msoa11cd: params['msoa11cd'], notestoreview: params['notestoreview'] }
       end
 
-      # Get the address for the specified UPRN.
+      # Get the address for the specified UPRN as path parameter
+      get '/frameservice/addresses/:uprn/?' do
+        erb :address, locals: { uprn: params['uprn'] }
+      end
 
       # Update an existing address.
-      put '/frameservice/addresses/:address_id' do
-        erb :edit_address
+      put '/frameservice/addresses/:uprn' do
+        erb :edit_address, locals: { uprn: params['uprn'] }
       end
 
       # Get all questionnaires for the specified address.
@@ -46,10 +49,6 @@ module BeyondMock
         erb :edit_questionnaire
       end
 
-      # Get the specified address.
-      get '/frameservice/addresses/:address_id' do
-        erb :address
-      end
 
       # Get the specified questionnaire.
       get '/frameservice/questionnaires/:questionnaire_id' do

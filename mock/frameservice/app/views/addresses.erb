@@ -1,4 +1,4 @@
-<% if (!questionnaireid.nil?) and (questionnaireid.match('^[0-9]*'))  %>
+<% if (!questionnaireid.nil?) and (questionnaireid.match('^[0-9]*$'))  %>
 [
   {
     "uprn":1300057127,
@@ -20,11 +20,10 @@
     "lad12nm":"Hartlepool"
   }
 ]
-<% else %>
-<% if (!uprn.nil?) and (uprn.match('^[0-9]*'))  %>
+<% elsif (!uprn.nil?) and (uprn.match('^[0-9]*$'))  %>
 [
   {
-    "uprn":1300057127,
+    "uprn":"<%= uprn %>",
     "addresstype":"HH",
     "estabtype":"",
     "address_line1":"",
@@ -44,8 +43,7 @@
     "lad12nm":"Hartlepool"
   }
 ]
-<% else %>
-<% if (!msoa11cd.nil?) and (msoa11cd.match('^E[0-9]{8}$'))  %>
+<% elsif (!msoa11cd.nil?) and (msoa11cd.match('^E[0-9]{8}$'))  %>
 <% if (!notestoreview.nil?) and (notestoreview == "true") %>
 [
   {
@@ -58,7 +56,7 @@
     "postcode":"TS25 4EZ",
     "oa11cd":"",
     "lsoa11cd":"",
-    "msoa11cd":"E02002488",
+    "msoa11cd":"<%= msoa11cd %>",
     "lad12cd":"E06000001",
     "region11cd":"E12000001",
     "eastings":449343,
@@ -78,7 +76,7 @@
     "postcode":"TS26 8JT",
     "oa11cd":"E00060342",
     "lsoa11cd":"E01011966",
-    "msoa11cd":"E02002488",
+    "msoa11cd":"<%= msoa11cd %>",
     "lad12cd":"E06000001",
     "region11cd":"E12000001",
     "eastings":449720,
@@ -100,7 +98,7 @@
     "town_name":"Hartlepool",
     "postcode":"TS25 4EZ",
     "oa11cd":"","lsoa11cd":"",
-    "msoa11cd":"E02002488",
+    "msoa11cd":"<%= msoa11cd %>",
     "lad12cd":"E06000001",
     "region11cd":"E12000001",
     "eastings":449343,
@@ -119,7 +117,7 @@
     "postcode":"TS26 8JT",
     "oa11cd":"E00060342",
     "lsoa11cd":"E01011966",
-    "msoa11cd":"E02002488",
+    "msoa11cd":"<%= msoa11cd %>",
     "lad12cd":"E06000001",
     "region11cd":"E12000001",
     "eastings":449720,
@@ -139,7 +137,7 @@
     "postcode":"TS26 9NW",
     "oa11cd":"E00060338",
     "lsoa11cd":"E01011965",
-    "msoa11cd":"E02002488",
+    "msoa11cd":"<%= msoa11cd %>",
     "lad12cd":"E06000001",
     "region11cd":"E12000001",
     "eastings":449590,
@@ -158,7 +156,7 @@
     "postcode":"TS26 0HT",
     "oa11cd":"E00060547",
     "lsoa11cd":"E01012002",
-    "msoa11cd":"E02002488",
+    "msoa11cd":"<%= msoa11cd %>",
     "lad12cd":"E06000001",
     "region11cd":"E12000001",
     "eastings":449628,
@@ -178,7 +176,7 @@
     "postcode":"TS26 9NW",
     "oa11cd":"E00060338",
     "lsoa11cd":"E01011965",
-    "msoa11cd":"E02002488",
+    "msoa11cd":"<%= msoa11cd %>",
     "lad12cd":"E06000001",
     "region11cd":"E12000001",
     "eastings":449598,
@@ -198,7 +196,7 @@
     "postcode":"TS26 0RH",
     "oa11cd":"E00174097",
     "lsoa11cd":"E01011983",
-    "msoa11cd":"E02002488",
+    "msoa11cd":"<%= msoa11cd %>",
     "lad12cd":"E06000001",
     "region11cd":"E12000001",
     "eastings":449250,
@@ -212,6 +210,4 @@
 <% end %>
 <% else %>
 []
-<% end %>
-<% end %>
 <% end %>

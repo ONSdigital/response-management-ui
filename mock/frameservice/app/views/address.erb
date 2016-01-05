@@ -1,25 +1,24 @@
+<% if (!uprn.nil?) and (uprn.match('^[0-9]*$'))  %>
 [
-    {
-        "addressid": "2000059168",
-        "addresstype": "CE",
-        "enumerationtype": "2",
-        "estabtype": "01",
-        "estabname": "THE CRYSTAL CENTRE",
-        "namemanager": "DR SHACHI PRADHAN",
-        "telnumber": "01245515300",
-        "subbuildingname": null,
-        "buildingname": null,
-        "buildingnumber": null,
-        "thoroughfarename": "PUDDINGS WOOD DRIVE",
-        "posttown": "CHELMSFORD",
-        "postcode": "CM1 7LF",
-        "addgridref": "4354580572468",
-        "rgn11cd": "E12000001",
-        "lad12cd": "E08000022",
-        "caseload": "A10313S1S1",
-        "latitude": 55.04536040519006,
-        "longitude": -1.4450133381484214,
-        "hardtocount": 3,
-        "lad12nm": "North Tyneside"
-    }
+  {
+    "uprn":"<%= uprn %>",
+    "addresstype":"HH",
+    "estabtype":"",
+    "address_line1":"",
+    "address_line2":"92 Welldeck Road",
+    "town_name":"Hartlepool"
+    ,"postcode":"TS26 8JT",
+    "oa11cd":"E00060342",
+    "lsoa11cd":"E01011966",
+    "msoa11cd":"E02002488",
+    "lad12cd":"E06000001",
+    "region11cd":"E12000001",
+    "eastings":449720,
+    "northings":533011,
+    "htc":2,
+    "latitude":54.68955510797955,
+    "longitude":-1.2286043954101922,
+    "lad12nm":"Hartlepool"
+  }
 ]
+<% end %>
