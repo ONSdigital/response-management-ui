@@ -1,10 +1,16 @@
+<% if (!questionnaireid.nil?) and (questionnaireid.match('^[0-9]*$'))  %>
 [
     {
-        "questionnaireid": "0460231023371141",
-        "addressid": "2000059168",
-        "formtype": "I",
-        "formstatus": 0,
-        "receiptstatus": 1,
-        "receiptdatetime": 1402606920000
+        "questionnaireid": "<%= questionnaireid %>",
+        "uprn": "1300056891",
+        "formtype": "01",
+        "formstatus": 1,
+        "receiptstatus": 0,
+        "receiptdatetime": null,
+        "token":"17tpyv4bp9ty",
+        "surveyid":"01"
     }
 ]
+<% else %>
+[]
+<% end %>

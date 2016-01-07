@@ -31,29 +31,29 @@ module BeyondMock
 
       # Update an existing address.
       put '/frameservice/addresses/:uprn' do
-        erb :edit_address, locals: { uprn: params['uprn'] }
+        erb :address, locals: { uprn: params['uprn'] }
       end
 
-      # Get all questionnaires for the specified address.
-      get '/frameservice/questionnaires?addressid=:address_id' do
-        erb :questionnaires
+      # Get all questionnaires for the specified UPRN, questionnaire for the specified Token or QuestionnaireId as a query parameter
+      get '/frameservice/questionnaires' do
+        erb :questionnaires, locals: { questionnaireid: params['questionnaireid'], token: params['token'], uprn: params['uprn'], tracker: params['tracker'] }
       end
 
-      # Create a new questionnaire.
-      post '/frameservice/questionnaires' do
-        erb :new_questionnaire
+      # Get questionnaire for the specified questionnaireid as a path parameter
+      get '/frameservice/questionnaires/:questionnaireid/?' do
+        erb :questionnaire, locals: { questionnaireid: params['questionnaireid'] }
       end
 
       # Update an existing questionnaire.
-      put '/frameservice/questionnaires/:questionnaire_id' do
-        erb :edit_questionnaire
+      put '/frameservice/questionnaires/:questionnaireid/?' do
+        erb :questionnaire, locals: { questionnaireid: params['questionnaireid'] }
       end
 
-
-      # Get the specified questionnaire.
-      get '/frameservice/questionnaires/:questionnaire_id' do
-        erb :questionnaire
+      # Create a new questionnaire.
+      post '/frameservice/:formtype/questionnaires/?' do
+        erb :new_questionnaire, locals: { formtype: params['formtype'] }
       end
+
     end
   end
 end

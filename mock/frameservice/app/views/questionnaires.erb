@@ -1,26 +1,80 @@
+<% if (!questionnaireid.nil?) and (questionnaireid.match('^[0-9]*$'))  %>
 [
     {
-        "questionnaireid": "0460231023371141",
-        "addressid": "2000059168",
-        "formtype": "I",
-        "formstatus": 0,
-        "receiptstatus": 1,
-        "receiptdatetime": 1402606920000
-    },
-    {
-        "questionnaireid": "0460231023372171",
-        "addressid": "2000059168",
-        "formtype": "I",
-        "formstatus": 0,
-        "receiptstatus": 1,
-        "receiptdatetime": 1402936200000
-    },
-    {
-        "questionnaireid": "0260231023370177",
-        "addressid": "2000059168",
-        "formtype": "CE",
-        "formstatus": 0,
-        "receiptstatus": 1,
-        "receiptdatetime": 1402755660000
+        "questionnaireid": "<%= questionnaireid %>",
+        "uprn": "1300056891",
+        "formtype": "01",
+        "formstatus": 1,
+        "receiptstatus": 0,
+        "receiptdatetime": null,
+        "token":"17tpyv4bp9ty",
+        "surveyid":"01"
     }
 ]
+<% elsif (!token.nil?) and (token.match('^[0-9,a-z]*$'))  %>
+[
+    {
+        "questionnaireid": "160233311537150",
+        "uprn": "1300056891",
+        "formtype": "01",
+        "formstatus": 1,
+        "receiptstatus": 0,
+        "receiptdatetime": null,
+        "token":"<%= token %>",
+        "surveyid":"01"
+    }
+]
+<% elsif (!uprn.nil?) and (uprn.match('^[0-9]*$'))  %>
+<% if (!tracker.nil?) and (tracker == "true") %>
+[
+    {
+        "questionnaireid": "160233311537150",
+        "uprn": "<%= uprn %>",
+        "formtype": "01",
+        "formstatus": 1,
+        "receiptstatus": 0,
+        "receiptdatetime": null,
+        "token":"17tpyv4bp9ty",
+        "surveyid":"01",
+        "latestresponsesubmittime":"1411990588334",
+        "latestlocation":"StoreLoaded",
+        "latestcapturetime":"2014-09-29T12:36:29.013+01:00"
+    }
+]
+<% else %>
+[
+    {
+        "questionnaireid": "160233311537150",
+        "uprn": "<%= uprn %>",
+        "formtype": "01",
+        "formstatus": 1,
+        "receiptstatus": 0,
+        "receiptdatetime": null,
+        "token":"17tpyv4bp9ty",
+        "surveyid":"01"
+    }
+    {
+        "questionnaireid": "160233311537151",
+        "uprn": "<%= uprn %>",
+        "formtype": "01",
+        "formstatus": 1,
+        "receiptstatus": 0,
+        "receiptdatetime": null,
+        "token":"17tpyv4bpqt2",
+        "surveyid":"01"
+    }
+    {
+        "questionnaireid": "160233311537152",
+        "uprn": "<%= uprn %>",
+        "formtype": "01",
+        "formstatus": 1,
+        "receiptstatus": 0,
+        "receiptdatetime": null,
+        "token":"17tpyv4bprku",
+        "surveyid":"01"
+    }
+]
+<% end %>
+<% else %>
+[]
+<% end %>
