@@ -60,8 +60,9 @@ module Beyond
 
       get '/manage/responsegenerator/?' do
         authenticate!
-        rg = ResponseGenerator.read
-        erb :manage_response_generator, locals: { title: 'Response Generator Control', response_generator: rg }
+        rg_service = ResponseGenerator.new(generator_host: settings.respgen_service_host, generator_port: settings.respgen_service_port)
+        rgi = rg_service.read
+        erb :manage_response_generator, locals: { title: 'Response Generator Control', response_generator: rgi }
       end
 
       post '/manage/responsegenerator/?' do
