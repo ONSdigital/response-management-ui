@@ -12,7 +12,6 @@ The application depends on the following RubyGems:
 
 * [json](http://flori.github.io/json/)
 * [net-ldap](https://github.com/ruby-ldap/ruby-net-ldap)
-* [pg](https://bitbucket.org/ged/ruby-pg/wiki/Home)
 * [rest-client](https://github.com/rest-client/rest-client)
 * [rotp](https://github.com/mdp/rotp)
 * [sass](https://github.com/sass/sass) (Not a runtime dependency; see below)
