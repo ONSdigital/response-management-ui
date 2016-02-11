@@ -9,7 +9,7 @@ module BeyondMock
 
       # get information for the specified sample
       get '/samples/:sampleid' do
-        erb :sample, locals: { casetypeid: params['casetypeid'] }
+        erb :sample, locals: { sampleid: params['sampleid'] }
       end
 
     end
