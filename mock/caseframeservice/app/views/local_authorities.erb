@@ -1,0 +1,18 @@
+<% if (!region_code.nil?) and (region_code.match('^E[0-9]{8}$'))  %>
+[
+  {"rgn11cd":"<%= region_code %>","lad12cd":"E06000001","lad12nm":"Hartlepool"},
+  {"rgn11cd":"<%= region_code %>","lad12cd":"E06000002","lad12nm":"Middlesbrough"},
+  {"rgn11cd":"<%= region_code %>","lad12cd":"E06000003","lad12nm":"Redcar and Cleveland"},
+  {"rgn11cd":"<%= region_code %>","lad12cd":"E06000004","lad12nm":"Stockton-on-Tees"},
+  {"rgn11cd":"<%= region_code %>","lad12cd":"E06000005","lad12nm":"Darlington"},
+  {"rgn11cd":"<%= region_code %>","lad12cd":"E06000047","lad12nm":"County Durham"},
+  {"rgn11cd":"<%= region_code %>","lad12cd":"E06000048","lad12nm":"Northumberland"},
+  {"rgn11cd":"<%= region_code %>","lad12cd":"E08000020","lad12nm":"Gateshead"},
+  {"rgn11cd":"<%= region_code %>","lad12cd":"E08000021","lad12nm":"Newcastle upon Tyne"},
+  {"rgn11cd":"<%= region_code %>","lad12cd":"E08000022","lad12nm":"North Tyneside"},
+  {"rgn11cd":"<%= region_code %>","lad12cd":"E08000023","lad12nm":"South Tyneside"},
+  {"rgn11cd":"<%= region_code %>","lad12cd":"E08000024","lad12nm":"Sunderland"}
+]
+<% else %>
+[]
+<% end %>

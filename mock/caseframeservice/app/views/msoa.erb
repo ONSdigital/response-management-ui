@@ -1,0 +1,7 @@
+<% if (!msoa_code.nil?) and (msoa_code.match('^E[0-9]{8}$'))  %>
+[
+  {"msoa11cd":"<%= msoa_code %>","msoa11nm":"Hartlepool 001"}
+]
+<% else %>
+[]
+<% end %>

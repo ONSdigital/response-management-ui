@@ -1,0 +1,7 @@
+<% if (!local_authority_code.nil?) and (local_authority_code.match('^E[0-9]{8}$'))  %>
+[
+{"rgn11cd":"E12000001","lad12cd":"<%= local_authority_code %>","lad12nm":"Hartlepool"}
+]
+<% else %>
+[]
+<% end %>

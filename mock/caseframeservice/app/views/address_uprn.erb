@@ -1,0 +1,26 @@
+<% if (!uprn.nil?) and (uprn.match('^[0-9]*$'))  %>
+[
+  {
+    "uprn":"<%= uprn %>",
+    "addresstype":"HH",
+    "estabtype":"",
+    "address_line1":"",
+    "address_line2":"92 Welldeck Road",
+    "town_name":"Hartlepool"
+    ,"postcode":"TS26 8JT",
+    "oa11cd":"E00060342",
+    "lsoa11cd":"E01011966",
+    "msoa11cd":"E02002488",
+    "lad12cd":"E06000001",
+    "region11cd":"E12000001",
+    "eastings":449720,
+    "northings":533011,
+    "htc":2,
+    "latitude":54.68955510797955,
+    "longitude":-1.2286043954101922,
+    "lad12nm":"Hartlepool"
+  }
+]
+<% else %>
+[]
+<% end %>
