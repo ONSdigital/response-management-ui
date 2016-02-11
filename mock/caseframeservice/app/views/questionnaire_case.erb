@@ -1,0 +1,17 @@
+<% if (!caseid.nil?) and (caseid.match('^[0-9]*$'))  %>
+[
+  {
+    "questionnaireid": 0,
+    "caseid": 0,
+    "questionnaire_status": "string",
+    "dispatch_datetime": "2016-02-11T11:38:08.141Z",
+    "response_datetime": "2016-02-11T11:38:08.141Z",
+    "receipt_datetime": "2016-02-11T11:38:08.141Z",
+    "formtype": "string",
+    "mode": "string",
+    "iac": "string"
+  }
+]
+<% else %>
+[]
+<% end %>

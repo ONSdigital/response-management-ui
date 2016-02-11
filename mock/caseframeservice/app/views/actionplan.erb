@@ -1,0 +1,18 @@
+<% if (!actionplanid.nil?) and (actionplanid.match('^[0-9]*$'))  %>
+[
+  {
+    "actionplanid": "<%= actionplanid %>",
+    "actionplan_name": "string",
+    "description": "string",
+    "rules": "string"
+  }
+]
+<% else %>
+[
+  {
+    "code": 0,
+    "message": "string",
+    "fields": "string"
+  }
+]
+<% end %>

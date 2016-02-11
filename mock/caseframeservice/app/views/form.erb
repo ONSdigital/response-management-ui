@@ -1,0 +1,16 @@
+<% if (!formtype.nil?) and (formtype.match('^[0-9]*$'))  %>
+[
+  {
+    "formtype": "<%= formtype %>",
+    "description": "string"
+  }
+]
+<% else %>
+[
+  {
+    "code": 0,
+    "message": "string",
+    "fields": "string"
+  }
+]
+<% end %>

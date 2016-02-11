@@ -1,0 +1,32 @@
+<% if (!uprn.nil?) and (uprn.match('^[0-9]*$'))  %>
+[
+  {
+    "caseid": 0,
+    "uprn": "<%= uprn %>",
+    "case_status": "string",
+    "casetype": "string",
+    "created_datetime": "2016-02-11T11:38:08.114Z",
+    "created_by": "string",
+    "sampleid": 0,
+    "actionplanid": 0,
+    "surveyid": 0,
+    "parentcaseid": 0,
+    "formtype": "string"
+  },
+  {
+    "caseid": 0,
+    "uprn": "<%= uprn %>",
+    "case_status": "string",
+    "casetype": "string",
+    "created_datetime": "2016-02-11T11:38:08.114Z",
+    "created_by": "string",
+    "sampleid": 0,
+    "actionplanid": 0,
+    "surveyid": 0,
+    "parentcaseid": 0,
+    "formtype": "string"
+  }
+]
+<% else %>
+[]
+<% end %>

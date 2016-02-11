@@ -1,0 +1,19 @@
+<% if (!casetypeid.nil?) and (casetypeid.match('^[0-9]*$'))  %>
+[
+  {
+  "casetypeid": "<%= casetypeid %>",
+  "casetype_name": "string",
+  "description": "string",
+  "actionplanid": 0,
+  "formtype": "string"
+  }
+]
+<% else %>
+[
+  {
+    "code": 0,
+    "message": "string",
+    "fields": "string"
+  }
+]
+<% end %>

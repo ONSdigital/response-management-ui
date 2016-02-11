@@ -1,0 +1,17 @@
+<% if (!surveyid.nil?) and (surveyid.match('^[0-9]*$'))  %>
+[
+  {
+    "surveyid": "<%= surveyid %>",
+    "survey_name": "string",
+    "description": "string"
+  }
+]
+<% else %>
+[
+  {
+    "code": 0,
+    "message": "string",
+    "fields": "string"
+  }
+]
+<% end %>

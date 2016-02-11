@@ -1,0 +1,19 @@
+<% if (!caseid.nil?) and (caseid.match('^[0-9]*$'))  %>
+[
+  {
+    "caseid": "<%= caseid %>",
+    "uprn": 0,
+    "case_status": "string",
+    "casetype": "string",
+    "created_datetime": "2016-02-11T11:38:08.114Z",
+    "created_by": "string",
+    "sampleid": 0,
+    "actionplanid": 0,
+    "surveyid": 0,
+    "parentcaseid": 0,
+    "formtype": "string"
+  }
+]
+<% else %>
+[]
+<% end %>

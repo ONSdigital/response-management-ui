@@ -1,0 +1,19 @@
+<% if (!sampleid.nil?) and (sampleid.match('^[0-9]*$'))  %>
+[
+  {
+    "sampleid": "<%= sampleid %>",
+    "sample_name": "string",
+    "address_criteria": "string",
+    "casetypeid": 0,
+    "surveyid": 0
+  }
+]
+<% else %>
+[
+  {
+    "code": 0,
+    "message": "string",
+    "fields": "string"
+  }
+]
+<% end %>

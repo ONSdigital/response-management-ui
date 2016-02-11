@@ -1,0 +1,32 @@
+<% if (!caseid.nil?) and (caseid.match('^[0-9]*$'))  %>
+[
+  {
+    "actionid": 0,
+    "caseid": "<%= caseid %>",
+    "actionplanid": 0,
+    "action_status": "string",
+    "action_type": "string",
+    "situation": "string",
+    "created_datetime": "2016-02-11T11:38:08.162Z",
+    "created_by": "string"
+  },
+  {
+    "actionid": 0,
+    "caseid": "<%= caseid %>",
+    "actionplanid": 0,
+    "action_status": "string",
+    "action_type": "string",
+    "situation": "string",
+    "created_datetime": "2016-02-11T11:38:08.162Z",
+    "created_by": "string"
+  }
+]
+<% else %>
+[
+  {
+  "code": 0,
+  "message": "string",
+  "fields": "string"
+  }
+]
+<% end %>
