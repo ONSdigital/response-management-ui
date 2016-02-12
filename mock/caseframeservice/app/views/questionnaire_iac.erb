@@ -1,7 +1,7 @@
 <% if (!iac.nil?) and (iac.match('^[0-9]{20}$'))  %>
 [
   {
-    "questionnaireid": 0,
+    "questionnaireid": 160233311537150,
     "caseid": 0,
     "questionnaire_status": "string",
     "dispatch_datetime": "2016-02-11T11:38:08.141Z",
@@ -12,12 +12,20 @@
     "iac": "<%= iac %>"
   }
 ]
+<% elsif (!iac.nil?) and (!iac.match('^[0-9]{20}$'))  %>
+[
+  {
+    "code": 400,
+    "message": "Bad request (type=Internal Server Error, status=400).",
+    "fields": "Invalid IAC code ."
+  }
+]
 <% else %>
 [
   {
-    "code": 0,
-    "message": "string",
-    "fields": "string"
+    "code": 500,
+    "message": "There was an unexpected error (type=Internal Server Error, status=500).",
+    "fields": "org.springframework.dao.InvaliDataAccessResourceUsageException: could not extract ResultSet;SQL [n/a]; nested exception is org.hibernate.exception.SQLGrammarException: could not extract Resultset."
   }
 ]
 <% end %>
