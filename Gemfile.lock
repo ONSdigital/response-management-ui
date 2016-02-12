@@ -17,7 +17,7 @@ GEM
     mime-types (2.99)
     net-ldap (0.14.0)
     netrc (0.11.0)
-    ons-ldap (7.8.0)
+    ons-ldap (8.10.0)
       net-ldap (~> 0, >= 0.11)
     pg (0.18.4)
     rack (1.6.4)
@@ -54,7 +54,7 @@ PLATFORMS
 DEPENDENCIES
   ctp-common!
   json
-  ons-ldap!
+  ons-ldap (~> 8)!
   rest-client
   rotp
   sass
