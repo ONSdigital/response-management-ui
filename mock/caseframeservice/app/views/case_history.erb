@@ -1,20 +1,36 @@
 <% if (!caseid.nil?) and (caseid.match('^[0-9]*$'))  %>
 [
   {
-    "casehistoryid": 0,
+    "casehistoryid": 123456,
     "caseid": "<%= caseid %>",
-    "description": "string",
+    "description": "This is some text in a free test field restricted to 100 characters",
     "createdDatetime": "2016-02-11T11:38:08.135Z",
-    "createdBy": "string",
-    "category": "string"
+    "createdBy": "George McFly",
+    "category": "REFUSAL"
   },
   {
-    "casehistoryid": 0,
+    "casehistoryid": 123457,
     "caseid": "<%= caseid %>",
-    "description": "string",
+    "description": "this is some other block of text describing what happened in this event",
     "createdBatetime": "2016-02-11T11:38:08.135Z",
-    "createdBy": "string",
-    "category": "string"
+    "createdBy": "Cedric Digory",
+    "category": "SOMETHING"
+  },
+  {
+    "casehistoryid": 123458,
+    "caseid": "<%= caseid %>",
+    "description": "this is yet more text describing what happened in this event",
+    "createdBatetime": "2016-02-11T11:38:08.135Z",
+    "createdBy": "Brian Brain",
+    "category": "SOMETHING"
+  },
+  {
+    "casehistoryid": 123459,
+    "caseid": "<%= caseid %>",
+    "description": "blah blah blah somr random latin",
+    "createdBatetime": "2016-02-11T11:38:08.135Z",
+    "createdBy": "Cedric Digory",
+    "category": "SOMETHING"
   }
 ]
 <% else %>
