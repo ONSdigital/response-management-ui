@@ -3,14 +3,14 @@ module Beyond
     class FollowUpService < Base
 
       # Get all follow-ups for the selected questionnaire.
-      get '/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/addresses/:uprn_code/questionnaires/:questionnaire_id' do |region_code, local_authority_code, msoa_code, uprn_code, questionnaire_id|
+      get '/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/addresses/:uprn_code/questionnaires/:questionnaire_id/iac/:iac' do |region_code, local_authority_code, msoa_code, uprn_code, questionnaire_id, iac|
         authenticate!
         follow_ups = JSON.parse(RestClient.get("http://#{settings.follow_up_service_host}:#{settings.follow_up_service_port}/FollowUpService/FollowUp/QuestionnaireId=#{questionnaire_id}")).paginate(page: params[:page])
 
         # Get the selected address and quesionnaire details so they can be redisplayed for reference.
-        addresses = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/frameservice/addresses/#{uprn_code}"))
+        addresses = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/addresses/#{uprn_code}"))
         coordinates = "#{addresses.first['latitude']},#{addresses.first['longitude']}"
-        questionnaires = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/frameservice/questionnaires/#{questionnaire_id}"))
+        questionnaires = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/questionnaires/iac/#{iac}"))
         erb :follow_ups, layout: :sidebar_layout,
                          locals: { title: "Follow-Ups for Questionnaire #{questionnaire_id}",
                                    region_code: region_code,

@@ -36,44 +36,52 @@
   <thead>
     <tr>
       <th>Questionnaire ID</th>
-      <th>Survey Token</th>
-      <th>Form Type</th>
+      <th>Questionnaire Status</th>
+      <th>Dispatch Date</th>
       <th>Form Status</th>
       <th>Receipt Status</th>
       <th>Receipt Date</th>
+      <th>IAC</th>
+      <th></th>
     </tr>
   </thead>
   <tbody>
   <% questionnaires.each do |questionnaire| %>
     <tr class="even">
       <td><%=h questionnaire['questionnaireid'] %></td>
-    <% if questionnaire['token'] %>
-      <td class="surveytoken"><%=h questionnaire['token'] %></td>
-    <% else %>
-      <td>Not activated</td>
+      <% if questionnaire['questionnaire_status'] %>
+        <td <%=h questionnaire['questionnaire_status'] %></td>
+      <% else %>
+        <td>-</td>
+      <% end %>
+      <% if questionnaire['questionnaireid'] %>
+        <td><%=h questionnaire['questionnaireid'] %></td>
+      <% else %>
+        <td>-</td>
+      <% end %>
+      <% if questionnaire['dispatchDatetime'] %>
+        <td><%=h questionnaire['dispatchDatetime'] %></td>
+      <% else %>
+        <td>-</td>
+      <% end %>
+      <% if questionnaire['responseDatetime'] %>
+        <td><%=h questionnaire['responseDatetime'] %></td>
+      <% else %>
+        <td>-</td>
+      <% end %>
+      <% if questionnaire['receiptDatetime'] %>
+        <td><%=h questionnaire['receiptDatetime'] %></td>
+      <% else %>
+        <td>-</td>
+      <% end %>
+      <% if questionnaire['iac'] %>
+        <td><%=h questionnaire['iac'] %></td>
+      <% else %>
+        <td>-</td>
+      <% end %>
+        <td><% if params[:page].present? %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/questionnaires/<%=h questionnaire['questionnaireid'] %>/edit?page=<%=h params[:page] %>"><% else %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/questionnaires/<%=h questionnaire['questionnaireid'] %>/edit"><% end %>Edit</a></td>
+      </tr>
     <% end %>
-    <% if questionnaire['questionnaireid'] %>
-      <td><%=h questionnaire['questionnaireid'].slice(0,2).to_form_type %></td>
-    <% else %>
-      <td>-</td>
-    <% end %>
-    <% if questionnaire['formstatus'] %>
-      <td><%=h questionnaire['formstatus'].to_form_status %></td>
-    <% else %>
-      <td>-</td>
-    <% end %>
-    <% if questionnaire['receiptstatus'] %>
-      <td><%=h questionnaire['receiptstatus'] == 0 ? 'Not returned' : 'Returned' %></td>
-    <% else %>
-      <td>-</td>
-    <% end %>
-    <% if questionnaire['receiptdatetime'] %>
-      <td><%=h questionnaire['receiptdatetime'].to_date %></td>
-    <% else %>
-      <td>-</td>
-    <% end %>
-    </tr>
-  <% end %>
   </tbody>
 </table>
 

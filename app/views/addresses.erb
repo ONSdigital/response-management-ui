@@ -24,49 +24,19 @@
         <th>UPRN</th>
         <th>Address Type</th>
         <th>Establishment Type</th>
-        <th>Hard to Count</th>
-        <th>Easting</th>
-        <th>Northing</th>
-        <th>Manager</th>
-        <th>Telephone</th>
         <th></th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h address['uprn'] %>/questionnaires"><%=h address['uprn'] %></a></td>
-      <% if address['addresstype'].present? %>
-        <td><%=h address['addresstype'].to_address_type %></td>
+        <td><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h address['uprn'] %>/cases"><%=h address['uprn'] %></a></td>
+      <% if address['addressType'].present? %>
+        <td><%=h address['addressType'].to_address_type %></td>
       <% else %>
         <td>-</td>
       <% end %>
-      <% if address['estabtype'].present? %>
-        <td><%=h address['estabtype'] %></td>
-      <% else %>
-        <td>-</td>
-      <% end %>
-      <% if address['htc'].present? %>
-        <td><%=h address['htc'] %></td>
-      <% else %>
-        <td>-</td>
-      <% end %>
-      <% if address['eastings'].present? %>
-        <td><%=h address['eastings'] %></td>
-      <% else %>
-        <td-</td>
-      <% end %>
-      <% if address['northings'].present? %>
-        <td><%=h address['northings'] %></td>
-      <% else %>
-        <td-</td>
-      <% end %>
-      <% if address['namemanager'].present? %>
-        <td><%=h address['namemanager'].to_title_case %></td>
-      <% else %>
-        <td>-</td>
-      <% end %>
-      <% if address['telnumber'].present? %>
-        <td><%=h address['telnumber'].to_phone_number %></td>
+      <% if address['estabType'].present? %>
+        <td><%=h address['estabType'] %></td>
       <% else %>
         <td>-</td>
       <% end %>

@@ -3,16 +3,16 @@ module Beyond
     class FrameService < Base
 
       # Get all regions.
-      get '/regions/?' do
+      get '/regions' do
         authenticate!
-        regions = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/frameservice/regions")).paginate(page: params[:page])
+        regions = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/regions")).paginate(page: params[:page])
         erb :regions, locals: { title: 'Regions', regions: regions }
       end
 
       # Get all LAs for the selected region.
-      get '/regions/:region_code/las/?' do |region_code|
+      get '/regions/:region_code/las' do |region_code|
         authenticate!
-        local_authorities = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/frameservice/lads?regionid=#{region_code}")).paginate(page: params[:page])
+        local_authorities = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/regions/#{region_code}/lads")).paginate(page: params[:page])
         erb :local_authorities, locals: { title: "Local Authorities for Region #{region_code}",
                                           region_code: region_code,
                                           local_authorities: local_authorities }
@@ -21,7 +21,7 @@ module Beyond
       # Get all msoas for the selected LA.
       get '/regions/:region_code/las/:local_authority_code/msoas' do |region_code, local_authority_code|
         authenticate!
-        msoas = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/frameservice/msoas?ladid=#{local_authority_code}")).paginate(page: params[:page])
+        msoas = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/lads/#{local_authority_code}/msoas")).paginate(page: params[:page])
         erb :msoas, locals: { title: "MSOAs for LA #{local_authority_code}",
                               region_code: region_code,
                               local_authority_code: local_authority_code,
@@ -31,7 +31,7 @@ module Beyond
       # Get all addresses for the selected MSOA.
       get '/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/addresses' do |region_code, local_authority_code, msoa_code|
         authenticate!
-        addresses = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/frameservice/addresses?msoa11cd=#{msoa_code}")).paginate(page: params[:page])
+        addresses = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/msoas/#{msoa_code}/addresssummaries")).paginate(page: params[:page])
         erb :addresses, locals: { title: "Addresses for MSOA #{msoa_code}",
                                   region_code: region_code,
                                   local_authority_code: local_authority_code,
@@ -42,7 +42,7 @@ module Beyond
       # Get all the addresses to review for the selected msoa. -
       get '/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/addresses/review' do |region_code, local_authority_code, msoa_code|
         authenticate!
-        addresses = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/frameservice/addresses?msoa11cd=#{msoa_code}&notestoreview=true")).paginate(page: params[:page])
+        addresses = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/addresses?msoa11cd=#{msoa_code}&notestoreview=true")).paginate(page: params[:page])
         erb :review_addresses, locals: { title: "Review Addresses Notes for MSOA #{msoa_code}",
                                          region_code: region_code,
                                          local_authority_code: local_authority_code,
@@ -53,7 +53,7 @@ module Beyond
       # Present a form for reviewing the address notes for an existing address.
       get '/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/addresses/:uprn_code/review' do |region_code, local_authority_code, msoa_code, uprn_code|
         authenticate!
-        addresses = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/frameservice/addresses/#{uprn_code}"))
+        addresses = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/addresses/#{uprn_code}"))
         address = addresses.first
         coordinates = "#{address['latitude']},#{address['longitude']}"
         follow_ups = JSON.parse(RestClient.get("http://#{settings.follow_up_service_host}:#{settings.follow_up_service_port}/FollowUpService/FollowUp/uprn=#{uprn_code}")).paginate(page: params[:page])
@@ -194,7 +194,7 @@ module Beyond
       # Present a form for editing an existing address.
       get '/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/addresses/:uprn_code/edit' do |region_code, local_authority_code, msoa_code, uprn_code|
         authenticate!
-        addresses = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/frameservice/addresses/#{uprn_code}"))
+        addresses = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/addresses/#{uprn_code}"))
         address = addresses.first
         coordinates = "#{address['latitude']},#{address['longitude']}"
         action = "/regions/#{region_code}/las/#{local_authority_code}/msoas/#{msoa_code}/addresses/#{uprn_code}"
@@ -270,7 +270,7 @@ module Beyond
 
             if reviewing
               action += '/review'
-              addresses = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/frameservice/addresses/#{params[:uprn_code]}"))
+              addresses = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/addresses/#{params[:uprn_code]}"))
               address = addresses.first
               coordinates = "#{address['latitude']},#{address['longitude']}"
               follow_ups = JSON.parse(RestClient.get("http://#{settings.follow_up_service_host}:#{settings.follow_up_service_port}/FollowUpService/FollowUp/uprn=#{params[:uprn_code]}")).paginate(page: params[:page])
@@ -287,7 +287,7 @@ module Beyond
 
             fill_in_form(output)
           else
-            RestClient.put("http://#{settings.frame_service_host}:#{settings.frame_service_port}/frameservice/addresses/#{params[:uprn_code]}",
+            RestClient.put("http://#{settings.frame_service_host}:#{settings.frame_service_port}/addresses/#{params[:uprn_code]}",
                            { addresstype: params[:addresstype],
                              estabtype: params[:estabtype],
                              msoa11cd: params[:msoa_code],
@@ -319,35 +319,60 @@ module Beyond
         end
       end
 
-      # Get all questionnaires for the selected address.
-      get '/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/addresses/:uprn_code/questionnaires' do |region_code, local_authority_code, msoa_code, uprn_code|
+      # Get all cases for the selected address.
+      get '/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/addresses/:uprn_code/cases' do |region_code, local_authority_code, msoa_code, uprn_code|
         authenticate!
-        questionnaires = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/frameservice/questionnaires?uprn=#{uprn_code}")).paginate(page: params[:page])
+        cases = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/cases/uprn/#{uprn_code}")).paginate(page: params[:page])
 
         # Get the selected address details so they can be redisplayed for reference.
-        addresses = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/frameservice/addresses/#{uprn_code}"))
+        addresses = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/addresses/#{uprn_code}"))
         coordinates = "#{addresses.first['latitude']},#{addresses.first['longitude']}"
-        erb :questionnaires, layout: :sidebar_layout,
-                             locals: { title: "Questionnaires for Address #{uprn_code}",
+        erb :cases, layout: :sidebar_layout,
+                             locals: { title: "Cases for Address #{uprn_code}",
                                        region_code: region_code,
                                        local_authority_code: local_authority_code,
                                        msoa_code: msoa_code,
                                        uprn_code: uprn_code,
-                                       questionnaires: questionnaires,
+                                       cases: cases,
                                        addresses: addresses,
                                        coordinates: coordinates }
+      end
+
+      # Get a specific case.
+      get '/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/addresses/:uprn_code/case/:case_id' do |region_code, local_authority_code, msoa_code, uprn_code,case_id|
+        authenticate!
+        cases = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/cases/#{case_id}"))
+        questionnaires = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/questionnaires/case/#{case_id}"))
+        if cases.empty?
+          erb :case_not_found, locals: { title: 'Case Not Found' }
+        else
+          addresses = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/addresses/#{uprn_code}"))
+          address = addresses.first
+          coordinates = "#{address['latitude']},#{address['longitude']}"
+          erb :unique_case, layout: :sidebar_layout,
+                           locals: { title: "Case #{case_id}",
+                                     region_code: address['regionCode'],
+                                     local_authority_code: address['ladCode'],
+                                     msoa_code: address['msoaArea'],
+                                     uprn_code: address['uprn'],
+                                     caseid: case_id,
+                                     cases: cases,
+                                     questionnaires: questionnaires,
+                                     addresses: addresses,
+                                     coordinates: coordinates }
+        end
       end
 
       # Get a specific questionnaire.
       get '/questionnaires/:questionnaire_id' do |questionnaire_id|
         authenticate!
-        questionnaires = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/frameservice/questionnaires/#{questionnaire_id}"))
+        questionnaires = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/cases/qid/#{questionnaire_id}"))
 
         if questionnaires.empty?
           erb :questionnaire_not_found, locals: { title: 'Questionnaire Not Found' }
         else
           follow_ups = JSON.parse(RestClient.get("http://#{settings.follow_up_service_host}:#{settings.follow_up_service_port}/FollowUpService/FollowUp/QuestionnaireId=#{questionnaire_id}")).paginate(page: params[:page])
-          addresses = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/frameservice/addresses/#{questionnaires.first['uprn']}"))
+          addresses = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/addresses/#{questionnaires.first['uprn']}"))
           address = addresses.first
           coordinates = "#{address['latitude']},#{address['longitude']}"
           erb :follow_ups, layout: :sidebar_layout,
@@ -383,7 +408,7 @@ module Beyond
       # Create a new questionnaire.
       post '/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/addresses/:uprn_code/questionnaires' do |region_code, local_authority_code, msoa_code, uprn_code|
         authenticate!
-        RestClient.post("http://#{settings.frame_service_host}:#{settings.frame_service_port}/frameservice/#{params[:formtype]}/questionnaires",
+        RestClient.post("http://#{settings.frame_service_host}:#{settings.frame_service_port}/#{params[:formtype]}/questionnaires",
                         { uprn: uprn_code,
                           formtype: params[:formtype],
                           formstatus: params[:formstatus].to_i
@@ -404,7 +429,7 @@ module Beyond
       # Present a form for editing an existing questionnaire.
       get '/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/addresses/:uprn_code/questionnaires/:questionnaire_id/edit' do |region_code, local_authority_code, msoa_code, uprn_code, questionnaire_id|
         authenticate!
-        questionnaires = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/frameservice/questionnaires/#{questionnaire_id}"))
+        questionnaires = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/questionnaires/#{questionnaire_id}"))
         questionnaire = questionnaires.first
         action = "/regions/#{region_code}/las/#{local_authority_code}/msoas/#{msoa_code}/addresses/#{uprn_code}/questionnaires/#{questionnaire_id}"
 
@@ -423,7 +448,7 @@ module Beyond
       # Update an existing questionnaire
       put '/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/addresses/:uprn_code/questionnaires/:questionnaire_id' do |region_code, local_authority_code, msoa_code, uprn_code, questionnaire_id|
         authenticate!
-        RestClient.put("http://#{settings.frame_service_host}:#{settings.frame_service_port}/frameservice/questionnaires/#{questionnaire_id}",
+        RestClient.put("http://#{settings.frame_service_host}:#{settings.frame_service_port}/questionnaires/#{questionnaire_id}",
                        { uprn: uprn_code,
                          formtype: params[:formtype],
                          formstatus: params[:formstatus].to_i

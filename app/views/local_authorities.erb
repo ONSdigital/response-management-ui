@@ -25,8 +25,8 @@
   <tbody>
   <% local_authorities.each_with_index do |local_authority, i| %>
     <tr class="<%= i.even? ? 'even' : 'odd ' %>">
-      <td><%=h local_authority['lad12cd'] %></td>
-      <td><a href="/regions/<%=h region_code %>/las/<%=h local_authority['lad12cd'] %>/msoas"><%=h local_authority['lad12nm'] %></a></td>
+      <td><%=h local_authority['ladCode'] %></td>
+      <td><a href="/regions/<%=h region_code %>/las/<%=h local_authority['ladCode'] %>/msoas"><%=h local_authority['ladName'] %></a></td>
     </tr>
   <% end %>
   </tbody>

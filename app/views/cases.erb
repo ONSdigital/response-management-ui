@@ -1,0 +1,102 @@
+<% content_for :menu do %>
+  <li><a href="/">Home</a></li>
+  <li id="active"><a href="/regions">Addresses</a></li>
+<% if authorised? %>
+  <li><a href="/manage">Manage</a></li>
+<% end %>
+<% end %>
+
+<% content_for :breadcrumbs do %>
+  <a href="/regions">Regions</a> &gt; <a href="/regions/<%=h region_code %>/las">Region <%=h region_code %></a> &gt; <a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas">LA <%=h local_authority_code %></a> &gt; <a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses">MSOA <%=h msoa_code %></a> &gt; Address <%=h uprn_code %>
+<% end %>
+
+<% content_for :sub_heading do %>
+  Click a case to create or view questionnaires.
+<% end %>
+
+<% content_for :sidebar do %>
+  <%= erb :googlemaps_partial, locals: { coordinates: coordinates } %>
+<% end %>
+
+<% addresses.each do |address| %>
+  <table class="address" style="margin-top: 0px;">
+    <thead>
+      <tr>
+        <th>UPRN</th>
+        <th>Address Type</th>
+        <th>Easting</th>
+        <th>Northing</th>
+        <th>Address Line 1</th>
+        <th>Manager</th>
+        <th>Telephone</th>
+      </tr>
+    </thead>
+    <%= erb :address_partial, locals: { address: address } %>
+    <%= erb :addresslines_partial, locals: { address: address } %>
+  </table>
+<% end %>
+
+<% content_for :footer do %>
+  <h3>Cases</h3>
+  <div id="newcases">
+    <form action="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/questionnaires/new" method="get">
+      <input class="button" type="submit" value="Create Case&hellip;"> or <% if params[:page].present? %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/questionnaires?page=<%=h params[:page] %>"><% else %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/questionnaires"><% end %>Refresh</a>
+    <% if params[:page].present? %>
+      <input type="hidden" name="page" value="<%=h params[:page] %>">
+    <% end %>
+    </form>
+  </div>
+
+  <% if cases.any? %>
+    <%= will_paginate cases, :class => 'questionnairepagination', :previous_label => '&lt; Prev', :next_label => 'Next &gt;' %>
+    <table class="questionnaire">
+      <thead>
+        <tr>
+          <th>Case ID</th>
+          <th>Case Status</th>
+          <th>Case Type</th>
+          <th>Case Created</th>
+          <th>Sample ID</th>
+          <th>Form Type</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+      <% cases.each_with_index do |uniqueCase, i| %>
+        <tr class="<%= i.even? ? 'even' : 'odd ' %>">
+          <td><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/case/<%=h uniqueCase['caseid'] %>"><%=h uniqueCase['caseid'] %></a></td>
+        <% if uniqueCase['caseStatus'].present? %>
+          <td><%=h uniqueCase['caseStatus'] %></td>
+          <% else %>
+            <td>-</td>
+          <% end %>
+        <% if uniqueCase['casetype'].present? %>
+          <td><%=h uniqueCase['casetype'] %></td>
+        <% else %>
+          <td>-</td>
+        <% end %>
+        <% if uniqueCase['createdDatetime'].present? %>
+          <td><%=h uniqueCase['createdDatetime'] %></td>
+        <% else %>
+          <td>-</td>
+        <% end %>
+        <% if uniqueCase['sampleid'].present? %>
+          <td><%=h uniqueCase['sampleid']  %></td>
+        <% else %>
+          <td>-</td>
+        <% end %>
+        <% if uniqueCase['formtype'].present? %>
+          <td><%=h uniqueCase['formtype'] %></td>
+        <% else %>
+          <td>-</td>
+        <% end %>
+          <td><% if params[:page].present? %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/cases/<%=h uniqueCase['caseid'] %>/edit?page=<%=h params[:page] %>"><% else %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/cases/<%=h uniqueCase['caseid'] %>/edit"><% end %>Edit</a></td>
+        </tr>
+      <% end %>
+        </tbody>
+      </table>
+      <%= will_paginate cases, :previous_label => '&lt; Prev', :next_label => 'Next &gt;' %>
+  <% else %>
+    <p id="information"><strong>There are no cases for this address.</strong></p>
+  <% end %>
+<% end %>

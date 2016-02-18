@@ -1,11 +1,11 @@
 <tbody class="addresslines">
-<% if address['address_line2'].present? %>
+<% if address['addressLine2'].present? %>
   <tr>
-    <td colspan="10"><%=h address['address_line2'].to_title_case %></td>
+    <td colspan="10"><%=h address['addressLine2'].to_title_case %></td>
   </tr>
 <% end %>
   <tr>
-    <td colspan="10"><%=h address['town_name'].to_title_case %></td>
+    <td colspan="10"><%=h address['townName'].to_title_case %></td>
   </tr>
   <tr>
     <td colspan="10"><%=h address['postcode'] %></td>
