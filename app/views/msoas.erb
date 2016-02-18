@@ -18,13 +18,15 @@
 <table class="caseloads">
   <thead>
     <tr>
-      <th>MSOA</th>
+      <th>MSOA Code</th>
+      <th>MSOA Name</th>
     </tr>
   </thead>
   <tbody>
   <% msoas.each_with_index do |msoa, i| %>
     <tr class="<%= i.even? ? 'even' : 'odd ' %>">
-      <td><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa['msoaCode'] %>/addresses"><%=h msoa['msoaCode'] %></a></td>
+      <td><%=h msoa['msoaCode'] %></a></td>
+      <td><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa['msoaCode'] %>/addresses"><%=h msoa['msoaName'] %></a></td>
     </tr>
   <% end %>
   </tbody>

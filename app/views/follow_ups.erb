@@ -7,7 +7,7 @@
 <% end %>
 
 <% content_for :breadcrumbs do %>
-  <a href="/regions">Regions</a> &gt; <a href="/regions/<%=h region_code %>/las">Region <%=h region_code %></a> &gt; <a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas">LA <%=h local_authority_code %></a> &gt; <a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses">MSOA <%=h msoa_code %></a> &gt; <a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/questionnaires">Address <%=uprn_code %></a> &gt; Questionnaire <%=h questionnaire_id %>
+  <a href="/regions">Regions</a> &gt; <a href="/regions/<%=h region_code %>/las">Region <%=h region_code %></a> &gt; <a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas">LA <%=h local_authority_code %></a> &gt; <a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses">MSOA <%=h msoa_code %></a> &gt; <a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/cases">Address <%=uprn_code %></a> &gt; <a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/case/<%=h case_id %>">Case <%=case_id %></a> &gt; Questionnaire <%=h questionnaire_id %>
 <% end %>
 
 <% content_for :sidebar do %>
@@ -38,9 +38,9 @@
       <th>Questionnaire ID</th>
       <th>Questionnaire Status</th>
       <th>Dispatch Date</th>
-      <th>Form Status</th>
-      <th>Receipt Status</th>
+      <th>Response Date</th>
       <th>Receipt Date</th>
+      <th>Form Type</th>
       <th>IAC</th>
       <th></th>
     </tr>
@@ -51,11 +51,6 @@
       <td><%=h questionnaire['questionnaireid'] %></td>
       <% if questionnaire['questionnaire_status'] %>
         <td <%=h questionnaire['questionnaire_status'] %></td>
-      <% else %>
-        <td>-</td>
-      <% end %>
-      <% if questionnaire['questionnaireid'] %>
-        <td><%=h questionnaire['questionnaireid'] %></td>
       <% else %>
         <td>-</td>
       <% end %>
@@ -74,12 +69,17 @@
       <% else %>
         <td>-</td>
       <% end %>
+      <% if questionnaire['formtype'] %>
+        <td><%=h questionnaire['formtype'] %></td>
+      <% else %>
+        <td>-</td>
+      <% end %>
       <% if questionnaire['iac'] %>
         <td><%=h questionnaire['iac'] %></td>
       <% else %>
         <td>-</td>
       <% end %>
-        <td><% if params[:page].present? %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/questionnaires/<%=h questionnaire['questionnaireid'] %>/edit?page=<%=h params[:page] %>"><% else %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/questionnaires/<%=h questionnaire['questionnaireid'] %>/edit"><% end %>Edit</a></td>
+          <td><% if params[:page].present? %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/case/<%=h case_id %>/questionnaires/<%=h questionnaire['questionnaireid'] %>/iac/<%=h questionnaire['iac'] %>/edit?page=<%=h params[:page] %>"><% else %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/case/<%=h case_id %>/questionnaires/<%=h questionnaire['questionnaireid'] %>/iac/<%=h questionnaire['iac'] %>/edit"><% end %>Edit</a></td>
       </tr>
     <% end %>
   </tbody>

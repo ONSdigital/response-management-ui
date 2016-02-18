@@ -342,6 +342,31 @@ module Beyond
       get '/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/addresses/:uprn_code/case/:case_id' do |region_code, local_authority_code, msoa_code, uprn_code,case_id|
         authenticate!
         cases = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/cases/#{case_id}"))
+        events = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/cases/#{case_id}/history"))
+        if cases.empty?
+          erb :case_not_found, locals: { title: 'Case Not Found' }
+        else
+          addresses = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/addresses/#{uprn_code}"))
+          address = addresses.first
+          coordinates = "#{address['latitude']},#{address['longitude']}"
+          erb :case_events, layout: :sidebar_layout,
+                           locals: { title: "Events for Case #{case_id}",
+                                     region_code: address['regionCode'],
+                                     local_authority_code: address['ladCode'],
+                                     msoa_code: address['msoaArea'],
+                                     uprn_code: address['uprn'],
+                                     caseid: case_id,
+                                     cases: cases,
+                                     events: events,
+                                     addresses: addresses,
+                                     coordinates: coordinates }
+        end
+      end
+
+      # Get all questionnaires for a specific case.
+      get '/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/addresses/:uprn_code/cases/:case_id/questionnaires' do |region_code, local_authority_code, msoa_code, uprn_code,case_id|
+        authenticate!
+        cases = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/cases/#{case_id}"))
         questionnaires = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/questionnaires/case/#{case_id}"))
         if cases.empty?
           erb :case_not_found, locals: { title: 'Case Not Found' }
@@ -349,8 +374,8 @@ module Beyond
           addresses = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/addresses/#{uprn_code}"))
           address = addresses.first
           coordinates = "#{address['latitude']},#{address['longitude']}"
-          erb :unique_case, layout: :sidebar_layout,
-                           locals: { title: "Case #{case_id}",
+          erb :case_questionnaire, layout: :sidebar_layout,
+                           locals: { title: "Questionnaires for Case #{case_id}",
                                      region_code: address['regionCode'],
                                      local_authority_code: address['ladCode'],
                                      msoa_code: address['msoaArea'],
@@ -427,9 +452,9 @@ module Beyond
       end
 
       # Present a form for editing an existing questionnaire.
-      get '/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/addresses/:uprn_code/questionnaires/:questionnaire_id/edit' do |region_code, local_authority_code, msoa_code, uprn_code, questionnaire_id|
+      get '/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/addresses/:uprn_code/case/:case_id/questionnaires/:questionnaire_id/iac/:iac/edit' do |region_code, local_authority_code, msoa_code, uprn_code, case_id, questionnaire_id, iac|
         authenticate!
-        questionnaires = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/questionnaires/#{questionnaire_id}"))
+        questionnaires = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/questionnaires/iac/#{iac}"))
         questionnaire = questionnaires.first
         action = "/regions/#{region_code}/las/#{local_authority_code}/msoas/#{msoa_code}/addresses/#{uprn_code}/questionnaires/#{questionnaire_id}"
 

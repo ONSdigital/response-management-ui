@@ -3,7 +3,7 @@ module Beyond
     class FollowUpService < Base
 
       # Get all follow-ups for the selected questionnaire.
-      get '/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/addresses/:uprn_code/questionnaires/:questionnaire_id/iac/:iac' do |region_code, local_authority_code, msoa_code, uprn_code, questionnaire_id, iac|
+      get '/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/addresses/:uprn_code/case/:case_id/questionnaires/:questionnaire_id/iac/:iac' do |region_code, local_authority_code, msoa_code, uprn_code, case_id, questionnaire_id, iac|
         authenticate!
         follow_ups = JSON.parse(RestClient.get("http://#{settings.follow_up_service_host}:#{settings.follow_up_service_port}/FollowUpService/FollowUp/QuestionnaireId=#{questionnaire_id}")).paginate(page: params[:page])
 
@@ -17,6 +17,7 @@ module Beyond
                                    local_authority_code: local_authority_code,
                                    msoa_code: msoa_code,
                                    uprn_code: uprn_code,
+                                   case_id: case_id,
                                    questionnaire_id: questionnaire_id,
                                    follow_ups: follow_ups,
                                    questionnaires: questionnaires,
