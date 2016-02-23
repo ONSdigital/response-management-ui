@@ -1,7 +1,6 @@
 <% if (!uprn.nil?) and (uprn.match('^[0-9]*$'))  %>
-[
   {
-    "uprn":"<%= uprn %>",
+    "uprn":<%= uprn %>,
     "addresstype":"HH",
     "estabtype":"",
     "addressLine1":"",
@@ -20,7 +19,6 @@
     "longitude":-1.2286043954101922,
     "ladName":"Hartlepool"
   }
-]
 <% else %>
 [
   {

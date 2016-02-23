@@ -325,8 +325,8 @@ module Beyond
         cases = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/cases/uprn/#{uprn_code}")).paginate(page: params[:page])
 
         # Get the selected address details so they can be redisplayed for reference.
-        addresses = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/addresses/#{uprn_code}"))
-        coordinates = "#{addresses.first['latitude']},#{addresses.first['longitude']}"
+        address = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/addresses/#{uprn_code}"))
+        coordinates = "#{address['latitude']},#{address['longitude']}"
         erb :cases, layout: :sidebar_layout,
                              locals: { title: "Cases for Address #{uprn_code}",
                                        region_code: region_code,
@@ -334,7 +334,7 @@ module Beyond
                                        msoa_code: msoa_code,
                                        uprn_code: uprn_code,
                                        cases: cases,
-                                       addresses: addresses,
+                                       address: address,
                                        coordinates: coordinates }
       end
 
@@ -346,8 +346,7 @@ module Beyond
         if cases.empty?
           erb :case_not_found, locals: { title: 'Case Not Found' }
         else
-          addresses = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/addresses/#{uprn_code}"))
-          address = addresses.first
+          address = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/addresses/#{uprn_code}"))
           coordinates = "#{address['latitude']},#{address['longitude']}"
           erb :case_events, layout: :sidebar_layout,
                            locals: { title: "Events for Case #{case_id}",
@@ -358,7 +357,7 @@ module Beyond
                                      caseid: case_id,
                                      cases: cases,
                                      events: events,
-                                     addresses: addresses,
+                                     address: address,
                                      coordinates: coordinates }
         end
       end
@@ -415,7 +414,7 @@ module Beyond
       end
 
       # Present a form for creating a new questionnaire.
-      get '/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/addresses/:uprn_code/cases/:case_id/questionnaires/new' do |region_code, local_authority_code, msoa_code, case_id, uprn_code|
+      get '/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/addresses/:uprn_code/questionnaires/new' do |region_code, local_authority_code, msoa_code, uprn_code|
         authenticate!
         action = "/regions/#{region_code}/las/#{local_authority_code}/msoas/#{msoa_code}/addresses/#{uprn_code}/questionnaires"
         erb :questionnaire, locals: { title: "Create Questionnaire for Address #{uprn_code}",
@@ -426,45 +425,8 @@ module Beyond
                                       local_authority_code: local_authority_code,
                                       msoa_code: msoa_code,
                                       uprn_code: uprn_code,
-                                      case_id: case_id,
                                       formtype: '01',
                                       formstatus: 0 }
-      end
-
-      # Present a form for creating a new case.
-      get '/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/addresses/:uprn_code/cases/new' do |region_code, local_authority_code, msoa_code, uprn_code|
-        authenticate!
-        action = "/regions/#{region_code}/las/#{local_authority_code}/msoas/#{msoa_code}/addresses/#{uprn_code}/cases"
-        erb :case, locals: { title: "Create Case for Address #{uprn_code}",
-                                      action: action,
-                                      method: :post,
-                                      page: params[:page],
-                                      region_code: region_code,
-                                      local_authority_code: local_authority_code,
-                                      msoa_code: msoa_code,
-                                      uprn_code: uprn_code,
-                                      formtype: '01',
-                                      formstatus: 0 }
-      end
-
-      # Present a form for creating a new event.
-      get '/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/addresses/:uprn_code/case/:case_id/event/new' do |region_code, local_authority_code, msoa_code, uprn_code, case_id|
-        authenticate!
-        eventDropDowns = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/events"))
-        action = "/regions/#{region_code}/las/#{local_authority_code}/msoas/#{msoa_code}/case/#{case_id}/event"
-        erb :event, locals: { title: "Create Event for Case #{case_id}",
-                                      action: action,
-                                      method: :post,
-                                      page: params[:page],
-                                      region_code: region_code,
-                                      local_authority_code: local_authority_code,
-                                      msoa_code: msoa_code,
-                                      case_id: case_id,
-                                      uprn_code: uprn_code,
-                                      eventDropDowns: eventDropDowns,
-                                      formtype: '01',
-                                      eventCategory: 0,
-                                      eventOutcome: 0}
       end
 
       # Create a new questionnaire.
@@ -503,9 +465,6 @@ module Beyond
                                       local_authority_code: local_authority_code,
                                       msoa_code: msoa_code,
                                       uprn_code: uprn_code,
-                                      case_id: case_id,
-                                      iac: iac,
-                                      questionnaire_id: questionnaire_id,
                                       formtype: questionnaire['formtype'],
                                       formstatus: questionnaire['formstatus'].to_i }
       end

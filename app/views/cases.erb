@@ -18,7 +18,6 @@
   <%= erb :googlemaps_partial, locals: { coordinates: coordinates } %>
 <% end %>
 
-<% addresses.each do |address| %>
   <table class="address" style="margin-top: 0px;">
     <thead>
       <tr>
@@ -34,7 +33,6 @@
     <%= erb :address_partial, locals: { address: address } %>
     <%= erb :addresslines_partial, locals: { address: address } %>
   </table>
-<% end %>
 
 <% content_for :footer do %>
   <h3>Cases</h3>
