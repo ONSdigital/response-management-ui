@@ -38,14 +38,6 @@
 
 <% content_for :footer do %>
   <h3>Cases</h3>
-  <div id="newcases">
-    <form action="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/questionnaires/new" method="get">
-      <input class="button" type="submit" value="Create Case&hellip;"> or <% if params[:page].present? %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/questionnaires?page=<%=h params[:page] %>"><% else %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/questionnaires"><% end %>Refresh</a>
-    <% if params[:page].present? %>
-      <input type="hidden" name="page" value="<%=h params[:page] %>">
-    <% end %>
-    </form>
-  </div>
 
   <% if cases.any? %>
     <%= will_paginate cases, :class => 'questionnairepagination', :previous_label => '&lt; Prev', :next_label => 'Next &gt;' %>
@@ -58,7 +50,6 @@
           <th>Case Created</th>
           <th>Sample ID</th>
           <th>Form Type</th>
-          <th></th>
         </tr>
       </thead>
       <tbody>
@@ -90,7 +81,6 @@
         <% else %>
           <td>-</td>
         <% end %>
-          <td><% if params[:page].present? %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/cases/<%=h uniqueCase['caseid'] %>/edit?page=<%=h params[:page] %>"><% else %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/cases/<%=h uniqueCase['caseid'] %>/edit"><% end %>Edit</a></td>
         </tr>
       <% end %>
         </tbody>

@@ -1,0 +1,95 @@
+<% content_for :menu do %>
+  <li><a href="/">Home</a></li>
+  <li id="active"><a href="/regions">Addresses</a></li>
+<% if authorised? %>
+  <li><a href="/manage">Manage</a></li>
+<% end %>
+<% end %>
+
+<% content_for :breadcrumbs do %>
+  <a href="/regions">Regions</a> &gt; <a href="/regions/<%=h region_code %>/las">Region <%=h region_code %></a> &gt; <a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas">LA <%=h local_authority_code %></a> &gt; <a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses">MSOA <%=h msoa_code %></a> &gt; <a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/case/<%=h case_id %>">Case <%=h case_id %></a> &gt; <% if method.eql? :post %>Create Event<% elsif method.eql? :put %>Edit Event<% end %>
+<% end %>
+
+<% content_for :stylesheet do %>
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.min.css">
+<% end %>
+
+<% content_for :javascript do %>
+  <script src="//code.jquery.com/ui/1.11.0/jquery-ui.min.js"></script>
+  <script src="/javascripts/questionnaire.js" type="text/javascript"></script>
+  <script src="/javascripts/events.js" type="text/javascript"></script>
+  <script src="/javascripts/dropdowns.js" type="text/javascript"></script>
+
+<% end %>
+
+<form action="<%= action %>" method="post">
+<% if method.present? %>
+  <input type="hidden" name="_method" value="<%= method %>">
+<% end %>
+<% if params[:page].present? %>
+  <input type="hidden" name="page" value="<%=h params[:page] %>">
+<% end %>
+
+  <fieldset>
+    <% if method == :post %>
+    <form>
+      <!-- remember to markup your forms properly using labels! -->
+      <p><label for="textareaChars">Description (max 100 characters)</label> <span class="required">*</span></p>
+      <textarea rows="4" cols="50" id="textareaChars" maxlength="100"></textarea>
+      <span id="chars">100</span> characters remaining
+    </form>
+    <% end %>
+    <p><label for="eventCategory">Category</label> <span class="required">*</span></p>
+    <p>
+      <select id="eventCategory" name="eventCategory">
+      <% if eventCategory.to_s.eql? '0' %>
+        <option value="0" selected="selected">Helpline</option>
+        <option value="1">Field</option>
+      <% elsif eventCategory.to_s.eql? '1' %>
+        <option value="0">Field</option>
+        <option value="1" selected="selected">Helpline</option>
+      <% end %>
+      </select>
+    </p>
+    <p><label for="eventOutcome">Outcome</label> <span class="required">*</span></p>
+    <p>
+      <select id="eventOutcome" name="eventOutcome">
+      <% if eventOutcome.to_s.eql? '0' %>
+        <option value="0" selected="selected">Refused</option>
+        <option value="1">Support Provided</option>
+        <option value="2">Materials Requested</option>
+        <option value="3">Paper Questionnaire Requested</option>
+        <option value="4">Not A Property</option>
+      <% elsif eventOutcome.to_s.eql? '1' %>
+        <option value="0">Refused</option>
+        <option value="1" selected="selected">Support Provided</option>
+        <option value="2">Materials Requested</option>
+        <option value="3">Paper Questionnaire Requested</option>
+        <option value="4">Not A Property</option>
+      <% elsif eventOutcome.to_s.eql? '2' %>
+        <option value="0">Refused</option>
+        <option value="1">Support Provided</option>
+        <option value="2" selected="selected">Materials Requested</option>
+        <option value="3">Paper Questionnaire Requested</option>
+        <option value="4">Not A Property</option>
+      <% elsif eventOutcome.to_s.eql? '3' %>
+        <option value="0">Refused</option>
+        <option value="1">Support Provided</option>
+        <option value="2">Materials Requested</option>
+        <option value="3" selected="selected">Paper Questionnaire Requested</option>
+        <option value="4">Not A Property</option>
+      <% elsif eventOutcome.to_s.eql? '4' %>
+        <option value="0">Refused</option>
+        <option value="1">Support Provided</option>
+        <option value="2">Materials Requested</option>
+        <option value="3">Paper Questionnaire Requested</option>
+        <option value="4" selected="selected">Not A Property</option>
+      <% end %>
+      </select>
+    </p>
+  </fieldset>
+  <p id="requiredfields"><span class="required">*</span> Required fields</p>
+  <p class="buttons">
+    <input class="button" type="submit" value="Save"> or <% if params[:page].present? %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/case/<%=h case_id %>/event?page=<%=h params[:page] %>"><% else %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/case/<%=h case_id %>"><% end %>Cancel</a>
+  </p>
+</form>

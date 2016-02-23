@@ -41,8 +41,7 @@
       <th>Case Created</th>
       <th>Sample ID</th>
       <th>Form Type</th>
-      <th>Questionnaires</th>
-      <th></th>
+      <th>Questionnaires</th
     </tr>
   </thead>
   <tbody>
@@ -75,7 +74,6 @@
     <td>-</td>
   <% end %>
     <td><% if params[:page].present? %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/cases/<%=h uniqueCase['caseid'] %>/questionnaires?page=<%=h params[:page] %>"><% else %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/cases/<%=h uniqueCase['caseid'] %>/questionnaires"><% end %>View Questionnaires</a></td>
-    <td><% if params[:page].present? %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/cases/<%=h uniqueCase['caseid'] %>/edit?page=<%=h params[:page] %>"><% else %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/cases/<%=h uniqueCase['caseid'] %>/edit"><% end %>Edit</a></td>
   </tr>
   <% end %>
   </tbody>
@@ -83,9 +81,9 @@
 
 <% content_for :footer do %>
   <h3>Events</h3>
-  <div id="newquestionnaire">
-    <form action="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/questionnaires/new" method="get">
-      <input class="button" type="submit" value="Create Event&hellip;"> or <% if params[:page].present? %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/questionnaires?page=<%=h params[:page] %>"><% else %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/questionnaires"><% end %>Refresh</a>
+  <div id="newevent">
+    <form action="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/case/<%=h caseid %>/event/new" method="get">
+      <input class="button" type="submit" value="Create Event&hellip;"> or <% if params[:page].present? %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/questionnaires?page=<%=h params[:page] %>"><% else %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/case/<%=h caseid %>"><% end %>Refresh</a>
     <% if params[:page].present? %>
       <input type="hidden" name="page" value="<%=h params[:page] %>">
     <% end %>

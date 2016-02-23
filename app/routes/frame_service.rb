@@ -415,7 +415,7 @@ module Beyond
       end
 
       # Present a form for creating a new questionnaire.
-      get '/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/addresses/:uprn_code/questionnaires/new' do |region_code, local_authority_code, msoa_code, uprn_code|
+      get '/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/addresses/:uprn_code/cases/:case_id/questionnaires/new' do |region_code, local_authority_code, msoa_code, case_id, uprn_code|
         authenticate!
         action = "/regions/#{region_code}/las/#{local_authority_code}/msoas/#{msoa_code}/addresses/#{uprn_code}/questionnaires"
         erb :questionnaire, locals: { title: "Create Questionnaire for Address #{uprn_code}",
@@ -426,8 +426,45 @@ module Beyond
                                       local_authority_code: local_authority_code,
                                       msoa_code: msoa_code,
                                       uprn_code: uprn_code,
+                                      case_id: case_id,
                                       formtype: '01',
                                       formstatus: 0 }
+      end
+
+      # Present a form for creating a new case.
+      get '/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/addresses/:uprn_code/cases/new' do |region_code, local_authority_code, msoa_code, uprn_code|
+        authenticate!
+        action = "/regions/#{region_code}/las/#{local_authority_code}/msoas/#{msoa_code}/addresses/#{uprn_code}/cases"
+        erb :case, locals: { title: "Create Case for Address #{uprn_code}",
+                                      action: action,
+                                      method: :post,
+                                      page: params[:page],
+                                      region_code: region_code,
+                                      local_authority_code: local_authority_code,
+                                      msoa_code: msoa_code,
+                                      uprn_code: uprn_code,
+                                      formtype: '01',
+                                      formstatus: 0 }
+      end
+
+      # Present a form for creating a new event.
+      get '/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/addresses/:uprn_code/case/:case_id/event/new' do |region_code, local_authority_code, msoa_code, uprn_code, case_id|
+        authenticate!
+        eventDropDowns = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/events"))
+        action = "/regions/#{region_code}/las/#{local_authority_code}/msoas/#{msoa_code}/case/#{case_id}/event"
+        erb :event, locals: { title: "Create Event for Case #{case_id}",
+                                      action: action,
+                                      method: :post,
+                                      page: params[:page],
+                                      region_code: region_code,
+                                      local_authority_code: local_authority_code,
+                                      msoa_code: msoa_code,
+                                      case_id: case_id,
+                                      uprn_code: uprn_code,
+                                      eventDropDowns: eventDropDowns,
+                                      formtype: '01',
+                                      eventCategory: 0,
+                                      eventOutcome: 0}
       end
 
       # Create a new questionnaire.
@@ -466,6 +503,9 @@ module Beyond
                                       local_authority_code: local_authority_code,
                                       msoa_code: msoa_code,
                                       uprn_code: uprn_code,
+                                      case_id: case_id,
+                                      iac: iac,
+                                      questionnaire_id: questionnaire_id,
                                       formtype: questionnaire['formtype'],
                                       formstatus: questionnaire['formstatus'].to_i }
       end

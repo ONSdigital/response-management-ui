@@ -1,0 +1,66 @@
+<% content_for :menu do %>
+  <li><a href="/">Home</a></li>
+  <li id="active"><a href="/regions">Addresses</a></li>
+<% if authorised? %>
+  <li><a href="/manage">Manage</a></li>
+<% end %>
+<% end %>
+
+<% content_for :breadcrumbs do %>
+  <a href="/regions">Regions</a> &gt; <a href="/regions/<%=h region_code %>/las">Region <%=h region_code %></a> &gt; <a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas">LA <%=h local_authority_code %></a> &gt; <a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses">MSOA <%=h msoa_code %></a> &gt; <a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/cases">Address <%=h uprn_code %></a> &gt; <% if method.eql? :post %>Create Event<% elsif method.eql? :put %>Edit Event<% end %>
+<% end %>
+
+<% content_for :stylesheet do %>
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.min.css">
+<% end %>
+
+<% content_for :javascript do %>
+  <script src="//code.jquery.com/ui/1.11.0/jquery-ui.min.js"></script>
+  <script src="/javascripts/questionnaire.js" type="text/javascript"></script>
+<% end %>
+
+<form action="<%= action %>" method="post">
+<% if method.present? %>
+  <input type="hidden" name="_method" value="<%= method %>">
+<% end %>
+<% if params[:page].present? %>
+  <input type="hidden" name="page" value="<%=h params[:page] %>">
+<% end %>
+
+  <fieldset>
+    <% if method == :post %>
+    <p><label for="formtype">Description (max 100 characters)</label> <span class="required">*</span></p>
+    <p>
+      <textarea rows="4" cols="50">Enter short description of event.</textarea>
+    </p>
+    <% end %>
+    <p><label for="formstatus">Category</label> <span class="required">*</span></p>
+    <p>
+      <select id="formstatus" name="formstatus">
+      <% if formstatus.to_s.eql? '0' %>
+        <option value="0" selected="selected">Not dispatched</option>
+        <option value="1">Dispatched</option>
+      <% elsif formstatus.to_s.eql? '1' %>
+        <option value="0">Not dispatched</option>
+        <option value="1" selected="selected">Dispatched</option>
+      <% end %>
+      </select>
+    </p>
+    <p><label for="formstatus">Outcome</label> <span class="required">*</span></p>
+    <p>
+      <select id="formstatus" name="formstatus">
+      <% if formstatus.to_s.eql? '0' %>
+        <option value="0" selected="selected">Not dispatched</option>
+        <option value="1">Dispatched</option>
+      <% elsif formstatus.to_s.eql? '1' %>
+        <option value="0">Not dispatched</option>
+        <option value="1" selected="selected">Dispatched</option>
+      <% end %>
+      </select>
+    </p>
+  </fieldset>
+  <p id="requiredfields"><span class="required">*</span> Required fields</p>
+  <p class="buttons">
+    <input class="button" type="submit" value="Save"> or <% if params[:page].present? %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/case?page=<%=h params[:page] %>"><% else %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/cases"><% end %>Cancel</a>
+  </p>
+</form>
