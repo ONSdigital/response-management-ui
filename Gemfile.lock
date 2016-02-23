@@ -54,7 +54,7 @@ PLATFORMS
 DEPENDENCIES
   ctp-common!
   json
-  ons-ldap (~> 8)!
+  ons-ldap!
   rest-client
   rotp
   sass
