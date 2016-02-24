@@ -43,16 +43,16 @@
     </tr>
   </thead>
   <tbody>
-  <% cases.each do |uniqueCase| %>
+
   <tr class="even">
-    <td><%=h uniqueCase['caseid'] %></td>
+    <td><%=h uniqueCase['caseId'] %></td>
   <% if uniqueCase['caseStatus'].present? %>
     <td><%=h uniqueCase['caseStatus'] %></td>
     <% else %>
       <td>-</td>
     <% end %>
-  <% if uniqueCase['casetype'].present? %>
-    <td><%=h uniqueCase['casetype'] %></td>
+  <% if uniqueCase['caseTypeId'].present? %>
+    <td><%=h uniqueCase['caseTypeId'] %></td>
   <% else %>
     <td>-</td>
   <% end %>
@@ -61,19 +61,18 @@
   <% else %>
     <td>-</td>
   <% end %>
-  <% if uniqueCase['sampleid'].present? %>
-    <td><%=h uniqueCase['sampleid']  %></td>
+  <% if uniqueCase['sampleId'].present? %>
+    <td><%=h uniqueCase['sampleId']  %></td>
   <% else %>
     <td>-</td>
   <% end %>
-  <% if uniqueCase['formtype'].present? %>
-    <td><%=h uniqueCase['formtype'] %></td>
+  <% if uniqueCase['questionSet'].present? %>
+    <td><%=h uniqueCase['questionSet'] %></td>
   <% else %>
     <td>-</td>
   <% end %>
-    <td><% if params[:page].present? %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/cases/<%=h uniqueCase['caseid'] %>/questionnaires?page=<%=h params[:page] %>"><% else %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/cases/<%=h uniqueCase['caseid'] %>/questionnaires"><% end %>View Questionnaires</a></td>
+    <td><% if params[:page].present? %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/cases/<%=h uniqueCase['caseId'] %>/questionnaires?page=<%=h params[:page] %>"><% else %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/cases/<%=h uniqueCase['caseId'] %>/questionnaires"><% end %>View Questionnaires</a></td>
   </tr>
-  <% end %>
   </tbody>
 </table>
 
@@ -100,8 +99,8 @@
       <tbody>
       <% events.each_with_index do |events, i| %>
         <tr class="<%= i.even? ? 'even' : 'odd ' %>">
-        <% if events['casehistoryid'] %>
-          <td><%=h events['casehistoryid'] %></td>
+        <% if events['caseEventId'] %>
+          <td><%=h events['caseEventId'] %></td>
         <% else %>
           <td>-</td>
         <% end %>

@@ -341,21 +341,21 @@ module Beyond
       # Get a specific case.
       get '/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/addresses/:uprn_code/case/:case_id' do |region_code, local_authority_code, msoa_code, uprn_code,case_id|
         authenticate!
-        cases = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/cases/#{case_id}"))
-        events = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/cases/#{case_id}/history"))
-        if cases.empty?
+        uniqueCase = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/cases/#{case_id}"))
+        events = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/cases/#{case_id}/events"))
+        if uniqueCase.empty?
           erb :case_not_found, locals: { title: 'Case Not Found' }
         else
           address = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/addresses/#{uprn_code}"))
           coordinates = "#{address['latitude']},#{address['longitude']}"
           erb :case_events, layout: :sidebar_layout,
                            locals: { title: "Events for Case #{case_id}",
-                                     region_code: address['regionCode'],
-                                     local_authority_code: address['ladCode'],
-                                     msoa_code: address['msoaArea'],
+                                     region_code: address['region11cd'],
+                                     local_authority_code: address['lad12cd'],
+                                     msoa_code: address['msoa11cd'],
                                      uprn_code: address['uprn'],
                                      caseid: case_id,
-                                     cases: cases,
+                                     uniqueCase: uniqueCase,
                                      events: events,
                                      address: address,
                                      coordinates: coordinates }
@@ -427,6 +427,26 @@ module Beyond
                                       uprn_code: uprn_code,
                                       formtype: '01',
                                       formstatus: 0 }
+      end
+
+      # Present a form for creating a new event.
+      get '/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/addresses/:uprn_code/case/:case_id/event/new' do |region_code, local_authority_code, msoa_code, uprn_code, case_id|
+      authenticate!
+      #eventDropDowns = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/events"))
+      action = "/regions/#{region_code}/las/#{local_authority_code}/msoas/#{msoa_code}/case/#{case_id}/event"
+      erb :event, locals: { title: "Create Event for Case #{case_id}",
+                                    action: action,
+                                    method: :post,
+                                    page: params[:page],
+                                    region_code: region_code,
+                                    local_authority_code: local_authority_code,
+                                    msoa_code: msoa_code,
+                                    case_id: case_id,
+                                    uprn_code: uprn_code,
+                                    #eventDropDowns: eventDropDowns,
+                                    formtype: '01',
+                                    eventCategory: 0,
+                                    eventOutcome: 0}
       end
 
       # Create a new questionnaire.

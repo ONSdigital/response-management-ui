@@ -53,14 +53,14 @@
       <tbody>
       <% cases.each_with_index do |uniqueCase, i| %>
         <tr class="<%= i.even? ? 'even' : 'odd ' %>">
-          <td><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/case/<%=h uniqueCase['caseid'] %>"><%=h uniqueCase['caseid'] %></a></td>
+          <td><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/case/<%=h uniqueCase['caseId'] %>"><%=h uniqueCase['caseId'] %></a></td>
         <% if uniqueCase['caseStatus'].present? %>
           <td><%=h uniqueCase['caseStatus'] %></td>
           <% else %>
             <td>-</td>
           <% end %>
-        <% if uniqueCase['casetype'].present? %>
-          <td><%=h uniqueCase['casetype'] %></td>
+        <% if uniqueCase['caseTypeId'].present? %>
+          <td><%=h uniqueCase['caseTypeId'] %></td>
         <% else %>
           <td>-</td>
         <% end %>
@@ -69,13 +69,13 @@
         <% else %>
           <td>-</td>
         <% end %>
-        <% if uniqueCase['sampleid'].present? %>
-          <td><%=h uniqueCase['sampleid']  %></td>
+        <% if uniqueCase['sampleId'].present? %>
+          <td><%=h uniqueCase['sampleId']  %></td>
         <% else %>
           <td>-</td>
         <% end %>
-        <% if uniqueCase['formtype'].present? %>
-          <td><%=h uniqueCase['formtype'] %></td>
+        <% if uniqueCase['questionSet'].present? %>
+          <td><%=h uniqueCase['questionSet'] %></td>
         <% else %>
           <td>-</td>
         <% end %>
