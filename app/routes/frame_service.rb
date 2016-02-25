@@ -31,12 +31,20 @@ module Beyond
       # Get all addresses for the selected MSOA.
       get '/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/addresses' do |region_code, local_authority_code, msoa_code|
         authenticate!
-        addresses = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/msoas/#{msoa_code}/addresssummaries")).paginate(page: params[:page])
+        addresses = []
+
+        RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/msoas/#{msoa_code}/addresssummaries") do |response, _request, _result, &_block|
+          addresses = JSON.parse(response).paginate(page: params[:page]) unless response.code == 204
+        end
+
         erb :addresses, locals: { title: "Addresses for MSOA #{msoa_code}",
                                   region_code: region_code,
                                   local_authority_code: local_authority_code,
                                   msoa_code: msoa_code,
                                   addresses: addresses }
+
+        #addresses = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/msoas/#{msoa_code}/addresssummaries")).paginate(page: params[:page])
+
       end
 
       # Get all the addresses to review for the selected msoa. -
