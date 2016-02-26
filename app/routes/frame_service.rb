@@ -481,8 +481,7 @@ module Beyond
       # Present a form for editing an existing questionnaire.
       get '/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/addresses/:uprn_code/case/:case_id/questionnaires/:questionnaire_id/iac/:iac/edit' do |region_code, local_authority_code, msoa_code, uprn_code, case_id, questionnaire_id, iac|
         authenticate!
-        questionnaires = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/questionnaires/iac/#{iac}"))
-        questionnaire = questionnaires.first
+        questionnaire = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/questionnaires/iac/#{iac}"))
         action = "/regions/#{region_code}/las/#{local_authority_code}/msoas/#{msoa_code}/addresses/#{uprn_code}/questionnaires/#{questionnaire_id}"
 
         erb :questionnaire, locals: { title: "Edit Questionnaire #{questionnaire_id} for Address #{uprn_code}",
@@ -493,8 +492,9 @@ module Beyond
                                       local_authority_code: local_authority_code,
                                       msoa_code: msoa_code,
                                       uprn_code: uprn_code,
-                                      formtype: questionnaire['formType'],
-                                      formstatus: questionnaire['formStatus'].to_i }
+                                      case_id: case_id,
+                                      formtype: questionnaire['questionSet'],
+                                      formstatus: questionnaire['questionnaireStatus'].to_i }
       end
 
       # Update an existing questionnaire
