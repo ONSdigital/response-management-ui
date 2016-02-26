@@ -25,8 +25,8 @@
   <tbody>
   <% regions.each_with_index do |region, i| %>
     <tr class="<%= i.even? ? 'even' : 'odd ' %>">
-      <td><%=h region['rgn11cd'] %></td>
-      <td><a href="/regions/<%=h region['rgn11cd'] %>/las"><%=h region['rgn11nm'] %></a></td>
+      <td><%=h region['regionCode'] %></td>
+      <td><a href="/regions/<%=h region['regionCode'] %>/las"><%=h region['regionName'] %></a></td>
     </tr>
   <% end %>
   </tbody>

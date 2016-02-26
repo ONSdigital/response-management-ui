@@ -358,9 +358,9 @@ module Beyond
           coordinates = "#{address['latitude']},#{address['longitude']}"
           erb :case_events, layout: :sidebar_layout,
                            locals: { title: "Events for Case #{case_id}",
-                                     region_code: address['region11cd'],
-                                     local_authority_code: address['lad12cd'],
-                                     msoa_code: address['msoa11cd'],
+                                     region_code: address['regionCode'],
+                                     local_authority_code: address['ladCode'],
+                                     msoa_code: address['msoaArea'],
                                      uprn_code: address['uprn'],
                                      caseid: case_id,
                                      uniqueCase: uniqueCase,
@@ -373,13 +373,12 @@ module Beyond
       # Get all questionnaires for a specific case.
       get '/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/addresses/:uprn_code/cases/:case_id/questionnaires' do |region_code, local_authority_code, msoa_code, uprn_code,case_id|
         authenticate!
-        cases = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/cases/#{case_id}"))
-        questionnaires = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/questionnaires/case/#{case_id}"))
-        if cases.empty?
+        kase = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/cases/#{case_id}"))
+        questionnaires = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/questionnaires/caseid/#{case_id}"))
+        if kase.empty?
           erb :case_not_found, locals: { title: 'Case Not Found' }
         else
-          addresses = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/addresses/#{uprn_code}"))
-          address = addresses.first
+          address = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/addresses/#{uprn_code}"))
           coordinates = "#{address['latitude']},#{address['longitude']}"
           erb :case_questionnaire, layout: :sidebar_layout,
                            locals: { title: "Questionnaires for Case #{case_id}",
@@ -388,9 +387,9 @@ module Beyond
                                      msoa_code: address['msoaArea'],
                                      uprn_code: address['uprn'],
                                      caseid: case_id,
-                                     cases: cases,
+                                     kase: kase,
                                      questionnaires: questionnaires,
-                                     addresses: addresses,
+                                     address: address,
                                      coordinates: coordinates }
         end
       end
