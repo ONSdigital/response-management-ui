@@ -14,7 +14,7 @@
   <%= erb :googlemaps_partial, locals: { coordinates: coordinates } %>
 <% end %>
 
-<% addresses.each do |address| %>
+
   <table class="address" style="margin-top: 0px;">
     <thead>
       <tr>
@@ -30,7 +30,7 @@
     <%= erb :address_partial, locals: { address: address } %>
     <%= erb :addresslines_partial, locals: { address: address } %>
   </table>
-<% end %>
+
 
 <table class="questionnaire">
   <thead>
@@ -40,37 +40,36 @@
       <th>Dispatch Date</th>
       <th>Response Date</th>
       <th>Receipt Date</th>
-      <th>Form Type</th>
+      <th>Question Set</th>
       <th>IAC</th>
       <th></th>
     </tr>
   </thead>
   <tbody>
-  <% questionnaires.each do |questionnaire| %>
     <tr class="even">
-      <td><%=h questionnaire['questionnaireid'] %></td>
-      <% if questionnaire['questionnaire_status'] %>
-        <td <%=h questionnaire['questionnaire_status'] %></td>
+      <td><%=h questionnaire['questionnaireId'] %></td>
+      <% if questionnaire['questionnaireStatus'] %>
+        <td <%=h questionnaire['questionnaireStatus'] %></td>
       <% else %>
         <td>-</td>
       <% end %>
-      <% if questionnaire['dispatchDatetime'] %>
-        <td><%=h questionnaire['dispatchDatetime'] %></td>
+      <% if questionnaire['dispatchDateTime'] %>
+        <td><%=h questionnaire['dispatchDateTime'] %></td>
       <% else %>
         <td>-</td>
       <% end %>
-      <% if questionnaire['responseDatetime'] %>
-        <td><%=h questionnaire['responseDatetime'] %></td>
+      <% if questionnaire['responseDateTime'] %>
+        <td><%=h questionnaire['responseDateTime'] %></td>
       <% else %>
         <td>-</td>
       <% end %>
-      <% if questionnaire['receiptDatetime'] %>
-        <td><%=h questionnaire['receiptDatetime'] %></td>
+      <% if questionnaire['receiptDateTime'] %>
+        <td><%=h questionnaire['receiptDateTime'] %></td>
       <% else %>
         <td>-</td>
       <% end %>
-      <% if questionnaire['formtype'] %>
-        <td><%=h questionnaire['formtype'] %></td>
+      <% if questionnaire['questionSet'] %>
+        <td><%=h questionnaire['questionSet'] %></td>
       <% else %>
         <td>-</td>
       <% end %>
@@ -79,16 +78,15 @@
       <% else %>
         <td>-</td>
       <% end %>
-          <td><% if params[:page].present? %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/case/<%=h case_id %>/questionnaires/<%=h questionnaire['questionnaireid'] %>/iac/<%=h questionnaire['iac'] %>/edit?page=<%=h params[:page] %>"><% else %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/case/<%=h case_id %>/questionnaires/<%=h questionnaire['questionnaireid'] %>/iac/<%=h questionnaire['iac'] %>/edit"><% end %>Edit</a></td>
+          <td><% if params[:page].present? %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/case/<%=h case_id %>/questionnaires/<%=h questionnaire['questionnaireId'] %>/iac/<%=h questionnaire['iac']%>/edit?page=<%=h params[:page] %>"><% else %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/case/<%=h case_id %>/questionnaires/<%=h questionnaire['questionnaireId'] %>/iac/<%=h questionnaire['iac']%>/edit"><% end %>Edit</a></td>
       </tr>
-    <% end %>
   </tbody>
 </table>
 
 <% content_for :footer do %>
   <h3>Follow-Ups</h3>
   <div id="newfollowup">
-    <form action="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/questionnaires/<%=h questionnaire_id %>/followups/new" method="get">
+    <form action="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/cases/<%=h case_id %>/questionnaires/<%=h questionnaire_id %>/iac/<%=h iac %>/followups/new" method="get">
       <input class="button" type="submit" value="Create Follow-Up&hellip;"> or <% if params[:page].present? %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/questionnaires/<%=h questionnaire_id %>?page=<%=h params[:page] %>"><% else %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/questionnaires/<%=h questionnaire_id %>"><% end %>Refresh</a>
     <% if params[:page].present? %>
       <input type="hidden" name="page" value="<%=h params[:page] %>">

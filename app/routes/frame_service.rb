@@ -374,7 +374,7 @@ module Beyond
       get '/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/addresses/:uprn_code/cases/:case_id/questionnaires' do |region_code, local_authority_code, msoa_code, uprn_code,case_id|
         authenticate!
         kase = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/cases/#{case_id}"))
-        questionnaires = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/questionnaires/caseid/#{case_id}"))
+        questionnaires = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/questionnaires/case/#{case_id}"))
         if kase.empty?
           erb :case_not_found, locals: { title: 'Case Not Found' }
         else
@@ -421,7 +421,7 @@ module Beyond
       end
 
       # Present a form for creating a new questionnaire.
-      get '/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/addresses/:uprn_code/questionnaires/new' do |region_code, local_authority_code, msoa_code, uprn_code|
+      get '/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/addresses/:uprn_code/cases/:case_id/questionnaires/new' do |region_code, local_authority_code, msoa_code, uprn_code, case_id|
         authenticate!
         action = "/regions/#{region_code}/las/#{local_authority_code}/msoas/#{msoa_code}/addresses/#{uprn_code}/questionnaires"
         erb :questionnaire, locals: { title: "Create Questionnaire for Address #{uprn_code}",
@@ -431,6 +431,7 @@ module Beyond
                                       region_code: region_code,
                                       local_authority_code: local_authority_code,
                                       msoa_code: msoa_code,
+                                      case_id: case_id,
                                       uprn_code: uprn_code,
                                       formtype: '01',
                                       formstatus: 0 }
@@ -492,8 +493,8 @@ module Beyond
                                       local_authority_code: local_authority_code,
                                       msoa_code: msoa_code,
                                       uprn_code: uprn_code,
-                                      formtype: questionnaire['formtype'],
-                                      formstatus: questionnaire['formstatus'].to_i }
+                                      formtype: questionnaire['formType'],
+                                      formstatus: questionnaire['formStatus'].to_i }
       end
 
       # Update an existing questionnaire
