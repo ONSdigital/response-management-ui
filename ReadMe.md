@@ -6,7 +6,7 @@ This Ruby Sinatra application demonstrates using Java web services to provide Re
 Prerequisites
 -------------
 
-The application's `config.yml` configuration file references the Java web services using a `collect-server` name which needs to be present in your hosts file. It also references an LDAP server using an `ldap-server` name. Install the RubyGems the applications depends on by running `bundle install`.
+The application's `config.yml` configuration file references the Java web services using a `collect-server` name which needs to be present in your hosts file. It also references an LDAP server using an `ldap-server` name. Install the RubyGems the application depends on by running `bundle install`.
 
 Running
 -------
