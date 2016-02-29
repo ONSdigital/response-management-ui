@@ -202,8 +202,7 @@ module Beyond
       # Present a form for editing an existing address.
       get '/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/addresses/:uprn_code/edit' do |region_code, local_authority_code, msoa_code, uprn_code|
         authenticate!
-        addresses = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/addresses/#{uprn_code}"))
-        address = addresses.first
+        address = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/addresses/#{uprn_code}"))
         coordinates = "#{address['latitude']},#{address['longitude']}"
         action = "/regions/#{region_code}/las/#{local_authority_code}/msoas/#{msoa_code}/addresses/#{uprn_code}"
 
@@ -397,25 +396,26 @@ module Beyond
       # Get a specific questionnaire.
       get '/questionnaires/:questionnaire_id' do |questionnaire_id|
         authenticate!
-        questionnaires = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/cases/qid/#{questionnaire_id}"))
+        questionnaire = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/cases/qid/#{questionnaire_id}"))
 
-        if questionnaires.empty?
+        if questionnaire.empty?
           erb :questionnaire_not_found, locals: { title: 'Questionnaire Not Found' }
         else
           follow_ups = JSON.parse(RestClient.get("http://#{settings.follow_up_service_host}:#{settings.follow_up_service_port}/FollowUpService/FollowUp/QuestionnaireId=#{questionnaire_id}")).paginate(page: params[:page])
-          addresses = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/addresses/#{questionnaires.first['uprn']}"))
-          address = addresses.first
+          address = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/addresses/#{questionnaire['uprn']}"))
           coordinates = "#{address['latitude']},#{address['longitude']}"
           erb :follow_ups, layout: :sidebar_layout,
                            locals: { title: "Questionnaire #{questionnaire_id}",
-                                     region_code: address['region11cd'],
-                                     local_authority_code: address['lad12cd'],
-                                     msoa_code: address['msoa11cd'],
+                                     region_code: address['regionCode'],
+                                     local_authority_code: address['ladCode'],
+                                     msoa_code: address['msoaArea'],
                                      uprn_code: address['uprn'],
+                                     case_id: address['caseId'],
+                                     iac: address['iac'],
                                      questionnaire_id: questionnaire_id,
                                      follow_ups: follow_ups,
-                                     questionnaires: questionnaires,
-                                     addresses: addresses,
+                                     questionnaire: questionnaire,
+                                     address: address,
                                      coordinates: coordinates }
         end
       end
@@ -436,6 +436,21 @@ module Beyond
                                       formtype: '01',
                                       formstatus: 0 }
       end
+
+      # Present form after searching via postcode.
+      get '/postcode/:postcode' do |postcode|
+        authenticate!
+        addresses = []
+
+        RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/addresses/postcode/#{postcode}") do |response, _request, _result, &_block|
+          addresses = JSON.parse(response).paginate(page: params[:page]) unless response.code == 204
+        end
+
+        erb :addresses_postcode, locals: { title: "Addresses for Postcode #{postcode}",
+                                      addresses: addresses }
+        
+      end
+
 
       # Present a form for creating a new event.
       get '/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/addresses/:uprn_code/case/:case_id/event/new' do |region_code, local_authority_code, msoa_code, uprn_code, case_id|
