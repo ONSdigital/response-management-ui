@@ -1,16 +1,14 @@
 <% if (!iac.nil?) and (iac.match('^[0-9]{20}$'))  %>
-[
   {
-    "questionnaireid": 160233311537150,
-    "caseid": 0,
+    "questionnaireId": 160233311537150,
+    "caseId": 0,
     "questionnaireStatus": "string",
-    "dispatchDatetime": "2016-02-11",
-    "responseDatetime": "2016-02-11",
-    "receiptDatetime": "2016-02-11",
-    "formtype": "string",
+    "dispatchDateTime": "2016-02-11",
+    "responseDateTime": "2016-02-11",
+    "receiptDateTime": "2016-02-11",
+    "questionSet": "string",
     "iac": "<%= iac %>"
   }
-]
 <% elsif (!iac.nil?) and (!iac.match('^[0-9]{20}$'))  %>
 [
   {

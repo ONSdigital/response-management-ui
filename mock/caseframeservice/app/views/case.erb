@@ -1,18 +1,17 @@
 <% if (!caseid.nil?) and (caseid.match('^[0-9]*$'))  %>
-[
-  {
-    "caseid": "<%= caseid %>",
-    "uprn": "12345678900987654321",
-    "caseStatus": "INIT",
-    "casetype": "1",
-    "createdDatetime": "2016-02-12 09:46:39.25+00",
-    "createdBy": "SYSTEM",
-    "sampleid": 1,
-    "actionplanid": 1,
-    "surveyid": 1,
-    "formtype": "HH"
-  }
-]
+{
+  "caseId": "<%= caseid %>",
+  "uprn": "12345678900987654321",
+  "caseStatus": "INIT",
+  "caseTypeId": "1",
+  "createdDatetime": "2016-02-12 09:46:39.25+00",
+  "createdBy": "SYSTEM",
+  "sampleId": 1,
+  "actionplanId": 1,
+  "surveyId": 1,
+  "parentCaseId": 0,
+  "questionSet": "HH"
+}
 <% else %>
 [
   {

@@ -1,28 +1,30 @@
 <% if (!uprn.nil?) and (uprn.match('^[0-9]*$'))  %>
 [
   {
-    "caseid": 2512,
+    "caseId": 2512,
     "uprn": "<%= uprn %>",
     "caseStatus": "INIT",
-    "casetype": "1",
+    "caseTypeId": "1",
     "createdDatetime": "2016-02-12 09:46:39.25+00",
     "createdBy": "SYSTEM",
-    "sampleid": 1,
-    "actionplanid": 1,
-    "surveyid": 1,
-    "formtype": "HH"
+    "sampleId": 1,
+    "actionPlanId": 1,
+    "surveyId": 1,
+    "parentCaseId": 1,
+    "questionSet": "HH"
   },
   {
-    "caseid": 2513,
+    "caseId": 2513,
     "uprn": "<%= uprn %>",
     "caseStatus": "INIT",
-    "casetype": "2",
+    "caseTypeId": "2",
     "createdDatetime": "2016-02-12 09:46:39.25+00",
     "createdBy": "SYSTEM",
-    "sampleid": 2,
-    "actionplanid": 2,
-    "surveyid": 2,
-    "formtype": "HH"
+    "sampleId": 2,
+    "actionplanId": 2,
+    "surveyId": 2,
+    "parentCaseId": 1,
+    "questionSet": "HH"
   }
 ]
 <% else %>

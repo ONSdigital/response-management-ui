@@ -18,8 +18,8 @@ module BeyondMock
       end
 
       # Get the history for the specified case
-      get '/cases/:caseid/history' do
-        erb :case_history, locals: { caseid: params['caseid'] }
+      get '/cases/:caseid/events' do
+        erb :case_events, locals: { caseid: params['caseid'] }
       end
 
     end
