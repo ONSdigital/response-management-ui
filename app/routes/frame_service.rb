@@ -443,12 +443,12 @@ module Beyond
         addresses = []
 
         RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/addresses/postcode/#{postcode}") do |response, _request, _result, &_block|
-          addresses = JSON.parse(response).paginate(page: params[:page]) unless response.code == 204
+          addresses = JSON.parse(response).paginate(page: params[:page]) unless response.code == 404
         end
 
         erb :addresses_postcode, locals: { title: "Addresses for Postcode #{postcode}",
                                       addresses: addresses }
-        
+
       end
 
 
