@@ -5,7 +5,7 @@ GEM
     ctp-common (7.7.1)
       pg (~> 0, >= 0.18.3)
       rest-client (~> 1, >= 1.8.0)
-    domain_name (0.5.20160128)
+    domain_name (0.5.20160216)
       unf (>= 0.0.5, < 1.0.0)
     formkeeper (0.0.15)
       hpricot
@@ -14,7 +14,7 @@ GEM
     http-cookie (1.0.2)
       domain_name (~> 0.5)
     json (1.8.3)
-    mime-types (2.99)
+    mime-types (2.99.1)
     net-ldap (0.14.0)
     netrc (0.11.0)
     ons-ldap (8.10.0)
@@ -54,7 +54,7 @@ PLATFORMS
 DEPENDENCIES
   ctp-common!
   json
-  ons-ldap!
+  ons-ldap (~> 8)!
   rest-client
   rotp
   sass
