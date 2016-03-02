@@ -17,6 +17,7 @@ ldap-directory:
   groups:
     admins: collect-admins
     users: collect-users
+    csos: collect-csos
 
 google-maps:
   api-key: AIzaSyAtKmYXuijfiPsstjNsczBocKw149--fqM

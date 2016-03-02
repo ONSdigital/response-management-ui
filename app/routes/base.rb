@@ -108,7 +108,6 @@ module Beyond
                                              settings.ldap_directory_base,
                                              settings.ldap_groups,
                                              logger)
-
         if user = User.authenticate(ldap_connection, params)
           session[:user] = user
           if request.cookies[NO_2FA_COOKIE]

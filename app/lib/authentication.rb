@@ -6,8 +6,8 @@ module Authentication
     end
   end
 
-  def authorised?
-    session[:user].present? && session[:user].admin?
+  def authorised?(group)
+    session[:user].present? && session[:user].groups.include?(group)
   end
 
   def redirect_to_original_request
