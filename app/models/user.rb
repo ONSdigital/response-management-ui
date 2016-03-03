@@ -3,7 +3,6 @@ require 'rotp'
 class User
   attr_reader :display_name
   attr_reader :groups
-  alias_method :groups?, :groups
 
 
   def self.authenticate(ldap_connection, params = {})
