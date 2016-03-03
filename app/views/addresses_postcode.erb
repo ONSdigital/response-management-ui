@@ -12,23 +12,45 @@
   Click an Address ID to view questionnaires for that address.
 <% end %>
 
-
 <% if addresses.any? %>
-  <%= will_paginate addresses, :previous_label => '&lt; Prev', :next_label => 'Next &gt;' %>
-<% addresses.each do |address| %>
+<%= will_paginate addresses, :previous_label => '&lt; Prev', :next_label => 'Next &gt;' %>
   <table class="address">
     <thead>
       <tr>
         <th>UPRN</th>
+        <th>Address Line 1</th>
+        <th>Address Line 2</th>
+        <th>Town</th>
+        <th>Postcode</th>
         <th>Address Type</th>
         <th>Establishment Type</th>
-        <th></th>
       </tr>
     </thead>
     <tbody>
-      <tr>
+      <% addresses.each_with_index do |address, i| %>
+        <tr class="<%= i.even? ? 'even' : 'odd ' %>">
         <td><a href="/regions/<%=h address['regionCode'] %>/las/<%=h address['ladCode'] %>/msoas/<%=h address['msoaArea'] %>/addresses/<%=h address['uprn'] %>/cases"><%=h address['uprn'] %></a></td>
-      <% if address['addressType'].present? %>
+        <% if address['addressLine1'].present? %>
+          <td><%=h address['addressLine1'] %></td>
+        <% else %>
+          <td>-</td>
+        <% end %>
+        <% if address['addressLine2'].present? %>
+          <td><%=h address['addressLine2'] %></td>
+        <% else %>
+          <td>-</td>
+        <% end %>
+        <% if address['town'].present? %>
+          <td><%=h address['town'] %></td>
+        <% else %>
+          <td>-</td>
+        <% end %>
+        <% if address['postcode'].present? %>
+          <td><%=h address['postcode'] %></td>
+        <% else %>
+          <td>-</td>
+        <% end %>
+        <% if address['addressType'].present? %>
         <td><%=h address['addressType'].to_address_type %></td>
       <% else %>
         <td>-</td>
@@ -38,12 +60,11 @@
       <% else %>
         <td>-</td>
       <% end %>
-        <td><% if params[:page].present? %><a href="/regions/<%=h address['regionCode'] %>/las/<%=h address['ladCode'] %>/msoas/<%= address['msoaArea'] %>/addresses/<%=h address['uprn'] %>/edit?page=<%=h params[:page] %>"><% else %><a href="/regions/<%=h address['regionCode'] %>/las/<%=h address['ladCode'] %>/msoas/<%= address['msoaArea'] %>/addresses/<%=h address['uprn'] %>/edit"><% end %>Edit</a></td>
       </tr>
+      <% end %>
     </tbody>
-    <%= erb :addresslines_partial, locals: { address: address } %>
   </table>
-<% end %>
-<% else %>
-  <p id="information"><strong>There are no addresses for this postcode.</strong></p>
-<% end %>
+  <%= will_paginate addresses, :previous_label => '&lt; Prev', :next_label => 'Next &gt;' %>
+  <% else %>
+  <p id="information"><strong>There are no addresses for this MSOA.</strong></p>
+  <% end %>

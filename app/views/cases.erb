@@ -23,15 +23,60 @@
   <table class="address" style="margin-top: 0px;">
     <thead>
       <tr>
-        <th>UPRN</th>
-        <th>Address Type</th>
-        <th>Easting</th>
-        <th>Northing</th>
         <th>Address Line 1</th>
+        <th>Address Line 2</th>
+        <th>Town</th>
+        <th>Postcode</th>
+        <th>Address Type</th>
+        <th>Establishment Type</th>
+        <th>Survey Description</th>
+        <th>Sample Name</th>
       </tr>
     </thead>
-    <%= erb :address_partial, locals: { address: address } %>
-    <%= erb :addresslines_partial, locals: { address: address } %>
+    <tbody>
+      <tr class="even">
+      <% if address['addressLine1'].present? %>
+          <td><%=h address['addressLine1'] %></td>
+        <% else %>
+          <td>-</td>
+        <% end %>
+        <% if address['addressLine2'].present? %>
+          <td><%=h address['addressLine2'] %></td>
+        <% else %>
+          <td>-</td>
+        <% end %>
+        <% if address['town'].present? %>
+          <td><%=h address['town'] %></td>
+        <% else %>
+          <td>-</td>
+        <% end %>
+        <% if address['postcode'].present? %>
+          <td><%=h address['postcode'] %></td>
+        <% else %>
+          <td>-</td>
+        <% end %>
+        <% if address['addressType'].present? %>
+        <td><%=h address['addressType'].to_address_type %></td>
+      <% else %>
+        <td>-</td>
+      <% end %>
+      <% if address['estabType'].present? %>
+        <td><%=h address['estabType'] %></td>
+      <% else %>
+        <td>-</td>
+      <% end %>
+      <% if survey['description'].present? %>
+        <td><%=h survey['description'] %></td>
+      <% else %>
+        <td>-</td>
+      <% end %>
+      <% if sample['sampleName'].present? %>
+        <td><%=h sample['sampleName'] %></td>
+      <% else %>
+        <td>-</td>
+      <% end %>
+    </tr>
+    </tbody>
   </table>
 
 <% content_for :footer do %>
@@ -44,7 +89,6 @@
         <tr>
           <th>Case ID</th>
           <th>Case Status</th>
-          <th>Case Type</th>
           <th>Case Created</th>
           <th>Sample ID</th>
           <th>Question Set</th>
@@ -59,13 +103,8 @@
           <% else %>
             <td>-</td>
           <% end %>
-        <% if uniqueCase['caseTypeId'].present? %>
-          <td><%=h uniqueCase['caseTypeId'] %></td>
-        <% else %>
-          <td>-</td>
-        <% end %>
         <% if uniqueCase['createdDatetime'].present? %>
-          <td><%=h uniqueCase['createdDatetime'] %></td>
+          <td><%=h uniqueCase['createdDatetime'].to_short_date %></td>
         <% else %>
           <td>-</td>
         <% end %>

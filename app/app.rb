@@ -65,6 +65,10 @@ class Fixnum
 end
 
 class String
+  def to_short_date
+    t = Time.parse(self)
+    t.strftime('%v')
+  end
 
   # Friendly form types.
   def to_form_type
