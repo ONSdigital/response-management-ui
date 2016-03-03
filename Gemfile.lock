@@ -17,7 +17,7 @@ GEM
     mime-types (2.99.1)
     net-ldap (0.14.0)
     netrc (0.11.0)
-    ons-ldap (9.12.4)
+    ons-ldap (8.12.0)
       net-ldap (~> 0, >= 0.11)
     pg (0.18.4)
     rack (1.6.4)
