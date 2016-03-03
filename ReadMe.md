@@ -6,39 +6,23 @@ This Ruby Sinatra application demonstrates using Java web services to provide Re
 Prerequisites
 -------------
 
-The application's `config.yml` configuration file references the Java web services using a `collect-server` name which needs to be present in your hosts file. It also references an LDAP server using an `ldap-server` name.
-
-The application depends on the following RubyGems:
-
-* [json](http://flori.github.io/json/)
-* [net-ldap](https://github.com/ruby-ldap/ruby-net-ldap)
-* [rest-client](https://github.com/rest-client/rest-client)
-* [rotp](https://github.com/mdp/rotp)
-* [sass](https://github.com/sass/sass) (Not a runtime dependency; see below)
-* [sinatra-content-for2](https://github.com/Undev/sinatra-content-for2)
-* [sinatra-flash](https://github.com/SFEley/sinatra-flash)
-* [sinatra-formkeeper](https://github.com/lyokato/sinatra-formkeeper)
-* [will_paginate](https://github.com/mislav/will_paginate)
+The application's `config.yml` configuration file references the Java web services using a `collect-server` name which needs to be present in your hosts file. It also references an LDAP server using an `ldap-server` name. Install the RubyGems the application depends on by running `bundle install`.
 
 Running
 -------
 
 To run this project in development using its [Rackup](http://rack.github.io/) file use:
 
-  `rackup config.ru -p 8179` (the `config.ru` may be omitted as Rack looks for this file by default)
+  `bundle exec rackup config.ru` (the `config.ru` may be omitted as Rack looks for this file by default)
 
-and access using [http://localhost:8179](http://localhost:8179)
-
-To daemonise the Rack process and use production mode, use:
-
-  `rackup -D -E production -p 8179`
+and access using [http://localhost:9292](http://localhost:9292)
 
 Running Using the Mock Backend
 ------------------------------
 
 This project includes two Sinatra applications that provide mock versions of the FrameService and FollowUpService web services. To run them, edit your hosts file so that `collect-server` uses 127.0.0.1. Then run:
 
-  `rackup -p 8178` from within the `mock\frameservice` directory and `rackup -p 8177` within the `mock\followupservice` directory. Alternatively, for an easy life, simply run `mock\run.cmd`.
+  `bundle exec rackup -p 8178` from within the `mock\frameservice` directory and `bundle exec rackup -p 8177` within the `mock\followupservice` directory.
 
 Start the user interface normally as described above.
 
