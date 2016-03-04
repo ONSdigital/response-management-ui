@@ -70,7 +70,6 @@
       <th>Case Status</th>
       <th>Case Type</th>
       <th>Case Created</th>
-      <th>Sample ID</th>
       <th>Question Set</th>
       <th>Survey Description</th>
       <th>Sample Name</th>
@@ -93,11 +92,6 @@
   <% end %>
   <% if uniqueCase['createdDatetime'].present? %>
     <td><%=h uniqueCase['createdDatetime'].to_date %></td>
-  <% else %>
-    <td>-</td>
-  <% end %>
-  <% if uniqueCase['sampleId'].present? %>
-    <td><%=h uniqueCase['sampleId']  %></td>
   <% else %>
     <td>-</td>
   <% end %>
