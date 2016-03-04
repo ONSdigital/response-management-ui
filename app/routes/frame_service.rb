@@ -360,11 +360,12 @@ module Beyond
       end
 
       # Get a specific case.
-      get '/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/addresses/:uprn_code/case/:case_id' do |region_code, local_authority_code, msoa_code, uprn_code,case_id|
+      get '/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/case/:case_id' do |region_code, local_authority_code, msoa_code,case_id|
         authenticate!
         events = []
         uniqueCase = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/cases/#{case_id}"))
         #events = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/cases/#{case_id}/events"))
+        uprn_code = "#{uniqueCase['uprn']}"
         survey_id = "#{uniqueCase['surveyId']}"
         sample_id = "#{uniqueCase['sampleId']}"
         survey = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/surveys/#{survey_id}"))
@@ -381,7 +382,7 @@ module Beyond
                                      region_code: address['regionCode'],
                                      local_authority_code: address['ladCode'],
                                      msoa_code: address['msoaArea'],
-                                     uprn_code: address['uprn'],
+                                     uprn_code: uprn_code,
                                      caseid: case_id,
                                      uniqueCase: uniqueCase,
                                      events: events,

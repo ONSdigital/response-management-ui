@@ -78,7 +78,6 @@
           <th>Case ID</th>
           <th>Case Status</th>
           <th>Case Created</th>
-          <th>Sample ID</th>
           <th>Question Set</th>
           <th>Survey Description</th>
           <th>Sample Name</th>
@@ -87,7 +86,7 @@
       <tbody>
       <% cases.each_with_index do |uniqueCase, i| %>
         <tr class="<%= i.even? ? 'even' : 'odd ' %>">
-          <td><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/case/<%=h uniqueCase['caseId'] %>"><%=h uniqueCase['caseId'] %></a></td>
+          <td><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/case/<%=h uniqueCase['caseId'] %>"><%=h uniqueCase['caseId'] %></a></td>
         <% if uniqueCase['caseStatus'].present? %>
           <td><%=h uniqueCase['caseStatus'] %></td>
           <% else %>
@@ -95,11 +94,6 @@
           <% end %>
         <% if uniqueCase['createdDatetime'].present? %>
           <td><%=h uniqueCase['createdDatetime'].to_date %></td>
-        <% else %>
-          <td>-</td>
-        <% end %>
-        <% if uniqueCase['sampleId'].present? %>
-          <td><%=h uniqueCase['sampleId']  %></td>
         <% else %>
           <td>-</td>
         <% end %>
