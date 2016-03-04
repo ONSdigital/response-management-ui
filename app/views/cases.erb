@@ -29,8 +29,6 @@
         <th>Postcode</th>
         <th>Address Type</th>
         <th>Establishment Type</th>
-        <th>Survey Description</th>
-        <th>Sample Name</th>
       </tr>
     </thead>
     <tbody>
@@ -65,16 +63,6 @@
       <% else %>
         <td>-</td>
       <% end %>
-      <% if survey['description'].present? %>
-        <td><%=h survey['description'] %></td>
-      <% else %>
-        <td>-</td>
-      <% end %>
-      <% if sample['sampleName'].present? %>
-        <td><%=h sample['sampleName'] %></td>
-      <% else %>
-        <td>-</td>
-      <% end %>
     </tr>
     </tbody>
   </table>
@@ -92,6 +80,8 @@
           <th>Case Created</th>
           <th>Sample ID</th>
           <th>Question Set</th>
+          <th>Survey Description</th>
+          <th>Sample Name</th>
         </tr>
       </thead>
       <tbody>
@@ -104,7 +94,7 @@
             <td>-</td>
           <% end %>
         <% if uniqueCase['createdDatetime'].present? %>
-          <td><%=h uniqueCase['createdDatetime'].to_short_date %></td>
+          <td><%=h uniqueCase['createdDatetime'].to_date %></td>
         <% else %>
           <td>-</td>
         <% end %>
@@ -115,6 +105,16 @@
         <% end %>
         <% if uniqueCase['questionSet'].present? %>
           <td><%=h uniqueCase['questionSet'] %></td>
+        <% else %>
+          <td>-</td>
+        <% end %>
+        <% if uniqueCase['surveyDescription'].present? %>
+          <td><%=h uniqueCase['surveyDescription'] %></td>
+        <% else %>
+          <td>-</td>
+        <% end %>
+        <% if uniqueCase['sampleName'].present? %>
+          <td><%=h uniqueCase['sampleName'] %></td>
         <% else %>
           <td>-</td>
         <% end %>

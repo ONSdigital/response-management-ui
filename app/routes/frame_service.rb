@@ -331,15 +331,21 @@ module Beyond
         authenticate!
         cases = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/cases/uprn/#{uprn_code}")).paginate(page: params[:page])
 
+        #loop through cases and append the survey description and sample name
+        cases.each do |uniqueCase|
+          survey_id = "#{uniqueCase['surveyId']}"
+          sample_id = "#{uniqueCase['sampleId']}"
+          survey = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/surveys/#{survey_id}"))
+          sample = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/samples/#{sample_id}"))
+          uniqueCase["surveyDescription"] = survey['description']
+          uniqueCase["sampleName"] = sample['sampleName']
+        end
+
+        logger.info cases
+
         # Get the selected address details so they can be redisplayed for reference.
         address = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/addresses/#{uprn_code}"))
         coordinates = "#{address['latitude']},#{address['longitude']}"
-        uniqueCase = cases.first
-        survey_id = "#{uniqueCase['surveyId']}"
-        sample_id = "#{uniqueCase['sampleId']}"
-
-        survey = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/surveys/#{survey_id}"))
-        sample = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/samples/#{sample_id}"))
 
         erb :cases, layout: :sidebar_layout,
                              locals: { title: "Cases for Address #{uprn_code}",
@@ -349,9 +355,7 @@ module Beyond
                                        uprn_code: uprn_code,
                                        cases: cases,
                                        address: address,
-                                       coordinates: coordinates,
-                                       survey: survey,
-                                       sample: sample
+                                       coordinates: coordinates
                                      }
       end
 
@@ -361,6 +365,10 @@ module Beyond
         events = []
         uniqueCase = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/cases/#{case_id}"))
         #events = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/cases/#{case_id}/events"))
+        survey_id = "#{uniqueCase['surveyId']}"
+        sample_id = "#{uniqueCase['sampleId']}"
+        survey = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/surveys/#{survey_id}"))
+        sample = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/samples/#{sample_id}"))
 
         RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/cases/#{case_id}/events") do |response, _request, _result, &_block|
           events = JSON.parse(response).paginate(page: params[:page]) unless response.code == 204
@@ -369,7 +377,7 @@ module Beyond
           address = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/addresses/#{uprn_code}"))
           coordinates = "#{address['latitude']},#{address['longitude']}"
           erb :case_events, layout: :sidebar_layout,
-                           locals: { title: "Events for Case #{case_id}",
+                           locals: { title: "Event history for Case: #{case_id}",
                                      region_code: address['regionCode'],
                                      local_authority_code: address['ladCode'],
                                      msoa_code: address['msoaArea'],
@@ -378,16 +386,18 @@ module Beyond
                                      uniqueCase: uniqueCase,
                                      events: events,
                                      address: address,
-                                     coordinates: coordinates }
+                                     coordinates: coordinates,
+                                     survey: survey,
+                                     sample: sample }
 
       end
 
       # Get all questionnaires for a specific case.
       get '/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/addresses/:uprn_code/cases/:case_id/questionnaires' do |region_code, local_authority_code, msoa_code, uprn_code,case_id|
         authenticate!
-        kase = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/cases/#{case_id}"))
+        uniqueCase = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/cases/#{case_id}"))
         questionnaires = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/questionnaires/case/#{case_id}"))
-        if kase.empty?
+        if uniqueCase.empty?
           erb :case_not_found, locals: { title: 'Case Not Found' }
         else
           address = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/addresses/#{uprn_code}"))
@@ -399,7 +409,7 @@ module Beyond
                                      msoa_code: address['msoaArea'],
                                      uprn_code: address['uprn'],
                                      caseid: case_id,
-                                     kase: kase,
+                                     uniqueCase: uniqueCase,
                                      questionnaires: questionnaires,
                                      address: address,
                                      coordinates: coordinates }

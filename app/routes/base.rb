@@ -76,7 +76,7 @@ module Beyond
 
       # Only administrators can access the management screens.
       before '/manage*' do
-        halt 403 unless authorised?
+        halt 403 unless authorised?("collect-admins")
       end
 
       # Error pages.
