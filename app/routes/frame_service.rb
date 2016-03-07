@@ -333,15 +333,13 @@ module Beyond
 
         #loop through cases and append the survey description and sample name
         cases.each do |uniqueCase|
-          survey_id = "#{uniqueCase['surveyId']}"
-          sample_id = "#{uniqueCase['sampleId']}"
+          survey_id = uniqueCase['surveyId']
+          sample_id = uniqueCase['sampleId']
           survey = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/surveys/#{survey_id}"))
           sample = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/samples/#{sample_id}"))
-          uniqueCase["surveyDescription"] = survey['description']
-          uniqueCase["sampleName"] = sample['sampleName']
+          uniqueCase['surveyDescription'] = survey['description']
+          uniqueCase['sampleName'] = sample['sampleName']
         end
-
-        logger.info cases
 
         # Get the selected address details so they can be redisplayed for reference.
         address = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/addresses/#{uprn_code}"))
