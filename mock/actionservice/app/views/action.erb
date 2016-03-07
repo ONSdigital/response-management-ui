@@ -1,0 +1,25 @@
+<% if (!actionid.nil?) and (actionid.match('^[0-9]*$'))  %>
+[
+  {
+    "actionId": "<%= actionid %>",
+    "caseId": 0,
+    "actionPlanId": 0,
+    "actionRuleId": 0,
+    "actionTypeId": 0,
+    "createdBy": "string",
+    "priority": 0,
+    "situation": "string",
+    "state": "Submitted",
+    "createdDateTime": "2016-03-07T09:49:40.871Z",
+    "updatedDateTime": "2016-03-07T09:49:40.871Z"
+  }
+]
+<% else %>
+[
+  {
+  "code": 0,
+  "message": "string",
+  "fields": "string"
+  }
+]
+<% end %>
