@@ -131,8 +131,10 @@
       <thead>
         <tr>
           <th>Case Event ID</th>
+          <th>Created Date/time</th>
+          <th>Created By</th>
+          <th>Event Category</th>
           <th>Description</th>
-          <th>Category</th>
         </tr>
       </thead>
       <tbody>
@@ -143,13 +145,23 @@
         <% else %>
           <td>-</td>
         <% end %>
-        <% if events['description'] %>
-          <td><%=h events['description'] %></td>
+        <% if events['createdDateTime'] %>
+          <td><%=h events['createdDateTime'].to_date %></td>
+        <% else %>
+          <td>-</td>
+        <% end %>
+        <% if events['createdBy'] %>
+          <td><%=h events['createdBy'] %></td>
         <% else %>
           <td>-</td>
         <% end %>
         <% if events['category'] %>
           <td><%=h events['category'] %></td>
+        <% else %>
+          <td>-</td>
+        <% end %>
+        <% if events['description'] %>
+          <td><%=h events['description'] %></td>
         <% else %>
           <td>-</td>
         <% end %>

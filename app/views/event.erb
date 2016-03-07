@@ -41,51 +41,73 @@
       <span id="chars">100</span> characters remaining
     </form>
     <% end %>
-    <p><label for="eventCategory">Category</label> <span class="required">*</span></p>
+    <p><label for="eventCategory">Type</label> <span class="required">*</span></p>
     <p>
       <select id="eventCategory" name="eventCategory">
       <% if eventCategory.to_s.eql? '0' %>
         <option value="0" selected="selected">Helpline</option>
-        <option value="1">Field</option>
-      <% elsif eventCategory.to_s.eql? '1' %>
-        <option value="0">Field</option>
-        <option value="1" selected="selected">Helpline</option>
       <% end %>
       </select>
     </p>
-    <p><label for="eventOutcome">Outcome</label> <span class="required">*</span></p>
+    <p><label for="eventOutcome">Category</label> <span class="required">*</span></p>
     <p>
       <select id="eventOutcome" name="eventOutcome">
       <% if eventOutcome.to_s.eql? '0' %>
-        <option value="0" selected="selected">Refused</option>
-        <option value="1">Support Provided</option>
-        <option value="2">Materials Requested</option>
-        <option value="3">Paper Questionnaire Requested</option>
-        <option value="4">Not A Property</option>
+        <option value="0" selected="selected">General Enquiry</option>
+        <option value="1">Survey Enquiry</option>
+        <option value="2">Address Query</option>
+        <option value="3">Technical Query</option>
+        <option value="4">Refusal</option>
+        <option value="5">Complaint</option>
+        <option value="6">Miscellaneous</option>
       <% elsif eventOutcome.to_s.eql? '1' %>
-        <option value="0">Refused</option>
-        <option value="1" selected="selected">Support Provided</option>
-        <option value="2">Materials Requested</option>
-        <option value="3">Paper Questionnaire Requested</option>
-        <option value="4">Not A Property</option>
+        <option value="0">General Enquiry</option>
+        <option value="1" selected="selected">Survey Enquiry</option>
+        <option value="2">Address Query</option>
+        <option value="3">Technical Query</option>
+        <option value="4">Refusal</option>
+        <option value="5">Complaint</option>
+        <option value="6">Miscellaneous</option>
       <% elsif eventOutcome.to_s.eql? '2' %>
-        <option value="0">Refused</option>
-        <option value="1">Support Provided</option>
-        <option value="2" selected="selected">Materials Requested</option>
-        <option value="3">Paper Questionnaire Requested</option>
-        <option value="4">Not A Property</option>
+        <option value="0">General Enquiry</option>
+        <option value="1">Survey Enquiry</option>
+        <option value="2" selected="selected">Address Query</option>
+        <option value="3">Technical Query</option>
+        <option value="4">Refusal</option>
+        <option value="5">Complaint</option>
+        <option value="6">Miscellaneous</option>
       <% elsif eventOutcome.to_s.eql? '3' %>
-        <option value="0">Refused</option>
-        <option value="1">Support Provided</option>
-        <option value="2">Materials Requested</option>
-        <option value="3" selected="selected">Paper Questionnaire Requested</option>
-        <option value="4">Not A Property</option>
+        <option value="0">General Enquiry</option>
+        <option value="1">Survey Enquiry</option>
+        <option value="2">Address Query</option>
+        <option value="3" selected="selected">Technical Query</option>
+        <option value="4">Refusal</option>
+        <option value="5">Complaint</option>
+        <option value="6">Miscellaneous</option>
       <% elsif eventOutcome.to_s.eql? '4' %>
-        <option value="0">Refused</option>
-        <option value="1">Support Provided</option>
-        <option value="2">Materials Requested</option>
-        <option value="3">Paper Questionnaire Requested</option>
-        <option value="4" selected="selected">Not A Property</option>
+        <option value="0">General Enquiry</option>
+        <option value="1">Survey Enquiry</option>
+        <option value="2">Address Query</option>
+        <option value="3">Technical Query</option>
+        <option value="4" selected="selected">Refusal</option>
+        <option value="5">Complaint</option>
+        <option value="6">Miscellaneous</option>
+      <% elsif eventOutcome.to_s.eql? '5' %>
+        <option value="0">General Enquiry</option>
+        <option value="1">Survey Enquiry</option>
+        <option value="2">Address Query</option>
+        <option value="3">Technical Query</option>
+        <option value="4">Refusal</option>
+        <option value="5" selected="selected">Complaint</option>
+        <option value="6">Miscellaneous</option>
+      <% elsif eventOutcome.to_s.eql? '6' %>
+        <option value="0">General Enquiry</option>
+        <option value="1">Survey Enquiry</option>
+        <option value="2">Address Query</option>
+        <option value="3">Technical Query</option>
+        <option value="4">Refusal</option>
+        <option value="5">Complaint</option>
+        <option value="6" selected="selected">Miscellaneous</option>
       <% end %>
       </select>
     </p>
