@@ -3,11 +3,13 @@ module Beyond
     class FollowUpService < Base
 
       # Get all follow-ups for the selected questionnaire.
-      get '/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/addresses/:uprn_code/case/:case_id/questionnaires/:questionnaire_id/iac/:iac' do |region_code, local_authority_code, msoa_code, uprn_code, case_id, questionnaire_id, iac|
+      get '/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/case/:case_id/questionnaires/:questionnaire_id/iac/:iac' do |region_code, local_authority_code, msoa_code, case_id, questionnaire_id, iac|
         authenticate!
         follow_ups = JSON.parse(RestClient.get("http://#{settings.follow_up_service_host}:#{settings.follow_up_service_port}/FollowUpService/FollowUp/QuestionnaireId=#{questionnaire_id}")).paginate(page: params[:page])
 
         # Get the selected address and quesionnaire details so they can be redisplayed for reference.
+        uniqueCase = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/cases/questionnaire/#{questionnaire_id}"))
+        uprn_code = uniqueCase['uprn']
         address = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/addresses/#{uprn_code}"))
         coordinates = "#{address['latitude']},#{address['longitude']}"
         questionnaire = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/questionnaires/iac/#{iac}"))
@@ -27,7 +29,7 @@ module Beyond
       end
 
       # Present a form for creating a new follow-up.
-      get '/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/addresses/:uprn_code/cases/:case_id/questionnaires/:questionnaire_id/iac/:iac/followups/new' do |region_code, local_authority_code, msoa_code, uprn_code, case_id, questionnaire_id, iac|
+      get '/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/cases/:case_id/questionnaires/:questionnaire_id/iac/:iac/followups/new' do |region_code, local_authority_code, msoa_code, uprn_code, case_id, questionnaire_id, iac|
         authenticate!
         action = "/regions/#{region_code}/las/#{local_authority_code}/msoas/#{msoa_code}/addresses/#{uprn_code}/questionnaires/#{questionnaire_id}/followups"
         erb :follow_up, locals: { title: "Create Follow-Up for Questionnaire #{questionnaire_id}",

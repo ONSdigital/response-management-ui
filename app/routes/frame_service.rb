@@ -392,13 +392,14 @@ module Beyond
       end
 
       # Get all questionnaires for a specific case.
-      get '/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/addresses/:uprn_code/cases/:case_id/questionnaires' do |region_code, local_authority_code, msoa_code, uprn_code,case_id|
+      get '/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/cases/:case_id/questionnaires' do |region_code, local_authority_code, msoa_code,case_id|
         authenticate!
         uniqueCase = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/cases/#{case_id}"))
         questionnaires = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/questionnaires/case/#{case_id}"))
         if uniqueCase.empty?
           erb :case_not_found, locals: { title: 'Case Not Found' }
         else
+          uprn_code = "#{uniqueCase['uprn']}"
           address = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/addresses/#{uprn_code}"))
           coordinates = "#{address['latitude']},#{address['longitude']}"
           erb :case_questionnaire, layout: :sidebar_layout,

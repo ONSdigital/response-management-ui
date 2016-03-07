@@ -110,7 +110,7 @@
   <% else %>
     <td>-</td>
   <% end %>
-    <td><% if params[:page].present? %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/cases/<%=h uniqueCase['caseId'] %>/questionnaires?page=<%=h params[:page] %>"><% else %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/cases/<%=h uniqueCase['caseId'] %>/questionnaires"><% end %>View Questionnaires</a></td>
+    <td><% if params[:page].present? %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/cases/<%=h uniqueCase['caseId'] %>/questionnaires?page=<%=h params[:page] %>"><% else %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/cases/<%=h uniqueCase['caseId'] %>/questionnaires"><% end %>View Questionnaires</a></td>
   </tr>
   </tbody>
 </table>
@@ -119,7 +119,7 @@
   <h3>Events</h3>
   <div id="newquestionnaire">
     <form action="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/case/<%=h caseid %>/event/new" method="get">
-      <input class="button" type="submit" value="Create Event&hellip;"> or <% if params[:page].present? %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/questionnaires?page=<%=h params[:page] %>"><% else %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/case/<%=h caseid %>"><% end %>Refresh</a>
+      <input class="button" type="submit" value="Create Event&hellip;"> or <% if params[:page].present? %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/questionnaires?page=<%=h params[:page] %>"><% else %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/case/<%=h caseid %>"><% end %>Refresh</a>
     <% if params[:page].present? %>
       <input type="hidden" name="page" value="<%=h params[:page] %>">
     <% end %>
