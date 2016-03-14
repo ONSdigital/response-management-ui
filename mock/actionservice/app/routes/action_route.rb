@@ -1,6 +1,6 @@
 module BeyondMock
   module Routes
-    class CaseFrameService < Base
+    class ActionService < Base
 
 
       # Get the action details for a specified action
