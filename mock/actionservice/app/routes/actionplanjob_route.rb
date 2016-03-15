@@ -4,7 +4,7 @@ module BeyondMock
 
       # get Action Plan Jobs
       get '/actionplans/jobs/:actionplanjobid' do
-        erb :actionplansjob, locals: {actionplanjobid: params['actionplanjobid']}
+        erb :actionplanjob, locals: {actionplanjobid: params['actionplanjobid']}
       end
 
       # List Action Plan jobs
