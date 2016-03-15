@@ -1,14 +1,13 @@
 <% if (!actionplanid.nil?) and (actionplanid.match('^[0-9]*$'))  %>
-[
-  {
-    "actionPlanJobId": 0,
-    "actionPlanId": "<%= actionplanid %>",
-    "createdBy": "string",
-    "state": "Submitted",
-    "createdDateTime": "2016-03-14T07:52:35.740Z",
-    "updatedDateTime": "2016-03-14T07:52:35.740Z"
-  }
-]
+{
+  "actionPlanId": <%= actionplanid %>,
+  "surveyId": 1,
+  "name": "HH",
+  "description": "Household Action Plan",
+  "createdBy": "SYSTEM",
+  "createdDateTime": "2016-03-14T07:52:35.686Z",
+  "lastGoodRunDateTime": "2016-03-14T07:52:35.686Z"
+}
 <% else %>
 {
   "code": "string",
