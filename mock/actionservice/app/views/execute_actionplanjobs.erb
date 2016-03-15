@@ -1,0 +1,16 @@
+<% if (!actionplanid.nil?) and (actionplanid.match('^[0-9]*$'))  %>
+{
+  "actionPlanJobId": 0,
+  "actionPlanId": <%= actionplanid %>,
+  "createdBy": "string",
+  "state": "Submitted",
+  "createdDateTime": "2016-03-15T14:21:59.375Z",
+  "updatedDateTime": "2016-03-15T14:21:59.375Z"
+}
+<% else %>
+{
+  "code": "string",
+  "timestamp": 0,
+  "message": "string"
+}
+<% end %>

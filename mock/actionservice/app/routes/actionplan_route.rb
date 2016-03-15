@@ -12,6 +12,11 @@ module BeyondMock
         erb :actionplan, locals: { actionplanid: params['actionplanid'] }
       end
 
+      # Update Action Plan
+      put '/actionplans/:actionplanid' do
+        erb :edit_actionplan, locals: { actionplanid: params['actionplanid'] }
+      end
+
       # List Action Rlues for Action Plan
       get '/actionplans/:actionplanid/rules' do
         erb :actionplanrules, locals: { actionplanid: params['actionplanid'] }

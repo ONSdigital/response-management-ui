@@ -8,9 +8,19 @@ module BeyondMock
         erb :actions
       end
 
+      # create an action
+      post '/actions' do
+        erb :new_actions
+      end
+
       # Get the action details for a specified action
       get '/actions/:actionid' do
         erb :action, locals: { actionid: params['actionid'] }
+      end
+
+      # update an action
+      put '/actions/:actionid' do
+        erb :edit_action, locals: { actionid: params['actionid'] }
       end
 
       # Get action details for a specified case
