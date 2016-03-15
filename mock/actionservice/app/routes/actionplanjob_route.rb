@@ -13,7 +13,7 @@ module BeyondMock
       end
 
       # Execute Action Plan
-      put '/actionplans/:actionplanid/jobs' do
+      post '/actionplans/:actionplanid/jobs' do
         erb :execute_actionplanjobs, locals: { actionplanid: params['actionplanid'] }
       end
 
