@@ -118,7 +118,7 @@
 <% content_for :footer do %>
   <h3>Events</h3>
   <div id="newquestionnaire">
-    <form action="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/case/<%=h caseid %>/event/new" method="get">
+    <form action="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/case/<%=h caseid %>/event/new" method="get">
       <input class="button" type="submit" value="Create Event&hellip;"> or <% if params[:page].present? %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/questionnaires?page=<%=h params[:page] %>"><% else %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/case/<%=h caseid %>"><% end %>Refresh</a>
     <% if params[:page].present? %>
       <input type="hidden" name="page" value="<%=h params[:page] %>">

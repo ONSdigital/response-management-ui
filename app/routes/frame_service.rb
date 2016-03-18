@@ -443,6 +443,60 @@ module Beyond
         end
       end
 
+      # Present form after searching via postcode.
+      get '/postcode/:postcode' do |postcode|
+        authenticate!
+        addresses = []
+
+        RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/addresses/postcode/#{postcode}") do |response, _request, _result, &_block|
+          addresses = JSON.parse(response).paginate(page: params[:page]) unless response.code == 404
+        end
+
+        erb :addresses_postcode, locals: { title: "Addresses for Postcode #{postcode}",
+                                      addresses: addresses }
+
+      end
+
+
+      # Present a form for creating a new event.
+      get '/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/case/:case_id/event/new' do |region_code, local_authority_code, msoa_code, case_id|
+      authenticate!
+      action = "/regions/#{region_code}/las/#{local_authority_code}/msoas/#{msoa_code}/case/#{case_id}/event"
+      categories = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/categories"))
+      erb :event, locals: { title: "Create Event for Case #{case_id}",
+                                    action: action,
+                                    method: :post,
+                                    page: params[:page],
+                                    region_code: region_code,
+                                    local_authority_code: local_authority_code,
+                                    msoa_code: msoa_code,
+                                    case_id: case_id,
+                                    categories: categories
+                                    }
+      end
+
+      # Create a new event.
+      post '/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/case/:case_id/event' do |region_code, local_authority_code, msoa_code, case_id|
+        authenticate!
+        RestClient.post("http://#{settings.frame_service_host}:#{settings.frame_service_port}/cases/#{case_id}/events",
+                        { description: "description",
+                          category: "category",
+                          subCategory: "subCategory",
+                          createdBy: "createdBy"
+                        }.to_json, content_type: :json, accept: :json
+                       ) do |response, _request, _result, &_block|
+          if response.code == 200
+            flash[:notice] = 'Successfully created event.'
+          else
+            flash[:error] = "Unable to create event (HTTP #{response.code} received)."
+          end
+        end
+
+        event_url = "/regions/#{region_code}/las/#{local_authority_code}/msoas/#{msoa_code}/case/#{case_id}"
+        event_url += "?page=#{params[:page]}" if params[:page].present?
+        redirect event_url
+      end
+
       # Present a form for creating a new questionnaire.
       get '/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/addresses/:uprn_code/cases/:case_id/questionnaires/new' do |region_code, local_authority_code, msoa_code, uprn_code, case_id|
         authenticate!
@@ -460,40 +514,6 @@ module Beyond
                                       formstatus: 0 }
       end
 
-      # Present form after searching via postcode.
-      get '/postcode/:postcode' do |postcode|
-        authenticate!
-        addresses = []
-
-        RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/addresses/postcode/#{postcode}") do |response, _request, _result, &_block|
-          addresses = JSON.parse(response).paginate(page: params[:page]) unless response.code == 404
-        end
-
-        erb :addresses_postcode, locals: { title: "Addresses for Postcode #{postcode}",
-                                      addresses: addresses }
-
-      end
-
-
-      # Present a form for creating a new event.
-      get '/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/addresses/:uprn_code/case/:case_id/event/new' do |region_code, local_authority_code, msoa_code, uprn_code, case_id|
-      authenticate!
-      #eventDropDowns = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/events"))
-      action = "/regions/#{region_code}/las/#{local_authority_code}/msoas/#{msoa_code}/case/#{case_id}/event"
-      erb :event, locals: { title: "Create Event for Case #{case_id}",
-                                    action: action,
-                                    method: :post,
-                                    page: params[:page],
-                                    region_code: region_code,
-                                    local_authority_code: local_authority_code,
-                                    msoa_code: msoa_code,
-                                    case_id: case_id,
-                                    uprn_code: uprn_code,
-                                    #eventDropDowns: eventDropDowns,
-                                    formtype: '01',
-                                    eventCategory: 0,
-                                    eventOutcome: 0}
-      end
 
       # Create a new questionnaire.
       post '/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/addresses/:uprn_code/questionnaires' do |region_code, local_authority_code, msoa_code, uprn_code|
