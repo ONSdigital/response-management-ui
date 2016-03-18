@@ -22,6 +22,12 @@ module BeyondMock
         erb :case_events, locals: { caseid: params['caseid'] }
       end
 
+      # creates a case event
+      put '/cases/:caseid/events' do
+        erb :case_events, locals: { caseid: params['caseid'] }
+      end
+
+
     end
   end
 end

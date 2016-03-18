@@ -12,6 +12,11 @@ module BeyondMock
         erb :sample, locals: { sampleid: params['sampleid'] }
       end
 
+      # create cases for the specified sample
+      put '/samples/:sampleid' do
+        erb :sample, locals: { sampleid: params['sampleid'] }
+      end
+
     end
   end
 end

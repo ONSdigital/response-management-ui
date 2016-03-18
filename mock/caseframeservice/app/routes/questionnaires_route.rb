@@ -12,6 +12,11 @@ module BeyondMock
         erb :questionnaire_case, locals: { caseid: params['caseid'] }
       end
 
+      # Confirms a response has been received in the Survey Data Exchange
+      put '/questionnaires/:questionnaireid/response' do
+        erb :questionnaire, locals: { questionnaireid: params['questionnaireid'] }
+      end
+
     end
   end
 end
