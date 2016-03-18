@@ -1,0 +1,17 @@
+<% if (!caseid.nil?) and (caseid.match('^[0-9]*$'))  %>
+{
+  "caseEventId": 0,
+  "caseId": "<%= caseid %>",
+  "description": "string",
+  "category": "string",
+  "subCategory": "string",
+  "createdDateTime": "2016-03-18T08:58:56.326Z",
+  "createdBy": "string"
+}
+<% else %>
+{
+  "code": "string",
+  "timestamp": 0,
+  "message": "string"
+}
+<% end %>
