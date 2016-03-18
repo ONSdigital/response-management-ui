@@ -13,7 +13,6 @@ require_relative './routes/casetypes_route'
 require_relative './routes/samples_route'
 require_relative './routes/surveys_route'
 require_relative './routes/actionplans_route'
-require_relative './routes/events_route'
 require_relative './routes/categories_route'
 
 module BeyondMock
