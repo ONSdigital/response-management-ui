@@ -8,8 +8,8 @@ module BeyondMock
       end
 
       # Get the case information for the specified questionnaire
-      get '/cases/qid/:questionnaireid' do
-        erb :case_qid, locals: { questionnaireid: params['questionnaireid'] }
+      get '/cases/questionnaire/:questionnaireid' do
+        erb :case_questionnaire, locals: { questionnaireid: params['questionnaireid'] }
       end
 
       # Get the case information for the specified case
