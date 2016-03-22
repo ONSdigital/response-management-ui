@@ -34,14 +34,16 @@
   <fieldset>
     <% if method == :post %>
       <p><label for="eventtext">Description (max 250 characters)</label> <span class="required">*</span></p>
-      <textarea rows="4" cols="50" id="eventtext" name="eventtext" maxlength="100" value="<%=h eventtext %>"></textarea>
-      <span id="chars">100</span> characters remaining
+      <% if description_error %>
+        <p><span class="required">Description Required</span></p>
+      <% end %>
+      <textarea rows="4" cols="50" id="eventtext" name="eventtext" maxlength="250" value="<%=h eventtext %>"></textarea>
+      <span id="chars">250</span> characters remaining
     <% end %>
 
     <p><label for="eventcategory">Category</label> <span class="required">*</span></p>
     <p>
       <select id="eventcategory" name="eventcategory">
-
         <option value="General Enquiry" selected="selected">General Enquiry</option>
         <option value="Survey Enquiry - Escalated">General Enquiry - Escalated</option>
         <option value="Survey Enquiry">Survey Enquiry</option>
@@ -54,7 +56,6 @@
         <option value="Complaint - Escalated">Complaint - Escalated</option>
         <option value="Request for Fulfilment">Request for Fulfilment</option>
         <option value="Miscellaneous">Miscellaneous</option>
-
       </select>
     </p>
   </fieldset>

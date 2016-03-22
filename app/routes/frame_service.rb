@@ -473,31 +473,58 @@ module Beyond
                                     eventtext: '',
                                     eventcategory: '',
                                     createdby: '',
+                                    description_error: false,
                                     case_id: case_id #,
                                     # categories: categories
                                     }
+
       end
 
       # Create a new event.
       post '/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/case/:case_id/event' do |region_code, local_authority_code, msoa_code, case_id|
         authenticate!
-        user = session[:user]
-        RestClient.post("http://#{settings.frame_service_host}:#{settings.frame_service_port}/cases/#{case_id}/events",
-                        { description: params[:eventtext],
-                          category: params[:eventcategory],
-                          createdBy: "#{user.display_name}"
-                        }.to_json, content_type: :json, accept: :json
-                       ) do |response, _request, _result, &_block|
-          if response.code == 200
-            flash[:notice] = 'Successfully created event.'
-          else
-            flash[:error] = "Unable to create event (HTTP #{response.code} received)."
-          end
+
+        #test for existence of description text
+        form do
+          field :eventtext, present: true
         end
 
-        event_url = "/regions/#{region_code}/las/#{local_authority_code}/msoas/#{msoa_code}/case/#{case_id}"
-        event_url += "?page=#{params[:page]}" if params[:page].present?
-        redirect event_url
+        if form.failed?
+          action = "/regions/#{region_code}/las/#{local_authority_code}/msoas/#{msoa_code}/case/#{case_id}/event"
+          erb :event, locals: { title: "Create Event for Case #{case_id}",
+                                        action: action,
+                                        method: :post,
+                                        page: params[:page],
+                                        region_code: region_code,
+                                        local_authority_code: local_authority_code,
+                                        msoa_code: msoa_code,
+                                        eventtext: '',
+                                        eventcategory: '',
+                                        createdby: '',
+                                        description_error: true,
+                                        case_id: case_id #,
+                                        # categories: categories
+                                        }
+
+        else
+          user = session[:user]
+          RestClient.post("http://#{settings.frame_service_host}:#{settings.frame_service_port}/cases/#{case_id}/events",
+                          { description: params[:eventtext],
+                            category: params[:eventcategory],
+                            createdBy: "#{user.user_id}"
+                          }.to_json, content_type: :json, accept: :json
+                         ) do |response, _request, _result, &_block|
+            if response.code == 200
+              flash[:notice] = 'Successfully created event.'
+            else
+              flash[:error] = "Unable to create event (HTTP #{response.code} received)."
+            end
+          end
+
+          event_url = "/regions/#{region_code}/las/#{local_authority_code}/msoas/#{msoa_code}/case/#{case_id}"
+          event_url += "?page=#{params[:page]}" if params[:page].present?
+          redirect event_url
+        end
       end
 
       # Present a form for creating a new questionnaire.
