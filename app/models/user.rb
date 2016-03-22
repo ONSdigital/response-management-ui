@@ -1,6 +1,7 @@
 require 'rotp'
 
 class User
+  attr_reader :user_id
   attr_reader :display_name
   attr_reader :groups
 
@@ -12,13 +13,14 @@ class User
 
     user_entry = ldap_connection.authenticate(username, password)
 
-    User.new(user_entry.display_name, user_entry.token, user_entry.groups) unless user_entry.nil?
+    User.new(user_entry.user_id, user_entry.display_name, user_entry.token, user_entry.groups) unless user_entry.nil?
   end
 
-  def initialize(display_name, token, groups)
+  def initialize(user_id, display_name, token, groups)
+    @user_id      = user_id
     @display_name = display_name
     @token        = token
-    @groups        = groups
+    @groups       = groups
   end
 
   def valid_code?(drift, params = {})
