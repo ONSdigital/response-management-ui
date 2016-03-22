@@ -462,7 +462,7 @@ module Beyond
       get '/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/case/:case_id/event/new' do |region_code, local_authority_code, msoa_code, case_id|
       authenticate!
       action = "/regions/#{region_code}/las/#{local_authority_code}/msoas/#{msoa_code}/case/#{case_id}/event"
-      categories = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/categories"))
+      # categories = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/categories"))
       erb :event, locals: { title: "Create Event for Case #{case_id}",
                                     action: action,
                                     method: :post,
@@ -470,19 +470,22 @@ module Beyond
                                     region_code: region_code,
                                     local_authority_code: local_authority_code,
                                     msoa_code: msoa_code,
-                                    case_id: case_id,
-                                    categories: categories
+                                    eventtext: '',
+                                    eventcategory: '',
+                                    createdby: '',
+                                    case_id: case_id #,
+                                    # categories: categories
                                     }
       end
 
       # Create a new event.
       post '/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/case/:case_id/event' do |region_code, local_authority_code, msoa_code, case_id|
         authenticate!
+        user = session[:user]
         RestClient.post("http://#{settings.frame_service_host}:#{settings.frame_service_port}/cases/#{case_id}/events",
-                        { description: "description",
-                          category: "category",
-                          subCategory: "subCategory",
-                          createdBy: "createdBy"
+                        { description: params[:eventtext],
+                          category: params[:eventcategory],
+                          createdBy: "#{user.display_name}"
                         }.to_json, content_type: :json, accept: :json
                        ) do |response, _request, _result, &_block|
           if response.code == 200

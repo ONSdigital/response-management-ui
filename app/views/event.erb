@@ -33,18 +33,24 @@
 
   <fieldset>
     <% if method == :post %>
-      <p><label for="textareaChars">Description (max 100 characters)</label> <span class="required">*</span></p>
-      <textarea rows="4" cols="50" id="textareaChars" maxlength="100"></textarea>
+      <p><label for="eventtext">Description (max 100 characters)</label> <span class="required">*</span></p>
+      <textarea rows="4" cols="50" id="eventtext" name="eventtext" maxlength="100" value="<%=h eventtext %>"></textarea>
       <span id="chars">100</span> characters remaining
     <% end %>
 
-    <p><label for="eventCategory">Category</label> <span class="required">*</span></p>
+    <p><label for="eventcategory">Category</label> <span class="required">*</span></p>
     <p>
-      <select>
-       <% categories.each do |category| %>
-        <option value=<%=h category['name'] %>><%=h category['name'] %></option>
-      <% end %>
-</select>
+      <select id="eventcategory" name="eventcategory">
+
+        <option value="General Enquiry" selected="selected">General Enquiry</option>
+        <option value="Survey Enquiry">Survey Enquiry</option>
+        <option value="Address Query">Address Query</option>
+        <option value="Technical Query">Technical Query</option>
+        <option value="Refusal">Refusal</option>
+        <option value="Complaint">Complaint</option>
+        <option value="Miscellaneous">Miscellaneous</option>
+
+      </select>
     </p>
   </fieldset>
   <p id="requiredfields"><span class="required">*</span> Required fields</p>
