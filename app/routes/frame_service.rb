@@ -361,6 +361,7 @@ module Beyond
       get '/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/case/:case_id' do |region_code, local_authority_code, msoa_code,case_id|
         authenticate!
         events = []
+        actions = []
         uniqueCase = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/cases/#{case_id}"))
         #events = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/cases/#{case_id}/events"))
         uprn_code = "#{uniqueCase['uprn']}"
@@ -371,8 +372,12 @@ module Beyond
 
         RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/cases/#{case_id}/events") do |response, _request, _result, &_block|
           events = JSON.parse(response).paginate(page: params[:page]) unless response.code == 204
-
         end
+
+        RestClient.get("http://#{settings.action_service_host}:#{settings.action_service_port}/actions/case/#{case_id}") do |response, _request, _result, &_block|
+          actions = JSON.parse(response).paginate(page: params[:page]) unless response.code == 204
+        end
+        
           address = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/addresses/#{uprn_code}"))
           coordinates = "#{address['latitude']},#{address['longitude']}"
           erb :case_events, layout: :sidebar_layout,
@@ -387,7 +392,9 @@ module Beyond
                                      address: address,
                                      coordinates: coordinates,
                                      survey: survey,
-                                     sample: sample }
+                                     sample: sample,
+                                     actions: actions
+                                    }
 
       end
 

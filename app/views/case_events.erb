@@ -170,6 +170,58 @@
         </tbody>
       </table>
   <% else %>
-    <p id="information"><strong>There are no events for this address.</strong></p>
+    <p id="information"><strong>There are no events for this case.</strong></p>
+    <br>
+  <% end %>
+<% end %>
+
+<% content_for :footer do %>
+  <h3>Actions</h3>
+
+  <% if actions.any? %>
+    <table class="questionnaire">
+      <thead>
+        <tr>
+          <th>Action ID ID</th>
+          <th>Action Type Name</th>
+          <th>Created By</th>
+          <th>State</th>
+          <th>Created Date</th>
+        </tr>
+      </thead>
+      <tbody>
+      <% actions.each_with_index do |action, i| %>
+        <tr class="<%= i.even? ? 'even' : 'odd ' %>">
+        <% if action['actionId'] %>
+          <td><%=h action['actionId'] %></td>
+        <% else %>
+          <td>-</td>
+        <% end %>
+        <% if action['actionTypeName'] %>
+          <td><%=h action['actionTypeName'] %></td>
+        <% else %>
+          <td>-</td>
+        <% end %>
+        <% if action['createdBy'] %>
+          <td><%=h action['createdBy'] %></td>
+        <% else %>
+          <td>-</td>
+        <% end %>
+        <% if action['state'] %>
+          <td><%=h action['state'].to_title_case %></td>
+        <% else %>
+          <td>-</td>
+        <% end %>
+        <% if action['createdDateTime'] %>
+          <td><%=h action['createdDateTime'].to_date %></td>
+        <% else %>
+          <td>-</td>
+        <% end %>
+      </tr>
+      <% end %>
+        </tbody>
+      </table>
+  <% else %>
+    <p id="information"><strong>There are no actions for this case.</strong></p>
   <% end %>
 <% end %>

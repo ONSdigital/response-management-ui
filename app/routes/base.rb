@@ -27,6 +27,8 @@ module Beyond
         set :respgen_service_port, config['response-generator-webservice']['port']
         set :frame_service_host, config['frame-webservice']['host']
         set :frame_service_port, config['frame-webservice']['port']
+        set :action_service_host, config['action-webservice']['host']
+        set :action_service_port, config['action-webservice']['port']
         set :follow_up_service_host, config['follow-up-webservice']['host']
         set :follow_up_service_port, config['follow-up-webservice']['port']
         set :ldap_directory_host, config['ldap-directory']['host']
