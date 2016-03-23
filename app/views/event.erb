@@ -41,12 +41,12 @@
       <span id="chars">250</span> characters remaining
     <% end %>
 
-    <p><label for="eventCategory">Category</label> <span class="required">*</span></p>
+    <p><label for="eventcategory">Category</label> <span class="required">*</span></p>
     <p>
-      <select>
+      <select id="eventcategory" name="eventcategory">
        <% categories.each do |category| %>
         <% if category['manual'] %>
-          <option value=<%=h category['name'] %>><%=h category['name'] %></option>
+          <option value='<%=h category['name'] %>'><%=h category['name'] %></option>
         <% end %>
       <% end %>
     </select>
