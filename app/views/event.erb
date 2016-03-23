@@ -27,7 +27,7 @@
 <% if method.present? %>
   <input type="hidden" name="_method" value="<%= method %>">
 <% end %>
-<% if params[:page].present? %>
+<% if params[:page].present? %>a
   <input type="hidden" name="page" value="<%=h params[:page] %>">
 <% end %>
 
@@ -41,22 +41,15 @@
       <span id="chars">250</span> characters remaining
     <% end %>
 
-    <p><label for="eventcategory">Category</label> <span class="required">*</span></p>
+    <p><label for="eventCategory">Category</label> <span class="required">*</span></p>
     <p>
-      <select id="eventcategory" name="eventcategory">
-        <option value="General Enquiry" selected="selected">General Enquiry</option>
-        <option value="Survey Enquiry - Escalated">General Enquiry - Escalated</option>
-        <option value="Survey Enquiry">Survey Enquiry</option>
-        <option value="Survey Enquiry - Escalated">Survey Enquiry - Escalated</option>
-        <option value="Address Details Incorrect">Address Details Incorrect</option>
-        <option value="Classification Incorrect">Classification Incorrect</option>
-        <option value="Technical Query">Technical Query</option>
-        <option value="Refusal">Refusal</option>
-        <option value="Complaint">Complaint</option>
-        <option value="Complaint - Escalated">Complaint - Escalated</option>
-        <option value="Request for Fulfilment">Request for Fulfilment</option>
-        <option value="Miscellaneous">Miscellaneous</option>
-      </select>
+      <select>
+       <% categories.each do |category| %>
+        <% if category['manual'] %>
+          <option value=<%=h category['name'] %>><%=h category['name'] %></option>
+        <% end %>
+      <% end %>
+    </select>
     </p>
   </fieldset>
   <p id="requiredfields"><span class="required">*</span> Required fields</p>

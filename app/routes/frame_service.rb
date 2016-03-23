@@ -377,7 +377,7 @@ module Beyond
         RestClient.get("http://#{settings.action_service_host}:#{settings.action_service_port}/actions/case/#{case_id}") do |response, _request, _result, &_block|
           actions = JSON.parse(response).paginate(page: params[:page]) unless response.code == 204
         end
-        
+
           address = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/addresses/#{uprn_code}"))
           coordinates = "#{address['latitude']},#{address['longitude']}"
           erb :case_events, layout: :sidebar_layout,
@@ -469,7 +469,7 @@ module Beyond
       get '/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/case/:case_id/event/new' do |region_code, local_authority_code, msoa_code, case_id|
       authenticate!
       action = "/regions/#{region_code}/las/#{local_authority_code}/msoas/#{msoa_code}/case/#{case_id}/event"
-      # categories = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/categories"))
+      categories = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/categories"))
       erb :event, locals: { title: "Create Event for Case #{case_id}",
                                     action: action,
                                     method: :post,
@@ -481,8 +481,8 @@ module Beyond
                                     eventcategory: '',
                                     createdby: '',
                                     description_error: false,
-                                    case_id: case_id #,
-                                    # categories: categories
+                                    case_id: case_id,
+                                    categories: categories
                                     }
 
       end
@@ -509,8 +509,8 @@ module Beyond
                                         eventcategory: '',
                                         createdby: '',
                                         description_error: true,
-                                        case_id: case_id #,
-                                        # categories: categories
+                                        case_id: case_id,
+                                        categories: categories
                                         }
 
         else
