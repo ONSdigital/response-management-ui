@@ -129,11 +129,12 @@
   </div>
 
   <% if events.any? %>
+  <%= will_paginate events, :previous_label => '&lt; Prev', :next_label => 'Next &gt;' %>
     <table class="questionnaire">
       <thead>
         <tr>
           <th>Case Event ID</th>
-          <th>Created Date/time</th>
+          <th>Created Date</th>
           <th>Created By</th>
           <th>Event Category</th>
           <th>Description</th>
@@ -171,11 +172,23 @@
       <% end %>
         </tbody>
       </table>
+      <%= will_paginate events, :previous_label => '&lt; Prev', :next_label => 'Next &gt;' %>
+
 
       <% content_for :footer do %>
         <h3>Actions</h3>
-
+        <br>
+        <div id="newquestionnaire">
+          <form action="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/case/<%=h caseid %>/event/new" method="get">
+            <% if params[:page].present? %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/questionnaires?page=<%=h params[:page] %>"><% else %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/case/<%=h caseid %>"><% end %>Refresh</a>
+          <% if params[:page].present? %>
+            <input type="hidden" name="page" value="<%=h params[:page] %>">
+          <% end %>
+          </form>
+        </div>
         <% if actions.any? %>
+        <%= will_paginate actions, :previous_label => '&lt; Prev', :next_label => 'Next &gt;' %>
+
           <table class="questionnaire">
             <thead>
               <tr>
@@ -218,6 +231,8 @@
             <% end %>
               </tbody>
             </table>
+            <%= will_paginate actions, :previous_label => '&lt; Prev', :next_label => 'Next &gt;' %>
+
         <% else %>
           <p id="information"><strong>There are no actions for this case.</strong></p>
         <% end %>
