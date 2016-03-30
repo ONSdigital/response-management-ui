@@ -21,7 +21,7 @@
 <% end %>
 
 <% addresses.each do |address| %>
-  <table class="address" style="margin-top: 0px;">
+  <table class="primary" style="margin-top: 0px;">
     <thead>
       <tr>
         <th>UPRN</th>
@@ -48,8 +48,8 @@
   </div>
 
   <% if questionnaires.any? %>
-    <%= will_paginate questionnaires, :class => 'questionnairepagination', :previous_label => '&lt; Prev', :next_label => 'Next &gt;' %>
-    <table class="questionnaire">
+    <%= will_paginate questionnaires, :class => 'secondarypagination', :previous_label => '&lt; Prev', :next_label => 'Next &gt;' %>
+    <table class="secondary">
       <thead>
         <tr>
           <th>Questionnaire ID</th>

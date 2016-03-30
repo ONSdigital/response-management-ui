@@ -18,7 +18,7 @@
   <%= erb :googlemaps_partial, locals: { coordinates: coordinates } %>
 <% end %>
 
-  <table class="address" style="margin-top: 0px;">
+  <table class="primary" style="margin-top: 0px; width: 100%">
     <thead>
       <tr>
         <th>UPRN</th>
@@ -33,7 +33,7 @@
   </table>
 
 
-<table class="questionnaire">
+<table class="secondary">
   <thead>
     <tr>
       <th>Case ID</th>
@@ -89,7 +89,7 @@
   </div>
 
   <% if questionnaires.any? %>
-    <table class="questionnaire">
+    <table class="secondary">
       <thead>
         <tr>
           <th>Questionnaire ID</th>

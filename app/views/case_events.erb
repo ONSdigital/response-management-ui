@@ -18,7 +18,7 @@
   <%= erb :googlemaps_partial, locals: { coordinates: coordinates } %>
 <% end %>
 
-  <table class="address" style="margin-top: 0px;">
+  <table class="primary" style="margin-top: 0px; width: 100%">
     <thead>
       <tr>
         <th>Address Line 1</th>
@@ -65,7 +65,7 @@
     </tbody>
   </table>
 
-<table class="questionnaire">
+<table class="secondary">
   <thead>
     <tr>
       <th>Case ID</th>
@@ -119,7 +119,7 @@
 
 <% content_for :footer do %>
   <h3>Events</h3>
-  <div id="newquestionnaire">
+  <div id="events">
     <form action="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/case/<%=h caseid %>/event/new" method="get">
       <input class="button" type="submit" value="Create Event&hellip;"> or <% if params[:page].present? %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/questionnaires?page=<%=h params[:page] %>"><% else %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/case/<%=h caseid %>"><% end %>Refresh</a>
     <% if params[:page].present? %>
@@ -130,7 +130,7 @@
 
   <% if events.any? %>
   <%= will_paginate events, :previous_label => '&lt; Prev', :next_label => 'Next &gt;' %>
-    <table class="questionnaire">
+    <table class="secondary">
       <thead>
         <tr>
           <th>Case Event ID</th>
@@ -178,7 +178,7 @@
       <% content_for :footer do %>
         <h3>Actions</h3>
         <br>
-        <div id="newquestionnaire">
+        <div id="actions">
           <form action="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/case/<%=h caseid %>/event/new" method="get">
             <% if params[:page].present? %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/questionnaires?page=<%=h params[:page] %>"><% else %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/case/<%=h caseid %>"><% end %>Refresh</a>
           <% if params[:page].present? %>
@@ -189,7 +189,7 @@
         <% if actions.any? %>
         <%= will_paginate actions, :previous_label => '&lt; Prev', :next_label => 'Next &gt;' %>
 
-          <table class="questionnaire">
+          <table class="secondary">
             <thead>
               <tr>
                 <th>Action ID</th>

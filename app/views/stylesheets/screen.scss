@@ -300,22 +300,19 @@ strong {
   padding-left: 5px;
 }
 
-.address {
-  width: 100%;
-}
-
-.address, .caseloads, .localauthorities, .regions {
+.primary {
   background-color: $primary-light;
   border: 2px solid $primary-light;
   font-size: 90%;
 }
 
-.address tbody, .caseloads tbody, .localauthorities tbody, .regions tbody {
+.primary tbody {
   background-color: $white;
 }
 
-.address .addresslines {
+.primary .primarylines {
   background-color: $alternate-lightest;
+  width: 100%;
 }
 
 .button {
@@ -373,13 +370,13 @@ strong {
   margin-top: 20px;
 }
 
-.pagination, .questionnairepagination {
+.pagination, .secondarypagination {
   color: $black;
   font-size: 90%;
   font-weight: bold;
 }
 
-.pagination a, .questionnairepagination a {
+.pagination a, .secondarypagination a {
   @include border-radius-large;
   background-color: $white;
   border: 2px solid $secondary-lightest;
@@ -390,17 +387,17 @@ strong {
   text-decoration: none;
 }
 
-.pagination a:hover, .questionnairepagination a:hover {
+.pagination a:hover, .secondarypagination a:hover {
   background-color: $white;
   border: 2px solid $secondary-light;
   color: $black;
 }
 
-.pagination .disabled, .questionnairepagination .disabled {
+.pagination .disabled, .secondarypagination .disabled {
   display: none;
 }
 
-.questionnairepagination {
+.secondarypagination {
   clear: both;
   padding-top: 20px;
 }
@@ -419,7 +416,7 @@ strong {
   margin-bottom: 10px;
 }
 
-.questionnaire, .followup {
+.secondary {
   background-color: $secondary-light;
   border: 2px solid $secondary-light;
   font-size: 90%;
@@ -427,15 +424,15 @@ strong {
   width: 100%;
 }
 
-.questionnaire thead, .followup thead {
+.secondary thead {
   background-color: $secondary-light;
 }
 
-.questionnaire .even, .followup .even {
+.secondary .even {
   background-color: $secondary-lightest;
 }
 
-.questionnaire .odd, .followup .odd {
+.secondary .odd {
   background-color: $secondary-lighter;
 }
 
