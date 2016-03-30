@@ -398,6 +398,47 @@ module Beyond
 
       end
 
+      # Get a specific case.
+      get '/case/:case_id' do |case_id|
+        authenticate!
+        events = []
+        actions = []
+        uniqueCase = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/cases/#{case_id}"))
+        #events = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/cases/#{case_id}/events"))
+        uprn_code = "#{uniqueCase['uprn']}"
+        survey_id = "#{uniqueCase['surveyId']}"
+        sample_id = "#{uniqueCase['sampleId']}"
+        survey = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/surveys/#{survey_id}"))
+        sample = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/samples/#{sample_id}"))
+
+        RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/cases/#{case_id}/events") do |response, _request, _result, &_block|
+          events = JSON.parse(response).paginate(page: params[:page]) unless response.code == 204
+        end
+
+        RestClient.get("http://#{settings.action_service_host}:#{settings.action_service_port}/actions/case/#{case_id}") do |response, _request, _result, &_block|
+          actions = JSON.parse(response).paginate(page: params[:page]) unless response.code == 204
+        end
+
+          address = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/addresses/#{uprn_code}"))
+          coordinates = "#{address['latitude']},#{address['longitude']}"
+          erb :case_events, layout: :sidebar_layout,
+                           locals: { title: "Event history for Case: #{case_id}",
+                                     region_code: address['regionCode'],
+                                     local_authority_code: address['ladCode'],
+                                     msoa_code: address['msoaArea'],
+                                     uprn_code: uprn_code,
+                                     caseid: case_id,
+                                     uniqueCase: uniqueCase,
+                                     events: events,
+                                     address: address,
+                                     coordinates: coordinates,
+                                     survey: survey,
+                                     sample: sample,
+                                     actions: actions
+                                    }
+
+      end
+
       # Get all questionnaires for a specific case.
       get '/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/cases/:case_id/questionnaires' do |region_code, local_authority_code, msoa_code,case_id|
         authenticate!

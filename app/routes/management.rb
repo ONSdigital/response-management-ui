@@ -33,10 +33,16 @@ module Beyond
       end
 
       # Get all escalated cases.
-      get '/manage/escalated' do
+      get '/manage/escalated/:escalatetype' do |escalatetype|
+        escalated = []
         authenticate!
-        regions = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/frameservice/regions")).paginate(page: params[:page])
-        erb :escalated, locals: { title: 'View Escalated Cases' }
+        type = "ESC_#{escalatetype.upcase}"
+        #escalated = JSON.parse().paginate(page: params[:page])
+        RestClient.get("http://#{settings.action_service_host}:#{settings.action_service_port}/actions?actiontype=#{type}&state=ACTIVE") do |response, _request, _result, &_block|
+          escalated = JSON.parse(response).paginate(page: params[:page]) unless response.code == 204
+        end
+
+        erb :escalated_cases, locals: { title: "View Escalated #{escalatetype.capitalize} Cases", escalated: escalated }
       end
 
     end

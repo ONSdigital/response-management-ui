@@ -1,0 +1,51 @@
+<% content_for :menu do %>
+  <li><a href="/">Home</a></li>
+  <% unless authorised?("collect-csos") %>
+  <li id="active"><a href="/regions">Addresses</a></li>
+  <% end %>
+  <% if authorised?("collect-admins") %>
+    <li><a href="/manage">Manage</a></li>
+  <% end %>
+<% end %>
+
+<% unless authorised?("collect-csos") %>
+  <% content_for :breadcrumbs do %>
+  <% end %>
+<% end %>
+
+<% content_for :breadcrumbs do %>
+Escalated Cases
+<% end %>
+
+    <% if escalated.any? %>
+      <%= will_paginate escalated, :class => 'secondarypagination', :previous_label => '&lt; Prev', :next_label => 'Next &gt;' %>
+      <table class="secondary">
+        <thead>
+          <tr>
+            <th>Case ID</th>
+            <th>Action State</th>
+            <th>Action Created</th>
+          </tr>
+        </thead>
+        <tbody>
+        <% escalated.each_with_index do |escalatedCase, i| %>
+          <tr class="<%= i.even? ? 'even' : 'odd ' %>">
+            <td><a href="/case/<%=h escalatedCase['caseId'] %>"><%=h escalatedCase['caseId'] %></a></td>
+          <% if escalatedCase['state'].present? %>
+            <td><%=h escalatedCase['state'].capitalize %></td>
+          <% else %>
+            <td>-</td>
+          <% end %>
+          <% if escalatedCase['createdDateTime'].present? %>
+            <td><%=h escalatedCase['createdDateTime'].to_date %></td>
+          <% else %>
+            <td>-</td>
+          <% end %>
+          </tr>
+        <% end %>
+          </tbody>
+        </table>
+        <%= will_paginate escalated, :previous_label => '&lt; Prev', :next_label => 'Next &gt;' %>
+    <% else %>
+      <p id="information"><strong>There are no escalated cases.</strong></p>
+    <% end %>
