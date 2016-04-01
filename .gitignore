@@ -4,6 +4,7 @@
 ### Ruby ###
 *.gem
 *.rbc
+*.sass-cache*
 /.config
 /coverage/
 /InstalledFiles
