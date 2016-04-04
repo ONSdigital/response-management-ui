@@ -37,6 +37,12 @@ module Beyond
         set :ldap_groups, config['ldap-directory']['groups']
         set :google_maps_api_key, config['google-maps']['api-key']
 
+        # Display badges with the built date, environment and commit SHA on the
+        # Sign In screen in non-production environments.
+        set :built, config['badges']['built']
+        set :commit, config['badges']['commit']
+        set :environment, config['badges']['environment']
+
         # Expire sessions after ten minutes of inactivity.
         use Rack::Session::Cookie, key: 'rack.session', path: '/',
                                    secret: 'eb46fa947d8411e5996329c9ef0ba35d',
@@ -101,7 +107,16 @@ module Beyond
       end
 
       get '/signin/?' do
-        erb :signin, layout: :simple_layout, locals: { title: 'Sign In' }
+        built  = settings.built
+        commit = settings.commit
+
+        # Display the correct built date and commit SHA when running locally.
+        built = Date.today.strftime('%d_%b_%Y') if built == '01_Jan_1970'
+        commit = `git rev-parse --short HEAD` if commit == 'commit'
+        erb :signin, layout: :simple_layout, locals: { title: 'Sign In',
+                                                       built: built,
+                                                       commit: commit,
+                                                       environment: settings.environment }
       end
 
       post '/signin/?' do

@@ -25,3 +25,8 @@ ldap-directory:
 
 google-maps:
   api-key: AIzaSyAtKmYXuijfiPsstjNsczBocKw149--fqM
+
+badges:
+  built: 01_Jan_1970
+  commit: commit
+  environment: development
