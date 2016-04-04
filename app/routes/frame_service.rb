@@ -375,7 +375,7 @@ module Beyond
         end
 
         RestClient.get("http://#{settings.action_service_host}:#{settings.action_service_port}/actions/case/#{case_id}") do |response, _request, _result, &_block|
-          actions = JSON.parse(response).paginate(page: params[:page]) unless response.code == 204
+          actions = JSON.parse(response) unless response.code == 204
         end
 
           address = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/addresses/#{uprn_code}"))
@@ -416,13 +416,13 @@ module Beyond
         end
 
         RestClient.get("http://#{settings.action_service_host}:#{settings.action_service_port}/actions/case/#{case_id}") do |response, _request, _result, &_block|
-          actions = JSON.parse(response).paginate(page: params[:page]) unless response.code == 204
+          actions = JSON.parse(response) unless response.code == 204
         end
 
           address = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/addresses/#{uprn_code}"))
           coordinates = "#{address['latitude']},#{address['longitude']}"
           erb :case_events, layout: :sidebar_layout,
-                           locals: { title: "Event history for Case: #{case_id}",
+                           locals: { title: "Event History for Case #{case_id}",
                                      region_code: address['regionCode'],
                                      local_authority_code: address['ladCode'],
                                      msoa_code: address['msoaArea'],

@@ -119,11 +119,12 @@
 
 <% content_for :footer do %>
   <h3>Events</h3>
+  <br>
   <div id="events">
     <form action="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/case/<%=h caseid %>/event/new" method="get">
-      <input class="button" type="submit" value="Create Event&hellip;"> or <% if params[:page].present? %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/questionnaires?page=<%=h params[:page] %>"><% else %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/case/<%=h caseid %>"><% end %>Refresh</a>
-    <% if params[:page].present? %>
-      <input type="hidden" name="page" value="<%=h params[:page] %>">
+      <input class="button" type="submit" value="Create Event&hellip;"> or <% if params[:actionpage].present? %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/questionnaires?page=<%=h params[:actionpage] %>"><% else %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/case/<%=h caseid %>"><% end %>Refresh</a>
+    <% if params[:actionpage].present? %>
+      <input type="hidden" name="page" value="<%=h params[:actionpage] %>">
     <% end %>
     </form>
   </div>
@@ -176,18 +177,11 @@
 
 
       <% content_for :footer do %>
+        <br>
         <h3>Actions</h3>
         <br>
-        <div id="actions">
-          <form action="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/case/<%=h caseid %>/event/new" method="get">
-            <% if params[:page].present? %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/questionnaires?page=<%=h params[:page] %>"><% else %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/case/<%=h caseid %>"><% end %>Refresh</a>
-          <% if params[:page].present? %>
-            <input type="hidden" name="page" value="<%=h params[:page] %>">
-          <% end %>
-          </form>
-        </div>
+
         <% if actions.any? %>
-        <%= will_paginate actions, :previous_label => '&lt; Prev', :next_label => 'Next &gt;' %>
 
           <table class="secondary">
             <thead>
@@ -231,7 +225,6 @@
             <% end %>
               </tbody>
             </table>
-            <%= will_paginate actions, :previous_label => '&lt; Prev', :next_label => 'Next &gt;' %>
 
         <% else %>
           <p id="information"><strong>There are no actions for this case.</strong></p>

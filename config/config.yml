@@ -4,7 +4,7 @@ follow-up-webservice:
 
 action-webservice:
   host: collect-server
-  port: 8161
+  port: 8151
 
 frame-webservice:
   host: collect-server
