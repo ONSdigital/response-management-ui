@@ -1,7 +1,4 @@
-<% content_for :menu do %>
-  <li id="active"><a href="/">Home</a></li>
-  <li><a href="/regions">Addresses</a></li>
-<% end %>
+<%= erb :menu, locals: { pageid: "addresses" } %>
 
 <% content_for :breadcrumbs do %>
   403 Forbidden

@@ -1,12 +1,4 @@
-<% content_for :menu do %>
-  <li><a href="/">Home</a></li>
-  <% unless authorised?("collect-csos") %>
-  <li><a href="/regions">Addresses</a></li>
-  <% end %>
-  <% if authorised?("collect-admins") %>
-    <li id="active"><a href="/manage">Manage</a></li>
-  <% end %>
-<% end %>
+<%= erb :menu, locals: { pageid: "manage" } %>
 
 <% unless authorised?("collect-csos") %>
   <% content_for :breadcrumbs do %>

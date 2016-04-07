@@ -1,12 +1,4 @@
-<% content_for :menu do %>
-  <li id="active"><a href="/">Home</a></li>
-  <% unless authorised?("collect-csos") %>
-  <li><a href="/regions">Addresses</a></li>
-  <% end %>
-  <% if authorised?("collect-admins") %>
-    <li><a href="/manage">Manage</a></li>
-  <% end %>
-<% end %>
+<%= erb :menu, locals: { pageid: "home" } %>
 
 <% content_for :breadcrumbs do %>
   404 Not Found
