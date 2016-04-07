@@ -82,8 +82,13 @@ module Beyond
         headers 'Content-Type' => 'text/html; charset=utf-8'
       end
 
-      # Only administrators can access the management screens.
+      # Only administrators and escalation team can access the management screens.
       before '/manage*' do
+        halt 403 unless authorised?("collect-admins") || authorised?("collect-escalate")
+      end
+
+      # Only administrators can access the admin screens.
+      before '/admin*' do
         halt 403 unless authorised?("collect-admins")
       end
 

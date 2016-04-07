@@ -381,7 +381,7 @@ module Beyond
           address = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/addresses/#{uprn_code}"))
           coordinates = "#{address['latitude']},#{address['longitude']}"
           erb :case_events, layout: :sidebar_layout,
-                           locals: { title: "Event history for Case: #{case_id}",
+                           locals: { title: "Event History for Case #{case_id}",
                                      region_code: address['regionCode'],
                                      local_authority_code: address['ladCode'],
                                      msoa_code: address['msoaArea'],
@@ -519,6 +519,8 @@ module Beyond
                                     local_authority_code: local_authority_code,
                                     msoa_code: msoa_code,
                                     eventtext: '',
+                                    customername: '',
+                                    customercontact: '',
                                     eventcategory: '',
                                     createdby: '',
                                     description_error: false,
@@ -547,6 +549,8 @@ module Beyond
                                         local_authority_code: local_authority_code,
                                         msoa_code: msoa_code,
                                         eventtext: '',
+                                        customername: '',
+                                        customercontact: '',
                                         eventcategory: '',
                                         createdby: '',
                                         description_error: true,
@@ -557,7 +561,7 @@ module Beyond
         else
           user = session[:user]
           RestClient.post("http://#{settings.frame_service_host}:#{settings.frame_service_port}/cases/#{case_id}/events",
-                          { description: params[:eventtext],
+                          { description: "name: " + params[:customername] + " phone: " + params[:customercontact] + " " + params[:eventtext],
                             category: params[:eventcategory],
                             createdBy: "#{user.user_id}"
                           }.to_json, content_type: :json, accept: :json
