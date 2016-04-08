@@ -1,7 +1,7 @@
 <%= erb :menu, locals: { pageid: "addresses" } %>
 
 <% content_for :sub_heading do %>
-  Click an Address ID to view cases for that address.
+  Click to view cases for that address.
 <% end %>
 
 <% if addresses.any? %>
@@ -9,19 +9,18 @@
   <table class="primary">
     <thead>
       <tr>
-        <th></th>
         <th>Address Line 1</th>
         <th>Address Line 2</th>
         <th>Town</th>
         <th>Postcode</th>
         <th>Address Type</th>
         <th>Establishment Type</th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
       <% addresses.each_with_index do |address, i| %>
         <tr class="<%= i.even? ? 'even' : 'odd ' %>">
-        <td><a href="/regions/<%=h address['regionCode'] %>/las/<%=h address['ladCode'] %>/msoas/<%=h address['msoaArea'] %>/addresses/<%=h address['uprn'] %>/cases">view cases</a></td>
         <% if address['addressLine1'].present? %>
           <td><%=h address['addressLine1'] %></td>
         <% else %>
@@ -52,6 +51,7 @@
       <% else %>
         <td>-</td>
       <% end %>
+      <td><a href="/regions/<%=h address['regionCode'] %>/las/<%=h address['ladCode'] %>/msoas/<%=h address['msoaArea'] %>/addresses/<%=h address['uprn'] %>/cases">View Cases</a></td>
       </tr>
       <% end %>
     </tbody>
