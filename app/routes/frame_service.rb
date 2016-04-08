@@ -510,7 +510,12 @@ module Beyond
       get '/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/case/:case_id/event/new' do |region_code, local_authority_code, msoa_code, case_id|
       authenticate!
       action = "/regions/#{region_code}/las/#{local_authority_code}/msoas/#{msoa_code}/case/#{case_id}/event"
-      categories = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/categories"))
+
+      # Get groups from session[:user].groups and remove the duplicated collect-user
+      role = session[:user].groups
+      role -= ['collect-users']
+
+      categories = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/categories?role=#{role[0]}"))
       erb :event, locals: { title: "Create Event for Case #{case_id}",
                                     action: action,
                                     method: :post,
@@ -560,8 +565,19 @@ module Beyond
 
         else
           user = session[:user]
+          name = ''
+          phone = ''
+
+          if !params[:customername].nil
+            name = 'name: ' + params[:customername]
+          end
+
+          if !params[:customercontact].nil
+            name = 'phone: ' + params[:customercontact]
+          end
+
           RestClient.post("http://#{settings.frame_service_host}:#{settings.frame_service_port}/cases/#{case_id}/events",
-                          { description: "name: " + params[:customername] + " phone: " + params[:customercontact] + " " + params[:eventtext],
+                          { ddescription: "name: #{params[:customername]} phone: #{params[:customercontact]} #{params[:eventtext]}",
                             category: params[:eventcategory],
                             createdBy: "#{user.user_id}"
                           }.to_json, content_type: :json, accept: :json
