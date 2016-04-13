@@ -10,10 +10,6 @@ frame-webservice:
   host: collect-server
   port: 8171
 
-response-generator-webservice:
-  host: collect-server
-  port: 8168
-
 ldap-directory:
   host: ldap-server
   port: 389
