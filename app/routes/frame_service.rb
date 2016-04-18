@@ -335,9 +335,7 @@ module Beyond
           cases = JSON.parse(response).paginate(page: params[:page]) unless response.code == 204
         end
 
-
-        if !cases.empty?
-          #loop through cases and append the survey description and sample name
+        if cases.any?
           cases.each do |uniqueCase|
             survey_id = uniqueCase['surveyId']
             sample_id = uniqueCase['sampleId']
