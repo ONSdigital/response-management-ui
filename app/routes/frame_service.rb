@@ -546,6 +546,10 @@ module Beyond
 
         if form.failed?
           action = "/regions/#{region_code}/las/#{local_authority_code}/msoas/#{msoa_code}/case/#{case_id}/event"
+          # Get groups from session[:user].groups and remove the duplicated collect-user
+          groups = session[:user].groups
+          groups -= ['collect-users']
+          categories = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/categories?role=#{groups.first}"))
           erb :event, locals: { title: "Create Event for Case #{case_id}",
                                         action: action,
                                         method: :post,
