@@ -329,16 +329,21 @@ module Beyond
       # Get all cases for the selected address.
       get '/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/addresses/:uprn_code/cases' do |region_code, local_authority_code, msoa_code, uprn_code|
         authenticate!
-        cases = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/cases/uprn/#{uprn_code}")).paginate(page: params[:page])
+        cases = []
 
-        #loop through cases and append the survey description and sample name
-        cases.each do |uniqueCase|
-          survey_id = uniqueCase['surveyId']
-          sample_id = uniqueCase['sampleId']
-          survey = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/surveys/#{survey_id}"))
-          sample = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/samples/#{sample_id}"))
-          uniqueCase['surveyDescription'] = survey['description']
-          uniqueCase['sampleName'] = sample['sampleName']
+        RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/cases/uprn/#{uprn_code}") do |response, _request, _result, &_block|
+          cases = JSON.parse(response).paginate(page: params[:page]) unless response.code == 204
+        end
+
+        if cases.any?
+          cases.each do |uniqueCase|
+            survey_id = uniqueCase['surveyId']
+            sample_id = uniqueCase['sampleId']
+            survey = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/surveys/#{survey_id}"))
+            sample = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/samples/#{sample_id}"))
+            uniqueCase['surveyDescription'] = survey['description']
+            uniqueCase['sampleName'] = sample['sampleName']
+          end
         end
 
         # Get the selected address details so they can be redisplayed for reference.

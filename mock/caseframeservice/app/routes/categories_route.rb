@@ -2,9 +2,10 @@ module BeyondMock
   module Routes
     class CaseFrameService < Base
 
-      # Get all case event categories
+      # Get case event categories filtered by role
       get '/categories' do
-        erb :categories
+        role = params['role']
+        erb :categories, locals: { role: role }
       end
 
     end

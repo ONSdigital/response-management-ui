@@ -1,7 +1,7 @@
 module BeyondMock
   module Routes
     class FollowUpService < Base
-    
+
       # Get the follow-ups for the specified questionnaire.
       get '/FollowUpService/FollowUp/QuestionnaireId=:questionnaire_id' do
         erb :follow_ups
@@ -21,12 +21,12 @@ module BeyondMock
       post '/FollowUpService/FollowUp' do
         erb :new_follow_up
       end
-      
+
       # Update an existing follow-up.
       put '/FollowUpService/FollowUp/:follow_up_id' do
         erb :edit_follow_up
       end
-      
+
       # Delete (i.e. cancel or mark as reviewed) the specified follow-up.
       put '/FollowUpService/FollowUp/:follow_up_id' do
         erb :cancelled_follow_up
