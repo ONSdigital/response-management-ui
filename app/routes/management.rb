@@ -36,9 +36,9 @@ module Beyond
       get '/manage/escalated/:escalatetype' do |escalatetype|
         escalated = []
         authenticate!
-        type = "ESC_#{escalatetype.upcase}"
+        type = "#{escalatetype.capitalize}Escalation"
         #escalated = JSON.parse().paginate(page: params[:page])
-        RestClient.get("http://#{settings.action_service_host}:#{settings.action_service_port}/actions?actiontype=#{type}&state=ACTIVE") do |response, _request, _result, &_block|
+        RestClient.get("http://#{settings.action_service_host}:#{settings.action_service_port}/actions?actiontype=#{type}&state=PENDING") do |response, _request, _result, &_block|
           escalated = JSON.parse(response).paginate(page: params[:page]) unless response.code == 204
         end
 
