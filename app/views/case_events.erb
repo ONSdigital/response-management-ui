@@ -114,7 +114,11 @@
   <br>
   <div id="events">
     <form action="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/case/<%=h caseid %>/event/new" method="get">
-      <input class="button" type="submit" value="Create Event&hellip;"> or <% if params[:actionpage].present? %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/questionnaires?page=<%=h params[:actionpage] %>"><% else %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/case/<%=h caseid %>"><% end %>Refresh</a>
+      <% if uniqueCase['caseStatus'] != 'CLOSED' %>
+      <input class="button" type="submit" value="Create Event&hellip;" > or <% if params[:actionpage].present? %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/questionnaires?page=<%=h params[:actionpage] %>"><% else %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/case/<%=h caseid %>"><% end %>Refresh</a>
+      <% else %>
+      <input class="button" type="submit" value="Case Closed&hellip;" disabled> or <% if params[:actionpage].present? %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/questionnaires?page=<%=h params[:actionpage] %>"><% else %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/case/<%=h caseid %>"><% end %>Refresh</a>
+      <% end %>
     <% if params[:actionpage].present? %>
       <input type="hidden" name="page" value="<%=h params[:actionpage] %>">
     <% end %>

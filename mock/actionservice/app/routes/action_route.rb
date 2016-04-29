@@ -3,9 +3,17 @@ module BeyondMock
     class ActionService < Base
 
 
-      # Get the action details for a specified action
+      # Lists all actions, optionally filtered by ActionType and/or state.
       get '/actions' do
-        erb :actions
+        if params[:state].nil? && params[:actiontype].nil?
+          erb :actions
+        elsif params[:state].nil? && !params[:actiontype].nil?
+          erb :actions_actiontype, locals: { actiontype: params['actiontype'] }
+        elsif !params[:state].nil? && params[:actiontype].nil?
+          erb :actions_state, locals: { state: params['state'] }
+        else
+          erb :actions_actiontype_state, locals: { actiontype: params['actiontype'], state: params['state'] }
+        end
       end
 
       # create an action
@@ -21,6 +29,11 @@ module BeyondMock
       # update an action
       put '/actions/:actionid' do
         erb :edit_action, locals: { actionid: params['actionid'] }
+      end
+
+      # update an action
+      put '/actions/case/:caseid' do
+        erb :edit_action_case, locals: { caseid: params['caseid'] }
       end
 
       # Get action details for a specified case
