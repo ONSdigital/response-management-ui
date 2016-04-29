@@ -342,7 +342,7 @@ module Beyond
             survey = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/surveys/#{survey_id}"))
             sample = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/samples/#{sample_id}"))
             uniqueCase['surveyDescription'] = survey['description']
-            uniqueCase['sampleName'] = sample['name']
+            uniqueCase['sampleName'] = sample['sampleName']
           end
         end
 
