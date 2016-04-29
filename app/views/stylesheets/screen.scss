@@ -347,6 +347,11 @@ strong {
   font-weight: bold;
 }
 
+/* CTPA-394 */
+#yui-main .message {
+  margin-bottom: 15px;
+}
+
 .message {
   background-color: $alternate-lightest;
   @include border-radius-large;
