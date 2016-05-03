@@ -1,6 +1,6 @@
-<% if (!localAuthorityCode.nil?) and (localAuthorityCode.match('^E[0-9]{8}$'))  %>
+<% if (!code.nil?) and (code.match('^E[0-9]{8}$'))  %>
 [
-{"regionCode":"E12000001","ladCode":"<%= localAuthorityCode %>","ladName":"Hartlepool"}
+{"regionCode":"E12000001","code":"<%= code %>","name":"Hartlepool"}
 ]
 <% else %>
 [

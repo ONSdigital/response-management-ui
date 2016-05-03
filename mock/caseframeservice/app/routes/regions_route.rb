@@ -9,12 +9,12 @@ module BeyondMock
 
       # Get information for the specified region..
       get '/regions/:regionid' do
-        erb :region, locals: { regionCode: params['regionid'] }
+        erb :region, locals: { code: params['regionid'] }
       end
 
       # Get all LADs for the specified region.
       get '/regions/:regionid/lads' do
-        erb :local_authorities, locals: { regionCode: params['regionid'] }
+        erb :local_authorities, locals: { code: params['regionid'] }
       end
 
     end

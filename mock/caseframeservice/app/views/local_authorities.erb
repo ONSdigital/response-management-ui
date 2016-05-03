@@ -1,17 +1,17 @@
-<% if (!regionCode.nil?) and (regionCode.match('^E[0-9]{8}$'))  %>
+<% if (!code.nil?) and (code.match('^E[0-9]{8}$'))  %>
 [
-  {"regionCode":"<%= regionCode %>","ladCode":"E06000001","ladName":"Hartlepool"},
-  {"regionCode":"<%= regionCode %>","ladCode":"E06000002","ladName":"Middlesbrough"},
-  {"regionCode":"<%= regionCode %>","ladCode":"E06000003","ladName":"Redcar and Cleveland"},
-  {"regionCode":"<%= regionCode %>","ladCode":"E06000004","ladName":"Stockton-on-Tees"},
-  {"regionCode":"<%= regionCode %>","ladCode":"E06000005","ladName":"Darlington"},
-  {"regionCode":"<%= regionCode %>","ladCode":"E06000047","ladName":"County Durham"},
-  {"regionCode":"<%= regionCode %>","ladCode":"E06000048","ladName":"Northumberland"},
-  {"regionCode":"<%= regionCode %>","ladCode":"E08000020","ladName":"Gateshead"},
-  {"regionCode":"<%= regionCode %>","ladCode":"E08000021","ladName":"Newcastle upon Tyne"},
-  {"regionCode":"<%= regionCode %>","ladCode":"E08000022","ladName":"North Tyneside"},
-  {"regionCode":"<%= regionCode %>","ladCode":"E08000023","ladName":"South Tyneside"},
-  {"regionCode":"<%= regionCode %>","ladCode":"E08000024","ladName":"Sunderland"}
+  {"regionCode":"<%= code %>","code":"E06000001","name":"Hartlepool"},
+  {"regionCode":"<%= code %>","code":"E06000002","name":"Middlesbrough"},
+  {"regionCode":"<%= code %>","code":"E06000003","name":"Redcar and Cleveland"},
+  {"regionCode":"<%= code %>","code":"E06000004","name":"Stockton-on-Tees"},
+  {"regionCode":"<%= code %>","code":"E06000005","name":"Darlington"},
+  {"regionCode":"<%= code %>","code":"E06000047","name":"County Durham"},
+  {"regionCode":"<%= code %>","code":"E06000048","name":"Northumberland"},
+  {"regionCode":"<%= code %>","code":"E08000020","name":"Gateshead"},
+  {"regionCode":"<%= code %>","code":"E08000021","name":"Newcastle upon Tyne"},
+  {"regionCode":"<%= code %>","code":"E08000022","name":"North Tyneside"},
+  {"regionCode":"<%= code %>","code":"E08000023","name":"South Tyneside"},
+  {"regionCode":"<%= code %>","code":"E08000024","name":"Sunderland"}
 ]
 <% else %>
 [

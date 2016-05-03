@@ -4,12 +4,12 @@ module BeyondMock
 
       # Get information for the specified MSOA..
       get '/msoas/:msoaid' do
-        erb :msoa, locals: { msoaCode: params['msoaid'] }
+        erb :msoa, locals: { code: params['msoaid'] }
       end
 
       # Get address summaries for the specified MSOA
       get '/msoas/:msoaid/addresssummaries' do
-        erb :addresssummary, locals: { msoaCode: params['msoaid'] }
+        erb :addresssummary, locals: { code: params['msoaid'] }
       end
 
     end
