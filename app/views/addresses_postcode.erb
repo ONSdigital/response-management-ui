@@ -46,12 +46,12 @@
       <% else %>
         <td>-</td>
       <% end %>
-      <% if address['estabType'].present? %>
-        <td><%=h address['estabType'] %></td>
+      <% if address['category'].present? %>
+        <td><%=h address['category'] %></td>
       <% else %>
         <td>-</td>
       <% end %>
-      <td><a href="/regions/<%=h address['regionCode'] %>/las/<%=h address['ladCode'] %>/msoas/<%=h address['msoaArea'] %>/addresses/<%=h address['uprn'] %>/cases">View Cases</a></td>
+      <td><a href="/regions/<%=h address['code'] %>/las/<%=h address['ladCode'] %>/msoas/<%=h address['msoaArea'] %>/addresses/<%=h address['uprn'] %>/cases">View Cases</a></td>
       </tr>
       <% end %>
     </tbody>

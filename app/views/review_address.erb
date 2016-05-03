@@ -26,7 +26,7 @@
   <% end %>
 <% end %>
 
-<% if form.failed_on? :estabtype %>
+<% if form.failed_on? :category %>
   <% content_for :form_errors do %>
     <p class="message">&bull; Establishment type is required for communal establishments and must be a number</p>
   <% end %>
@@ -53,7 +53,7 @@
   <input type="hidden" name="page" value="<%=h params[:page] %>">
 <% end %>
 <%= erb :addressform_partial, locals: { addresstype: addresstype, eastings: eastings, northings: northings, address_line1: address_line1, address_line2: address_line2,
-                                        estabtype: estabtype, hardtocount: hardtocount, town_name: town_name,  postcode: postcode } %>
+                                        category: category, hardtocount: hardtocount, town_name: town_name,  postcode: postcode } %>
   <p id="requiredfields"><span class="required">*</span> Required fields</p>
   <p class="buttons">
     <input class="button" type="submit" value="Save"> or <% if params[:page].present? %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses?page=<%=h params[:page] %>"><% else %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/review"><% end %>Cancel</a>

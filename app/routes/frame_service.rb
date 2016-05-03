@@ -78,7 +78,7 @@ module Beyond
                                        addresstype: address['type'],
                                        eastings: address['eastings'],
                                        northings: address['northings'],
-                                       estabtype: address['estabtype'],
+                                       category: address['category'],
                                        hardtocount: address['htc'],
                                        address_line1: address['address_line1'].to_title_case,
                                        address_line2: address['address_line2'].to_title_case,
@@ -107,7 +107,7 @@ module Beyond
                                 addresstype: 'HH',
                                 addgridref: '',
                                 enumerationtype: '',
-                                estabtype: '',
+                                category: '',
                                 hardtocount: '1',
                                 estabname: '',
                                 namemanager: '',
@@ -128,7 +128,7 @@ module Beyond
             filters :upcase
             field :addgridref, present: true, int: true, length: 13
             field :enumerationtype, present: true, int: true
-            field :estabtype, present: true, int: true
+            field :category, present: true, int: true
             field :postcode, present: true
           end
         else
@@ -152,7 +152,7 @@ module Beyond
                                            addresstype: params[:addresstype],
                                            addgridref: params[:addgridref],
                                            enumerationtype: params[:enumerationtype],
-                                           estabtype: params[:estabtype],
+                                           category: params[:category],
                                            hardtocount: params[:hardtocount],
                                            estabname: params[:estabname],
                                            namemanager: params[:namemanager],
@@ -173,7 +173,7 @@ module Beyond
                             caseload: caseload_code,
                             enumerationtype: params[:enumerationtype],
                             estabname: params[:estabname],
-                            estabtype: params[:estabtype],
+                            category: params[:category],
                             hardtocount: params[:hardtocount].to_i,
                             lad12cd: local_authority_code,
                             namemanager: params[:namemanager],
@@ -215,7 +215,7 @@ module Beyond
                                 address_line2: address['address_line2'].to_title_case,
                                 addresstype: address['type'],
                                 eastings: address['eastings'],
-                                estabtype: address['estabtype'],
+                                category: address['category'],
                                 hardtocount: address['htc'],
                                 local_authority_code: local_authority_code,
                                 lsoa11cd: address['lsoa11cd'],
@@ -240,7 +240,7 @@ module Beyond
               filters :upcase
               field :address_line2, :present=>true
               field :eastings, :present=>true, :int=>true
-              field :estabtype, :present=>true
+              field :category, :present=>true
               field :northings, :present=>true, :int=>true
               field :postcode, :present=>true
             end
@@ -264,7 +264,7 @@ module Beyond
                        address_line2: params[:address_line2],
                        addresstype: params[:addresstype],
                        eastings: params[:eastings],
-                       estabtype: params[:estabtype],
+                       category: params[:category],
                        hardtocount: params[:hardtocount],
                        local_authority_code: params[:local_authority_code],
                        lsoa11cd: params[:lsoa11cd],
@@ -296,7 +296,7 @@ module Beyond
           else
             RestClient.put("http://#{settings.frame_service_host}:#{settings.frame_service_port}/addresses/#{params[:uprn_code]}",
                            { addresstype: params[:addresstype],
-                             estabtype: params[:estabtype],
+                             category: params[:category],
                              msoa11cd: params[:msoa_code],
                              lsoa11cd: params[:lsoa11cd],
                              oa11cd: params[:oa11cd],
@@ -387,7 +387,7 @@ module Beyond
           coordinates = "#{address['latitude']},#{address['longitude']}"
           erb :case_events, layout: :sidebar_layout,
                            locals: { title: "Event History for Case #{case_id}",
-                                     region_code: address['regionCode'],
+                                     region_code: address['code'],
                                      local_authority_code: address['ladCode'],
                                      msoa_code: address['msoaArea'],
                                      uprn_code: uprn_code,
@@ -428,7 +428,7 @@ module Beyond
           coordinates = "#{address['latitude']},#{address['longitude']}"
           erb :case_events, layout: :sidebar_layout,
                            locals: { title: "Event History for Case #{case_id}",
-                                     region_code: address['regionCode'],
+                                     region_code: address['code'],
                                      local_authority_code: address['ladCode'],
                                      msoa_code: address['msoaArea'],
                                      uprn_code: uprn_code,
@@ -457,7 +457,7 @@ module Beyond
           coordinates = "#{address['latitude']},#{address['longitude']}"
           erb :case_questionnaire, layout: :sidebar_layout,
                            locals: { title: "Questionnaires for Case #{case_id}",
-                                     region_code: address['regionCode'],
+                                     region_code: address['code'],
                                      local_authority_code: address['ladCode'],
                                      msoa_code: address['msoaArea'],
                                      uprn_code: address['uprn'],
@@ -482,7 +482,7 @@ module Beyond
           coordinates = "#{address['latitude']},#{address['longitude']}"
           erb :follow_ups, layout: :sidebar_layout,
                            locals: { title: "Questionnaire #{questionnaire_id}",
-                                     region_code: address['regionCode'],
+                                     region_code: address['code'],
                                      local_authority_code: address['ladCode'],
                                      msoa_code: address['msoaArea'],
                                      uprn_code: address['uprn'],
