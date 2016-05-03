@@ -4,6 +4,7 @@
 ### Ruby ###
 *.gem
 *.rbc
+*.css.map
 *.sass-cache*
 /.config
 /coverage/
