@@ -28,13 +28,13 @@
     </thead>
     <tbody>
       <tr class="even">
-      <% if address['addressLine1'].present? %>
-          <td><%=h address['addressLine1'] %></td>
+      <% if address['line1'].present? %>
+          <td><%=h address['line1'] %></td>
         <% else %>
           <td>-</td>
         <% end %>
-        <% if address['addressLine2'].present? %>
-          <td><%=h address['addressLine2'] %></td>
+        <% if address['line2'].present? %>
+          <td><%=h address['line2'] %></td>
         <% else %>
           <td>-</td>
         <% end %>
@@ -48,8 +48,8 @@
         <% else %>
           <td>-</td>
         <% end %>
-        <% if address['addressType'].present? %>
-        <td><%=h address['addressType'].to_address_type %></td>
+        <% if address['type'].present? %>
+        <td><%=h address['type'].to_address_type %></td>
       <% else %>
         <td>-</td>
       <% end %>
@@ -82,8 +82,8 @@
       <% cases.each_with_index do |uniqueCase, i| %>
         <tr class="<%= i.even? ? 'even' : 'odd ' %>">
           <td><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/case/<%=h uniqueCase['caseId'] %>"><%=h uniqueCase['caseId'] %></a></td>
-        <% if uniqueCase['caseStatus'].present? %>
-          <td><%=h uniqueCase['caseStatus'] %></td>
+        <% if uniqueCase['state'].present? %>
+          <td><%=h uniqueCase['state'] %></td>
           <% else %>
             <td>-</td>
           <% end %>
@@ -102,8 +102,8 @@
         <% else %>
           <td>-</td>
         <% end %>
-        <% if uniqueCase['sampleName'].present? %>
-          <td><%=h uniqueCase['sampleName'] %></td>
+        <% if uniqueCase['name'].present? %>
+          <td><%=h uniqueCase['name'] %></td>
         <% else %>
           <td>-</td>
         <% end %>

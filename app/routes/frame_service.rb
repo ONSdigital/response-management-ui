@@ -75,7 +75,7 @@ module Beyond
                                        region_code: region_code,
                                        local_authority_code: local_authority_code,
                                        msoa_code: msoa_code,
-                                       addresstype: address['addresstype'],
+                                       addresstype: address['type'],
                                        eastings: address['eastings'],
                                        northings: address['northings'],
                                        estabtype: address['estabtype'],
@@ -213,7 +213,7 @@ module Beyond
                                 page: params[:page],
                                 address_line1: address['address_line1'].to_title_case,
                                 address_line2: address['address_line2'].to_title_case,
-                                addresstype: address['addresstype'],
+                                addresstype: address['type'],
                                 eastings: address['eastings'],
                                 estabtype: address['estabtype'],
                                 hardtocount: address['htc'],
@@ -342,7 +342,7 @@ module Beyond
             survey = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/surveys/#{survey_id}"))
             sample = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/samples/#{sample_id}"))
             uniqueCase['surveyDescription'] = survey['description']
-            uniqueCase['sampleName'] = sample['sampleName']
+            uniqueCase['name'] = sample['name']
           end
         end
 

@@ -40,8 +40,8 @@
 
   <tr class="even">
     <td><%=h uniqueCase['caseId'] %></td>
-  <% if uniqueCase['caseStatus'].present? %>
-    <td><%=h uniqueCase['caseStatus'] %></td>
+  <% if uniqueCase['state'].present? %>
+    <td><%=h uniqueCase['state'] %></td>
     <% else %>
       <td>-</td>
     <% end %>

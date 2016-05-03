@@ -23,13 +23,13 @@
     </thead>
     <tbody>
       <tr class="even">
-      <% if address['addressLine1'].present? %>
-          <td><%=h address['addressLine1'] %></td>
+      <% if address['line1'].present? %>
+          <td><%=h address['line1'] %></td>
         <% else %>
           <td>-</td>
         <% end %>
-        <% if address['addressLine2'].present? %>
-          <td><%=h address['addressLine2'] %></td>
+        <% if address['line2'].present? %>
+          <td><%=h address['line2'] %></td>
         <% else %>
           <td>-</td>
         <% end %>
@@ -43,8 +43,8 @@
         <% else %>
           <td>-</td>
         <% end %>
-        <% if address['addressType'].present? %>
-        <td><%=h address['addressType'].to_address_type %></td>
+        <% if address['type'].present? %>
+        <td><%=h address['type'].to_address_type %></td>
       <% else %>
         <td>-</td>
       <% end %>
@@ -74,8 +74,8 @@
 
   <tr class="even">
     <td><%=h uniqueCase['caseId'] %></td>
-  <% if uniqueCase['caseStatus'].present? %>
-    <td><%=h uniqueCase['caseStatus'] %></td>
+  <% if uniqueCase['state'].present? %>
+    <td><%=h uniqueCase['state'] %></td>
     <% else %>
       <td>-</td>
     <% end %>
@@ -99,8 +99,8 @@
   <% else %>
     <td>-</td>
   <% end %>
-  <% if sample['sampleName'].present? %>
-    <td><%=h sample['sampleName'] %></td>
+  <% if sample['name'].present? %>
+    <td><%=h sample['name'] %></td>
   <% else %>
     <td>-</td>
   <% end %>
@@ -114,7 +114,7 @@
   <br>
   <div id="events">
     <form action="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/case/<%=h caseid %>/event/new" method="get">
-      <% if uniqueCase['caseStatus'] != 'CLOSED' %>
+      <% if uniqueCase['state'] != 'CLOSED' %>
       <input class="button" type="submit" value="Create Event&hellip;" > or <% if params[:actionpage].present? %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/questionnaires?page=<%=h params[:actionpage] %>"><% else %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/case/<%=h caseid %>"><% end %>Refresh</a>
       <% else %>
       <input class="button" type="submit" value="Case Closed&hellip;" disabled> or <% if params[:actionpage].present? %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/questionnaires?page=<%=h params[:actionpage] %>"><% else %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/case/<%=h caseid %>"><% end %>Refresh</a>

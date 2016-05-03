@@ -1,8 +1,8 @@
 <tbody>
   <tr>
     <td><%=h address['uprn'] %></td>
-  <% if address['addressType'].present? %>
-    <td><%=h address['addressType'].to_address_type %></td>
+  <% if address['type'].present? %>
+    <td><%=h address['type'].to_address_type %></td>
   <% else %>
     <td>-</td>
   <% end %>
@@ -16,8 +16,8 @@
   <% else %>
     <td>-</td>
   <% end %>
-  <% if address['addressLine1'].present? %>
-    <td><%=h address['addressLine1'] %></td>
+  <% if address['line1'].present? %>
+    <td><%=h address['line1'] %></td>
   <% else %>
     <td>-</td>
   <% end %>

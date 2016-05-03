@@ -25,8 +25,8 @@
     <tbody>
       <tr>
         <td><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h address['uprn'] %>/cases"><%=h address['uprn'] %></a></td>
-      <% if address['addressType'].present? %>
-        <td><%=h address['addressType'].to_address_type %></td>
+      <% if address['type'].present? %>
+        <td><%=h address['type'].to_address_type %></td>
       <% else %>
         <td>-</td>
       <% end %>
