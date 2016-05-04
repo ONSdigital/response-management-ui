@@ -1,4 +1,4 @@
-<%= erb :menu, locals: { pageid: "addresses" } %>
+  <%= erb :menu, locals: { pageid: "addresses" } %>
 
 <% content_for :breadcrumbs do %>
   <a href="/regions">Regions</a> &gt; <a href="/regions/<%=h region_code %>/las">Region <%=h region_code %></a> &gt; <a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas">LA <%=h local_authority_code %></a> &gt; MSOA <%=h msoa_code %>
@@ -30,8 +30,8 @@
       <% else %>
         <td>-</td>
       <% end %>
-      <% if address['category'].present? %>
-        <td><%=h address['category'] %></td>
+      <% if address['estabtype'].present? %>
+        <td><%=h address['estabtype'] %></td>
       <% else %>
         <td>-</td>
       <% end %>
