@@ -387,7 +387,7 @@ module Beyond
           coordinates = "#{address['latitude']},#{address['longitude']}"
           erb :case_events, layout: :sidebar_layout,
                            locals: { title: "Event History for Case #{case_id}",
-                                     region_code: address['code'],
+                                     region_code: address['regionCode'],
                                      local_authority_code: address['ladCode'],
                                      msoa_code: address['msoaArea'],
                                      uprn_code: uprn_code,
@@ -428,7 +428,7 @@ module Beyond
           coordinates = "#{address['latitude']},#{address['longitude']}"
           erb :case_events, layout: :sidebar_layout,
                            locals: { title: "Event History for Case #{case_id}",
-                                     region_code: address['code'],
+                                     region_code: address['regionCode'],
                                      local_authority_code: address['ladCode'],
                                      msoa_code: address['msoaArea'],
                                      uprn_code: uprn_code,
@@ -457,7 +457,7 @@ module Beyond
           coordinates = "#{address['latitude']},#{address['longitude']}"
           erb :case_questionnaire, layout: :sidebar_layout,
                            locals: { title: "Questionnaires for Case #{case_id}",
-                                     region_code: address['code'],
+                                     region_code: address['regionCode'],
                                      local_authority_code: address['ladCode'],
                                      msoa_code: address['msoaArea'],
                                      uprn_code: address['uprn'],
@@ -482,7 +482,7 @@ module Beyond
           coordinates = "#{address['latitude']},#{address['longitude']}"
           erb :follow_ups, layout: :sidebar_layout,
                            locals: { title: "Questionnaire #{questionnaire_id}",
-                                     region_code: address['code'],
+                                     region_code: address['regionCode'],
                                      local_authority_code: address['ladCode'],
                                      msoa_code: address['msoaArea'],
                                      uprn_code: address['uprn'],
