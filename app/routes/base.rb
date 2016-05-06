@@ -110,6 +110,10 @@ module Beyond
       end
 
       get '/signin/?' do
+
+        # CTPA-404 Always bypass the two factor authentication screen for 2016.
+        response.set_cookie(NO_2FA_COOKIE, value: '1', max_age: THIRTY_DAYS.to_s)
+        
         built  = settings.built
         commit = settings.commit
 
