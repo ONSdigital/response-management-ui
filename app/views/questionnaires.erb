@@ -62,23 +62,23 @@
         <% else %>
           <td>Not activated</td>
         <% end %>
-        <% if questionnaire['questionnaireid'].present? %>
-          <td><%=h questionnaire['questionnaireid'].slice(0,2).to_form_type %></td>
+        <% if questionnaire['questionnaireId'].present? %>
+          <td><%=h questionnaire['questionnaireId'].slice(0,2).to_form_type %></td>
         <% else %>
           <td>-</td>
         <% end %>
-        <% if questionnaire['formstatus'].present? %>
-          <td><%=h questionnaire['formstatus'].to_form_status %></td>
+        <% if questionnaire['questionSet'].present? %>
+          <td><%=h questionnaire['questionSet'].to_form_status %></td>
         <% else %>
           <td>-</td>
         <% end %>
-        <% if questionnaire['receiptstatus'].present? %>
-          <td><%=h questionnaire['receiptstatus'] == 0 ? 'Not returned' : 'Returned' %></td>
+        <% if questionnaire['state'].present? %>
+          <td><%=h questionnaire['state'].to_form_status %></td>
         <% else %>
           <td>-</td>
         <% end %>
-        <% if questionnaire['receiptdatetime'].present? %>
-          <td><%=h questionnaire['receiptdatetime'].to_date %></td>
+        <% if questionnaire['receiptDateTime'].present? %>
+          <td><%=h questionnaire['receiptDateTime'].to_date %></td>
         <% else %>
           <td>-</td>
         <% end %>

@@ -98,8 +98,8 @@
       <% questionnaires.each_with_index do |questionnaire, i| %>
         <tr class="<%= i.even? ? 'even' : 'odd ' %>">
           <td><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/case/<%=h caseid %>/questionnaires/<%=h questionnaire['questionnaireId'] %>/iac/<%=h questionnaire['iac'] %>"><%=h questionnaire['questionnaireId'] %></a></td>
-        <% if questionnaire['questionnaireStatus'] %>
-          <td <%=h questionnaire['questionnaireStatus'] %></td>
+        <% if questionnaire['state'] %>
+          <td><%=h questionnaire['state'] %></td>
         <% else %>
           <td>-</td>
         <% end %>
