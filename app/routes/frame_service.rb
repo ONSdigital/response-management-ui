@@ -588,6 +588,27 @@ module Beyond
                          ) do |response, _request, _result, &_block|
             if response.code == 200
               flash[:notice] = 'Successfully created event.'
+
+              if params[:eventcategory] == 'Closed' || params[:eventcategory] == 'Refusal' || params[:eventcategory] == 'IncorrectEscalation'
+                actions = JSON.parse(RestClient.get("http://#{settings.action_service_host}:#{settings.action_service_port}/actions/case/#{case_id}"))
+                if actions.any?
+                  actions.each do |action|
+                    if action['actionTypeName'] == 'GeneralEscalation' || action['actionTypeName'] == 'SurveyEscalation' || action['actionTypeName'] ==  'ComplaintEscalation'
+                      action_id = action['actionId']
+                      RestClient.put("http://#{settings.action_service_host}:#{settings.action_service_port}/actions/#{action_id}/feedback",
+                          '<p:actionFeedback xmlns:p="http://ons.gov.uk/ctp/response/action/message/feedback" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://ons.gov.uk/ctp/response/action/message/feedback actionFeedback.xsd "><actionId>2</actionId><situation></situation><outcome>REQUEST_COMPLETED</outcome><notes></notes></p:actionFeedback>',
+                          content_type: :xml
+                         ) do |response, _request, _result, &_block|
+                           if response.code == 200
+                               logger.info 'Successfully completed action.'
+                           else
+                             logger.info "Unable to complete action (HTTP #{response.code} received)."
+                           end
+                         end
+                       end
+                    end
+                  end
+                end
             else
               flash[:error] = "Unable to create event (HTTP #{response.code} received)."
             end
