@@ -224,7 +224,7 @@ module Beyond
                                 oa11cd: address['oa11cd'],
                                 postcode: address['postcode'],
                                 region_code: region_code,
-                                town_name: address['town_name'].to_title_case,
+                                town_name: address['townName'].to_title_case,
                                 coordinates: coordinates }
       end
 
