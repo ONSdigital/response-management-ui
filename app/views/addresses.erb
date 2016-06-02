@@ -35,7 +35,7 @@
       <% else %>
         <td>-</td>
       <% end %>
-        <td><% if params[:page].present? %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%= msoa_code %>/addresses/<%=h address['uprn'] %>/edit?page=<%=h params[:page] %>"><% else %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%= msoa_code %>/addresses/<%=h address['uprn'] %>/edit"><% end %>Edit</a></td>
+        <td>-</td>
       </tr>
     </tbody>
     <%= erb :addresslines_partial, locals: { address: address } %>
