@@ -589,7 +589,7 @@ module Beyond
             if response.code == 200
               flash[:notice] = 'Successfully created event.'
 
-              if params[:eventcategory] == 'Closed' || params[:eventcategory] == 'Refusal' || params[:eventcategory] == 'IncorrectEscalation'
+              if params[:eventcategory] == 'Closed' || params[:eventcategory] == 'Refusal' || params[:eventcategory] == 'IncorrectEscalation' || params[:eventcategory] == 'Undeliverable' || params[:eventcategory] == 'Classification Incorrect'
                 actions = JSON.parse(RestClient.get("http://#{settings.action_service_host}:#{settings.action_service_port}/actions/case/#{case_id}"))
                 if actions.any?
                   actions.each do |action|
