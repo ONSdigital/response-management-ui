@@ -19,7 +19,6 @@
         <th>UPRN</th>
         <th>Address Type</th>
         <th>Establishment Type</th>
-        <th></th>
       </tr>
     </thead>
     <tbody>
@@ -34,8 +33,7 @@
         <td><%=h address['estabtype'] %></td>
       <% else %>
         <td>-</td>
-      <% end %>
-        <td>-</td>
+      <% end %>        
       </tr>
     </tbody>
     <%= erb :addresslines_partial, locals: { address: address } %>
