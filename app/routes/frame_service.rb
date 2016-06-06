@@ -590,7 +590,7 @@ module Beyond
               flash[:notice] = 'Successfully created event.'
               actions = []
 
-              if params[:eventcategory] == 'Closed' || params[:eventcategory] == 'Refusal' || params[:eventcategory] == 'IncorrectEscalation' || params[:eventcategory] == 'Undeliverable' || params[:eventcategory] == 'Classification Incorrect'
+              if params[:eventcategory] == 'Closed' || params[:eventcategory] == 'IncorrectEscalation' || params[:eventcategory] == 'Undeliverable'
                   RestClient.get("http://#{settings.action_service_host}:#{settings.action_service_port}/actions/case/#{case_id}") do |response, _request, _result, &_block|
                   actions = JSON.parse(response).paginate(page: params[:page]) unless response.code == 204
                 end
