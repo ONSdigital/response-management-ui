@@ -597,15 +597,18 @@ module Beyond
                 if actions.any?
                   actions.each do |action|
                     if action['actionTypeName'] == 'GeneralEscalation' || action['actionTypeName'] == 'SurveyEscalation' || action['actionTypeName'] ==  'ComplaintEscalation'
-                      action_id = action['actionId']
+                      action_id    = action['actionId']
+                      feedback_xml = <<-XML
+                        <p:actionFeedback xmlns:p="http://ons.gov.uk/ctp/response/action/message/feedback" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://ons.gov.uk/ctp/response/action/message/feedback actionFeedback.xsd">
+                          <actionId>#{action_id}</actionId>
+                          <situation></situation>
+                          <outcome>REQUEST_COMPLETED</outcome>
+                          <notes></notes>
+                        </p:actionFeedback>
+                      XML
+
                       RestClient.put("http://#{settings.action_service_host}:#{settings.action_service_port}/actions/#{action_id}/feedback",
-                        %-<p:actionFeedback xmlns:p="http://ons.gov.uk/ctp/response/action/message/feedback" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://ons.gov.uk/ctp/response/action/message/feedback actionFeedback.xsd">\
-                            <actionId>#{action_id}</actionId>\
-                            <situation></situation>\
-                            <outcome>REQUEST_COMPLETED</outcome>\
-                            <notes></notes>\
-                          </p:actionFeedback>-,
-                        content_type: :xml) do |response, _request, _result, &_block|
+                        feedback_xml, content_type: :xml) do |response, _request, _result, &_block|
                           if response.code == 200
                             logger.info 'Successfully completed action.'
                           else
