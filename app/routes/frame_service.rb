@@ -565,7 +565,7 @@ module Beyond
                                         eventtext: '',
                                         customername: '',
                                         customercontact: '',
-                                        eventcategory: '',
+                                        eventcategory: params[:eventcategory],
                                         createdby: '',
                                         description_error: true,
                                         case_id: case_id,

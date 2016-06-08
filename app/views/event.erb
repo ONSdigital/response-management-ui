@@ -29,7 +29,7 @@
       <% if description_error %>
         <p><span class="required">Description Required</span></p>
       <% end %>
-      <textarea rows="10" cols="50" id="eventtext" name="eventtext" maxlength="250" value="<%=h eventtext %>"></textarea>
+      <textarea autofocus rows="10" cols="50" id="eventtext" name="eventtext" maxlength="250" value="<%=h eventtext %>"></textarea>
       <span id="chars">250</span> characters remaining
     <% end %>
 
@@ -44,7 +44,11 @@
       <select id="eventcategory" name="eventcategory">
        <% categories.each do |category| %>
         <% if category['manual'] %>
-          <option value='<%=h category['name'] %>'><%=h category['name'] %></option>
+          <% if eventcategory == category['name'] %>
+            <option value='<%=h category['name'] %>' selected><%=h category['name'] %></option>
+            <% else %>
+            <option value='<%=h category['name'] %>'><%=h category['name'] %></option>
+          <% end %>
         <% end %>
       <% end %>
     </select>
