@@ -51,7 +51,7 @@
     <td>-</td>
   <% end %>
   <% if uniqueCase['createdDateTime'].present? %>
-    <td><%=h uniqueCase['createdDateTime'] %></td>
+    <td><%=h uniqueCase['createdDateTime'].to_date %></td>
   <% else %>
     <td>-</td>
   <% end %>
@@ -73,7 +73,7 @@
   <h3>Questionnaires</h3>
   <div id="newquestionnaire">
     <form action="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/cases/<%=h caseid %>/questionnaires/new" method="get">
-      <input class="button" type="submit" value="Create Questionnaire&hellip;"> or <% if params[:page].present? %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/cases/<%=h caseid %>/questionnaires?page=<%=h params[:page] %>"><% else %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/cases/<%=h caseid %>/questionnaires"><% end %>Refresh</a>
+      <% if params[:page].present? %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/cases/<%=h caseid %>/questionnaires?page=<%=h params[:page] %>"><% else %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/cases/<%=h caseid %>/questionnaires"><% end %>Refresh</a>
     <% if params[:page].present? %>
       <input type="hidden" name="page" value="<%=h params[:page] %>">
     <% end %>
@@ -91,30 +91,29 @@
           <th>Receipt Date</th>
           <th>Question Set</th>
           <th>IAC</th>
-          <th></th>
         </tr>
       </thead>
       <tbody>
       <% questionnaires.each_with_index do |questionnaire, i| %>
         <tr class="<%= i.even? ? 'even' : 'odd ' %>">
-          <td><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/case/<%=h caseid %>/questionnaires/<%=h questionnaire['questionnaireId'] %>/iac/<%=h questionnaire['iac'] %>"><%=h questionnaire['questionnaireId'] %></a></td>
+          <td><%=h questionnaire['questionnaireId'] %></td>
         <% if questionnaire['state'] %>
           <td><%=h questionnaire['state'] %></td>
         <% else %>
           <td>-</td>
         <% end %>
         <% if questionnaire['dispatchDateTime'] %>
-          <td><%=h questionnaire['dispatchDateTime'] %></td>
+          <td><%=h questionnaire['dispatchDateTime'].to_date %></td>
         <% else %>
           <td>-</td>
         <% end %>
         <% if questionnaire['responseDateTime'] %>
-          <td><%=h questionnaire['responseDateTime'] %></td>
+          <td><%=h questionnaire['responseDateTime'].to_date %></td>
         <% else %>
           <td>-</td>
         <% end %>
         <% if questionnaire['receiptDateTime'] %>
-          <td><%=h questionnaire['receiptDateTime'] %></td>
+          <td><%=h questionnaire['receiptDateTime'].to_date %></td>
         <% else %>
           <td>-</td>
         <% end %>
@@ -128,8 +127,7 @@
         <% else %>
           <td>-</td>
         <% end %>
-          <td><% if params[:page].present? %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/case/<%=h caseid %>/questionnaires/<%=h questionnaire['questionnaireId'] %>/iac/<%=h questionnaire['iac']%>/edit?page=<%=h params[:page] %>"><% else %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/case/<%=h caseid %>/questionnaires/<%=h questionnaire['questionnaireId'] %>/iac/<%=h questionnaire['iac'] %>/edit"><% end %>Edit</a></td>
-        </tr>
+            </tr>
       <% end %>
         </tbody>
       </table>
