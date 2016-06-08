@@ -36,12 +36,12 @@
   <thead>
     <tr>
       <th>Questionnaire ID</th>
+      <th>Internet Access Code</th>
       <th>Questionnaire Status</th>
       <th>Dispatch Date</th>
       <th>Response Date</th>
       <th>Receipt Date</th>
       <th>Question Set</th>
-      <th>IAC</th>
       <th></th>
     </tr>
   </thead>
@@ -53,18 +53,23 @@
       <% else %>
         <td>-</td>
       <% end %>
+      <% if questionnaire['iac'] %>
+        <td><%=h questionnaire['iac'] %></td>
+      <% else %>
+        <td>-</td>
+      <% end %>
       <% if questionnaire['dispatchDateTime'] %>
-        <td><%=h questionnaire['dispatchDateTime'] %></td>
+        <td><%=h questionnaire['dispatchDateTime'].to_date %></td>
       <% else %>
         <td>-</td>
       <% end %>
       <% if questionnaire['responseDateTime'] %>
-        <td><%=h questionnaire['responseDateTime'] %></td>
+        <td><%=h questionnaire['responseDateTime'].to_date %></td>
       <% else %>
         <td>-</td>
       <% end %>
       <% if questionnaire['receiptDateTime'] %>
-        <td><%=h questionnaire['receiptDateTime'] %></td>
+        <td><%=h questionnaire['receiptDateTime'].to_date %></td>
       <% else %>
         <td>-</td>
       <% end %>
@@ -73,12 +78,7 @@
       <% else %>
         <td>-</td>
       <% end %>
-      <% if questionnaire['iac'] %>
-        <td><%=h questionnaire['iac'] %></td>
-      <% else %>
-        <td>-</td>
-      <% end %>
-          <td><% if params[:page].present? %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/case/<%=h case_id %>/questionnaires/<%=h questionnaire['questionnaireId'] %>/iac/<%=h questionnaire['iac']%>/edit?page=<%=h params[:page] %>"><% else %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/case/<%=h case_id %>/questionnaires/<%=h questionnaire['questionnaireId'] %>/iac/<%=h questionnaire['iac']%>/edit"><% end %>Edit</a></td>
+        <td><% if params[:page].present? %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/case/<%=h case_id %>/questionnaires/<%=h questionnaire['questionnaireId'] %>/iac/<%=h questionnaire['iac']%>/edit?page=<%=h params[:page] %>"><% else %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/case/<%=h case_id %>/questionnaires/<%=h questionnaire['questionnaireId'] %>/iac/<%=h questionnaire['iac']%>/edit"><% end %>Edit</a></td>
       </tr>
   </tbody>
 </table>
