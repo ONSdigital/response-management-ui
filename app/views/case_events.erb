@@ -171,14 +171,9 @@
       </table>
       <%= will_paginate events, :previous_label => '&lt; Prev', :next_label => 'Next &gt;' %>
 
-
       <% content_for :footer do %>
-        <br>
         <h3>Actions</h3>
-        <br>
-
         <% if actions.any? %>
-
           <table class="secondary">
             <thead>
               <tr>
@@ -221,14 +216,11 @@
             <% end %>
               </tbody>
             </table>
-
         <% else %>
           <p id="information"><strong>There are no actions for this case.</strong></p>
         <% end %>
       <% end %>
-
   <% else %>
     <p id="information"><strong>There are no events for this case.</strong></p>
-    <br>
   <% end %>
 <% end %>
