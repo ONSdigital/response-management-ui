@@ -34,6 +34,7 @@ module Beyond
         set :ldap_directory_base, config['ldap-directory']['base']
         set :ldap_groups, config['ldap-directory']['groups']
         set :google_maps_api_key, config['google-maps']['api-key']
+        set :helpline_mi_directory, config['helpline-mi']['directory']
 
         # Display badges with the built date, environment and commit SHA on the
         # Sign In screen in non-production environments.
@@ -82,12 +83,12 @@ module Beyond
 
       # Only administrators and escalation team can access the management screens.
       before '/manage*' do
-        halt 403 unless authorised?("collect-admins") || authorised?("collect-escalate")
+        halt 403 unless authorised?('collect-admins') || authorised?('collect-escalate')
       end
 
       # Only administrators can access the admin screens.
       before '/admin*' do
-        halt 403 unless authorised?("collect-admins")
+        halt 403 unless authorised?('collect-admins')
       end
 
       # Error pages.
@@ -113,7 +114,7 @@ module Beyond
 
         # CTPA-404 Always bypass the two factor authentication screen for 2016.
         response.set_cookie(NO_2FA_COOKIE, value: '1', max_age: THIRTY_DAYS.to_s)
-        
+
         built  = settings.built
         commit = settings.commit
 

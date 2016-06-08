@@ -22,6 +22,9 @@ ldap-directory:
 google-maps:
   api-key: AIzaSyAtKmYXuijfiPsstjNsczBocKw149--fqM
 
+helpline-mi:
+  directory: /home/centos/code/responsemanagement-ui/reports
+
 badges:
   built: 01_Jan_1970
   commit: commit

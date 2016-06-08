@@ -6,6 +6,7 @@ require_relative './routes/base'
 require_relative './routes/frame_service'
 require_relative './routes/follow_up_service'
 require_relative './routes/management'
+require_relative './routes/helpline_mi'
 
 # Open up various built-in classes to add new convenience methods.
 class Object
@@ -125,5 +126,6 @@ module Beyond
     use Routes::FrameService
     use Routes::FollowUpService
     use Routes::Management
+    use Routes::HelplineMI
   end
 end
