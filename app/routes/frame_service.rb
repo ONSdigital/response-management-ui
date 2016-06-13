@@ -573,15 +573,16 @@ module Beyond
                                         }
 
         else
-          user  = session[:user]
-          name  = ''
-          phone = ''
-
-          name  = "name: #{params[:customername]} " unless params[:customername].length == 0
-          phone = "phone: #{params[:customercontact]} " unless params[:customercontact].length == 0
+          user        = session[:user]
+          name        = params[:customername]
+          phone       = params[:customercontact]
+          description = "#{params[:eventtext]}"
+          description = "name: #{name} #{description}" if name.length > 0 && phone.length == 0
+          description = "phone: #{phone} #{description}" if name.length == 0 && phone.length > 0
+          description = "name: #{name} phone: #{phone} #{description}" if name.length > 0 && phone.length > 0          
 
           RestClient.post("http://#{settings.frame_service_host}:#{settings.frame_service_port}/cases/#{case_id}/events",
-                          { description: "#{name} #{phone} #{params[:eventtext]}",
+                          { description: "#{description}",
                             category: params[:eventcategory],
                             createdBy: "#{user.user_id}"
                           }.to_json, content_type: :json, accept: :json
