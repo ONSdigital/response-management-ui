@@ -537,6 +537,7 @@ module Beyond
                                     case_id: case_id,
                                     categories: categories
                                     }
+                                  }
 
       end
 
