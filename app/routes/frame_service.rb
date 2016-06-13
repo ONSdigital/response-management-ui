@@ -533,7 +533,6 @@ module Beyond
                                     customercontact: '',
                                     eventcategory: '',
                                     createdby: '',
-                                    description_error: false,
                                     case_id: case_id,
                                     categories: categories
                                   }
@@ -567,7 +566,6 @@ module Beyond
                                         customercontact: '',
                                         eventcategory: params[:eventcategory],
                                         createdby: '',
-                                        description_error: true,
                                         case_id: case_id,
                                         categories: categories
                                         }
