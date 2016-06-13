@@ -48,13 +48,13 @@
   <tbody>
     <tr class="even">
       <td><%=h questionnaire['questionnaireId'] %></td>
+    <% if questionnaire['iac'] %>
+      <td><%=h questionnaire['iac'] %></td>
+    <% else %>
+      <td>-</td>
+    <% end %>
       <% if questionnaire['questionnaireStatus'] %>
         <td <%=h questionnaire['questionnaireStatus'] %></td>
-      <% else %>
-        <td>-</td>
-      <% end %>
-      <% if questionnaire['iac'] %>
-        <td><%=h questionnaire['iac'] %></td>
       <% else %>
         <td>-</td>
       <% end %>

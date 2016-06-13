@@ -88,13 +88,13 @@
       <% questionnaires.each_with_index do |questionnaire, i| %>
         <tr class="<%= i.even? ? 'even' : 'odd ' %>">
           <td><%=h questionnaire['questionnaireId'] %></td>
-        <% if questionnaire['state'] %>
-          <td><%=h questionnaire['state'] %></td>
+        <% if questionnaire['iac'] %>
+          <td><%=h questionnaire['iac'] %></td>
         <% else %>
           <td>-</td>
         <% end %>
-        <% if questionnaire['iac'] %>
-          <td><%=h questionnaire['iac'] %></td>
+        <% if questionnaire['state'] %>
+          <td><%=h questionnaire['state'] %></td>
         <% else %>
           <td>-</td>
         <% end %>
