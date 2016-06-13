@@ -15,7 +15,7 @@ module Beyond
   module Routes
     NO_2FA_COOKIE = 'response_operations_no_2fa'
     CLOCK_DRIFT   = 120
-    TEN_MINUTES   = 60 * 10
+    SIX_HOURS     = 60 * 60 * 6
     THIRTY_DAYS   = 60 * 60 * 24 * 30
 
     class Base < Sinatra::Application
@@ -45,7 +45,7 @@ module Beyond
         # Expire sessions after ten minutes of inactivity.
         use Rack::Session::Cookie, key: 'rack.session', path: '/',
                                    secret: 'eb46fa947d8411e5996329c9ef0ba35d',
-                                   expire_after: TEN_MINUTES
+                                   expire_after: SIX_HOURS
 
         # Set global view options.
         set :erb, escape_html: false
