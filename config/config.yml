@@ -1,7 +1,3 @@
-follow-up-webservice:
-  host: collect-server
-  port: 8177
-
 action-webservice:
   host: collect-server
   port: 8151
