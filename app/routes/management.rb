@@ -37,14 +37,13 @@ module Beyond
         escalated = []
         authenticate!
         type = "#{escalatetype.capitalize}Escalation"
-        #escalated = JSON.parse().paginate(page: params[:page])
+
         RestClient.get("http://#{settings.action_service_host}:#{settings.action_service_port}/actions?actiontype=#{type}&state=PENDING") do |response, _request, _result, &_block|
           escalated = JSON.parse(response).paginate(page: params[:page]) unless response.code == 204
         end
 
         erb :escalated_cases, locals: { title: "View Escalated #{escalatetype.capitalize} Cases", escalated: escalated }
       end
-
     end
   end
 end
