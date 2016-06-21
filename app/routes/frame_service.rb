@@ -496,12 +496,14 @@ module Beyond
         end
       end
 
-      # POstcode search.
+      # Postcode search.
       get '/postcode/:postcode' do |postcode|
         authenticate!
-        addresses = []
+        addresses  = []
+        search_url = "http://#{settings.frame_service_host}:#{settings.frame_service_port}/addresses/postcode/#{postcode}"
 
-        RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/addresses/postcode/#{postcode}") do |response, _request, _result, &_block|
+        # CTPA-477 Need to URI encode the postcode search string.
+        RestClient.get(URI.encode(search_url)) do |response, _request, _result, &_block|
           addresses = JSON.parse(response).paginate(page: params[:page]) unless response.code == 404
         end
 
