@@ -68,6 +68,11 @@ module Beyond
           follow_up['status'].downcase == 'cancelling'
         end
 
+        def format_error(message, response)
+          error = JSON.parse(response)
+          flash[:error] = "#{message}: #{error['error']['message']}<br>Please quote reference #{error['error']['timestamp']} when contacting support."
+        end
+
         # View helper for escaping HTML output.
         def h(text)
           Rack::Utils.escape_html(text)
