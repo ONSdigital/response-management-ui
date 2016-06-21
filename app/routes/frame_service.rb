@@ -496,7 +496,7 @@ module Beyond
         end
       end
 
-      # Present form after searching via postcode.
+      # POstcode search.
       get '/postcode/:postcode' do |postcode|
         authenticate!
         addresses = []
@@ -506,37 +506,34 @@ module Beyond
         end
 
         erb :addresses_postcode, locals: { title: "Addresses for Postcode #{postcode}",
-                                      addresses: addresses }
-
+                                           addresses: addresses }
       end
-
 
       # Present a form for creating a new event.
       get '/regions/:region_code/las/:local_authority_code/msoas/:msoa_code/case/:case_id/event/new' do |region_code, local_authority_code, msoa_code, case_id|
-      authenticate!
-      action = "/regions/#{region_code}/las/#{local_authority_code}/msoas/#{msoa_code}/case/#{case_id}/event"
+        authenticate!
+        action = "/regions/#{region_code}/las/#{local_authority_code}/msoas/#{msoa_code}/case/#{case_id}/event"
 
-      # Get groups from session[:user].groups and remove the duplicated collect-user
-      groups = session[:user].groups
-      groups -= ['collect-users']
+        # Get groups from session[:user].groups and remove the duplicated collect-user
+        groups = session[:user].groups
+        groups -= ['collect-users']
 
-      categories = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/categories?role=#{groups.first}"))
-      erb :event, locals: { title: "Create Event for Case #{case_id}",
-                                    action: action,
-                                    method: :post,
-                                    page: params[:page],
-                                    region_code: region_code,
-                                    local_authority_code: local_authority_code,
-                                    msoa_code: msoa_code,
-                                    eventtext: '',
-                                    customername: '',
-                                    customercontact: '',
-                                    eventcategory: '',
-                                    createdby: '',
-                                    case_id: case_id,
-                                    categories: categories
-                                  }
-
+        categories = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/categories?role=#{groups.first}"))
+        erb :event, locals: { title: "Create Event for Case #{case_id}",
+                                      action: action,
+                                      method: :post,
+                                      page: params[:page],
+                                      region_code: region_code,
+                                      local_authority_code: local_authority_code,
+                                      msoa_code: msoa_code,
+                                      eventtext: '',
+                                      customername: '',
+                                      customercontact: '',
+                                      eventcategory: '',
+                                      createdby: '',
+                                      case_id: case_id,
+                                      categories: categories
+                                    }
       end
 
       # Create a new event.
@@ -577,7 +574,7 @@ module Beyond
           description = "#{params[:eventtext]}"
           description = "name: #{name} #{description}" if name.length > 0 && phone.length == 0
           description = "phone: #{phone} #{description}" if name.length == 0 && phone.length > 0
-          description = "name: #{name} phone: #{phone} #{description}" if name.length > 0 && phone.length > 0          
+          description = "name: #{name} phone: #{phone} #{description}" if name.length > 0 && phone.length > 0
 
           RestClient.post("http://#{settings.frame_service_host}:#{settings.frame_service_port}/cases/#{case_id}/events",
                           { description: "#{description}",
