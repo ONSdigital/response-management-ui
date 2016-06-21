@@ -68,7 +68,7 @@ module Beyond
           follow_up['status'].downcase == 'cancelling'
         end
 
-        def format_error(message, response)
+        def error_flash(message, response)
           error = JSON.parse(response)
           flash[:error] = "#{message}: #{error['error']['message']}<br>Please quote reference #{error['error']['timestamp']} when contacting support."
         end
