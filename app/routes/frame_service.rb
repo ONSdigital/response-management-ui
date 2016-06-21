@@ -206,7 +206,8 @@ module Beyond
               if response.code == 200
                 flash[:notice] = 'Successfully updated address.'
               else
-                flash[:error] = "Unable to update address (HTTP #{response.code} received)."
+                logger.error response
+                error_flash('Unable to update address', response)
               end
             end
 
@@ -502,7 +503,8 @@ module Beyond
                           if response.code == 200
                             logger.info 'Successfully completed action.'
                           else
-                            logger.info "Unable to complete action (HTTP #{response.code} received)."
+                            logger.error response
+                            error_flash('Unable to complete action', response)
                           end
                         end
                       end
@@ -510,7 +512,8 @@ module Beyond
                   end
                 end
             else
-              flash[:error] = "Unable to create event (HTTP #{response.code} received)."
+              logger.error response
+              error_flash('Unable to create event', response)
             end
           end
 
@@ -550,7 +553,8 @@ module Beyond
           if response.code == 200
             flash[:notice] = 'Successfully created questionnaire.'
           else
-            flash[:error] = "Unable to create questionnaire (HTTP #{response.code} received)."
+            logger.error response
+            error_flash('Unable to create questionnaire', response)
           end
         end
 
@@ -590,7 +594,8 @@ module Beyond
           if response.code == 200
             flash[:notice] = 'Successfully updated questionnaire.'
           else
-            flash[:error] = "Unable to update questionnaire (HTTP #{response.code} received)."
+            logger.error response
+            error_flash('Unable to update questionnaire', response)
           end
         end
 
