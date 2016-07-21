@@ -8,7 +8,7 @@ module Beyond
         Dir.chdir(settings.helpline_mi_directory)
 
         # Sort the list of files by creation time, newest first.
-        names = Dir['*.csv'].sort_by{ |f| File.ctime(f) }
+        names = Dir['*.csv'].sort_by { |f| File.ctime(f) }.reverse
         erb :helpline_mi, layout: :simple_layout, locals: { title: 'Helpline MI Reports',
                                                             names: names }
       end

@@ -8,7 +8,12 @@
   <script src="//code.jquery.com/ui/1.11.0/jquery-ui.min.js"></script>
   <script src="/javascripts/questionnaire.js" type="text/javascript"></script>
   <script src="/javascripts/events.js" type="text/javascript"></script>
+<% end %>
 
+<% if form.failed_on? :eventtext %>
+  <% content_for :form_errors do %>
+    <p class="message">&bull; Description is required</p>
+  <% end %>
 <% end %>
 
 <form action="<%= action %>" method="post">
@@ -20,14 +25,11 @@
 <% end %>
 
   <fieldset>
-    <% if method == :post %>
-      <p><label for="eventtext">Description (max 250 characters)</label> <span class="required">*</span></p>
-      <% if description_error %>
-        <p><span class="required">Description Required</span></p>
-      <% end %>
-      <textarea autofocus rows="10" cols="50" id="eventtext" name="eventtext" maxlength="250" value="<%=h eventtext %>"></textarea>
-      <span id="chars">250</span> characters remaining
-    <% end %>
+  <% if method == :post %>
+    <p><label for="eventtext">Description (max 250 characters)</label> <span class="required">*</span></p>
+    <textarea autofocus rows="10" cols="50" id="eventtext" name="eventtext" maxlength="250" value="<%=h eventtext %>"></textarea>
+    <span id="chars">250</span> characters remaining
+  <% end %>
 
     <p><label for="customername">Name</label> </p>
     <textarea rows="1" cols="50" id="customername" name="customername" maxlength="40" value="<%=h customername %>"></textarea>

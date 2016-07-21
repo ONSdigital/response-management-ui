@@ -4,7 +4,6 @@ require 'rack/deflater'
 
 require_relative './routes/base'
 require_relative './routes/frame_service'
-require_relative './routes/follow_up_service'
 require_relative './routes/management'
 require_relative './routes/helpline_mi'
 
@@ -124,7 +123,6 @@ module Beyond
   class App < Sinatra::Application
     use Routes::Base
     use Routes::FrameService
-    use Routes::FollowUpService
     use Routes::Management
     use Routes::HelplineMI
   end

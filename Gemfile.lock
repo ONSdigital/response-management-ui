@@ -1,6 +1,6 @@
 GEM
   remote: https://rubygems.org/
-  remote: http://192.168.11.11:8003/
+  remote: http://rubygems.ctpdev.local/
   specs:
     ctp-common (7.7.1)
       pg (~> 0, >= 0.18.3)

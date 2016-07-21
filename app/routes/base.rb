@@ -15,7 +15,7 @@ module Beyond
   module Routes
     NO_2FA_COOKIE = 'response_operations_no_2fa'
     CLOCK_DRIFT   = 120
-    TEN_MINUTES   = 60 * 10
+    SIX_HOURS     = 60 * 60 * 6
     THIRTY_DAYS   = 60 * 60 * 24 * 30
 
     class Base < Sinatra::Application
@@ -27,8 +27,6 @@ module Beyond
         set :frame_service_port, config['frame-webservice']['port']
         set :action_service_host, config['action-webservice']['host']
         set :action_service_port, config['action-webservice']['port']
-        set :follow_up_service_host, config['follow-up-webservice']['host']
-        set :follow_up_service_port, config['follow-up-webservice']['port']
         set :ldap_directory_host, config['ldap-directory']['host']
         set :ldap_directory_port, config['ldap-directory']['port']
         set :ldap_directory_base, config['ldap-directory']['base']
@@ -45,7 +43,7 @@ module Beyond
         # Expire sessions after ten minutes of inactivity.
         use Rack::Session::Cookie, key: 'rack.session', path: '/',
                                    secret: 'eb46fa947d8411e5996329c9ef0ba35d',
-                                   expire_after: TEN_MINUTES
+                                   expire_after: SIX_HOURS
 
         # Set global view options.
         set :erb, escape_html: false
@@ -68,6 +66,11 @@ module Beyond
 
         def cancelling(follow_up)
           follow_up['status'].downcase == 'cancelling'
+        end
+
+        def error_flash(message, response)
+          error = JSON.parse(response)
+          flash[:error] = "#{message}: #{error['error']['message']}<br>Please quote reference #{error['error']['timestamp']} when contacting support."
         end
 
         # View helper for escaping HTML output.

@@ -120,29 +120,29 @@ module Beyond
         end
       end
 
-      # Present form after searching via postcode.
+      # Postcode search.
       get '/postcode/:postcode' do |postcode|
         authenticate!
-        addresses = []
+        addresses  = []
+        search_url = "http://#{settings.frame_service_host}:#{settings.frame_service_port}/addresses/postcode/#{postcode}"
 
-        RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/addresses/postcode/#{postcode}") do |response, _request, _result, &_block|
+        # CTPA-477 Need to URI encode the postcode search string.
+        RestClient.get(URI.encode(search_url)) do |response, _request, _result, &_block|
           addresses = JSON.parse(response).paginate(page: params[:page]) unless response.code == 404
         end
 
         erb :addresses_postcode, locals: { title: "Addresses for Postcode #{postcode}",
-                                      addresses: addresses }
-
+                                           addresses: addresses }
       end
-
 
       # Present a form for creating a new event.
       get '/case/:case_id/event/new' do |case_id|
       authenticate!
       action = "/case/#{case_id}/event"
 
-      # Get groups from session[:user].groups and remove the duplicated collect-user
-      groups = session[:user].groups
-      groups -= ['collect-users']
+        # Get groups from session[:user].groups and remove the duplicated collect-user
+        groups = session[:user].groups
+        groups -= ['collect-users']
 
       categories = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/categories?role=#{groups.first}"))
       erb :event, locals: { title: "Create Event for Case #{case_id}",
@@ -158,7 +158,6 @@ module Beyond
                                     case_id: case_id,
                                     categories: categories
                                     }
-
       end
 
       # Create a new event.
@@ -185,21 +184,21 @@ module Beyond
                                         customercontact: '',
                                         eventcategory: params[:eventcategory],
                                         createdby: '',
-                                        description_error: true,
                                         case_id: case_id,
                                         categories: categories
                                         }
 
         else
-          user  = session[:user]
-          name  = ''
-          phone = ''
-
-          name  = "name: #{params[:customername]} " unless params[:customername].length == 0
-          phone = "phone: #{params[:customercontact]} " unless params[:customercontact].length == 0
+          user        = session[:user]
+          name        = params[:customername]
+          phone       = params[:customercontact]
+          description = "#{params[:eventtext]}"
+          description = "name: #{name} #{description}" if name.length > 0 && phone.length == 0
+          description = "phone: #{phone} #{description}" if name.length == 0 && phone.length > 0
+          description = "name: #{name} phone: #{phone} #{description}" if name.length > 0 && phone.length > 0
 
           RestClient.post("http://#{settings.frame_service_host}:#{settings.frame_service_port}/cases/#{case_id}/events",
-                          { description: "#{name} #{phone} #{params[:eventtext]}",
+                          { description: "#{description}",
                             category: params[:eventcategory],
                             createdBy: "#{user.user_id}"
                           }.to_json, content_type: :json, accept: :json
@@ -230,7 +229,8 @@ module Beyond
                           if response.code == 200
                             logger.info 'Successfully completed action.'
                           else
-                            logger.info "Unable to complete action (HTTP #{response.code} received)."
+                            logger.error response
+                            error_flash('Unable to complete action', response)
                           end
                         end
                       end
@@ -238,7 +238,8 @@ module Beyond
                   end
                 end
             else
-              flash[:error] = "Unable to create event (HTTP #{response.code} received)."
+              logger.error response
+              error_flash('Unable to create event', response)
             end
           end
 
