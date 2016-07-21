@@ -1,9 +1,5 @@
 <%= erb :menu, locals: { pageid: "addresses" } %>
 
-<% content_for :breadcrumbs do %>
-  <a href="/regions">Regions</a> &gt; <a href="/regions/<%=h region_code %>/las">Region <%=h region_code %></a> &gt; <a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas">LA <%=h local_authority_code %></a> &gt; <a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses">MSOA <%=h msoa_code %></a> &gt; <a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/questionnaires">Address <%=h uprn_code %></a> &gt; <% if method.eql? :post %>Create Questionnaire<% elsif method.eql? :put %>Edit Questionnaire<% end %>
-<% end %>
-
 <% content_for :stylesheet do %>
   <link rel="stylesheet" href="//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.min.css">
 <% end %>
@@ -57,6 +53,6 @@
   </fieldset>
   <p id="requiredfields"><span class="required">*</span> Required fields</p>
   <p class="buttons">
-    <input class="button" type="submit" value="Save"> or <% if params[:page].present? %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/questionnaires?page=<%=h params[:page] %>"><% else %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/cases/<%=h case_id %>/questionnaires"><% end %>Cancel</a>
+    <input class="button" type="submit" value="Save"> or <% if params[:page].present? %><a href="/addresses/<%=h uprn_code %>/questionnaires?page=<%=h params[:page] %>"><% else %><a href="/addresses/<%=h uprn_code %>/cases/<%=h case_id %>/questionnaires"><% end %>Cancel</a>
   </p>
 </form>

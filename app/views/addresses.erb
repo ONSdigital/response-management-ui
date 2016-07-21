@@ -1,14 +1,10 @@
   <%= erb :menu, locals: { pageid: "addresses" } %>
 
-<% content_for :breadcrumbs do %>
-  <a href="/regions">Regions</a> &gt; <a href="/regions/<%=h region_code %>/las">Region <%=h region_code %></a> &gt; <a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas">LA <%=h local_authority_code %></a> &gt; MSOA <%=h msoa_code %>
-<% end %>
-
 <% content_for :sub_heading do %>
   Click an Address ID to view questionnaires for that address.
 <% end %>
 
-<% if params[:page].present? %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses?page=<%=h params[:page] %>"><% else %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses"><% end %>Refresh</a>
+<% if params[:page].present? %><a href="/addresses?page=<%=h params[:page] %>"><% else %><a href="/addresses"><% end %>Refresh</a>
 
 <% if addresses.any? %>
 <%= will_paginate addresses, :previous_label => '&lt; Prev', :next_label => 'Next &gt;' %>
@@ -23,7 +19,7 @@
     </thead>
     <tbody>
       <tr>
-        <td><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h address['uprn'] %>/cases"><%=h address['uprn'] %></a></td>
+        <td><a href="/addresses/<%=h address['uprn'] %>/cases"><%=h address['uprn'] %></a></td>
       <% if address['type'].present? %>
         <td><%=h address['type'].to_address_type %></td>
       <% else %>
@@ -33,7 +29,7 @@
         <td><%=h address['estabtype'] %></td>
       <% else %>
         <td>-</td>
-      <% end %>        
+      <% end %>
       </tr>
     </tbody>
     <%= erb :addresslines_partial, locals: { address: address } %>

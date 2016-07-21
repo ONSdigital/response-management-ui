@@ -6,15 +6,6 @@
   <% end %>
   <a href="/">Home</a></li>
 
-  <% unless authorised?("collect-csos") %>
-    <% if pageid == 'addresses' %>
-      <li id="active">
-    <% else %>
-      <li>
-    <% end %>
-    <a href="/regions">Addresses</a></li>
-  <% end %>
-
   <% if authorised?("collect-admins") || authorised?("collect-escalate")  %>
     <% if pageid == 'manage' %>
       <li id="active">

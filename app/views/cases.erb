@@ -1,12 +1,5 @@
 <%= erb :menu, locals: { pageid: "addresses" } %>
 
-<% unless authorised?("collect-csos") %>
-  <% content_for :breadcrumbs do %>
-    <a href="/regions">Regions</a> &gt; <a href="/regions/<%=h region_code %>/las">Region <%=h region_code %></a> &gt; <a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas">LA <%=h local_authority_code %></a> &gt; <a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses">MSOA <%=h msoa_code %></a> &gt; Address <%=h uprn_code %>
-  <% end %>
-<% end %>
-
-
 <% content_for :sub_heading do %>
   Click a case to create or view questionnaires.
 <% end %>
@@ -81,7 +74,7 @@
       <tbody>
       <% cases.each_with_index do |uniqueCase, i| %>
         <tr class="<%= i.even? ? 'even' : 'odd ' %>">
-          <td><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/case/<%=h uniqueCase['caseId'] %>"><%=h uniqueCase['caseId'] %></a></td>
+          <td><a href="/case/<%=h uniqueCase['caseId'] %>"><%=h uniqueCase['caseId'] %></a></td>
         <% if uniqueCase['state'].present? %>
           <td><%=h uniqueCase['state'] %></td>
           <% else %>

@@ -1,9 +1,5 @@
 <%= erb :menu, locals: { pageid: "addresses" } %>
 
-<% content_for :breadcrumbs do %>
-  <a href="/regions">Regions</a> &gt; <a href="/regions/<%=h region_code %>/las">Region <%=h region_code %></a> &gt; <a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas">LA <%=h local_authority_code %></a> &gt; <a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses">MSOA <%=h msoa_code %></a> &gt; Address <%=h uprn_code %>
-<% end %>
-
 <% content_for :sub_heading do %>
   Click a questionnaire to create or view follow-ups.
 <% end %>
@@ -31,8 +27,8 @@
 <% content_for :footer do %>
   <h3>Questionnaires</h3>
   <div id="newquestionnaire">
-    <form action="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/questionnaires/new" method="get">
-      <input class="button" type="submit" value="Create Questionnaire&hellip;"> or <% if params[:page].present? %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/questionnaires?page=<%=h params[:page] %>"><% else %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/questionnaires"><% end %>Refresh</a>
+    <form action="/addresses/<%=h uprn_code %>/questionnaires/new" method="get">
+      <input class="button" type="submit" value="Create Questionnaire&hellip;"> or <% if params[:page].present? %><a href="/addresses/<%=h uprn_code %>/questionnaires?page=<%=h params[:page] %>"><% else %><a href="/addresses/<%=h uprn_code %>/questionnaires"><% end %>Refresh</a>
     <% if params[:page].present? %>
       <input type="hidden" name="page" value="<%=h params[:page] %>">
     <% end %>
@@ -56,7 +52,7 @@
       <tbody>
       <% questionnaires.each_with_index do |questionnaire, i| %>
         <tr class="<%= i.even? ? 'even' : 'odd ' %>">
-          <td><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/questionnaires/<%=h questionnaire['questionnaireid'] %>"><%=h questionnaire['questionnaireid'] %></a></td>
+          <td><a href="/addresses/<%=h uprn_code %>/questionnaires/<%=h questionnaire['questionnaireid'] %>"><%=h questionnaire['questionnaireid'] %></a></td>
         <% if questionnaire['token'] %>
           <td class="surveytoken"><%=h questionnaire['token'] %></td>
         <% else %>
@@ -82,7 +78,7 @@
         <% else %>
           <td>-</td>
         <% end %>
-          <td><% if params[:page].present? %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/questionnaires/<%=h questionnaire['questionnaireid'] %>/edit?page=<%=h params[:page] %>"><% else %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/questionnaires/<%=h questionnaire['questionnaireid'] %>/edit"><% end %>Edit</a></td>
+          <td><% if params[:page].present? %><a href="/addresses/<%=h uprn_code %>/questionnaires/<%=h questionnaire['questionnaireid'] %>/edit?page=<%=h params[:page] %>"><% else %><a href="/addresses/<%=h uprn_code %>/questionnaires/<%=h questionnaire['questionnaireid'] %>/edit"><% end %>Edit</a></td>
         </tr>
       <% end %>
         </tbody>

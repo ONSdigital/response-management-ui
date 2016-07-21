@@ -1,11 +1,5 @@
 <%= erb :menu, locals: { pageid: "addresses" } %>
 
-<% unless authorised?("collect-csos") %>
-  <% content_for :breadcrumbs do %>
-    <a href="/regions">Regions</a> &gt; <a href="/regions/<%=h region_code %>/las">Region <%=h region_code %></a> &gt; <a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas">LA <%=h local_authority_code %></a> &gt; <a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses">MSOA <%=h msoa_code %></a> &gt; <a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/cases">Address <%=uprn_code %></a> &gt; Case <%=h caseid %>
-  <% end %>
-<% end %>
-
 <% content_for :sidebar do %>
   <%= erb :googlemaps_partial, locals: { coordinates: coordinates } %>
 <% end %>
@@ -104,7 +98,7 @@
   <% else %>
     <td>-</td>
   <% end %>
-    <td><% if params[:page].present? %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/cases/<%=h uniqueCase['caseId'] %>/questionnaires?page=<%=h params[:page] %>"><% else %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/cases/<%=h uniqueCase['caseId'] %>/questionnaires"><% end %>View Questionnaires</a></td>
+    <td><% if params[:page].present? %><a href="/cases/<%=h uniqueCase['caseId'] %>/questionnaires?page=<%=h params[:page] %>"><% else %><a href="/cases/<%=h uniqueCase['caseId'] %>/questionnaires"><% end %>View Questionnaires</a></td>
   </tr>
   </tbody>
 </table>
@@ -113,11 +107,11 @@
   <h3>Events</h3>
   <br>
   <div id="events">
-    <form action="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/case/<%=h caseid %>/event/new" method="get">
+    <form action="/case/<%=h caseid %>/event/new" method="get">
       <% if uniqueCase['state'] != 'CLOSED' %>
-      <input class="button" type="submit" value="Create Event&hellip;" > or <% if params[:actionpage].present? %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/questionnaires?page=<%=h params[:actionpage] %>"><% else %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/case/<%=h caseid %>"><% end %>Refresh</a>
+      <input class="button" type="submit" value="Create Event&hellip;" > or <% if params[:actionpage].present? %><a href="/addresses/<%=h uprn_code %>/questionnaires?page=<%=h params[:actionpage] %>"><% else %><a href="/case/<%=h caseid %>"><% end %>Refresh</a>
       <% else %>
-      <input class="button" type="submit" value="Case Closed&hellip;" disabled> or <% if params[:actionpage].present? %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses/<%=h uprn_code %>/questionnaires?page=<%=h params[:actionpage] %>"><% else %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/case/<%=h caseid %>"><% end %>Refresh</a>
+      <input class="button" type="submit" value="Case Closed&hellip;" disabled> or <% if params[:actionpage].present? %><a href="/addresses/<%=h uprn_code %>/questionnaires?page=<%=h params[:actionpage] %>"><% else %><a href="/case/<%=h caseid %>"><% end %>Refresh</a>
       <% end %>
     <% if params[:actionpage].present? %>
       <input type="hidden" name="page" value="<%=h params[:actionpage] %>">

@@ -1,9 +1,5 @@
 <%= erb :menu, locals: { pageid: "manage" } %>
 
-<% content_for :breadcrumbs do %>
-  <a href="/regions">Regions</a> &gt; <a href="/regions/<%=h region_code %>/las">Region <%=h region_code %></a> &gt; <a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas">LA <%=h local_authority_code %></a> &gt; <a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/addresses">MSOA <%=h msoa_code %></a> &gt; <a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/case/<%=h case_id %>">Case <%=h case_id %></a> &gt; <% if method.eql? :post %>Create Event<% elsif method.eql? :put %>Edit Event<% end %>
-<% end %>
-
 <% content_for :stylesheet do %>
   <link rel="stylesheet" href="//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.min.css">
 <% end %>
@@ -56,6 +52,6 @@
   </fieldset>
   <p id="requiredfields"><span class="required">*</span> Required fields</p>
   <p class="buttons">
-    <input class="button" type="submit" value="Save"> or <% if params[:page].present? %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/case/<%=h case_id %>/event?page=<%=h params[:page] %>"><% else %><a href="/regions/<%=h region_code %>/las/<%=h local_authority_code %>/msoas/<%=h msoa_code %>/case/<%=h case_id %>"><% end %>Cancel</a>
+    <input class="button" type="submit" value="Save"> or <% if params[:page].present? %><a href="/case/<%=h case_id %>/event?page=<%=h params[:page] %>"><% else %><a href="/case/<%=h case_id %>"><% end %>Cancel</a>
   </p>
 </form>

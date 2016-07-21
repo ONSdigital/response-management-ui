@@ -1,10 +1,5 @@
 <%= erb :menu, locals: { pageid: "manage" } %>
 
-<% unless authorised?("collect-csos") %>
-  <% content_for :breadcrumbs do %>
-  <% end %>
-<% end %>
-
 <% content_for :breadcrumbs do %>
 Escalated Cases
 <% end %>
