@@ -96,30 +96,6 @@ module Beyond
         end
       end
 
-      # Get a specific questionnaire.
-      get '/questionnaires/:questionnaire_id' do |questionnaire_id|
-        authenticate!
-        questionnaire = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/cases/qid/#{questionnaire_id}"))
-
-        if questionnaire.empty?
-          erb :questionnaire_not_found, locals: { title: 'Questionnaire Not Found' }
-        else
-          follow_ups = JSON.parse(RestClient.get("http://#{settings.follow_up_service_host}:#{settings.follow_up_service_port}/FollowUpService/FollowUp/QuestionnaireId=#{questionnaire_id}")).paginate(page: params[:page])
-          address = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/addresses/#{questionnaire['uprn']}"))
-          coordinates = "#{address['latitude']},#{address['longitude']}"
-          erb :follow_ups, layout: :sidebar_layout,
-                           locals: { title: "Questionnaire #{questionnaire_id}",
-                                     uprn_code: address['uprn'],
-                                     case_id: address['caseId'],
-                                     iac: address['iac'],
-                                     questionnaire_id: questionnaire_id,
-                                     follow_ups: follow_ups,
-                                     questionnaire: questionnaire,
-                                     address: address,
-                                     coordinates: coordinates }
-        end
-      end
-
       # Postcode search.
       get '/postcode/:postcode' do |postcode|
         authenticate!
