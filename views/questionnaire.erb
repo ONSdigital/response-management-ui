@@ -80,7 +80,6 @@
         <tr>
           <th>Questionnaire ID</th>
           <th>Internet Access Code</th>
-          <th>Questionnaire Status</th>
           <th>Dispatch Date</th>
           <th>Response Date</th>
           <th>Receipt Date</th>
@@ -93,11 +92,6 @@
           <td><%=h questionnaire['questionnaireId'] %></td>
         <% if questionnaire['iac'] %>
           <td><%=h questionnaire['iac'] %></td>
-        <% else %>
-          <td>-</td>
-        <% end %>
-        <% if questionnaire['state'] %>
-          <td><%=h questionnaire['state'] %></td>
         <% else %>
           <td>-</td>
         <% end %>
