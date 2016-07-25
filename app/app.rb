@@ -34,18 +34,18 @@ class Integer
 
   def to_date(time: true)
     if time
-      Time.at(self / 1000).utc.strftime('%e %b %Y %H:%M')
+      Time.at(self / 1000).localtime.strftime('%e %b %Y %H:%M')
     else
-      Time.at(self / 1000).utc.strftime('%e %b %Y')
+      Time.at(self / 1000).localtime.strftime('%e %b %Y')
     end
   end
 
   def to_hours
-    Time.at(self / 1000).utc.strftime('%H')
+    Time.at(self / 1000).localtime.strftime('%H')
   end
 
   def to_minutes
-    Time.at(self / 1000).utc.strftime('%M')
+    Time.at(self / 1000).localtime.strftime('%M')
   end
 end
 
@@ -67,7 +67,7 @@ end
 class String
   def to_date
     t = Time.parse(self)
-    t.strftime('%e %b %Y %H:%M')
+    t.localtime.strftime('%e %b %Y %H:%M')
   end
 
   # Friendly form types.
