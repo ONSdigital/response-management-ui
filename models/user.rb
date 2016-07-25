@@ -1,5 +1,7 @@
 require 'rotp'
 
+require_relative '../lib/core_ext/object'
+
 class User
   attr_reader :user_id
   attr_reader :display_name
