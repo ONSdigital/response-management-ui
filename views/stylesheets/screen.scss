@@ -245,6 +245,18 @@ strong {
   width: 150px;
 }
 
+#postcodesearch {
+  @include border-radius-small;
+  border: 1px solid $secondary-light;
+  float: right;
+  margin: 1px 5px 0 0;
+}
+
+#postcodesearch input {
+  border: 0;
+  padding-left: 5px;
+}
+
 #requiredfields {
   color: $secondary-light;
 }
@@ -257,18 +269,6 @@ strong {
 #signoutlink a:active {
   background-color: $secondary-lightest;
   color: $secondary-light;
-}
-
-#postcodesearch {
-  @include border-radius-small;
-  border: 1px solid $secondary-light;
-  float: right;
-  margin: 1px 5px 0 0;
-}
-
-#postcodesearch input {
-  border: 0;
-  padding-left: 5px;
 }
 
 .primary {
