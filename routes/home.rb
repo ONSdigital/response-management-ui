@@ -15,10 +15,10 @@ SESSION_EXPIRATION_PERIOD = 60 * 60 * 6
 
 # Load various settings from a configuration file.
 config = YAML.load_file(File.join(__dir__, '../config.yml'))
-set :frame_service_host, config['frame-webservice']['host']
-set :frame_service_port, config['frame-webservice']['port']
 set :action_service_host, config['action-webservice']['host']
 set :action_service_port, config['action-webservice']['port']
+set :case_service_host, config['case-webservice']['host']
+set :case_service_port, config['case-webservice']['port']
 set :ldap_directory_host, config['ldap-directory']['host']
 set :ldap_directory_port, config['ldap-directory']['port']
 set :ldap_directory_base, config['ldap-directory']['base']

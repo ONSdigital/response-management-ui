@@ -6,7 +6,7 @@ get '/addresses/:uprn_code/cases' do | uprn_code|
   authenticate!
   cases = []
 
-  RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/cases/uprn/#{uprn_code}") do |response, _request, _result, &_block|
+  RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/cases/uprn/#{uprn_code}") do |response, _request, _result, &_block|
     cases = JSON.parse(response).paginate(page: params[:page]) unless response.code == 204
   end
 
@@ -14,15 +14,15 @@ get '/addresses/:uprn_code/cases' do | uprn_code|
     cases.each do |uniqueCase|
       survey_id = uniqueCase['surveyId']
       sample_id = uniqueCase['sampleId']
-      survey = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/surveys/#{survey_id}"))
-      sample = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/samples/#{sample_id}"))
+      survey = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/surveys/#{survey_id}"))
+      sample = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/samples/#{sample_id}"))
       uniqueCase['surveyDescription'] = survey['description']
       uniqueCase['name'] = sample['name']
     end
   end
 
   # Get the selected address details so they can be displayed for reference.
-  address = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/addresses/#{uprn_code}"))
+  address = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/addresses/#{uprn_code}"))
   coordinates = "#{address['latitude']},#{address['longitude']}"
 
   erb :cases, layout: :sidebar_layout,
@@ -39,15 +39,15 @@ get '/case/:case_id' do |case_id|
   authenticate!
   events = []
   actions = []
-  uniqueCase = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/cases/#{case_id}"))
-  #events = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/cases/#{case_id}/events"))
+  uniqueCase = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}"))
+  #events = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}/events"))
   uprn_code = "#{uniqueCase['uprn']}"
   survey_id = "#{uniqueCase['surveyId']}"
   sample_id = "#{uniqueCase['sampleId']}"
-  survey = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/surveys/#{survey_id}"))
-  sample = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/samples/#{sample_id}"))
+  survey = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/surveys/#{survey_id}"))
+  sample = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/samples/#{sample_id}"))
 
-  RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/cases/#{case_id}/events") do |response, _request, _result, &_block|
+  RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}/events") do |response, _request, _result, &_block|
     events = JSON.parse(response).paginate(page: params[:page]) unless response.code == 204
   end
 
@@ -55,7 +55,7 @@ get '/case/:case_id' do |case_id|
     actions = JSON.parse(response) unless response.code == 204
   end
 
-    address = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/addresses/#{uprn_code}"))
+    address = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/addresses/#{uprn_code}"))
     coordinates = "#{address['latitude']},#{address['longitude']}"
     erb :case_events, layout: :sidebar_layout,
                      locals: { title: "Event History for Case #{case_id}",
@@ -76,13 +76,13 @@ end
 get '/cases/:case_id/questionnaires' do |case_id|
   authenticate!
   questionnaires = []
-  uniqueCase = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/cases/#{case_id}"))
-  questionnaires = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/questionnaires/case/#{case_id}"))
+  uniqueCase = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}"))
+  questionnaires = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/questionnaires/case/#{case_id}"))
   if uniqueCase.empty?
     erb :case_not_found, locals: { title: 'Case Not Found' }
   else
     uprn_code = "#{uniqueCase['uprn']}"
-    address = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/addresses/#{uprn_code}"))
+    address = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/addresses/#{uprn_code}"))
     coordinates = "#{address['latitude']},#{address['longitude']}"
     erb :questionnaire, layout: :sidebar_layout,
                         locals: { title: "Questionnaires for Case #{case_id}",
@@ -99,7 +99,7 @@ end
 get '/postcode/:postcode' do |postcode|
   authenticate!
   addresses  = []
-  search_url = "http://#{settings.frame_service_host}:#{settings.frame_service_port}/addresses/postcode/#{postcode}"
+  search_url = "http://#{settings.case_service_host}:#{settings.case_service_port}/addresses/postcode/#{postcode}"
 
   # CTPA-477 Need to URI encode the postcode search string.
   RestClient.get(URI.encode(search_url)) do |response, _request, _result, &_block|
@@ -119,7 +119,7 @@ action = "/case/#{case_id}/event"
   groups = session[:user].groups
   groups -= ['collect-users']
 
-categories = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/categories?role=#{groups.first}"))
+categories = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/categories?role=#{groups.first}"))
 erb :event, locals: { title: "Create Event for Case #{case_id}",
                               action: action,
                               method: :post,
@@ -149,7 +149,7 @@ post '/case/:case_id/event' do |case_id|
     # Get groups from session[:user].groups and remove the duplicated collect-user
     groups = session[:user].groups
     groups -= ['collect-users']
-    categories = JSON.parse(RestClient.get("http://#{settings.frame_service_host}:#{settings.frame_service_port}/categories?role=#{groups.first}"))
+    categories = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/categories?role=#{groups.first}"))
     erb :event, locals: { title: "Create Event for Case #{case_id}",
                                   action: action,
                                   method: :post,
@@ -172,7 +172,7 @@ post '/case/:case_id/event' do |case_id|
     description = "phone: #{phone} #{description}" if name.length == 0 && phone.length > 0
     description = "name: #{name} phone: #{phone} #{description}" if name.length > 0 && phone.length > 0
 
-    RestClient.post("http://#{settings.frame_service_host}:#{settings.frame_service_port}/cases/#{case_id}/events",
+    RestClient.post("http://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}/events",
                     { description: "#{description}",
                       category: params[:eventcategory],
                       createdBy: "#{user.user_id}"

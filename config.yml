@@ -2,7 +2,7 @@ action-webservice:
   host: collect-server
   port: 8151
 
-frame-webservice:
+case-webservice:
   host: collect-server
   port: 8171
 
