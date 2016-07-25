@@ -160,40 +160,6 @@ strong {
   font-family: $primary-fonts;
 }
 
-#gateway {
-  background-color: $primary-alternate;
-  @include border-radius-large;
-  font-size: 120%;
-  margin: 20px 0 20px;
-  padding: 10px;
-  width: 300px;
-}
-
-#gateway #status {
-  border-bottom: 2px solid $white;
-  font-weight: bold;
-  margin-bottom: 10px;
-  padding-bottom: 10px;
-}
-
-#gateway #status form {
-  float: right;
-  font-size: 80%;
-}
-
-#gateway p:first-of-type {
-  margin-bottom: 5px;
-}
-
-#gateway p:last-of-type {
-  font-size: 80%;
-  margin-top: 15px;
-}
-
-#gateway .value {
-  float: right;
-}
-
 #information {
   clear: both;
   color: $alternate;
