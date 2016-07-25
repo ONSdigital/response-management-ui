@@ -1,12 +1,12 @@
 Response Operations Ruby Web Application
 ========================================
 
-This Ruby Sinatra application demonstrates using Java web services to provide Caseload and associated Address and Questionnaire information.
+This Ruby Sinatra application is the user interface for the Response Management product.
 
 Prerequisites
 -------------
 
-The application's `config.yml` configuration file references the Java web services using a `collect-server` name which needs to be present in your hosts file. It also references an LDAP server using an `ldap-server` name. Install the RubyGems the application depends on by running `bundle install`.
+The application's `config.yml` configuration file references the Java web services using a `collect-server` name that needs to be present in your hosts file. It also references an LDAP server using an `ldap-server` name. Install the RubyGems the application depends on by running `bundle install`.
 
 Running
 -------
