@@ -112,7 +112,7 @@ get '/cases/:case_id/questionnaires' do |case_id|
 end
 
 # Postcode search.
-get '/postcode/:postcode' do |postcode|
+get '/postcodes/:postcode' do |postcode|
   authenticate!
   addresses  = []
   search_url = "http://#{settings.case_service_host}:#{settings.case_service_port}/addresses/postcode/#{postcode}"

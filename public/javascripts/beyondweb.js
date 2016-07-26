@@ -6,7 +6,7 @@ $(document).keyup(function(event) {
 
       // CTPA-477 Need to URI encode the postcode search string.
       postcode = encodeURIComponent(postcode.toUpperCase());
-      window.location = "/postcode/" + postcode;
+      window.location = "/postcodes/" + postcode;
     }
   }
 });
