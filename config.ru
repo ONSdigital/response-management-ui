@@ -7,6 +7,7 @@ require_relative 'routes/home'
 require_relative 'routes/authentication'
 require_relative 'routes/error'
 require_relative 'routes/case'
+require_relative 'routes/manage'
 require_relative 'routes/helpline'
 
 require 'rack/etag'
