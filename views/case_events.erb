@@ -67,7 +67,7 @@
   <tbody>
 
   <tr class="even">
-    <td><%=h kase['caseId'] %></td>
+    <td><%=h case_id %></td>
   <% if kase['state'].present? %>
     <td><%=h kase['state'] %></td>
     <% else %>
@@ -98,7 +98,7 @@
   <% else %>
     <td>-</td>
   <% end %>
-    <td><% if params[:page].present? %><a href="/cases/<%=h kase['caseId'] %>/questionnaires?page=<%=h params[:page] %>"><% else %><a href="/cases/<%=h kase['caseId'] %>/questionnaires"><% end %>View Questionnaires</a></td>
+    <td><% if params[:page].present? %><a href="/cases/<%=h case_id %>/questionnaires?page=<%=h params[:page] %>"><% else %><a href="/cases/<%=h case_id %>/questionnaires"><% end %>View Questionnaires</a></td>
   </tr>
   </tbody>
 </table>
