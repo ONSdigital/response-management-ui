@@ -10,6 +10,10 @@ helpers do
     "#{postcode[0, postcode.length - 3]} #{postcode[-3, 3]}"
   end
 
+  def strip_spaces(str)
+    str.gsub(/\s+/, '')
+  end
+
   def user_role
     session[:user].groups.delete_if { |group| group == 'collect-users' }.first
   end

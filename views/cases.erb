@@ -1,7 +1,7 @@
 <%= erb :menu, locals: { pageid: 'home' } %>
 
 <% content_for :breadcrumbs do %>
-<a href="/postcode/<%=h postcode %>"><%=h postcode %></a> &gt; Cases
+<a href="/postcode/<%=strip_spaces postcode %>"><%=h postcode %></a> &gt; Cases
 <% end %>
 
 <% content_for :sub_heading do %>
