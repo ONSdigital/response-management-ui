@@ -112,27 +112,27 @@ end
 
 # Present a form for creating a new event.
 get '/case/:case_id/event/new' do |case_id|
-authenticate!
-action = "/case/#{case_id}/event"
+  authenticate!
+  action = "/case/#{case_id}/event"
 
-  # Get groups from session[:user].groups and remove the duplicated collect-user
-  groups = session[:user].groups
-  groups -= ['collect-users']
+    # Get groups from session[:user].groups and remove the duplicated collect-user
+    groups = session[:user].groups
+    groups -= ['collect-users']
 
-categories = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/categories?role=#{groups.first}"))
-erb :event, locals: { title: "Create Event for Case #{case_id}",
-                              action: action,
-                              method: :post,
-                              page: params[:page],
-                              eventtext: '',
-                              customername: '',
-                              customercontact: '',
-                              eventcategory: '',
-                              createdby: '',
-                              description_error: false,
-                              case_id: case_id,
-                              categories: categories
-                              }
+  categories = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/categories?role=#{groups.first}"))
+  erb :event, locals: { title: "Create Event for Case #{case_id}",
+                        action: action,
+                        method: :post,
+                        page: params[:page],
+                        eventtext: '',
+                        customername: '',
+                        customercontact: '',
+                        eventcategory: '',
+                        createdby: '',
+                        description_error: false,
+                        case_id: case_id,
+                        categories: categories
+                      }
 end
 
 # Create a new event.
