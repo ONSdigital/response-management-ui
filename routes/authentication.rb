@@ -30,7 +30,8 @@ post '/signin/?' do
                                        settings.ldap_directory_base,
                                        settings.ldap_groups,
                                        logger)
-  if user = User.authenticate(ldap_connection, params)
+
+  if user = User.authenticate(ldap_connection, params) # rubocop:disable Lint/AssignmentInCondition
     session[:user] = user
     if request.cookies[NO_2FA_COOKIE]
       session[:valid_token] = true
