@@ -1,27 +1,26 @@
 <%= erb :menu, locals: { pageid: 'home' } %>
 
 <% content_for :breadcrumbs do %>
-<a href="/">Home</a> &gt; <a href="/postcodes/<%=url_format postcode %>"><%=h postcode %></a> &gt; <a href="/addresses/<%=h uprn %>/cases">Cases</a> &gt; <a href="/case/<%=h case_id %>">Case <%=h case_id %></a> &gt; Questionnaires 
+<a href="/">Home</a> &gt; <a href="/postcodes/<%=url_format postcode %>"><%=h postcode %></a> &gt; <a href="/addresses/<%=h uprn %>/cases">Cases</a> &gt; <a href="/case/<%=h case_id %>">Case <%=h case_id %></a> &gt; Questionnaires
 <% end %>
 
 <% content_for :sidebar do %>
   <%= erb :googlemaps_partial, locals: { coordinates: coordinates } %>
 <% end %>
 
-  <table class="primary" style="margin-top: 0px; width: 100%">
-    <thead>
-      <tr>
-        <th>UPRN</th>
-        <th>Address Type</th>
-        <th>Easting</th>
-        <th>Northing</th>
-        <th>Address Line 1</th>
-      </tr>
-    </thead>
-    <%= erb :address_partial, locals: { address: address } %>
-    <%= erb :addresslines_partial, locals: { address: address } %>
-  </table>
-
+<table class="primary" style="margin-top: 0px; width: 100%">
+  <thead>
+    <tr>
+      <th>UPRN</th>
+      <th>Address Type</th>
+      <th>Easting</th>
+      <th>Northing</th>
+      <th>Address Line 1</th>
+    </tr>
+  </thead>
+  <%= erb :address_partial, locals: { address: address } %>
+  <%= erb :addresslines_partial, locals: { address: address } %>
+</table>
 
 <table class="secondary">
   <thead>
@@ -35,35 +34,34 @@
     </tr>
   </thead>
   <tbody>
-
-  <tr class="even">
-    <td><%=h case_id %></td>
-  <% if kase['state'].present? %>
-    <td><%=h kase['state'] %></td>
+    <tr class="even">
+      <td><%=h case_id %></td>
+    <% if kase['state'].present? %>
+      <td><%=h kase['state'] %></td>
+      <% else %>
+        <td>-</td>
+      <% end %>
+    <% if kase['caseTypeId'].present? %>
+      <td><%=h kase['caseTypeId'] %></td>
     <% else %>
       <td>-</td>
     <% end %>
-  <% if kase['caseTypeId'].present? %>
-    <td><%=h kase['caseTypeId'] %></td>
-  <% else %>
-    <td>-</td>
-  <% end %>
-  <% if kase['createdDateTime'].present? %>
-    <td><%=h kase['createdDateTime'].to_date %></td>
-  <% else %>
-    <td>-</td>
-  <% end %>
-  <% if kase['sampleId'].present? %>
-    <td><%=h kase['sampleId']  %></td>
-  <% else %>
-    <td>-</td>
-  <% end %>
-  <% if kase['questionSet'].present? %>
-    <td><%=h kase['questionSet'] %></td>
-  <% else %>
-    <td>-</td>
-  <% end %>
-  </tr>
+    <% if kase['createdDateTime'].present? %>
+      <td><%=h kase['createdDateTime'].to_date %></td>
+    <% else %>
+      <td>-</td>
+    <% end %>
+    <% if kase['sampleId'].present? %>
+      <td><%=h kase['sampleId']  %></td>
+    <% else %>
+      <td>-</td>
+    <% end %>
+    <% if kase['questionSet'].present? %>
+      <td><%=h kase['questionSet'] %></td>
+    <% else %>
+      <td>-</td>
+    <% end %>
+    </tr>
   </tbody>
 </table>
 
@@ -78,51 +76,51 @@
     </form>
   </div>
 
-  <% if questionnaires.any? %>
-    <table class="secondary">
-      <thead>
-        <tr>
-          <th>Questionnaire ID</th>
-          <th>Internet Access Code</th>
-          <th>Dispatch Date</th>
-          <th>Response Date</th>
-          <th>Receipt Date</th>
-          <th>Question Set</th>
-        </tr>
-      </thead>
-      <tbody>
-      <% questionnaires.each_with_index do |questionnaire, i| %>
-        <tr class="<%= i.even? ? 'even' : 'odd ' %>">
-          <td><%=h questionnaire['questionnaireId'] %></td>
-        <% if questionnaire['iac'] %>
-          <td><%=h questionnaire['iac'] %></td>
-        <% else %>
-          <td>-</td>
-        <% end %>
-        <% if questionnaire['dispatchDateTime'] %>
-          <td><%=h questionnaire['dispatchDateTime'].to_date %></td>
-        <% else %>
-          <td>-</td>
-        <% end %>
-        <% if questionnaire['responseDateTime'] %>
-          <td><%=h questionnaire['responseDateTime'].to_date %></td>
-        <% else %>
-          <td>-</td>
-        <% end %>
-        <% if questionnaire['receiptDateTime'] %>
-          <td><%=h questionnaire['receiptDateTime'].to_date %></td>
-        <% else %>
-          <td>-</td>
-        <% end %>
-        <% if questionnaire['questionSet'] %>
-          <td><%=h questionnaire['questionSet'] %></td>
-        <% else %>
-          <td>-</td>
-        <% end %>
-        </tr>
+<% if questionnaires.any? %>
+  <table class="secondary">
+    <thead>
+      <tr>
+        <th>Questionnaire ID</th>
+        <th>Internet Access Code</th>
+        <th>Dispatch Date</th>
+        <th>Response Date</th>
+        <th>Receipt Date</th>
+        <th>Question Set</th>
+      </tr>
+    </thead>
+    <tbody>
+    <% questionnaires.each_with_index do |questionnaire, i| %>
+      <tr class="<%= i.even? ? 'even' : 'odd ' %>">
+        <td><%=h questionnaire['questionnaireId'] %></td>
+      <% if questionnaire['iac'] %>
+        <td><%=h questionnaire['iac'] %></td>
+      <% else %>
+        <td>-</td>
       <% end %>
-        </tbody>
-      </table>
+      <% if questionnaire['dispatchDateTime'] %>
+        <td><%=h questionnaire['dispatchDateTime'].to_date %></td>
+      <% else %>
+        <td>-</td>
+      <% end %>
+      <% if questionnaire['responseDateTime'] %>
+        <td><%=h questionnaire['responseDateTime'].to_date %></td>
+      <% else %>
+        <td>-</td>
+      <% end %>
+      <% if questionnaire['receiptDateTime'] %>
+        <td><%=h questionnaire['receiptDateTime'].to_date %></td>
+      <% else %>
+        <td>-</td>
+      <% end %>
+      <% if questionnaire['questionSet'] %>
+        <td><%=h questionnaire['questionSet'] %></td>
+      <% else %>
+        <td>-</td>
+      <% end %>
+      </tr>
+    <% end %>
+      </tbody>
+    </table>
   <% else %>
     <p id="information"><strong>There are no questionnaires for this address.</strong></p>
   <% end %>
