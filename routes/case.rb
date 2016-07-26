@@ -98,16 +98,16 @@ get '/cases/:case_id/questionnaires' do |case_id|
   else
     address = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/addresses/#{kase['uprn']}"))
     coordinates = "#{address['latitude']},#{address['longitude']}"
-    erb :questionnaire, layout: :sidebar_layout,
-                        locals: { title: "Questionnaires for Case #{case_id}",
-                                  uprn: address['uprn'],
-                                  case_id: case_id,
-                                  kase: kase,
-                                  questionnaires: questionnaires,
-                                  address: address,
-                                  coordinates: coordinates,
-                                  postcode: format_postcode(address['postcode'])
-                                }
+    erb :questionnaires, layout: :sidebar_layout,
+                         locals: { title: "Questionnaires for Case #{case_id}",
+                                   uprn: address['uprn'],
+                                   case_id: case_id,
+                                   kase: kase,
+                                   questionnaires: questionnaires,
+                                   address: address,
+                                   coordinates: coordinates,
+                                   postcode: format_postcode(address['postcode'])
+                                 }
   end
 end
 
