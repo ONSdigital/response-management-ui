@@ -106,11 +106,11 @@
 <% content_for :footer do %>
   <h3>Events</h3>
   <div id="events">
-    <form action="/case/<%=h caseid %>/event/new" method="get">
+    <form action="/case/<%=h case_id %>/event/new" method="get">
       <% if kase['state'] != 'CLOSED' %>
-      <input class="button" type="submit" value="Create Event&hellip;" > or <% if params[:actionpage].present? %><a href="/addresses/<%=h uprn_code %>/questionnaires?page=<%=h params[:actionpage] %>"><% else %><a href="/case/<%=h caseid %>"><% end %>Refresh</a>
+      <input class="button" type="submit" value="Create Event&hellip;" > or <% if params[:actionpage].present? %><a href="/addresses/<%=h uprn_code %>/questionnaires?page=<%=h params[:actionpage] %>"><% else %><a href="/case/<%=h case_id %>"><% end %>Refresh</a>
       <% else %>
-      <input class="button" type="submit" value="Case Closed&hellip;" disabled> or <% if params[:actionpage].present? %><a href="/addresses/<%=h uprn_code %>/questionnaires?page=<%=h params[:actionpage] %>"><% else %><a href="/case/<%=h caseid %>"><% end %>Refresh</a>
+      <input class="button" type="submit" value="Case Closed&hellip;" disabled> or <% if params[:actionpage].present? %><a href="/addresses/<%=h uprn_code %>/questionnaires?page=<%=h params[:actionpage] %>"><% else %><a href="/case/<%=h case_id %>"><% end %>Refresh</a>
       <% end %>
     <% if params[:actionpage].present? %>
       <input type="hidden" name="page" value="<%=h params[:actionpage] %>">

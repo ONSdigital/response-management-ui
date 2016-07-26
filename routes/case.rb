@@ -71,7 +71,7 @@ get '/case/:case_id' do |case_id|
   coordinates = "#{address['latitude']},#{address['longitude']}"
   erb :case_events, layout: :sidebar_layout, locals: { title: "Event History for Case #{case_id}",
                                                        uprn_code: uprn_code,
-                                                       caseid: case_id,
+                                                       case_id: case_id,
                                                        kase: kase,
                                                        events: events,
                                                        address: address,
