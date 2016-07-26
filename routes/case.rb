@@ -28,16 +28,14 @@ get '/addresses/:uprn/cases' do |uprn|
     cases = JSON.parse(response).paginate(page: params[:page]) unless response.code == 204
   end
 
-  if cases.any?
-    cases.each do |kase|
-      survey_id = kase['surveyId']
-      sample_id = kase['sampleId']
-      survey = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/surveys/#{survey_id}"))
-      sample = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/samples/#{sample_id}"))
-      kase['surveyDescription'] = survey['description']
-      kase['name'] = sample['name']
-    end
-  end
+  cases.each do |kase|
+    survey_id = kase['surveyId']
+    sample_id = kase['sampleId']
+    survey = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/surveys/#{survey_id}"))
+    sample = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/samples/#{sample_id}"))
+    kase['surveyDescription'] = survey['description']
+    kase['name'] = sample['name']
+  end  
 
   # Get the selected address details so they can be displayed for reference.
   address = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/addresses/#{uprn}"))
