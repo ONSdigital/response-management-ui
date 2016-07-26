@@ -11,7 +11,7 @@ helpers do
 end
 
 # Get all cases for the selected address.
-get '/addresses/:uprn_code/cases' do | uprn_code|
+get '/addresses/:uprn_code/cases' do |uprn_code|
   authenticate!
   cases = []
 
@@ -20,13 +20,13 @@ get '/addresses/:uprn_code/cases' do | uprn_code|
   end
 
   if cases.any?
-    cases.each do |uniqueCase|
-      survey_id = uniqueCase['surveyId']
-      sample_id = uniqueCase['sampleId']
+    cases.each do |kase|
+      survey_id = kase['surveyId']
+      sample_id = kase['sampleId']
       survey = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/surveys/#{survey_id}"))
       sample = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/samples/#{sample_id}"))
-      uniqueCase['surveyDescription'] = survey['description']
-      uniqueCase['name'] = sample['name']
+      kase['surveyDescription'] = survey['description']
+      kase['name'] = sample['name']
     end
   end
 
@@ -34,27 +34,25 @@ get '/addresses/:uprn_code/cases' do | uprn_code|
   address = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/addresses/#{uprn_code}"))
   coordinates = "#{address['latitude']},#{address['longitude']}"
 
-  erb :cases, layout: :sidebar_layout,
-                       locals: { title: "Cases for Address #{uprn_code}",
-                                 uprn_code: uprn_code,
-                                 cases: cases,
-                                 address: address,
-                                 coordinates: coordinates
-                               }
+  erb :cases, layout: :sidebar_layout, locals: { title: "Cases for Address #{uprn_code}",
+                                                 uprn_code: uprn_code,
+                                                 cases: cases,
+                                                 address: address,
+                                                 coordinates: coordinates
+                                               }
 end
 
 # Get a specific case.
 get '/case/:case_id' do |case_id|
   authenticate!
-  events = []
-  actions = []
-  uniqueCase = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}"))
-  #events = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}/events"))
-  uprn_code = "#{uniqueCase['uprn']}"
-  survey_id = "#{uniqueCase['surveyId']}"
-  sample_id = "#{uniqueCase['sampleId']}"
-  survey = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/surveys/#{survey_id}"))
-  sample = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/samples/#{sample_id}"))
+  events    = []
+  actions   = []
+  kase      = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}"))
+  uprn_code = kase['uprn']
+  survey_id = kase['surveyId']
+  sample_id = kase['sampleId']
+  survey    = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/surveys/#{survey_id}"))
+  sample    = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/samples/#{sample_id}"))
 
   RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}/events") do |response, _request, _result, &_block|
     events = JSON.parse(response).paginate(page: params[:page]) unless response.code == 204
@@ -64,20 +62,19 @@ get '/case/:case_id' do |case_id|
     actions = JSON.parse(response) unless response.code == 204
   end
 
-    address = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/addresses/#{uprn_code}"))
-    coordinates = "#{address['latitude']},#{address['longitude']}"
-    erb :case_events, layout: :sidebar_layout,
-                     locals: { title: "Event History for Case #{case_id}",
-                               uprn_code: uprn_code,
-                               caseid: case_id,
-                               uniqueCase: uniqueCase,
-                               events: events,
-                               address: address,
-                               coordinates: coordinates,
-                               survey: survey,
-                               sample: sample,
-                               actions: actions
-                              }
+  address = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/addresses/#{uprn_code}"))
+  coordinates = "#{address['latitude']},#{address['longitude']}"
+  erb :case_events, layout: :sidebar_layout, locals: { title: "Event History for Case #{case_id}",
+                                                       uprn_code: uprn_code,
+                                                       caseid: case_id,
+                                                       kase: kase,
+                                                       events: events,
+                                                       address: address,
+                                                       coordinates: coordinates,
+                                                       survey: survey,
+                                                       sample: sample,
+                                                       actions: actions
+                                                     }
 
 end
 
@@ -85,19 +82,18 @@ end
 get '/cases/:case_id/questionnaires' do |case_id|
   authenticate!
   questionnaires = []
-  uniqueCase = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}"))
+  kase = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}"))
   questionnaires = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/questionnaires/case/#{case_id}"))
-  if uniqueCase.empty?
+  if kase.empty?
     erb :case_not_found, locals: { title: 'Case Not Found' }
   else
-    uprn_code = "#{uniqueCase['uprn']}"
-    address = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/addresses/#{uprn_code}"))
+    address = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/addresses/#{kase['uprn']}"))
     coordinates = "#{address['latitude']},#{address['longitude']}"
     erb :questionnaire, layout: :sidebar_layout,
                         locals: { title: "Questionnaires for Case #{case_id}",
                                   uprn_code: address['uprn'],
                                   caseid: case_id,
-                                  uniqueCase: uniqueCase,
+                                  kase: kase,
                                   questionnaires: questionnaires,
                                   address: address,
                                   coordinates: coordinates }
@@ -122,15 +118,10 @@ end
 # Present a form for creating a new event.
 get '/case/:case_id/event/new' do |case_id|
   authenticate!
-  action = "/case/#{case_id}/event"
-
-    # Get groups from session[:user].groups and remove the duplicated collect-user
-    groups = session[:user].groups
-    groups -= ['collect-users']
-
+  session[:user].groups -= ['collect-users']
   categories = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/categories?role=#{groups.first}"))
   erb :event, locals: { title: "Create Event for Case #{case_id}",
-                        action: action,
+                        action: "/case/#{case_id}/event",
                         method: :post,
                         page: params[:page],
                         eventtext: '',
@@ -148,82 +139,74 @@ end
 post '/case/:case_id/event' do |case_id|
   authenticate!
 
-  #test for existence of description text
   form do
     field :eventtext, present: true
   end
 
   if form.failed?
-    action = "/case/#{case_id}/event"
-    # Get groups from session[:user].groups and remove the duplicated collect-user
-    groups = session[:user].groups
-    groups -= ['collect-users']
+    session[:user].groups -= ['collect-users']
     categories = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/categories?role=#{groups.first}"))
     erb :event, locals: { title: "Create Event for Case #{case_id}",
-                                  action: action,
-                                  method: :post,
-                                  page: params[:page],
-                                  eventtext: '',
-                                  customername: '',
-                                  customercontact: '',
-                                  eventcategory: params[:eventcategory],
-                                  createdby: '',
-                                  case_id: case_id,
-                                  categories: categories
-                                  }
-
+                          action: "/case/#{case_id}/event",
+                          method: :post,
+                          page: params[:page],
+                          eventtext: '',
+                          customername: '',
+                          customercontact: '',
+                          eventcategory: params[:eventcategory],
+                          createdby: '',
+                          case_id: case_id,
+                          categories: categories
+                        }
   else
     user        = session[:user]
     name        = params[:customername]
     phone       = params[:customercontact]
-    description = "#{params[:eventtext]}"
-    description = "name: #{name} #{description}" if name.length > 0 && phone.length == 0
-    description = "phone: #{phone} #{description}" if name.length == 0 && phone.length > 0
-    description = "name: #{name} phone: #{phone} #{description}" if name.length > 0 && phone.length > 0
+    description = params[:eventtext]
+    description = "name: #{name} #{description}" if !name.empty? && phone.empty?
+    description = "phone: #{phone} #{description}" if name.empty? && !phone.empty?
+    description = "name: #{name} phone: #{phone} #{description}" if !name.empty? && !phone.empty?
 
     RestClient.post("http://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}/events",
-                    { description: "#{description}",
+                    { description: description,
                       category: params[:eventcategory],
-                      createdBy: "#{user.user_id}"
+                      createdBy: user.user_id
                     }.to_json, content_type: :json, accept: :json
-                   ) do |response, _request, _result, &_block|
-      if response.code == 200
+                   ) do |post_response, _request, _result, &_block|
+      if post_response.code == 200
         flash[:notice] = 'Successfully created event.'
         actions = []
 
         if params[:eventcategory] == 'Closed' || params[:eventcategory] == 'IncorrectEscalation' || params[:eventcategory] == 'Undeliverable'
-            RestClient.get("http://#{settings.action_service_host}:#{settings.action_service_port}/actions/case/#{case_id}") do |response, _request, _result, &_block|
-            actions = JSON.parse(response).paginate(page: params[:page]) unless response.code == 204
+          RestClient.get("http://#{settings.action_service_host}:#{settings.action_service_port}/actions/case/#{case_id}") do |response, _request, _result, &_block|
+            actions = JSON.parse(response).paginate(page: params[:page]) unless response.code == 204 # rubocop:disable Metrics/BlockNesting
           end
-          if actions.any?
-            actions.each do |action|
-              if action['actionTypeName'] == 'GeneralEscalation' || action['actionTypeName'] == 'SurveyEscalation' || action['actionTypeName'] ==  'ComplaintEscalation'
-                action_id    = action['actionId']
-                feedback_xml = <<-XML
-                  <p:actionFeedback xmlns:p="http://ons.gov.uk/ctp/response/action/message/feedback" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://ons.gov.uk/ctp/response/action/message/feedback actionFeedback.xsd">
-                    <actionId>#{action_id}</actionId>
-                    <situation></situation>
-                    <outcome>REQUEST_COMPLETED</outcome>
-                    <notes></notes>
-                  </p:actionFeedback>
-                XML
+        end
 
-                RestClient.put("http://#{settings.action_service_host}:#{settings.action_service_port}/actions/#{action_id}/feedback",
-                  feedback_xml, content_type: :xml) do |response, _request, _result, &_block|
-                    if response.code == 200
-                      logger.info 'Successfully completed action.'
-                    else
-                      logger.error response
-                      error_flash('Unable to complete action', response)
-                    end
-                  end
-                end
-              end
+        actions.each do |action|
+          next unless action['actionTypeName'] == 'GeneralEscalation' || action['actionTypeName'] == 'SurveyEscalation' || action['actionTypeName'] == 'ComplaintEscalation'
+          action_id = action['actionId']
+          feedback_xml = <<-XML
+            <p:actionFeedback xmlns:p="http://ons.gov.uk/ctp/response/action/message/feedback" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://ons.gov.uk/ctp/response/action/message/feedback actionFeedback.xsd">
+              <actionId>#{action_id}</actionId>
+              <situation></situation>
+              <outcome>REQUEST_COMPLETED</outcome>
+              <notes></notes>
+            </p:actionFeedback>
+          XML
+
+          RestClient.put("http://#{settings.action_service_host}:#{settings.action_service_port}/actions/#{action_id}/feedback", feedback_xml, content_type: :xml) do |put_response, _request, _result, &_block|
+            if put_response.code == 200
+              logger.info 'Successfully completed action.'
+            else
+              logger.error put_response
+              error_flash('Unable to complete action', put_response)
             end
           end
+        end
       else
-        logger.error response
-        error_flash('Unable to create event', response)
+        logger.error post_response
+        error_flash('Unable to create event', post_response)
       end
     end
 

@@ -33,29 +33,29 @@
   <tbody>
 
   <tr class="even">
-    <td><%=h uniqueCase['caseId'] %></td>
-  <% if uniqueCase['state'].present? %>
-    <td><%=h uniqueCase['state'] %></td>
+    <td><%=h kase['caseId'] %></td>
+  <% if kase['state'].present? %>
+    <td><%=h kase['state'] %></td>
     <% else %>
       <td>-</td>
     <% end %>
-  <% if uniqueCase['caseTypeId'].present? %>
-    <td><%=h uniqueCase['caseTypeId'] %></td>
+  <% if kase['caseTypeId'].present? %>
+    <td><%=h kase['caseTypeId'] %></td>
   <% else %>
     <td>-</td>
   <% end %>
-  <% if uniqueCase['createdDateTime'].present? %>
-    <td><%=h uniqueCase['createdDateTime'].to_date %></td>
+  <% if kase['createdDateTime'].present? %>
+    <td><%=h kase['createdDateTime'].to_date %></td>
   <% else %>
     <td>-</td>
   <% end %>
-  <% if uniqueCase['sampleId'].present? %>
-    <td><%=h uniqueCase['sampleId']  %></td>
+  <% if kase['sampleId'].present? %>
+    <td><%=h kase['sampleId']  %></td>
   <% else %>
     <td>-</td>
   <% end %>
-  <% if uniqueCase['questionSet'].present? %>
-    <td><%=h uniqueCase['questionSet'] %></td>
+  <% if kase['questionSet'].present? %>
+    <td><%=h kase['questionSet'] %></td>
   <% else %>
     <td>-</td>
   <% end %>

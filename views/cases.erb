@@ -72,31 +72,31 @@
         </tr>
       </thead>
       <tbody>
-      <% cases.each_with_index do |uniqueCase, i| %>
+      <% cases.each_with_index do |kase, i| %>
         <tr class="<%= i.even? ? 'even' : 'odd ' %>">
-          <td><a href="/case/<%=h uniqueCase['caseId'] %>"><%=h uniqueCase['caseId'] %></a></td>
-        <% if uniqueCase['state'].present? %>
-          <td><%=h uniqueCase['state'] %></td>
+          <td><a href="/case/<%=h kase['caseId'] %>"><%=h kase['caseId'] %></a></td>
+        <% if kase['state'].present? %>
+          <td><%=h kase['state'] %></td>
           <% else %>
             <td>-</td>
           <% end %>
-        <% if uniqueCase['createdDateTime'].present? %>
-          <td><%=h uniqueCase['createdDateTime'].to_date %></td>
+        <% if kase['createdDateTime'].present? %>
+          <td><%=h kase['createdDateTime'].to_date %></td>
         <% else %>
           <td>-</td>
         <% end %>
-        <% if uniqueCase['questionSet'].present? %>
-          <td><%=h uniqueCase['questionSet'] %></td>
+        <% if kase['questionSet'].present? %>
+          <td><%=h kase['questionSet'] %></td>
         <% else %>
           <td>-</td>
         <% end %>
-        <% if uniqueCase['surveyDescription'].present? %>
-          <td><%=h uniqueCase['surveyDescription'] %></td>
+        <% if kase['surveyDescription'].present? %>
+          <td><%=h kase['surveyDescription'] %></td>
         <% else %>
           <td>-</td>
         <% end %>
-        <% if uniqueCase['name'].present? %>
-          <td><%=h uniqueCase['name'] %></td>
+        <% if kase['name'].present? %>
+          <td><%=h kase['name'] %></td>
         <% else %>
           <td>-</td>
         <% end %>
