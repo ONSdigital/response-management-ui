@@ -1,5 +1,9 @@
 <%= erb :menu, locals: { pageid: 'addresses' } %>
 
+<% content_for :breadcrumbs do %>
+<%=h postcode %>
+<% end %>
+
 <% if addresses.any? %>
 <% content_for :sub_heading do %>
   Click to view cases for an address.

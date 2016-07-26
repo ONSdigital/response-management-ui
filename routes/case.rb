@@ -42,7 +42,8 @@ get '/addresses/:uprn/cases' do |uprn|
                                                  uprn: uprn,
                                                  cases: cases,
                                                  address: address,
-                                                 coordinates: coordinates
+                                                 coordinates: coordinates,
+                                                 postcode: format_postcode(address['postcode'])
                                                }
 end
 
@@ -75,11 +76,11 @@ get '/case/:case_id' do |case_id|
                                                        events: events,
                                                        address: address,
                                                        coordinates: coordinates,
+                                                       postcode: format_postcode(address['postcode']),
                                                        survey: survey,
                                                        sample: sample,
                                                        actions: actions
                                                      }
-
 end
 
 # Get all questionnaires for a specific case.
@@ -100,7 +101,9 @@ get '/cases/:case_id/questionnaires' do |case_id|
                                   kase: kase,
                                   questionnaires: questionnaires,
                                   address: address,
-                                  coordinates: coordinates }
+                                  coordinates: coordinates,
+                                  postcode: format_postcode(address['postcode'])
+                                }
   end
 end
 
@@ -115,8 +118,10 @@ get '/postcode/:postcode' do |postcode|
     addresses = JSON.parse(response).paginate(page: params[:page]) unless response.code == 404
   end
 
-  erb :addresses, locals: { title: "Addresses for Postcode #{format_postcode(postcode)}",
-                            addresses: addresses }
+  formatted_postcode = format_postcode(postcode)
+  erb :addresses, locals: { title: "Addresses for Postcode #{formatted_postcode}",
+                            addresses: addresses,
+                            postcode: formatted_postcode }
 end
 
 # Present a form for creating a new event.

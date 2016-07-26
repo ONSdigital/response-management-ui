@@ -1,5 +1,9 @@
 <%= erb :menu, locals: { pageid: 'addresses' } %>
 
+<% content_for :breadcrumbs do %>
+<a href="/postcode/<%=h postcode %>"><%=h postcode %></a> &gt; Cases
+<% end %>
+
 <% content_for :sub_heading do %>
   Click a case to create or view questionnaires.
 <% end %>
