@@ -97,7 +97,7 @@ get '/cases/:case_id/questionnaires' do |case_id|
     erb :questionnaire, layout: :sidebar_layout,
                         locals: { title: "Questionnaires for Case #{case_id}",
                                   uprn_code: address['uprn'],
-                                  caseid: case_id,
+                                  case_id: case_id,
                                   kase: kase,
                                   questionnaires: questionnaires,
                                   address: address,

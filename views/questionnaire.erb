@@ -66,8 +66,8 @@
 <% content_for :footer do %>
   <h3>Questionnaires</h3>
   <div id="questionnaires">
-    <form action="/cases/<%=h caseid %>/questionnaires/new" method="get">
-      <% if params[:page].present? %><a href="/cases/<%=h caseid %>/questionnaires?page=<%=h params[:page] %>"><% else %><a href="/cases/<%=h caseid %>/questionnaires"><% end %>Refresh</a>
+    <form action="/cases/<%=h case_id %>/questionnaires/new" method="get">
+      <% if params[:page].present? %><a href="/cases/<%=h case_id %>/questionnaires?page=<%=h params[:page] %>"><% else %><a href="/cases/<%=h case_id %>/questionnaires"><% end %>Refresh</a>
       <% if params[:page].present? %>
         <input type="hidden" name="page" value="<%=h params[:page] %>">
       <% end %>
