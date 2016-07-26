@@ -2,7 +2,6 @@ module BeyondMock
   module Routes
     class ActionService < Base
 
-
       # Lists all actions, optionally filtered by ActionType and/or state.
       get '/actions' do
         if params[:state].nil? && params[:actiontype].nil?

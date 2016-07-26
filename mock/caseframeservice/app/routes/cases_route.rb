@@ -29,7 +29,7 @@ module BeyondMock
 
       # Lists all case IDs for an action plan's cases, optionally filtered by case state
       get '/cases/actionplan/:actionplanid' do
-          erb :cases_actionplan, locals: { actionplanid: params['actionplanid'] }
+        erb :cases_actionplan, locals: { actionplanid: params['actionplanid'] }
       end
 
     end
