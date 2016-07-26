@@ -8,6 +8,10 @@ helpers do
     # Add a space before the inward code, which is always three characters long.
     "#{postcode[0, postcode.length - 3]} #{postcode[-3, 3]}"
   end
+
+  def user_role
+    session[:user].groups.delete_if { |group| group == 'collect-users' }.first
+  end
 end
 
 # Get all cases for the selected address.
@@ -118,8 +122,7 @@ end
 # Present a form for creating a new event.
 get '/case/:case_id/event/new' do |case_id|
   authenticate!
-  session[:user].groups -= ['collect-users']
-  categories = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/categories?role=#{groups.first}"))
+  categories = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/categories?role=#{user_role}"))
   erb :event, locals: { title: "Create Event for Case #{case_id}",
                         action: "/case/#{case_id}/event",
                         method: :post,
@@ -144,8 +147,7 @@ post '/case/:case_id/event' do |case_id|
   end
 
   if form.failed?
-    session[:user].groups -= ['collect-users']
-    categories = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/categories?role=#{groups.first}"))
+    categories = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/categories?role=#{user_role}"))
     erb :event, locals: { title: "Create Event for Case #{case_id}",
                           action: "/case/#{case_id}/event",
                           method: :post,
