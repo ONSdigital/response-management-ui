@@ -1,9 +1,0 @@
-<%= erb :menu, locals: { pageid: 'addresses' } %>
-
-<% content_for :breadcrumbs do %>
-  <a href="/">Home</a>
-<% end %>
-
-<% content_for :sub_heading do %>
-  No record found for questionnaire <strong><%= h params[:questionnaire_id] %></strong>.
-<% end %>
