@@ -10,8 +10,8 @@ helpers do
     "#{postcode[0, postcode.length - 3]} #{postcode[-3, 3]}"
   end
 
-  def strip_spaces(str)
-    str.gsub(/\s+/, '')
+  def url_format(str)
+    str.gsub(/\s+/, '').downcase
   end
 
   def user_role

@@ -1,7 +1,7 @@
 <%= erb :menu, locals: { pageid: 'home' } %>
 
 <% content_for :breadcrumbs do %>
-<a href="/">Home</a> &gt; <%=strip_spaces postcode %>
+<a href="/">Home</a> &gt; <%=postcode.upcase %>
 <% end %>
 
 <% if addresses.any? %>
