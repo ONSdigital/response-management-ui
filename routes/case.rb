@@ -3,6 +3,7 @@ require_relative '../lib/core_ext/string'
 
 helpers do
   def format_postcode(postcode)
+    postcode.upcase!
     return postcode if postcode.length == 8
 
     # Add a space before the inward code, which is always three characters long.
