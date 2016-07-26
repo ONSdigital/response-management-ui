@@ -1,7 +1,7 @@
 <%= erb :menu, locals: { pageid: 'manage' } %>
 
 <% content_for :breadcrumbs do %>
-<a href="/manage">Manage</a> &gt; Escalated Cases
+<a href="/manage">Manage</a> &gt; <%=h title %>
 <% end %>
 
     <% if escalations.any? %>

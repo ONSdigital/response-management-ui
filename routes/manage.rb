@@ -15,5 +15,5 @@ get '/manage/escalated/:escalation_type' do |escalation_type|
     escalations = JSON.parse(response).paginate(page: params[:page]) unless response.code == 204
   end
 
-  erb :escalated_cases, locals: { title: "View Escalated #{escalation_type.capitalize}", escalations: escalations }
+  erb :escalated_cases, locals: { title: "Escalated #{escalation_type.capitalize} Cases", escalations: escalations }
 end
