@@ -16,11 +16,11 @@ helpers do
 end
 
 # Get all cases for the selected address.
-get '/addresses/:uprn_code/cases' do |uprn_code|
+get '/addresses/:uprn/cases' do |uprn|
   authenticate!
   cases = []
 
-  RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/cases/uprn/#{uprn_code}") do |response, _request, _result, &_block|
+  RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/cases/uprn/#{uprn}") do |response, _request, _result, &_block|
     cases = JSON.parse(response).paginate(page: params[:page]) unless response.code == 204
   end
 
@@ -36,11 +36,10 @@ get '/addresses/:uprn_code/cases' do |uprn_code|
   end
 
   # Get the selected address details so they can be displayed for reference.
-  address = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/addresses/#{uprn_code}"))
+  address = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/addresses/#{uprn}"))
   coordinates = "#{address['latitude']},#{address['longitude']}"
-
-  erb :cases, layout: :sidebar_layout, locals: { title: "Cases for Address #{uprn_code}",
-                                                 uprn_code: uprn_code,
+  erb :cases, layout: :sidebar_layout, locals: { title: "Cases for Address #{uprn}",
+                                                 uprn: uprn,
                                                  cases: cases,
                                                  address: address,
                                                  coordinates: coordinates
@@ -53,7 +52,7 @@ get '/case/:case_id' do |case_id|
   events    = []
   actions   = []
   kase      = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}"))
-  uprn_code = kase['uprn']
+  uprn = kase['uprn']
   survey_id = kase['surveyId']
   sample_id = kase['sampleId']
   survey    = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/surveys/#{survey_id}"))
@@ -67,10 +66,10 @@ get '/case/:case_id' do |case_id|
     actions = JSON.parse(response) unless response.code == 204
   end
 
-  address = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/addresses/#{uprn_code}"))
+  address = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/addresses/#{uprn}"))
   coordinates = "#{address['latitude']},#{address['longitude']}"
   erb :case_events, layout: :sidebar_layout, locals: { title: "Event History for Case #{case_id}",
-                                                       uprn_code: uprn_code,
+                                                       uprn: uprn,
                                                        case_id: case_id,
                                                        kase: kase,
                                                        events: events,
@@ -96,7 +95,7 @@ get '/cases/:case_id/questionnaires' do |case_id|
     coordinates = "#{address['latitude']},#{address['longitude']}"
     erb :questionnaire, layout: :sidebar_layout,
                         locals: { title: "Questionnaires for Case #{case_id}",
-                                  uprn_code: address['uprn'],
+                                  uprn: address['uprn'],
                                   case_id: case_id,
                                   kase: kase,
                                   questionnaires: questionnaires,
