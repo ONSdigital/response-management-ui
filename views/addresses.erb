@@ -1,11 +1,10 @@
 <%= erb :menu, locals: { pageid: 'addresses' } %>
 
+<% if addresses.any? %>
 <% content_for :sub_heading do %>
   Click to view cases for an address.
 <% end %>
-
-<% if addresses.any? %>
-<%= will_paginate addresses, :previous_label => '&lt; Prev', :next_label => 'Next &gt;' %>
+  <%= will_paginate addresses, :previous_label => '&lt; Prev', :next_label => 'Next &gt;' %>
   <table class="primary">
     <thead>
       <tr>
@@ -57,6 +56,6 @@
     </tbody>
   </table>
   <%= will_paginate addresses, :previous_label => '&lt; Prev', :next_label => 'Next &gt;' %>
-  <% else %>
+<% else %>
   <p id="information"><strong>There are no addresses for this postcode.</strong></p>
-  <% end %>
+<% end %>
