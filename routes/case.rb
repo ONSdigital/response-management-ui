@@ -1,6 +1,15 @@
 require_relative '../lib/core_ext/nilclass'
 require_relative '../lib/core_ext/string'
 
+helpers do
+  def format_postcode(postcode)
+    return postcode if postcode.length == 8
+
+    # Add a space before the inward code, which is always three characters long.
+    "#{postcode[0, postcode.length - 3]} #{postcode[-3, 3]}"
+  end
+end
+
 # Get all cases for the selected address.
 get '/addresses/:uprn_code/cases' do | uprn_code|
   authenticate!
@@ -106,7 +115,7 @@ get '/postcode/:postcode' do |postcode|
     addresses = JSON.parse(response).paginate(page: params[:page]) unless response.code == 404
   end
 
-  erb :addresses, locals: { title: "Addresses for Postcode #{postcode}",
+  erb :addresses, locals: { title: "Addresses for Postcode #{format_postcode(postcode)}",
                             addresses: addresses }
 end
 
