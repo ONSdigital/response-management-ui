@@ -1,3 +1,3 @@
 module Constants
-  DATE_FORMAT = '%e %b %Y %H:%M';
+  DATE_FORMAT = '%e %b %Y %H:%M'.freeze
 end

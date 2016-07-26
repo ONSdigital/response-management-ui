@@ -7,7 +7,6 @@ class User
   attr_reader :display_name
   attr_reader :groups
 
-
   def self.authenticate(ldap_connection, params = {})
     username = params[:username]
     password = params[:password]

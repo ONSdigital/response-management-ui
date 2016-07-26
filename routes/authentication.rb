@@ -1,4 +1,4 @@
-NO_2FA_COOKIE = 'response_operations_no_2fa'
+NO_2FA_COOKIE = 'response_operations_no_2fa'.freeze
 CLOCK_DRIFT   = 120
 THIRTY_DAYS   = 60 * 60 * 24 * 30
 
@@ -75,7 +75,7 @@ end
 
 get '/signout' do
   logger.info "'#{session[:user].display_name}' signed out"
-  session[:user]  = nil
+  session[:user] = nil
   session[:valid_token] = nil
   flash[:notice] = 'You have been signed out.'
   redirect '/'
