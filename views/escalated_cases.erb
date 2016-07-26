@@ -1,11 +1,11 @@
 <%= erb :menu, locals: { pageid: 'manage' } %>
 
 <% content_for :breadcrumbs do %>
-Escalated Cases
+<a href="/manage">Manage</a> &gt; Escalated Cases
 <% end %>
 
-    <% if escalated.any? %>
-      <%= will_paginate escalated, :class => 'secondarypagination', :previous_label => '&lt; Prev', :next_label => 'Next &gt;' %>
+    <% if escalations.any? %>
+      <%= will_paginate escalations, :class => 'secondarypagination', :previous_label => '&lt; Prev', :next_label => 'Next &gt;' %>
       <table class="secondary">
         <thead>
           <tr>
@@ -15,16 +15,16 @@ Escalated Cases
           </tr>
         </thead>
         <tbody>
-        <% escalated.each_with_index do |escalatedCase, i| %>
+        <% escalations.each_with_index do |kase, i| %>
           <tr class="<%= i.even? ? 'even' : 'odd ' %>">
-            <td><a href="/case/<%=h escalatedCase['caseId'] %>"><%=h escalatedCase['caseId'] %></a></td>
-          <% if escalatedCase['state'].present? %>
-            <td><%=h escalatedCase['state'].capitalize %></td>
+            <td><a href="/case/<%=h kase['caseId'] %>"><%=h kase['caseId'] %></a></td>
+          <% if kase['state'].present? %>
+            <td><%=h kase['state'].capitalize %></td>
           <% else %>
             <td>-</td>
           <% end %>
-          <% if escalatedCase['createdDateTime'].present? %>
-            <td><%=h escalatedCase['createdDateTime'].to_date %></td>
+          <% if kase['createdDateTime'].present? %>
+            <td><%=h kase['createdDateTime'].to_date %></td>
           <% else %>
             <td>-</td>
           <% end %>
@@ -32,7 +32,7 @@ Escalated Cases
         <% end %>
           </tbody>
         </table>
-        <%= will_paginate escalated, :previous_label => '&lt; Prev', :next_label => 'Next &gt;' %>
+        <%= will_paginate escalations, :previous_label => '&lt; Prev', :next_label => 'Next &gt;' %>
     <% else %>
       <p id="information"><strong>There are no escalated cases.</strong></p>
     <% end %>
