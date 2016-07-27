@@ -128,11 +128,11 @@ get '/postcodes/:postcode' do |postcode|
 end
 
 # Present a form for creating a new event.
-get '/case/:case_id/event/new' do |case_id|
+get '/cases/:case_id/event/new' do |case_id|
   authenticate!
   categories = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/categories?role=#{user_role}"))
   erb :event, locals: { title: "Create Event for Case #{case_id}",
-                        action: "/case/#{case_id}/event",
+                        action: "/cases/#{case_id}/event",
                         method: :post,
                         page: params[:page],
                         eventtext: '',
@@ -147,7 +147,7 @@ get '/case/:case_id/event/new' do |case_id|
 end
 
 # Create a new event.
-post '/case/:case_id/event' do |case_id|
+post '/cases/:case_id/event' do |case_id|
   authenticate!
 
   form do

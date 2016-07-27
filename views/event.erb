@@ -53,6 +53,6 @@
   </fieldset>
   <p id="requiredfields"><span class="required">*</span> Required fields</p>
   <p class="buttons">
-    <input class="button" type="submit" value="Save"> or <% if params[:page].present? %><a href="/case/<%=h case_id %>/event?page=<%=h params[:page] %>"><% else %><a href="/case/<%=h case_id %>"><% end %>Cancel</a>
+    <input class="button" type="submit" value="Save"> or <% if params[:page].present? %><a href="/cases/<%=h case_id %>/event?page=<%=h params[:page] %>"><% else %><a href="/cases/<%=h case_id %>"><% end %>Cancel</a>
   </p>
 </form>
