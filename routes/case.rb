@@ -157,6 +157,9 @@ post '/cases/:case_id/event' do |case_id|
     field :eventtext, present: true
   end
 
+  name  = params[:customername]
+  phone = params[:customercontact]
+
   if form.failed?
     kase       = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}"))
     address    = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/addresses/#{kase['uprn']}"))
@@ -169,16 +172,14 @@ post '/cases/:case_id/event' do |case_id|
                           case_id: case_id,
                           postcode: format_postcode(address['postcode']),
                           eventtext: '',
-                          customername: '',
-                          customercontact: '',
+                          customername: name,
+                          customercontact: phone,
                           eventcategory: params[:eventcategory],
                           createdby: '',
                           categories: categories
                         }
   else
     user        = session[:user]
-    name        = params[:customername]
-    phone       = params[:customercontact]
     description = params[:eventtext]
     description = "name: #{name} #{description}" if !name.empty? && phone.empty?
     description = "phone: #{phone} #{description}" if name.empty? && !phone.empty?
