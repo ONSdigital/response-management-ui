@@ -145,7 +145,6 @@ get '/cases/:case_id/event/new' do |case_id|
                         customercontact: '',
                         eventcategory: '',
                         createdby: '',
-                        case_id: case_id,
                         categories: categories
                       }
 end
@@ -174,7 +173,6 @@ post '/cases/:case_id/event' do |case_id|
                           customercontact: '',
                           eventcategory: params[:eventcategory],
                           createdby: '',
-                          case_id: case_id,
                           categories: categories
                         }
   else
