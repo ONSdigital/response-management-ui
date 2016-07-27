@@ -69,41 +69,40 @@
     </tr>
   </thead>
   <tbody>
-
-  <tr class="even">
-    <td><%=h case_id %></td>
-  <% if kase['state'].present? %>
-    <td><%=h kase['state'] %></td>
+    <tr class="even">
+      <td><%=h case_id %></td>
+    <% if kase['state'].present? %>
+      <td><%=h kase['state'] %></td>
+      <% else %>
+        <td>-</td>
+      <% end %>
+    <% if kase['caseTypeId'].present? %>
+      <td><%=h kase['caseTypeId'] %></td>
     <% else %>
       <td>-</td>
     <% end %>
-  <% if kase['caseTypeId'].present? %>
-    <td><%=h kase['caseTypeId'] %></td>
-  <% else %>
-    <td>-</td>
-  <% end %>
-  <% if kase['createdDateTime'].present? %>
-    <td><%=h kase['createdDateTime'].to_date %></td>
-  <% else %>
-    <td>-</td>
-  <% end %>
-  <% if kase['questionSet'].present? %>
-    <td><%=h kase['questionSet'] %></td>
-  <% else %>
-    <td>-</td>
-  <% end %>
-  <% if survey['description'].present? %>
-    <td><%=h survey['description'] %></td>
-  <% else %>
-    <td>-</td>
-  <% end %>
-  <% if sample['name'].present? %>
-    <td><%=h sample['name'] %></td>
-  <% else %>
-    <td>-</td>
-  <% end %>
-    <td><% if params[:page].present? %><a href="/cases/<%=h case_id %>/questionnaires?page=<%=h params[:page] %>"><% else %><a href="/cases/<%=h case_id %>/questionnaires"><% end %>View Questionnaires</a></td>
-  </tr>
+    <% if kase['createdDateTime'].present? %>
+      <td><%=h kase['createdDateTime'].to_date %></td>
+    <% else %>
+      <td>-</td>
+    <% end %>
+    <% if kase['questionSet'].present? %>
+      <td><%=h kase['questionSet'] %></td>
+    <% else %>
+      <td>-</td>
+    <% end %>
+    <% if survey['description'].present? %>
+      <td><%=h survey['description'] %></td>
+    <% else %>
+      <td>-</td>
+    <% end %>
+    <% if sample['name'].present? %>
+      <td><%=h sample['name'] %></td>
+    <% else %>
+      <td>-</td>
+    <% end %>
+      <td><% if params[:page].present? %><a href="/cases/<%=h case_id %>/questionnaires?page=<%=h params[:page] %>"><% else %><a href="/cases/<%=h case_id %>/questionnaires"><% end %>View Questionnaires</a></td>
+    </tr>
   </tbody>
 </table>
 
@@ -123,7 +122,7 @@
   </div>
 
   <% if events.any? %>
-  <%= will_paginate events, :previous_label => '&lt; Prev', :next_label => 'Next &gt;' %>
+    <%= will_paginate events, :previous_label => '&lt; Prev', :next_label => 'Next &gt;' %>
     <table class="secondary">
       <thead>
         <tr>
@@ -162,61 +161,61 @@
         <% else %>
           <td>-</td>
         <% end %>
-      </tr>
+        </tr>
       <% end %>
-        </tbody>
-      </table>
-      <%= will_paginate events, :previous_label => '&lt; Prev', :next_label => 'Next &gt;' %>
+      </tbody>
+    </table>
+    <%= will_paginate events, :previous_label => '&lt; Prev', :next_label => 'Next &gt;' %>
 
-      <% content_for :footer do %>
-        <h3>Actions</h3>
-        <% if actions.any? %>
-          <table class="secondary">
-            <thead>
-              <tr>
-                <th>Action ID</th>
-                <th>Action Type</th>
-                <th>Created By</th>
-                <th>State</th>
-                <th>Created Date</th>
-              </tr>
-            </thead>
-            <tbody>
-            <% actions.each_with_index do |action, i| %>
-              <tr class="<%= i.even? ? 'even' : 'odd ' %>">
-              <% if action['actionId'] %>
-                <td><%=h action['actionId'] %></td>
-              <% else %>
-                <td>-</td>
-              <% end %>
-              <% if action['actionTypeName'] %>
-                <td><%=h action['actionTypeName'] %></td>
-              <% else %>
-                <td>-</td>
-              <% end %>
-              <% if action['createdBy'] %>
-                <td><%=h action['createdBy'] %></td>
-              <% else %>
-                <td>-</td>
-              <% end %>
-              <% if action['state'] %>
-                <td><%=h action['state'].to_title_case %></td>
-              <% else %>
-                <td>-</td>
-              <% end %>
-              <% if action['createdDateTime'] %>
-                <td><%=h action['createdDateTime'].to_date %></td>
-              <% else %>
-                <td>-</td>
-              <% end %>
-            </tr>
-            <% end %>
-              </tbody>
-            </table>
+  <% content_for :footer do %>
+    <h3>Actions</h3>
+  <% if actions.any? %>
+    <table class="secondary">
+      <thead>
+        <tr>
+          <th>Action ID</th>
+          <th>Action Type</th>
+          <th>Created By</th>
+          <th>State</th>
+          <th>Created Date</th>
+        </tr>
+      </thead>
+      <tbody>
+      <% actions.each_with_index do |action, i| %>
+        <tr class="<%= i.even? ? 'even' : 'odd ' %>">
+        <% if action['actionId'] %>
+          <td><%=h action['actionId'] %></td>
         <% else %>
-          <p id="information"><strong>There are no actions for this case.</strong></p>
+          <td>-</td>
         <% end %>
+        <% if action['actionTypeName'] %>
+          <td><%=h action['actionTypeName'] %></td>
+        <% else %>
+          <td>-</td>
+        <% end %>
+        <% if action['createdBy'] %>
+          <td><%=h action['createdBy'] %></td>
+        <% else %>
+          <td>-</td>
+        <% end %>
+        <% if action['state'] %>
+          <td><%=h action['state'].to_title_case %></td>
+        <% else %>
+          <td>-</td>
+        <% end %>
+        <% if action['createdDateTime'] %>
+          <td><%=h action['createdDateTime'].to_date %></td>
+        <% else %>
+          <td>-</td>
+        <% end %>
+        </tr>
       <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <p id="information"><strong>There are no actions for this case.</strong></p>
+  <% end %>
+  <% end %>
   <% else %>
     <p id="information"><strong>There are no events for this case.</strong></p>
   <% end %>
