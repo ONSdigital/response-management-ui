@@ -140,7 +140,6 @@ get '/cases/:case_id/event/new' do |case_id|
                         customercontact: '',
                         eventcategory: '',
                         createdby: '',
-                        description_error: false,
                         case_id: case_id,
                         categories: categories
                       }
