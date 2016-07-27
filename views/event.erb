@@ -1,5 +1,9 @@
 <%= erb :menu, locals: { pageid: 'manage' } %>
 
+<% content_for :breadcrumbs do %>
+<a href="/">Home</a> &gt; <a href="/postcodes/<%=url_format postcode %>"><%=h postcode %></a> &gt; <a href="/addresses/<%=h uprn %>/cases">Cases</a> &gt; <a href="/cases/<%=h case_id %>">Case <%=h case_id %></a> &gt; Create Event
+<% end %>
+
 <% content_for :stylesheet do %>
   <link rel="stylesheet" href="//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.min.css">
 <% end %>

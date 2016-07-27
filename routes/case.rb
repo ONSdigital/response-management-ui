@@ -130,11 +130,16 @@ end
 # Present a form for creating a new event.
 get '/cases/:case_id/event/new' do |case_id|
   authenticate!
+  kase       = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}"))
+  address    = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/addresses/#{kase['uprn']}"))
   categories = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/categories?role=#{user_role}"))
   erb :event, locals: { title: "Create Event for Case #{case_id}",
                         action: "/cases/#{case_id}/event",
                         method: :post,
                         page: params[:page],
+                        uprn: address['uprn'],
+                        case_id: case_id,
+                        postcode: format_postcode(address['postcode']),
                         eventtext: '',
                         customername: '',
                         customercontact: '',
@@ -154,11 +159,16 @@ post '/cases/:case_id/event' do |case_id|
   end
 
   if form.failed?
+    kase       = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}"))
+    address    = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/addresses/#{kase['uprn']}"))
     categories = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/categories?role=#{user_role}"))
     erb :event, locals: { title: "Create Event for Case #{case_id}",
                           action: "/case/#{case_id}/event",
                           method: :post,
                           page: params[:page],
+                          uprn: address['uprn'],
+                          case_id: case_id,
+                          postcode: format_postcode(address['postcode']),
                           eventtext: '',
                           customername: '',
                           customercontact: '',
