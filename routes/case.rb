@@ -2,6 +2,10 @@ require_relative '../lib/core_ext/nilclass'
 require_relative '../lib/core_ext/string'
 
 helpers do
+  def coordinates_for(address)
+    "#{address['latitude']},#{address['longitude']}"
+  end
+
   def format_postcode(postcode)
     postcode.upcase!
     return postcode if postcode.length == 8
@@ -39,12 +43,11 @@ get '/addresses/:uprn/cases' do |uprn|
 
   # Get the selected address details so they can be displayed for reference.
   address = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/addresses/#{uprn}"))
-  coordinates = "#{address['latitude']},#{address['longitude']}"
   erb :cases, layout: :sidebar_layout, locals: { title: "Cases for Address #{uprn}",
                                                  uprn: uprn,
                                                  cases: cases,
                                                  address: address,
-                                                 coordinates: coordinates,
+                                                 coordinates: coordinates_for(address),
                                                  postcode: format_postcode(address['postcode'])
                                                }
 end
@@ -70,14 +73,13 @@ get '/case/:case_id' do |case_id|
   end
 
   address = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/addresses/#{uprn}"))
-  coordinates = "#{address['latitude']},#{address['longitude']}"
   erb :case_events, layout: :sidebar_layout, locals: { title: "Event History for Case #{case_id}",
                                                        uprn: uprn,
                                                        case_id: case_id,
                                                        kase: kase,
                                                        events: events,
                                                        address: address,
-                                                       coordinates: coordinates,
+                                                       coordinates: coordinates_for(address),
                                                        postcode: format_postcode(address['postcode']),
                                                        survey: survey,
                                                        sample: sample,
@@ -95,7 +97,6 @@ get '/cases/:case_id/questionnaires' do |case_id|
     erb :case_not_found, locals: { title: 'Case Not Found' }
   else
     address = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/addresses/#{kase['uprn']}"))
-    coordinates = "#{address['latitude']},#{address['longitude']}"
     erb :questionnaires, layout: :sidebar_layout,
                          locals: { title: "Questionnaires for Case #{case_id}",
                                    uprn: address['uprn'],
@@ -103,7 +104,7 @@ get '/cases/:case_id/questionnaires' do |case_id|
                                    kase: kase,
                                    questionnaires: questionnaires,
                                    address: address,
-                                   coordinates: coordinates,
+                                   coordinates: coordinates_for(address),
                                    postcode: format_postcode(address['postcode'])
                                  }
   end
