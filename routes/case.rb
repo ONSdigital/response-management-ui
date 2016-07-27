@@ -53,7 +53,7 @@ get '/addresses/:uprn/cases/?' do |uprn|
 end
 
 # Get a specific case.
-get '/case/:case_id' do |case_id|
+get '/cases/:case_id' do |case_id|
   authenticate!
   events    = []
   actions   = []

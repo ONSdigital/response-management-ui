@@ -78,7 +78,7 @@
       <tbody>
       <% cases.each_with_index do |kase, i| %>
         <tr class="<%= i.even? ? 'even' : 'odd ' %>">
-          <td><a href="/case/<%=h kase['caseId'] %>"><%=h kase['caseId'] %></a></td>
+          <td><a href="/cases/<%=h kase['caseId'] %>"><%=h kase['caseId'] %></a></td>
         <% if kase['state'].present? %>
           <td><%=h kase['state'] %></td>
           <% else %>
