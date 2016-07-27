@@ -24,7 +24,7 @@ helpers do
 end
 
 # Get all cases for the selected address.
-get '/addresses/:uprn/cases' do |uprn|
+get '/addresses/:uprn/cases/?' do |uprn|
   authenticate!
   cases = []
 
