@@ -39,7 +39,7 @@ get '/addresses/:uprn/cases/?' do |uprn|
     sample = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/samples/#{sample_id}"))
     kase['surveyDescription'] = survey['description']
     kase['name'] = sample['name']
-  end  
+  end
 
   # Get the selected address details so they can be displayed for reference.
   address = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/addresses/#{uprn}"))
@@ -228,7 +228,7 @@ post '/cases/:case_id/event' do |case_id|
       end
     end
 
-    event_url = "/case/#{case_id}"
+    event_url = "/cases/#{case_id}"
     event_url += "?page=#{params[:page]}" if params[:page].present?
     redirect event_url
   end
