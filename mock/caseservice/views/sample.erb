@@ -1,0 +1,16 @@
+<% if sample_id && sample_id.match('^[0-9]*$') %>
+{
+  "sampleid": "<%= sample_id %>",
+  "name": "name",
+  "description": "description",
+  "addressCriteria": "addressCriteria",
+  "casetypeid": 0,
+  "surveyid": 0
+}
+<% else %>
+{
+  "code": "code",
+  "timestamp": 0,
+  "message": "message"
+}
+<% end %>

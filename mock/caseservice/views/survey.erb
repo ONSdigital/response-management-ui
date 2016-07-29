@@ -1,0 +1,13 @@
+<% if survey_id && survey_id.match('^[0-9]*$')  %>
+{
+  "surveyid": "<%= survey_id %>",
+  "name": "name",
+  "description": "description"
+}
+<% else %>
+{
+  "code": "code",
+  "timestamp": 0,
+  "message": "message"
+}
+<% end %>

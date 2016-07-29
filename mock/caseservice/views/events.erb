@@ -1,0 +1,48 @@
+<% if case_id && case_id.match('^[0-9]*$') %>
+[
+  {
+    "caseEventId": 123456,
+    "caseId": "<%= case_id %>",
+    "description": "This is some text in a free test field restricted to 100 characters",
+    "category": "Refusal",
+    "subCategory": "",
+    "createdDateTime": "2016-02-11T11:38:08.135Z",
+    "createdBy": "George McFly"
+  },
+  {
+    "caseEventId": 123457,
+    "caseId": "<%= case_id %>",
+    "description": "This is some other block of text describing what happened in this event",
+    "category": "General Enquiry",
+    "subCategory": "",
+    "createdDateTime": "2016-02-11T11:38:08.135Z",
+    "createdBy": "Cedric Digory"
+  },
+  {
+    "caseEventId": 123458,
+    "caseId": "<%= case_id %>",
+    "description": "This is yet more text describing what happened in this event",
+    "category": "General Enquiry",
+    "subCategory": "",
+    "createdDateTime": "2016-02-11T11:38:08.135Z",
+    "createdBy": "Brian Brain"
+  },
+  {
+    "caseEventId": 123459,
+    "caseId": "<%= case_id %>",
+    "description": "Blah blah blah some random Latin",
+    "category": "General Enquiry",
+    "subCategory": "",
+    "createdDateTime": "2016-02-11T11:38:08.135Z",
+    "createdBy": "Cedric Digory"
+  }
+]
+<% else %>
+[
+  {
+    "code": "code",
+    "timestamp": 0,
+    "message": "message"
+  }
+]
+<% end %>
