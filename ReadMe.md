@@ -1,7 +1,7 @@
 Response Operations Ruby Web Application
 ========================================
 
-This Ruby Sinatra application is the user interface for the Response Management product.
+This Ruby [Sinatra](http://www.sinatrarb.com/) application is the user interface for the Response Management product. It enables cases to be managed and located via a postcode search. It consumes the Action and Case web services and interfaces with an OpenLDAP server to provide authentication.
 
 Prerequisites
 -------------
