@@ -20,9 +20,9 @@ and access using [http://localhost:9292](http://localhost:9292)
 Running Using the Mock Backend
 ------------------------------
 
-This project includes two Sinatra applications that provide mock versions of the FrameService and FollowUpService web services. To run them, edit your hosts file so that `collect-server` uses 127.0.0.1. Then run:
+This project includes two Sinatra applications that provide mock versions of the Action and Case web services. To run them, edit your hosts file so that `collect-server` uses 127.0.0.1. Then run:
 
-  `bundle exec rackup -p 8178` from within the `mock\frameservice` directory and `bundle exec rackup -p 8177` within the `mock\followupservice` directory.
+  `./run.sh` from within the `mock` directory. This is a shell script that starts both mock web services in the background. Use Ctrl + C to terminate them. The output from the background processes is written to `mock/nohup.out`. This file can be deleted if not required.
 
 Start the user interface normally as described above.
 
