@@ -2,8 +2,7 @@ GEM
   remote: https://rubygems.org/
   remote: http://rubygems.ctpdev.local/
   specs:
-    ctp-common (7.7.1)
-      pg (~> 0, >= 0.18.3)
+    ctp-common (9.22.0)
       rest-client (~> 1, >= 1.8.0)
     domain_name (0.5.20160615)
       unf (>= 0.0.5, < 1.0.0)
@@ -13,13 +12,12 @@ GEM
     hpricot (0.8.6)
     http-cookie (1.0.2)
       domain_name (~> 0.5)
-    json (2.0.1)
+    json (2.0.2)
     mime-types (2.99.2)
     net-ldap (0.15.0)
     netrc (0.11.0)
     ons-ldap (8.13.0)
       net-ldap (~> 0, >= 0.11)
-    pg (0.18.4)
     rack (1.6.4)
     rack-protection (1.5.3)
       rack
@@ -65,4 +63,4 @@ DEPENDENCIES
   will_paginate
 
 BUNDLED WITH
-   1.11.2
+   1.12.5
