@@ -10,7 +10,6 @@ gem 'sinatra-formkeeper'
 gem 'will_paginate'
 
 source 'http://rubygems.ctpdev.local' do
-  gem 'ctp-common'
   gem 'ons-ldap', '~>8'
 end
 

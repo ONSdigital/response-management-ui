@@ -2,8 +2,6 @@ GEM
   remote: https://rubygems.org/
   remote: http://rubygems.ctpdev.local/
   specs:
-    ctp-common (9.22.0)
-      rest-client (~> 1, >= 1.8.0)
     domain_name (0.5.20160615)
       unf (>= 0.0.5, < 1.0.0)
     formkeeper (0.0.15)
@@ -13,7 +11,9 @@ GEM
     http-cookie (1.0.2)
       domain_name (~> 0.5)
     json (2.0.2)
-    mime-types (2.99.2)
+    mime-types (3.1)
+      mime-types-data (~> 3.2015)
+    mime-types-data (3.2016.0521)
     net-ldap (0.15.0)
     netrc (0.11.0)
     ons-ldap (8.13.0)
@@ -21,10 +21,10 @@ GEM
     rack (1.6.4)
     rack-protection (1.5.3)
       rack
-    rest-client (1.8.0)
+    rest-client (2.0.0)
       http-cookie (>= 1.0.2, < 2.0)
-      mime-types (>= 1.16, < 3.0)
-      netrc (~> 0.7)
+      mime-types (>= 1.16, < 4.0)
+      netrc (~> 0.8)
     rotp (3.1.0)
     sass (3.4.22)
     sinatra (1.4.7)
@@ -50,7 +50,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  ctp-common!
   json
   ons-ldap (~> 8)!
   rest-client
