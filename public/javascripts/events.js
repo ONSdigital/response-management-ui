@@ -1,7 +1,6 @@
 $(document).ready(function() {
   $('#eventtext').keyup(function() {
-  var length = $(this).val().length;
-  var length = 250 -length;
-  $('#chars').text(length);
-});
+    var remaining = 250 - $(this).val().length;
+    $('#chars').text(remaining);
+  });
 });
