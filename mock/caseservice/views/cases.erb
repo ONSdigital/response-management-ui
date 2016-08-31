@@ -1,5 +1,5 @@
 <% if case_id && case_id.match('^[0-9]*$')  %>
-  <% if case_id == '1' %>
+[
   {
     "caseId": "<%= case_id %>",
     "uprn": "12345678900987654321",
@@ -12,8 +12,7 @@
     "surveyId": 1,
     "parentCaseId": 0,
     "questionSet": "HH"
-  }
-  <% else %>
+  },
   {
     "caseId": "<%= case_id %>",
     "uprn": "12345678900987654322",
@@ -27,7 +26,7 @@
     "parentCaseId": 0,
     "questionSet": "I"
   }
-  <% end %>
+]
 <% elsif uprn && uprn.match('^[0-9]*$') %>
 [
   {
@@ -42,6 +41,19 @@
     "surveyId": 1,
     "parentCaseId": 0,
     "questionSet": "HH"
+  },
+  {
+    "caseId": "2",
+    "uprn": "<%= uprn %>",
+    "state": "INIT",
+    "caseTypeId": "1",
+    "createdDateTime": "2016-02-12 09:46:39.25+00",
+    "createdBy": "SYSTEM",
+    "sampleId": 1,
+    "actionplanId": 1,
+    "surveyId": 1,
+    "parentCaseId": 0,
+    "questionSet": "I"
   }
 ]
 <% else %>

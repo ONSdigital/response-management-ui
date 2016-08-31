@@ -26,7 +26,7 @@ end
 
 # Get case by UPRN.
 get '/cases/uprn/:uprn' do |uprn|
-  erb :case, locals: { case_id: nil, uprn: uprn }
+  erb :cases, locals: { case_id: nil, uprn: uprn }
 end
 
 # List categories.
