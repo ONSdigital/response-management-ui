@@ -219,22 +219,22 @@ get '/cases/:case_id/childcase/new' do |case_id|
   kase       = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}"))
   address    = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/addresses/#{case_id}"))
   erb :childcase, locals: { title: "Request Individual Form for Case #{case_id}",
-                        action: "/cases/#{case_id}/childcase",
-                        method: :post,
-                        page: params[:page],
-                        uprn: address['uprn'],
-                        case_id: case_id,
-                        postcode: format_postcode(address['postcode']),
-                        eventtext: '',
-                        customername: '',
-                        customercontact: '',
-                        eventcategory: '',
-                        createdby: '',
-                        address: address
-                      }
+                            action: "/cases/#{case_id}/childcase",
+                            method: :post,
+                            page: params[:page],
+                            uprn: address['uprn'],
+                            case_id: case_id,
+                            postcode: format_postcode(address['postcode']),
+                            eventtext: '',
+                            customername: '',
+                            customercontact: '',
+                            eventcategory: '',
+                            createdby: '',
+                            address: address
+                          }
 end
 
-# Request childcase (individual form) and create associated event.
+# Request creation of childcase (individual form) and create associated event.
 post '/cases/:case_id/childcase' do |case_id|
   authenticate!
 
@@ -249,26 +249,26 @@ post '/cases/:case_id/childcase' do |case_id|
     kase       = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}"))
     address    = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/addresses/#{case_id}"))
     erb :childcase, locals: { title: "Request Individual Form for Case #{case_id}",
-                          action: "/cases/#{case_id}/childcase",
-                          method: :post,
-                          page: params[:page],
-                          uprn: address['uprn'],
-                          case_id: case_id,
-                          postcode: format_postcode(address['postcode']),
-                          eventtext: '',
-                          customername: '',
-                          customercontact: '',
-                          eventcategory: '',
-                          createdby: '',
-                          address: address
-                        }
+                              action: "/cases/#{case_id}/childcase",
+                              method: :post,
+                              page: params[:page],
+                              uprn: address['uprn'],
+                              case_id: case_id,
+                              postcode: format_postcode(address['postcode']),
+                              eventtext: '',
+                              customername: '',
+                              customercontact: '',
+                              eventcategory: '',
+                              createdby: '',
+                              address: address
+                            }
   else
     user        = session[:user]
-    description = "Individual form sent to "
+    description = 'Individual form sent to '
     description = "#{description} name: #{name} " if !name.empty? && phone.empty?
     description = "#{description} name: #{name} phone: #{phone} " if !name.empty? && !phone.empty?
 
-    # insert code to call end point for requesting iForm
+    # insert code to call end point for requesting individual form
 
     RestClient.post("http://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}/events",
                     { description: description,
@@ -289,7 +289,6 @@ post '/cases/:case_id/childcase' do |case_id|
     redirect event_url
   end
 end
-
 
 # Present a form for requesting a paper form.
 get '/cases/:case_id/paper/new' do |case_id|
@@ -312,7 +311,7 @@ get '/cases/:case_id/paper/new' do |case_id|
                       }
 end
 
-# Request pForm and create associated event.
+# Request printed questionnaire and create associated event.
 post '/cases/:case_id/paper' do |case_id|
   authenticate!
 
@@ -342,11 +341,11 @@ post '/cases/:case_id/paper' do |case_id|
                         }
   else
     user        = session[:user]
-    description = "Printed Questionnaire sent to "
+    description = 'Printed Questionnaire sent to '
     description = "#{description} name: #{name} " if !name.empty? && phone.empty?
     description = "#{description} name: #{name} phone: #{phone} " if !name.empty? && !phone.empty?
 
-    # insert code to call end point for requesting pForm
+    # insert code to call end point for requesting printed questionnaire
 
     RestClient.post("http://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}/events",
                     { description: description,
