@@ -9,12 +9,15 @@
 <% end %>
 
 
-  <form action="/cases/<%=h case_id %>/childcase/new" method="get">
-    <input class="button" type="submit" value="Request Individual Form&hellip;">
-  <% if params[:actionpage].present? %>
-    <input type="hidden" name="page" value="<%=h params[:actionpage] %>">
-  <% end %>
-  </form>
+    <form action="/cases/<%=h case_id %>/childcase/new" method="get">
+      <% if kase['questionSet'] == 'HH' %>
+        <input class="button" type="submit" value="Request Individual Form&hellip;">
+      <% end %>
+    <% if params[:actionpage].present? %>
+      <input type="hidden" name="page" value="<%=h params[:actionpage] %>">
+    <% end %>
+    </form>
+
 
   <table class="primary">
     <thead>
