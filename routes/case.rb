@@ -63,6 +63,7 @@ get '/cases/:case_id/?' do |case_id|
   sample_id = kase['sampleId']
   survey    = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/surveys/#{survey_id}"))
   sample    = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/samples/#{sample_id}"))
+  questionnaires = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/questionnaires/case/#{case_id}"))
 
   RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}/events") do |response, _request, _result, &_block|
     events = JSON.parse(response).paginate(page: params[:page]) unless response.code == 204
@@ -83,31 +84,9 @@ get '/cases/:case_id/?' do |case_id|
                                                        postcode: format_postcode(address['postcode']),
                                                        survey: survey,
                                                        sample: sample,
+                                                       questionnaires: questionnaires,
                                                        actions: actions
                                                      }
-end
-
-# Get all questionnaires for a specific case.
-get '/cases/:case_id/questionnaires' do |case_id|
-  authenticate!
-  questionnaires = []
-  kase = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}"))
-  questionnaires = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/questionnaires/case/#{case_id}"))
-  if kase.empty?
-    erb :case_not_found, locals: { title: 'Case Not Found' }
-  else
-    address = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/addresses/#{kase['uprn']}"))
-    erb :questionnaires, layout: :sidebar_layout,
-                         locals: { title: "Questionnaires for Case #{case_id}",
-                                   uprn: address['uprn'],
-                                   case_id: case_id,
-                                   kase: kase,
-                                   questionnaires: questionnaires,
-                                   address: address,
-                                   coordinates: coordinates_for(address),
-                                   postcode: format_postcode(address['postcode'])
-                                 }
-  end
 end
 
 # Postcode search.

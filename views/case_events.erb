@@ -8,9 +8,13 @@
   <%= erb :googlemaps_partial, locals: { coordinates: coordinates } %>
 <% end %>
 
-  <table class="primary" style="margin-top: 0px; width: 100%">
+  <table class="primary">
     <thead>
       <tr>
+        <th>Case Status</th>
+        <th>Case Created</th>
+        <th>Survey Description</th>
+        <th>Sample Name</th>
         <th>Address Line 1</th>
         <th>Address Line 2</th>
         <th>Town</th>
@@ -21,27 +25,47 @@
     </thead>
     <tbody>
       <tr class="even">
+        <% if kase['state'].present? %>
+      <td><%=h kase['state'] %></td>
+      <% else %>
+        <td>-</td>
+      <% end %>
+      <% if kase['createdDateTime'].present? %>
+        <td><%=h kase['createdDateTime'].to_date %></td>
+      <% else %>
+        <td>-</td>
+      <% end %>
+      <% if survey['description'].present? %>
+        <td><%=h survey['description'] %></td>
+      <% else %>
+        <td>-</td>
+      <% end %>
+      <% if sample['name'].present? %>
+        <td><%=h sample['name'] %></td>
+      <% else %>
+        <td>-</td>
+      <% end %>
       <% if address['line1'].present? %>
           <td><%=h address['line1'] %></td>
-        <% else %>
-          <td>-</td>
-        <% end %>
-        <% if address['line2'].present? %>
-          <td><%=h address['line2'] %></td>
-        <% else %>
-          <td>-</td>
-        <% end %>
-        <% if address['townName'].present? %>
-          <td><%=h address['townName'] %></td>
-        <% else %>
-          <td>-</td>
-        <% end %>
-        <% if address['postcode'].present? %>
-          <td><%=h address['postcode'] %></td>
-        <% else %>
-          <td>-</td>
-        <% end %>
-        <% if address['type'].present? %>
+      <% else %>
+        <td>-</td>
+      <% end %>
+      <% if address['line2'].present? %>
+        <td><%=h address['line2'] %></td>
+      <% else %>
+        <td>-</td>
+      <% end %>
+      <% if address['townName'].present? %>
+        <td><%=h address['townName'] %></td>
+      <% else %>
+        <td>-</td>
+      <% end %>
+      <% if address['postcode'].present? %>
+        <td><%=h address['postcode'] %></td>
+      <% else %>
+        <td>-</td>
+      <% end %>
+      <% if address['type'].present? %>
         <td><%=h address['type'].to_address_type %></td>
       <% else %>
         <td>-</td>
@@ -55,58 +79,55 @@
     </tbody>
   </table>
 
+<h3>Questionnaires</h3>
+
 <table class="secondary">
   <thead>
     <tr>
-      <th>Case ID</th>
-      <th>Case Status</th>
-      <th>Case Type</th>
-      <th>Case Created</th>
+      <th>Questionnaire ID</th>
+      <th>Internet Access Code</th>
+      <th>Dispatch Date</th>
+      <th>Response Date</th>
+      <th>Receipt Date</th>
       <th>Question Set</th>
-      <th>Survey Description</th>
-      <th>Sample Name</th>
-      <th>Questionnaires</th
     </tr>
   </thead>
   <tbody>
-    <tr class="even">
-      <td><%=h case_id %></td>
-    <% if kase['state'].present? %>
-      <td><%=h kase['state'] %></td>
-      <% else %>
-        <td>-</td>
-      <% end %>
-    <% if kase['caseTypeId'].present? %>
-      <td><%=h kase['caseTypeId'] %></td>
+  <% questionnaires.each_with_index do |questionnaire, i| %>
+    <tr class="<%= i.even? ? 'even' : 'odd ' %>">
+      <td><%=h questionnaire['questionnaireId'] %></td>
+    <% if questionnaire['iac'] %>
+      <td><%=h questionnaire['iac'] %></td>
     <% else %>
       <td>-</td>
     <% end %>
-    <% if kase['createdDateTime'].present? %>
-      <td><%=h kase['createdDateTime'].to_date %></td>
+    <% if questionnaire['dispatchDateTime'] %>
+      <td><%=h questionnaire['dispatchDateTime'].to_date %></td>
     <% else %>
       <td>-</td>
     <% end %>
-    <% if kase['questionSet'].present? %>
-      <td><%=h kase['questionSet'] %></td>
+    <% if questionnaire['responseDateTime'] %>
+      <td><%=h questionnaire['responseDateTime'].to_date %></td>
     <% else %>
       <td>-</td>
     <% end %>
-    <% if survey['description'].present? %>
-      <td><%=h survey['description'] %></td>
+    <% if questionnaire['receiptDateTime'] %>
+      <td><%=h questionnaire['receiptDateTime'].to_date %></td>
     <% else %>
       <td>-</td>
     <% end %>
-    <% if sample['name'].present? %>
-      <td><%=h sample['name'] %></td>
+    <% if questionnaire['questionSet'] %>
+      <td><%=h questionnaire['questionSet'] %></td>
     <% else %>
       <td>-</td>
     <% end %>
-      <td><% if params[:page].present? %><a href="/cases/<%=h case_id %>/questionnaires?page=<%=h params[:page] %>"><% else %><a href="/cases/<%=h case_id %>/questionnaires"><% end %>View Questionnaires</a></td>
     </tr>
-  </tbody>
+  <% end %>
+    </tbody>
 </table>
 
 <% content_for :footer do %>
+
   <h3>Events</h3>
   <div id="events">
     <form action="/cases/<%=h case_id %>/event/new" method="get">
