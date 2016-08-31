@@ -23,7 +23,7 @@ Start the user interface normally as described above.
 ## Compiling the Style Sheet using Sass
 This project uses the CSS preprocessor [Sass](http://sass-lang.com/) so that features such as variables and mixins that don't exist in pure CSS can be used. The SCSS syntax is used rather than the older Sass syntax. The application style sheet `public/screen.css` is compiled from the main Sass style sheet `views/stylesheets/screen.scss`, which in turn imports the other Sass style sheets in the same directory. To generate `screen.css` from `screen.scss` use:
 
- `sass -t compressed screen.scss ../../../public/css/screen.css`
+ `sass -t compressed screen.scss ../../public/css/screen.css`
 
  from within the `views/stylesheets` directory. Omit `-t compressed` for non-minified CSS output.
 
