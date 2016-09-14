@@ -34,6 +34,12 @@ get '/categories' do
   erb :categories, locals: { role: params['role'] }
 end
 
+# List products.
+get '/products' do
+  erb :products, locals: { role: params['role'] }
+end
+
+
 # Get sample.
 get '/samples/:sample_id' do |sample_id|
   erb :sample, locals: { sample_id: sample_id }
