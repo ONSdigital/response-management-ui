@@ -1,0 +1,83 @@
+<%= erb :menu, locals: { pageid: 'home' } %>
+
+<% content_for :breadcrumbs do %>
+<a href="/">Home</a> &gt; <a href="/postcodes/<%=url_format postcode %>"><%=h postcode %></a> &gt; <a href="/addresses/<%=h uprn %>/cases">Cases</a> &gt; <a href="/cases/<%=h case_id %>">Case <%=h case_id %></a> &gt; Request Individual Form
+<% end %>
+
+<% if form.failed_on? :customername %>
+  <% content_for :form_errors do %>
+    <p class="message">&bull; Name is required</p>
+  <% end %>
+<% end %>
+
+<table class="primary">
+  <thead>
+    <tr>
+      <th>Address Line 1</th>
+      <th>Address Line 2</th>
+      <th>Town</th>
+      <th>Postcode</th>
+      <th>Address Type</th>
+      <th>Establishment Type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="even">
+    <% if address['line1'].present? %>
+        <td><%=h address['line1'] %></td>
+    <% else %>
+      <td>-</td>
+    <% end %>
+    <% if address['line2'].present? %>
+      <td><%=h address['line2'] %></td>
+    <% else %>
+      <td>-</td>
+    <% end %>
+    <% if address['townName'].present? %>
+      <td><%=h address['townName'] %></td>
+    <% else %>
+      <td>-</td>
+    <% end %>
+    <% if address['postcode'].present? %>
+      <td><%=h address['postcode'] %></td>
+    <% else %>
+      <td>-</td>
+    <% end %>
+    <% if address['type'].present? %>
+      <td><%=h address['type'].to_address_type %></td>
+    <% else %>
+      <td>-</td>
+    <% end %>
+    <% if address['estabtype'].present? %>
+      <td><%=h address['estabtype'] %></td>
+    <% else %>
+      <td>-</td>
+    <% end %>
+  </tr>
+  </tbody>
+</table>
+
+<form action="<%= action %>" method="post">
+<% if method.present? %>
+  <input type="hidden" name="_method" value="<%= method %>">
+<% end %>
+<% if params[:page].present? %>a
+  <input type="hidden" name="page" value="<%=h params[:page] %>">
+<% end %>
+
+  <fieldset>
+    <p><label for="customername">Name</label><span class="required">*</span></p>
+    <input type="text" id="customername" name="customername" size="51" maxlength="40" value="<%=h customername %>">
+
+    <p><label for="customeremail">Email</label><span class="required">*</span></p>
+    <input type="text" id="customeremail" name="customeremail" size="51" maxlength="80" value="<%=h customername %>">
+
+    <p><label for="customercontact">Phone Number</label></p>
+    <input type="text" id="customercontact" name="customercontact" size="51" maxlength="40" value="<%=h customercontact %>">
+
+  </fieldset>
+  <p id="requiredfields"><span class="required">*</span> Required fields</p>
+  <p class="buttons">
+    <input class="button" type="submit" value="Save"> or <% if params[:page].present? %><a href="/cases/<%=h case_id %>/childform?page=<%=h params[:page] %>"><% else %><a href="/cases/<%=h case_id %>"><% end %>Cancel</a>
+  </p>
+</form>

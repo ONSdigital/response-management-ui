@@ -280,6 +280,7 @@ strong {
   border: 2px solid $primary-light;
   margin-bottom: 20px;
   font-size: 90%;
+  clear: left;
 }
 
 .primary tbody {
@@ -299,6 +300,9 @@ strong {
   border-bottom: 2px solid $secondary-light;
   border-left: 2px solid $secondary-lightest;
   padding: 1px 8px 1px;
+  margin-bottom: 5px;
+  margin-right: 5px;
+  float:left;
 }
 
 .buttons {
