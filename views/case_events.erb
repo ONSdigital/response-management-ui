@@ -8,16 +8,35 @@
   <%= erb :googlemaps_partial, locals: { coordinates: coordinates } %>
 <% end %>
 
-
-    <form action="/cases/<%=h case_id %>/childcase/new" method="get">
-      <% if kase['questionSet'] == 'HH' %>
-        <input class="button" type="submit" value="Request Individual Form&hellip;">
-      <% end %>
-    <% if params[:actionpage].present? %>
-      <input type="hidden" name="page" value="<%=h params[:actionpage] %>">
+  <form action="/cases/<%=h case_id %>/childcase/new" method="get">
+    <% if kase['questionSet'] == 'HH' %>
+      <input class="button" type="submit" value="Request Individual Form&hellip;">
     <% end %>
-    </form>
+  <% if params[:actionpage].present? %>
+    <input type="hidden" name="page" value="<%=h params[:actionpage] %>">
+  <% end %>
+  </form>
 
+  <form action="/cases/<%=h case_id %>/iac/new" method="get">
+    <input class="button" type="submit" value="Request Replacement IAC&hellip;">
+  <% if params[:actionpage].present? %>
+    <input type="hidden" name="page" value="<%=h params[:actionpage] %>">
+  <% end %>
+  </form>
+
+  <form action="/cases/<%=h case_id %>/translate/new" method="get">
+    <input class="button" type="submit" value="Request Translation Booklet&hellip;">
+  <% if params[:actionpage].present? %>
+    <input type="hidden" name="page" value="<%=h params[:actionpage] %>">
+  <% end %>
+  </form>
+
+  <form action="/cases/<%=h case_id %>/paper/new" method="get">
+    <input class="button" type="submit" value="Request Paper Form&hellip;">
+  <% if params[:actionpage].present? %>
+    <input type="hidden" name="page" value="<%=h params[:actionpage] %>">
+  <% end %>
+  </form>
 
   <table class="primary">
     <thead>
@@ -91,14 +110,6 @@
   </table>
 
 <h3>Questionnaires</h3>
-<div id="questionnaires">
-  <form action="/cases/<%=h case_id %>/paper/new" method="get">
-    <input class="button" type="submit" value="Request Paper Form&hellip;">
-  <% if params[:actionpage].present? %>
-    <input type="hidden" name="page" value="<%=h params[:actionpage] %>">
-  <% end %>
-  </form>
-</div>
 
 <table class="secondary">
   <thead>
