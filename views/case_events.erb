@@ -127,7 +127,7 @@
     <tr class="<%= i.even? ? 'even' : 'odd ' %>">
       <td><%=h questionnaire['questionnaireId'] %></td>
     <% if questionnaire['iac'] %>
-      <td><%=h questionnaire['iac'] %></td>
+      <td class="internetaccesscode"><%=h questionnaire['iac'] %></td>
     <% else %>
       <td>-</td>
     <% end %>
