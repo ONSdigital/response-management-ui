@@ -29,7 +29,7 @@ get '/addresses/:uprn/cases/?' do |uprn|
   cases = []
 
   RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/cases/uprn/#{uprn}") do |response, _request, _result, &_block|
-    cases = JSON.parse(response).paginate(page: params[:page]) unless response.code == 204
+    cases = JSON.parse(response).paginate(page: params[:page]) unless response.code == 404
   end
 
   cases.each do |kase|

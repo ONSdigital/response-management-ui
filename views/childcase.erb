@@ -4,6 +4,10 @@
 <a href="/">Home</a> &gt; <a href="/postcodes/<%=url_format postcode %>"><%=h postcode %></a> &gt; <a href="/addresses/<%=h uprn %>/cases">Cases</a> &gt; <a href="/cases/<%=h case_id %>">Case <%=h case_id %></a> &gt; Request Individual Form
 <% end %>
 
+<% content_for :javascript do %>
+  <script src="/javascripts/childcase.js" type="text/javascript"></script>
+<% end %>
+
 <% if form.failed_on? :customername %>
   <% content_for :form_errors do %>
     <p class="message">&bull; Name is required</p>
@@ -66,14 +70,23 @@
 <% end %>
 
   <fieldset>
-    <p><label for="customername">Name</label><span class="required">*</span></p>
-    <input type="text" id="customername" name="customername" size="51" maxlength="40" value="<%=h customername %>">
+    <p><label for="mode">Select Mode:</label></p>
+    <select name="Mode" id="mode">
+      <option value="">Select Mode:</option>
+      <option value="paper">Paper</option>
+      <option value="online">Online</option>
+    </select>
 
-    <p><label for="customeremail">Email</label><span class="required">*</span></p>
-    <input type="text" id="customeremail" name="customeremail" size="51" maxlength="80" value="<%=h customername %>">
+    <p><label for="icMode" class="disabletext">Select IC Mode:</label></p>
+    <select name="icMode" id="icMode" disabled>
+      <option value="">Select IC Mode:</option>
+      <option value="sms">SMS</option>
+      <option value="email">eMail</option>
+      <option value="letter">Letter</option>
+    </select>
 
-    <p><label for="customercontact">Phone Number</label></p>
-    <input type="text" id="customercontact" name="customercontact" size="51" maxlength="40" value="<%=h customercontact %>">
+    <p><label id="customerparametername" class="disabletext">Input:</label><span class="required">*</span></p>
+    <input type="text" id="customerparameter" name="customerparameter" size="51" maxlength="40" value="<%=h customername %>" disabled></p>
 
   </fieldset>
   <p id="requiredfields"><span class="required">*</span> Required fields</p>
