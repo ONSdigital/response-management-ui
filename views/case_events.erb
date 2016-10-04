@@ -9,7 +9,7 @@
 <% end %>
 
   <form action="/cases/<%=h case_id %>/childcase/new" method="get">
-    <% if kase['questionSet'] == 'HH' %>
+    <% if question_set == 'HH' %>
       <input class="button" type="submit" value="Request Individual Form&hellip;">
     <% end %>
   <% if params[:actionpage].present? %>

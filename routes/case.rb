@@ -26,25 +26,43 @@ end
 # Get all cases for the selected address.
 get '/addresses/:uprn/cases/?' do |uprn|
   authenticate!
-  cases = []
+  cases     = []
+  casegroup = []
+  casetype  = []
+  sample_id = ''
 
-  RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/cases/uprn/#{uprn}") do |response, _request, _result, &_block|
-    cases = JSON.parse(response).paginate(page: params[:page]) unless response.code == 404
-  end
+  categories = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/categories"))
 
-  cases.each do |kase|
-    survey_id = kase['surveyId']
-    sample_id = kase['sampleId']
-    survey = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/surveys/#{survey_id}"))
-    sample = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/samples/#{sample_id}"))
-    kase['surveyDescription'] = survey['description']
-    kase['name'] = sample['name']
+  RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/casegroup/uprn/#{uprn}") do |response, _request, _result, &_block|
+    casegroup = JSON.parse(response).paginate(page: params[:page]) unless response.code == 404
+    casegroup.each do |casegroup|
+      casegroup_id = casegroup['caseGroupId']
+
+      RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/cases/casegroup/#{casegroup_id}") do |response, _request, _result, &_block|
+        cases = JSON.parse(response).paginate(page: params[:page]) unless response.code == 404
+      end
+
+      cases.each do |kase|
+        sample_id   = casegroup['sampleId']
+        sample      = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/samples/#{sample_id}"))
+        survey_id   = sample['surveyId']
+        survey      = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/surveys/#{survey_id}"))
+        casetype_id = kase['caseTypeId']
+        casetype    = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/casetypes/#{casetype_id}"))
+
+        #add extra values to the kase object
+        kase['surveyDescription'] = survey['description']
+        kase['name']              = sample['name']
+        kase['questionSet']       = casetype['questionSet']
+      end
+    end
   end
 
   # Get the selected address details so they can be displayed for reference.
   address = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/addresses/#{uprn}"))
   erb :cases, layout: :sidebar_layout, locals: { title: "Cases for Address #{uprn}",
                                                  uprn: uprn,
+                                                 sample_id: sample_id,
                                                  cases: cases,
                                                  address: address,
                                                  coordinates: coordinates_for(address),
@@ -53,16 +71,14 @@ get '/addresses/:uprn/cases/?' do |uprn|
 end
 
 # Get a specific case.
-get '/cases/:case_id/?' do |case_id|
+get '/cases/:case_id/uprn/:uprn/sample/:sample_id?' do |case_id, uprn, sample_id|
   authenticate!
-  events    = []
-  actions   = []
-  kase      = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}"))
-  uprn = kase['uprn']
-  survey_id = kase['surveyId']
-  sample_id = kase['sampleId']
-  survey    = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/surveys/#{survey_id}"))
-  sample    = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/samples/#{sample_id}"))
+  events         = []
+  actions        = []
+  sample         = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/samples/#{sample_id}"))
+  survey_id      = sample['surveyId']
+  survey         = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/surveys/#{survey_id}"))
+  kase           = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}"))
   questionnaires = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/questionnaires/case/#{case_id}"))
 
   RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}/events") do |response, _request, _result, &_block|
@@ -73,7 +89,11 @@ get '/cases/:case_id/?' do |case_id|
     actions = JSON.parse(response) unless response.code == 204
   end
 
-  address = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/addresses/#{uprn}"))
+  casetype_id  = kase['caseTypeId']
+  casetype     = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/casetypes/#{casetype_id}"))
+  question_set = casetype['questionSet']
+  address      = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/addresses/#{uprn}"))
+
   erb :case_events, layout: :sidebar_layout, locals: { title: "Event History for Case #{case_id}",
                                                        uprn: uprn,
                                                        case_id: case_id,
@@ -85,7 +105,8 @@ get '/cases/:case_id/?' do |case_id|
                                                        survey: survey,
                                                        sample: sample,
                                                        questionnaires: questionnaires,
-                                                       actions: actions
+                                                       actions: actions,
+                                                       question_set: question_set
                                                      }
 end
 
@@ -110,7 +131,7 @@ end
 get '/cases/:case_id/event/new' do |case_id|
   authenticate!
   kase       = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}"))
-  address    = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/addresses/#{kase['uprn']}"))
+  address    = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/addresses/#{case_id}"))
   categories = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/categories?role=#{user_role}"))
   erb :event, locals: { title: "Create Event for Case #{case_id}",
                         action: "/cases/#{case_id}/event",
@@ -141,7 +162,7 @@ post '/cases/:case_id/event' do |case_id|
 
   if form.failed?
     kase       = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}"))
-    address    = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/addresses/#{kase['uprn']}"))
+    address    = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/addresses/#{case_id}"))
     categories = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/categories?role=#{user_role}"))
     erb :event, locals: { title: "Create Event for Case #{case_id}",
                           action: "/cases/#{case_id}/event",
@@ -227,8 +248,9 @@ get '/cases/:case_id/childcase/new' do |case_id|
                             postcode: format_postcode(address['postcode']),
                             eventtext: '',
                             customername: '',
-                            customeremail: '',
-                            customercontact: '',
+                            deliverymode: '',
+                            responsemode: '',
+                            contactmode: '',
                             eventcategory: '',
                             createdby: '',
                             address: address
@@ -239,13 +261,21 @@ end
 post '/cases/:case_id/childcase' do |case_id|
   authenticate!
 
+  responsemode  = params[:responsemode]
+  contactmode   = params[:contactmode]
+  deliverymode  = params[:delivery]
+  customername  = params[:customername]
+
   form do
+    field :responsemode, present: true
+    field :contactmode, present: true
+    if contactmode == 'letter'
+      field :delivery, present: false
+    else
+      field :delivery, present: true
+    end
     field :customername, present: true
   end
-
-  name  = params[:customername]
-  phone = params[:customercontact]
-  email = params[:customeremail]
 
   if form.failed?
     kase       = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}"))
@@ -258,18 +288,18 @@ post '/cases/:case_id/childcase' do |case_id|
                               case_id: case_id,
                               postcode: format_postcode(address['postcode']),
                               eventtext: '',
-                              customername: '',
-                              customeremail: '',
-                              customercontact: '',
+                              customername: customername,
+                              deliverymode: deliverymode,
                               eventcategory: '',
                               createdby: '',
+                              responsemode: responsemode,
+                              contactmode: contactmode,
                               address: address
                             }
   else
     user        = session[:user]
-    description = 'Individual form sent to '
-    description = "#{description} name: #{name} email #{email} " if !name.empty? && !email.empty? && phone.empty?
-    description = "#{description} name: #{name} email #{email} phone: #{phone} " if !name.empty? && !email.empty? && !phone.empty?
+    description = 'Individual form  sent to:'
+    description = "#{description} #{customername} "
 
     # insert code to call end point for requesting individual form
 
@@ -297,7 +327,7 @@ end
 get '/cases/:case_id/paper/new' do |case_id|
   authenticate!
   kase       = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}"))
-  address    = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/addresses/#{kase['uprn']}"))
+  address    = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/addresses/#{case_id}"))
   erb :paper, locals: { title: "Request Paper Questionnaire for Case #{case_id}",
                         action: "/cases/#{case_id}/paper",
                         method: :post,
@@ -307,8 +337,6 @@ get '/cases/:case_id/paper/new' do |case_id|
                         postcode: format_postcode(address['postcode']),
                         eventtext: '',
                         customername: '',
-                        customercontact: '',
-                        eventcategory: '',
                         createdby: '',
                         address: address
                       }
@@ -322,12 +350,11 @@ post '/cases/:case_id/paper' do |case_id|
     field :customername, present: true
   end
 
-  name  = params[:customername]
-  phone = params[:customercontact]
+  customername  = params[:customername]
 
   if form.failed?
     kase       = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}"))
-    address    = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/addresses/#{kase['uprn']}"))
+    address    = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/addresses/#{case_id}"))
     erb :paper, locals: { title: "Request Individual Form for Case #{case_id}",
                           action: "/cases/#{case_id}/paper",
                           method: :post,
@@ -336,17 +363,14 @@ post '/cases/:case_id/paper' do |case_id|
                           case_id: case_id,
                           postcode: format_postcode(address['postcode']),
                           eventtext: '',
-                          customername: '',
-                          customercontact: '',
-                          eventcategory: '',
+                          customername: customername,
                           createdby: '',
                           address: address
                         }
   else
     user        = session[:user]
     description = 'Printed Questionnaire sent to '
-    description = "#{description} name: #{name} " if !name.empty? && phone.empty?
-    description = "#{description} name: #{name} phone: #{phone} " if !name.empty? && !phone.empty?
+    description = "#{description} name: #{customername} " if !customername.empty?
 
     # insert code to call end point for requesting printed questionnaire
 
@@ -374,7 +398,7 @@ end
 get '/cases/:case_id/iac/new' do |case_id|
   authenticate!
   kase       = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}"))
-  address    = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/addresses/#{kase['uprn']}"))
+  address    = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/addresses/#{case_id}"))
   erb :iac, locals: { title: "Request Replacement IAC for Case #{case_id}",
                         action: "/cases/#{case_id}/iac",
                         method: :post,
@@ -384,8 +408,8 @@ get '/cases/:case_id/iac/new' do |case_id|
                         postcode: format_postcode(address['postcode']),
                         eventtext: '',
                         customername: '',
-                        customeremail: '',
-                        customercontact: '',
+                        deliverymode: '',
+                        contactmode: '',
                         eventcategory: '',
                         createdby: '',
                         address: address
@@ -397,16 +421,30 @@ post '/cases/:case_id/iac' do |case_id|
   authenticate!
 
   form do
+    field :customername, present: true #if params[:blah].present?
+  end
+
+  logger.info ('contact mode is: ' + params[:contactmode])
+
+  contactmode   = params[:contactmode]
+  deliverymode  = params[:delivery]
+  customername  = params[:customername]
+
+  form do
+    field :contactmode, present: true
+    if contactmode == 'letter'
+      field :delivery, present: false
+    else
+      field :delivery, present: true
+    end
     field :customername, present: true
   end
 
-  name  = params[:customername]
-  phone = params[:customercontact]
-  email = params[:customeremail]
+
 
   if form.failed?
     kase       = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}"))
-    address    = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/addresses/#{kase['uprn']}"))
+    address    = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/addresses/#{case_id}"))
     erb :iac, locals: { title: "Request Individual Form for Case #{case_id}",
                           action: "/cases/#{case_id}/iac",
                           method: :post,
@@ -415,18 +453,18 @@ post '/cases/:case_id/iac' do |case_id|
                           case_id: case_id,
                           postcode: format_postcode(address['postcode']),
                           eventtext: '',
-                          customername: '',
-                          customeremail: '',
-                          customercontact: '',
+                          customername: customername,
+                          deliverymode: deliverymode,
                           eventcategory: '',
                           createdby: '',
+                          contactmode: contactmode,
                           address: address
                         }
   else
     user        = session[:user]
     description = 'New Internet Access Code requested for '
-    description = "#{description} name: #{name} email #{email} " if !name.empty? && !email.empty? && phone.empty?
-    description = "#{description} name: #{name} email #{email} phone: #{phone} " if !name.empty? && !email.empty? && !phone.empty?
+    description = "#{description} name: #{customername} contactmode #{contactmode} " if !customername.empty? && !contactmode.empty?
+    description = "#{description} name: #{customername} contactmode #{contactmode}  " if !customername.empty? && !contactmode.empty?
 
     # insert code to call end point for requesting replacement IAC
 
@@ -454,8 +492,8 @@ end
 get '/cases/:case_id/translate/new' do |case_id|
   authenticate!
   kase       = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}"))
-  address    = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/addresses/#{kase['uprn']}"))
-  products   = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/products?role=#{user_role}"))
+  address    = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/addresses/#{case_id}"))
+  products   = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/categories?group=translation"))
   erb :translate, locals: { title: "Request Translation Booklet for Case #{case_id}",
                         action: "/cases/#{case_id}/translate",
                         method: :post,
@@ -465,7 +503,6 @@ get '/cases/:case_id/translate/new' do |case_id|
                         postcode: format_postcode(address['postcode']),
                         eventtext: '',
                         customername: '',
-                        customercontact: '',
                         eventcategory: '',
                         createdby: '',
                         address: address,
@@ -481,13 +518,12 @@ post '/cases/:case_id/translate' do |case_id|
     field :customername, present: true
   end
 
-  name  = params[:customername]
-  phone = params[:customercontact]
+  customername  = params[:customername]
 
   if form.failed?
     kase       = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}"))
-    address    = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/addresses/#{kase['uprn']}"))
-    products = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/products?role=#{user_role}"))
+    address    = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/addresses/#{case_id}"))
+    products = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/categories?group=translate"))
     erb :translate, locals: { title: "Request Translation Booklet for Case #{case_id}",
                           action: "/cases/#{case_id}/translate",
                           method: :post,
@@ -496,8 +532,7 @@ post '/cases/:case_id/translate' do |case_id|
                           case_id: case_id,
                           postcode: format_postcode(address['postcode']),
                           eventtext: '',
-                          customername: name,
-                          customercontact: phone,
+                          customername: customername,
                           eventcategory: params[:eventcategory],
                           createdby: '',
                           address: address,
@@ -508,9 +543,8 @@ post '/cases/:case_id/translate' do |case_id|
     translation = params[:product]
 
     description = "Translation Booklet in #{translation} supplied to"
-    description = "name: #{name} #{description}" if !name.empty? && phone.empty?
-    description = "phone: #{phone} #{description}" if name.empty? && !phone.empty?
-    description = "name: #{name} phone: #{phone} #{description}" if !name.empty? && !phone.empty?
+    description = "name: #{customername} #{description}" if !customername.empty?
+
 
     # insert code to call end point for requesting replacement IAC
 

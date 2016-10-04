@@ -8,9 +8,29 @@
   <script src="/javascripts/childcase.js" type="text/javascript"></script>
 <% end %>
 
-<% if form.failed_on? :customername %>
+<% if form.failed_on? :responsemode %>
   <% content_for :form_errors do %>
-    <p class="message">&bull; Name is required</p>
+    <p class="message">&bull; Please Select Response Mode</p>
+  <% end %>
+<% elsif responsemode != 'paper' %>
+  <% if form.failed_on? :contactmode  %>
+    <% content_for :form_errors do %>
+      <p class="message">&bull; Please Select Contact Mode</p>
+    <% end %>
+  <% elsif form.failed_on? :delivery %>
+    <% if contactmode != 'letter' %>
+      <% content_for :form_errors do %>
+        <p class="message">&bull; Please Input Delivery Mode</p>
+      <% end %>
+      <% elsif form.failed_on? :customername %>
+        <% content_for :form_errors do %>
+          <p class="message">&bull; Please Input Customer Name</p>
+        <% end %>
+    <% end %>
+  <% end %>
+<% elsif form.failed_on? :customername %>
+  <% content_for :form_errors do %>
+    <p class="message">&bull; Please Input Customer Name</p>
   <% end %>
 <% end %>
 
@@ -70,23 +90,26 @@
 <% end %>
 
   <fieldset>
-    <p><label for="mode">Select Mode:</label></p>
-    <select name="Mode" id="mode">
+    <p><label for="responsemode">Select Response Mode:</label></p>
+    <select name="responsemode" id="responsemode">
       <option value="">Select Mode:</option>
       <option value="paper">Paper</option>
       <option value="online">Online</option>
     </select>
 
-    <p><label for="icMode" class="disabletext">Select IC Mode:</label></p>
-    <select name="icMode" id="icMode" disabled>
+    <p><label for="contactmode">Select Contact Mode:</label></p>
+    <select name="contactmode" id="contactmode" disabled>
       <option value="">Select IC Mode:</option>
       <option value="sms">SMS</option>
       <option value="email">eMail</option>
       <option value="letter">Letter</option>
     </select>
 
-    <p><label id="customerparametername" class="disabletext">Input:</label><span class="required">*</span></p>
-    <input type="text" id="customerparameter" name="customerparameter" size="51" maxlength="40" value="<%=h customername %>" disabled></p>
+    <p><label id="deliverymode">Delivery Mode:</label><span class="required">*</span></p>
+    <input type="text" id="delivery" name="delivery" size="51" maxlength="40" value="<%=h deliverymode %>" disabled></p>
+
+    <p><label id="customername">Input Name:</label><span class="required">*</span></p>
+    <input type="text" id="customername" name="customername" size="51" maxlength="40" value="<%=h customername %>"></p>
 
   </fieldset>
   <p id="requiredfields"><span class="required">*</span> Required fields</p>

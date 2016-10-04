@@ -1,27 +1,28 @@
 $(document).ready(function() {
-  document.getElementById("mode").onchange = function() {
-    var mode = document.getElementById("mode");
-    var modeSelected = mode.options[mode.selectedIndex].text;
-    if(modeSelected == "Online") {
-        document.getElementById("icMode").disabled = false;
+  document.getElementById("responsemode").onchange = function() {
+    var responseMode = document.getElementById("responsemode");
+    var responseModeSelected = responseMode.options[responseMode.selectedIndex].text;
+    document.getElementById("delivery").disabled = true;
+    document.getElementById("contactmode").disabled = true;
+    document.getElementById('deliverymode').innerText = 'Delivery Mode:';
+    if(responseModeSelected == "Online") {
+        document.getElementById("contactmode").disabled = false;
     } else {
-        document.getElementById("icMode").disabled = true;
+        document.getElementById("contactmode").disabled = true;
     }
   }
 
-  document.getElementById("icMode").onchange = function() {
-    var icmode = document.getElementById("icMode");
-    document.getElementById("customerparameter").disabled = true;
-    var icmodeSelected = icmode.options[icmode.selectedIndex].text;
-    if(icmodeSelected == "eMail") {
-        document.getElementById("customerparameter").disabled = false;
-        document.getElementById('customerparametername').innerText = 'Input Email Address:';
-    } else if(icmodeSelected == "SMS") {
-        document.getElementById("customerparameter").disabled = false;
-        document.getElementById('customerparametername').innerText = 'Input Mobile Number:';
-    } else if(icmodeSelected == "Letter") {
-        document.getElementById("customerparameter").disabled = false;
-        document.getElementById('customerparametername').innerText = 'Input Name:';
+  document.getElementById("contactmode").onchange = function() {
+    var contactmode = document.getElementById("contactmode");
+    document.getElementById("delivery").disabled = true;
+    document.getElementById('deliverymode').innerText = 'Delivery Mode:';
+    var contactmodeSelected = contactmode.options[contactmode.selectedIndex].text;
+    if(contactmodeSelected == "eMail") {
+        document.getElementById("delivery").disabled = false;
+        document.getElementById("deliverymode").innerText = 'Delivery Mode - Input Email Address:';
+    } else if(contactmodeSelected == "SMS") {
+        document.getElementById("delivery").disabled = false;
+        document.getElementById("deliverymode").innerText = 'Delivery Mode: - Input Mobile Number:';
     }
   }
 
