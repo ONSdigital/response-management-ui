@@ -1,0 +1,37 @@
+<% if casetype_id && casetype_id.match('^[0-9]*$') %>
+[
+  {
+    "actionPlanMappingId": 1,
+    "actionPlanId": 0,
+    "caseTypeId": <% casetype_id %>,
+    "isDefault": true,
+    "inboundChannel": "string",
+    "variant": "string",
+    "outboundChannel": "string"
+  },
+  {
+    "actionPlanMappingId": 2,
+    "actionPlanId": 0,
+    "caseTypeId": <% casetype_id %>,
+    "isDefault": true,
+    "inboundChannel": "string",
+    "variant": "string",
+    "outboundChannel": "string"
+  },
+  {
+    "actionPlanMappingId": 3,
+    "actionPlanId": 0,
+    "caseTypeId": <% casetype_id %>,
+    "isDefault": true,
+    "inboundChannel": "string",
+    "variant": "string",
+    "outboundChannel": "string"
+  }
+]
+<% else %>
+{
+  "code": "code",
+  "timestamp": 0,
+  "message": "message"
+}
+<% end %>

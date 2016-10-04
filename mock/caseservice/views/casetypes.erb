@@ -1,0 +1,25 @@
+<% if casetype_id && casetype_id.match('^[0-9]*$') %>
+  <% if casetype_id == '1' %>
+  {
+    "caseTypeId": <%= casetype_id %>,
+    "name": "string",
+    "description": "string",
+    "respondentType": "string",
+    "questionSet": "HH"
+  }
+  <% else %>
+  {
+    "caseTypeId": <%= casetype_id %>,
+    "name": "string",
+    "description": "string",
+    "respondentType": "string",
+    "questionSet": "I"
+  }
+  <% end %>
+<% else %>
+{
+  "code": "code",
+  "timestamp": 0,
+  "message": "message"
+}
+<% end %>

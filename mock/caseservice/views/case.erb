@@ -2,48 +2,52 @@
   <% if case_id == '1' %>
   {
     "caseId": "<%= case_id %>",
-    "uprn": "12345678900987654321",
+    "externalRef": "1234567890",
+    "caseGroupId": 1,
+    "responses": [
+      {
+        "responseDateTime": "2016-09-29T08:53:49.746Z"
+      }
+    ],
+    "contact": {
+      "contactId": 1,
+      "forename": "Forename",
+      "surname": "Surname",
+      "phoneNumber": "01234 567890",
+      "emailAddress": "email@email.com"
+    },
     "state": "INIT",
-    "caseTypeId": "1",
-    "createdDateTime": "2016-02-12 09:46:39.25+00",
+    "iac": "e3gh 4ksa 14sf mpoq 98ui",
+    "caseTypeId": 1,
+    "createdDateTime": "2016-09-29T08:53:49.746Z",
     "createdBy": "SYSTEM",
-    "sampleId": 1,
-    "actionplanId": 1,
-    "surveyId": 1,
-    "parentCaseId": 0,
-    "questionSet": "HH"
+    "actionPlanMappingId": 1
   }
   <% else %>
   {
     "caseId": "<%= case_id %>",
-    "uprn": "12345678900987654322",
+    "externalRef": "1234567891",
+    "caseGroupId": 1,
+    "responses": [
+      {
+        "responseDateTime": "2016-09-29T08:53:49.746Z"
+      }
+    ],
+    "contact": {
+      "contactId": 1,
+      "forename": "Forename",
+      "surname": "Surname",
+      "phoneNumber": "01234 567890",
+      "emailAddress": "email@email.com"
+    },
     "state": "INIT",
-    "caseTypeId": "1",
-    "createdDateTime": "2016-02-12 09:46:39.25+00",
+    "iac": "js7r hs93 bd4q i873 hd04",
+    "caseTypeId": 1,
+    "createdDateTime": "2016-09-29T08:53:49.746Z",
     "createdBy": "SYSTEM",
-    "sampleId": 1,
-    "actionplanId": 1,
-    "surveyId": 1,
-    "parentCaseId": 0,
-    "questionSet": "I"
+    "actionPlanMappingId": 1
   }
-  <% end %>
-<% elsif uprn && uprn.match('^[0-9]*$') %>
-[
-  {
-    "caseId": "1",
-    "uprn": "<%= uprn %>",
-    "state": "INIT",
-    "caseTypeId": "1",
-    "createdDateTime": "2016-02-12 09:46:39.25+00",
-    "createdBy": "SYSTEM",
-    "sampleId": 1,
-    "actionplanId": 1,
-    "surveyId": 1,
-    "parentCaseId": 0,
-    "questionSet": "HH"
-  }
-]
+  <% end %> 
 <% else %>
 {
   "code": "code",

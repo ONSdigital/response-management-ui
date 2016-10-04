@@ -9,6 +9,11 @@ get '/addresses/postcode/:postcode' do |postcode|
   erb :address, locals: { uprn: nil, postcode: postcode }
 end
 
+# Get casegroup
+get '/casegroup/uprn/:uprn' do |uprn|
+  erb :casegroup, locals: { uprn: uprn }
+end
+
 # Get case.
 get '/cases/:case_id' do |case_id|
   erb :case, locals: { case_id: case_id }
@@ -19,38 +24,38 @@ get '/cases/:case_id/events' do |case_id|
   erb :events, locals: { case_id: case_id }
 end
 
-# Create case event.
+# Get casetypes.
+get '/casetypes/:casetype_id' do |casetype_id|
+  erb :casetypes, locals: { casetype_id: casetype_id }
+end
+
+
+# create case event.
 post '/cases/:case_id/events' do |case_id|
   erb :new_event, locals: { case_id: case_id }
 end
 
-# Get case by UPRN.
-get '/cases/uprn/:uprn' do |uprn|
-  erb :cases, locals: { case_id: nil, uprn: uprn }
+# Get cases by casgroup.
+get '/cases/casegroup/:casegroup_id' do |casegroup_id|
+  erb :cases, locals: { casegroup_id: casegroup_id }
 end
 
 # List categories.
 get '/categories' do
-  erb :categories, locals: { role: params['role'] }
+  erb :categories, locals: { role: params['role'], group: params['group']}
 end
-
-# List products.
-get '/products' do
-  erb :products, locals: { role: params['role'] }
-end
-
 
 # Get sample.
 get '/samples/:sample_id' do |sample_id|
   erb :sample, locals: { sample_id: sample_id }
 end
 
-# Get survey.
-get '/surveys/:survey_id' do |survey_id|
-  erb :survey, locals: { survey_id: survey_id }
+# Get actionplanmapping.
+get '/actionplanmapping/:mapping_id' do |mapping_id|
+  erb :actionplanmapping, locals: { mapping_id: mapping_id }
 end
 
-# List questionnaires for case.
-get '/questionnaires/case/:case_id' do |case_id|
-  erb :questionnaires, locals: { case_id: case_id }
+# Get actionplanmappings for casetype.
+get '/actionplanmappings/casetype/:casetype_id' do |casetype_id|
+  erb :actionplanmappings, locals: { casetype_id: casetype_id }
 end

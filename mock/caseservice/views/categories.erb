@@ -1,338 +1,464 @@
 <% if role && role.match('collect-csos') %>
 [
   {
+    "categoryId": 1,
     "name": "General Enquiry",
     "description": null,
+    "manual": true,
     "role": "collect-csos, collect-admins",
-    "generatedActionType": null,
-    "closeCase": null,
-    "manual": true
+    "group": null
   },
   {
+    "categoryId": 1,
     "name": "Complaint",
     "description": null,
+    "manual": true,
     "role": "collect-csos, collect-admins",
-    "generatedActionType": null,
-    "closeCase": null,
-    "manual": true
+    "group": null
   },
   {
+    "categoryId": 1,
     "name": "Survey Enquiry",
     "description": null,
+    "manual": true,
     "role": "collect-csos, collect-admins",
-    "generatedActionType": null,
-    "closeCase": null,
-    "manual": true
+    "group": null
   },
   {
+    "categoryId": 1,
     "name": "Address Details Incorrect",
     "description": null,
+    "manual": true,
     "role": "collect-csos, collect-admins",
-    "generatedActionType": null,
-    "closeCase": null,
-    "manual": true
+    "group": null
   },
   {
+    "categoryId": 1,
     "name": "Classification Incorrect",
     "description": null,
+    "manual": true,
     "role": "collect-csos, collect-admins",
-    "generatedActionType": null,
-    "closeCase": true,
-    "manual": true
+    "group": null
   },
   {
+    "categoryId": 1,
     "name": "Request for Fulfilment",
     "description": null,
+    "manual": true,
     "role": "collect-csos, collect-admins",
-    "generatedActionType": null,
-    "closeCase": null,
-    "manual": true
+    "group": null
   },
   {
+    "categoryId": 1,
     "name": "Technical Query",
     "description": null,
+    "manual": true,
     "role": "collect-csos, collect-admins",
-    "generatedActionType": null,
-    "closeCase": null,
-    "manual": true
+    "group": null
   },
   {
+    "categoryId": 1,
     "name": "Miscellaneous",
     "description": null,
+    "manual": true,
     "role": "collect-csos, collect-admins",
-    "generatedActionType": null,
-    "closeCase": null,
-    "manual": true
+    "group": null
+
   },
   {
+    "categoryId": 1,
     "name": "Complaint - Escalated",
     "description": null,
+    "manual": true,
     "role": "collect-csos, collect-admins",
-    "generatedActionType": "ComplaintEscalation",
-    "closeCase": null,
-    "manual": true
+    "group": null
+
   },
   {
+    "categoryId": 1,
     "name": "General Enquiry - Escalated",
     "description": null,
+    "manual": true,
     "role": "collect-csos, collect-admins",
-    "generatedActionType": "GeneralEscalation",
-    "closeCase": null,
-    "manual": true
+    "group": null
   },
   {
+    "categoryId": 1,
     "name": "Survey Enquiry - Escalated",
     "description": null,
+    "manual": true,
     "role": "collect-csos, collect-admins",
-    "generatedActionType": "SurveyEscalation",
-    "closeCase": null,
-    "manual": true
+    "group": null
   },
   {
+    "categoryId": 1,
     "name": "Undeliverable",
     "description": null,
+    "manual": true,
     "role": "collect-csos, collect-admins",
-    "generatedActionType": null,
-    "closeCase": true,
-    "manual": true
+    "group": null
   },
   {
+    "categoryId": 1,
     "name": "Refusal",
     "description": null,
+    "manual": true,
     "role": "collect-csos, collect-escalate, collect-admins",
-    "generatedActionType": null,
-    "closeCase": true,
-    "manual": true
+    "group": null
   }
 ]
 <% elsif role && role.match('collect-escalate') %>
 [
   {
+    "categoryId": 1,
     "name": "Pending",
     "description": "Pending",
+    "manual": true,
     "role": "collect-escalate, collect-admins",
-    "generatedActionType": null,
-    "closeCase": null,
-    "manual": true
+    "group": null
   },
   {
+    "categoryId": 1,
     "name": "Closed",
     "description": "Closed",
+    "manual": true,
     "role": "collect-escalate, collect-admins",
-    "generatedActionType": null,
-    "closeCase": null,
-    "manual": true
+    "group": null
   },
   {
+    "categoryId": 1,
     "name": "Refusal",
     "description": null,
+    "manual": true,
     "role": "collect-csos, collect-escalate, collect-admins",
-    "generatedActionType": null,
-    "closeCase": true,
-    "manual": true
+    "group": null
   },
   {
+    "categoryId": 1,
     "name": "IncorrectEscalation",
     "description": "Incorrect Escalation",
+    "manual": true,
     "role": "collect-escalate, collect-admins",
-    "generatedActionType": null,
-    "closeCase": null,
-    "manual": true
+    "group": null
   }
+]
+<% elsif group && group.match('translation') %>
+[
+  {
+    "categoryId": 1,
+    "name": "Welsh",
+    "description": "",
+    "manual": true,
+    "role": "collect-escalate, collect-admins",
+    "group": "translation"
+  },
+  {
+    "categoryId": 2,
+    "name": "Polish",
+    "description": "",
+    "manual": true,
+    "role": "collect-escalate, collect-admins",
+    "group": "translation"
+  },
+  {
+    "categoryId": 3,
+    "name": "Cantonese",
+    "description": null,
+    "manual": true,
+    "role": "collect-escalate, collect-admins",
+    "group": "translation"
+  },
+  {
+    "categoryId": 4,
+    "name": "Spanish",
+    "description": null,
+    "manual": true,
+    "role": "collect-csos, collect-escalate, collect-admins",
+    "group": "translation"
+  },
+  {
+    "categoryId": 4,
+    "name": "Arabic",
+    "description": null,
+    "manual": true,
+    "role": "collect-escalate, collect-admins",
+    "group": "translation"
+  },
+  {
+    "categoryId": 6,
+    "name": "Somali",
+    "description": "",
+    "manual": true,
+    "role": "collect-escalate, collect-admins",
+    "group": "translation"
+  },
+  {
+    "categoryId": 7,
+    "name": "Mandarin",
+    "description": null,
+    "manual": true,
+    "role": "collect-escalate, collect-admins",
+    "group": "translation"
+  },
+  {
+    "categoryId": 8,
+    "name": "Bengali",
+    "description": null,
+    "manual": true,
+    "role": "collect-csos, collect-escalate, collect-admins",
+    "group": "translation"
+  },
+  {
+    "categoryId": 9,
+    "name": "Portuguese",
+    "description": null,
+    "manual": true,
+    "role": "collect-escalate, collect-admins",
+    "group": "translation"
+  },
+  {
+    "categoryId": 10,
+    "name": "Punjabi - Gurmukhi",
+    "description": null,
+    "manual": true,
+    "role": "collect-csos, collect-escalate, collect-admins",
+    "group": "translation"
+  },
+  {
+    "categoryId": 11,
+    "name": "Punjabi - Shalmuki",
+    "description": null,
+    "manual": true,
+    "role": "collect-escalate, collect-admins",
+    "group": "translation"
+  },
+  {
+    "categoryId": 12,
+    "name": "Turkish",
+    "description": "",
+    "manual": true,
+    "role": "collect-escalate, collect-admins",
+    "group": "translation"
+  },
+  {
+    "categoryId": 13,
+    "name": "Lithuanian",
+    "description": null,
+    "manual": true,
+    "role": "collect-escalate, collect-admins",
+    "group": "translation"
+  },
+  {
+    "categoryId": 14,
+    "name": "Urdu",
+    "description": "",
+    "manual": true,
+    "role": "collect-escalate, collect-admins",
+    "group": "translation"
+  },
+  {
+    "categoryId": 15,
+    "name": "Gujarati",
+    "description": null,
+    "manual": true,
+    "role": "collect-escalate, collect-admins",
+    "group": "translation"
+  }
+
 ]
 <% else %>
 [
   {
+    "categoryId": 1,
     "name": "CaseCreated",
     "description": "Initial Creation Of Case",
+    "manual": false,
     "role": null,
-    "generatedActionType": null,
-    "closeCase": null,
-    "manual": false
+    "group": null
   },
   {
+    "categoryId": 1,
     "name": "CaseClosed",
     "description": "Closure of Case",
+    "manual": false,
     "role": null,
-    "generatedActionType": null,
-    "closeCase": null,
-    "manual": false
+    "group": null
   },
   {
+    "categoryId": 1,
     "name": "ActionUpdated",
     "description": "Action updated",
+    "manual": false,
     "role": null,
-    "generatedActionType": null,
-    "closeCase": null,
-    "manual": false
+    "group": null
   },
   {
+    "categoryId": 1,
     "name": "ActionCompleted",
     "description": "Action completed",
+    "manual": false,
     "role": null,
-    "generatedActionType": null,
-    "closeCase": null,
-    "manual": false
+    "group": null
   },
   {
+    "categoryId": 1,
     "name": "ActionCreated",
     "description": "Action created",
+    "manual": false,
     "role": null,
-    "generatedActionType": null,
-    "closeCase": null,
-    "manual": false
+    "group": null
   },
   {
+    "categoryId": 1,
     "name": "General Enquiry",
     "description": null,
+    "manual": true,
     "role": "collect-csos, collect-admins",
-    "generatedActionType": null,
-    "closeCase": null,
-    "manual": true
+    "group": null
   },
   {
+    "categoryId": 1,
     "name": "Complaint",
     "description": null,
+    "manual": true,
     "role": "collect-csos, collect-admins",
-    "generatedActionType": null,
-    "closeCase": null,
-    "manual": true
+    "group": null
   },
   {
+    "categoryId": 1,
     "name": "Survey Enquiry",
     "description": null,
+    "manual": true,
     "role": "collect-csos, collect-admins",
-    "generatedActionType": null,
-    "closeCase": null,
-    "manual": true
+    "group": null
   },
   {
+    "categoryId": 1,
     "name": "Address Details Incorrect",
     "description": null,
+    "manual": true,
     "role": "collect-csos, collect-admins",
-    "generatedActionType": null,
-    "closeCase": null,
-    "manual": true
+    "group": null
   },
   {
+    "categoryId": 1,
     "name": "Classification Incorrect",
     "description": null,
+    "manual": true,
     "role": "collect-csos, collect-admins",
-    "generatedActionType": null,
-    "closeCase": true,
-    "manual": true
+    "group": null
   },
   {
+    "categoryId": 1,
     "name": "Request for Fulfilment",
     "description": null,
+    "manual": true,
     "role": "collect-csos, collect-admins",
-    "generatedActionType": null,
-    "closeCase": null,
-    "manual": true
+    "group": null
   },
   {
+    "categoryId": 1,
     "name": "Technical Query",
     "description": null,
+    "manual": true,
     "role": "collect-csos, collect-admins",
-    "generatedActionType": null,
-    "closeCase": null,
-    "manual": true
+    "group": null
   },
   {
+    "categoryId": 1,
     "name": "Miscellaneous",
     "description": null,
+    "manual": true,
     "role": "collect-csos, collect-admins",
-    "generatedActionType": null,
-    "closeCase": null,
-    "manual": true
+    "group": null
   },
   {
+    "categoryId": 1,
     "name": "Pending",
     "description": "Pending",
+    "manual": true,
     "role": "collect-escalate, collect-admins",
-    "generatedActionType": null,
-    "closeCase": null,
-    "manual": true
+    "group": null
   },
   {
+    "categoryId": 1,
     "name": "Complaint - Escalated",
     "description": null,
+    "manual": true,
     "role": "collect-csos, collect-admins",
-    "generatedActionType": "ComplaintEscalation",
-    "closeCase": null,
-    "manual": true
+    "group": null
   },
   {
+    "categoryId": 1,
     "name": "General Enquiry - Escalated",
     "description": null,
+    "manual": true,
     "role": "collect-csos, collect-admins",
-    "generatedActionType": "GeneralEscalation",
-    "closeCase": null,
-    "manual": true
+    "group": null
   },
   {
+    "categoryId": 1,
     "name": "Survey Enquiry - Escalated",
     "description": null,
+    "manual": true,
     "role": "collect-csos, collect-admins",
-    "generatedActionType": "SurveyEscalation",
-    "closeCase": null,
-    "manual": true
+    "group": null
   },
   {
+    "categoryId": 1,
     "name": "Undeliverable",
     "description": null,
+    "manual": true,
     "role": "collect-csos, collect-admins",
-    "generatedActionType": null,
-    "closeCase": true,
-    "manual": true
+    "group": null
   },
   {
+    "categoryId": 1,
     "name": "QuestionnaireResponse",
     "description": "Questionnaire Response logged",
+    "manual": false,
     "role": null,
-    "generatedActionType": null,
-    "closeCase": true,
-    "manual": false
+    "group": null
   },
   {
+    "categoryId": 1,
     "name": "ActionCancellationCompleted",
     "description": "Action cancellation completed",
+    "manual": false,
     "role": null,
-    "generatedActionType": null,
-    "closeCase": null,
-    "manual": false
+    "group": null
   },
   {
+    "categoryId": 1,
     "name": "ActionCancellationCreated",
     "description": "Action cancellation created",
+    "manual": false,
     "role": null,
-    "generatedActionType": null,
-    "closeCase": null,
-    "manual": false
+    "group": null
   },
   {
+    "categoryId": 1,
     "name": "Closed",
     "description": "Closed",
+    "manual": true,
     "role": "collect-escalate, collect-admins",
-    "generatedActionType": null,
-    "closeCase": null,
-    "manual": true
+    "group": null
   },
   {
+    "categoryId": 1,
     "name": "Refusal",
     "description": null,
+    "manual": true,
     "role": "collect-csos, collect-escalate, collect-admins",
-    "generatedActionType": null,
-    "closeCase": true,
-    "manual": true
+    "group": null
   },
   {
+    "categoryId": 1,
     "name": "IncorrectEscalation",
     "description": "Incorrect Escalation",
+    "manual": true,
     "role": "collect-escalate, collect-admins",
-    "generatedActionType": null,
-    "closeCase": null,
-    "manual": true
+    "group": null
   }
 ]
 <% end %>
