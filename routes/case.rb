@@ -46,12 +46,11 @@ get '/addresses/:uprn/cases/?' do |uprn|
         sample_id   = casegroup['sampleId']
         sample      = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/samples/#{sample_id}"))
         survey_id   = sample['surveyId']
-        survey      = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/surveys/#{survey_id}"))
         casetype_id = kase['caseTypeId']
         casetype    = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/casetypes/#{casetype_id}"))
 
         #add extra values to the kase object
-        kase['surveyDescription'] = survey['description']
+        kase['surveyDescription'] = sample['survey']
         kase['name']              = sample['name']
         kase['questionSet']       = casetype['questionSet']
       end
@@ -76,10 +75,9 @@ get '/cases/:case_id/uprn/:uprn/sample/:sample_id?' do |case_id, uprn, sample_id
   events         = []
   actions        = []
   sample         = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/samples/#{sample_id}"))
-  survey_id      = sample['surveyId']
-  survey         = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/surveys/#{survey_id}"))
+  survey         = sample['survey']
   kase           = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}"))
-  questionnaires = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/questionnaires/case/#{case_id}"))
+  responses      = kase['responses']
 
   RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}/events") do |response, _request, _result, &_block|
     events = JSON.parse(response).paginate(page: params[:page]) unless response.code == 204
@@ -95,16 +93,17 @@ get '/cases/:case_id/uprn/:uprn/sample/:sample_id?' do |case_id, uprn, sample_id
   address      = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/addresses/#{uprn}"))
 
   erb :case_events, layout: :sidebar_layout, locals: { title: "Event History for Case #{case_id}",
-                                                       uprn: uprn,
                                                        case_id: case_id,
                                                        kase: kase,
                                                        events: events,
                                                        address: address,
+                                                       uprn: address['uprn'],
                                                        coordinates: coordinates_for(address),
                                                        postcode: format_postcode(address['postcode']),
                                                        survey: survey,
                                                        sample: sample,
-                                                       questionnaires: questionnaires,
+                                                       sample_id: sample_id,
+                                                       responses: responses,
                                                        actions: actions,
                                                        question_set: question_set
                                                      }
@@ -128,13 +127,13 @@ get '/postcodes/:postcode' do |postcode|
 end
 
 # Present a form for creating a new event.
-get '/cases/:case_id/event/new' do |case_id|
+get '/cases/:case_id/uprn/:uprn/sample/:sample_id/event/new' do |case_id, uprn, sample_id|
   authenticate!
   kase       = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}"))
   address    = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/addresses/#{case_id}"))
   categories = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/categories?role=#{user_role}"))
   erb :event, locals: { title: "Create Event for Case #{case_id}",
-                        action: "/cases/#{case_id}/event",
+                        action: "/cases/#{case_id}/uprn/#{case_id}/sample/#{sample_id}/event",
                         method: :post,
                         page: params[:page],
                         uprn: address['uprn'],
@@ -145,12 +144,13 @@ get '/cases/:case_id/event/new' do |case_id|
                         customercontact: '',
                         eventcategory: '',
                         createdby: '',
+                        sample_id: sample_id,
                         categories: categories
                       }
 end
 
 # Create a new event.
-post '/cases/:case_id/event' do |case_id|
+post '/cases/:case_id/uprn/:uprn/sample/:sample_id/event' do |case_id, uprn, sample_id|
   authenticate!
 
   form do
@@ -164,11 +164,12 @@ post '/cases/:case_id/event' do |case_id|
     kase       = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}"))
     address    = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/addresses/#{case_id}"))
     categories = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/categories?role=#{user_role}"))
+    uprn       = address['uprn']
     erb :event, locals: { title: "Create Event for Case #{case_id}",
-                          action: "/cases/#{case_id}/event",
+                          action: "/cases/#{case_id}/uprn/#{case_id}/sample/#{sample_id}/event",
                           method: :post,
                           page: params[:page],
-                          uprn: address['uprn'],
+                          uprn: uprn,
                           case_id: case_id,
                           postcode: format_postcode(address['postcode']),
                           eventtext: '',
@@ -176,6 +177,7 @@ post '/cases/:case_id/event' do |case_id|
                           customercontact: phone,
                           eventcategory: params[:eventcategory],
                           createdby: '',
+                          sample_id: sample_id,
                           categories: categories
                         }
   else
@@ -228,19 +230,19 @@ post '/cases/:case_id/event' do |case_id|
       end
     end
 
-    event_url = "/cases/#{case_id}"
+    event_url = "/cases/#{case_id}/uprn/#{uprn}/sample/#{sample_id}"
     event_url += "?page=#{params[:page]}" if params[:page].present?
     redirect event_url
   end
 end
 
 # Present a form for requesting an indvidual form.
-get '/cases/:case_id/childcase/new' do |case_id|
+get '/cases/:case_id/uprn/:uprn/sample/:sample_id/childcase/new' do |case_id, uprn, sample_id|
   authenticate!
   kase       = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}"))
   address    = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/addresses/#{case_id}"))
   erb :childcase, locals: { title: "Request Individual Form for Case #{case_id}",
-                            action: "/cases/#{case_id}/childcase",
+                            action: "/cases/#{case_id}/uprn/#{case_id}/sample/#{sample_id}/childcase",
                             method: :post,
                             page: params[:page],
                             uprn: address['uprn'],
@@ -253,12 +255,14 @@ get '/cases/:case_id/childcase/new' do |case_id|
                             contactmode: '',
                             eventcategory: '',
                             createdby: '',
+                            sample_id: sample_id,
                             address: address
                           }
 end
 
+
 # Request creation of childcase (individual form) and create associated event.
-post '/cases/:case_id/childcase' do |case_id|
+post '/cases/:case_id/uprn/:uprn/sample/:sample_id/childcase' do |case_id, uprn, sample_id|
   authenticate!
 
   responsemode  = params[:responsemode]
@@ -268,20 +272,23 @@ post '/cases/:case_id/childcase' do |case_id|
 
   form do
     field :responsemode, present: true
-    field :contactmode, present: true
-    if contactmode == 'letter'
-      field :delivery, present: false
-    else
+    if responsemode == 'online'
+      field :contactmode, present: true
+    end
+    if responsemode == 'online' && (contactmode == 'sms' || contactmode = 'email')
       field :delivery, present: true
     end
     field :customername, present: true
   end
 
   if form.failed?
+
+    logger.info ('in formed failed')
+
     kase       = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}"))
     address    = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/addresses/#{case_id}"))
     erb :childcase, locals: { title: "Request Individual Form for Case #{case_id}",
-                              action: "/cases/#{case_id}/childcase",
+                              action: "/cases/#{case_id}/uprn/#{case_id}/sample/#{sample_id}/childcase",
                               method: :post,
                               page: params[:page],
                               uprn: address['uprn'],
@@ -294,6 +301,7 @@ post '/cases/:case_id/childcase' do |case_id|
                               createdby: '',
                               responsemode: responsemode,
                               contactmode: contactmode,
+                              sample_id: sample_id,
                               address: address
                             }
   else
@@ -317,19 +325,19 @@ post '/cases/:case_id/childcase' do |case_id|
       end
     end
 
-    event_url = "/cases/#{case_id}"
+    event_url = "/cases/#{case_id}/uprn/#{uprn}/sample/#{sample_id}"
     event_url += "?page=#{params[:page]}" if params[:page].present?
     redirect event_url
   end
 end
 
 # Present a form for requesting a paper form.
-get '/cases/:case_id/paper/new' do |case_id|
+get '/cases/:case_id/uprn/:uprn/sample/:sample_id/paper/new' do |case_id, uprn, sample_id|
   authenticate!
   kase       = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}"))
   address    = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/addresses/#{case_id}"))
   erb :paper, locals: { title: "Request Paper Questionnaire for Case #{case_id}",
-                        action: "/cases/#{case_id}/paper",
+                        action: "/cases/#{case_id}/uprn/#{case_id}/sample/#{sample_id}/paper",
                         method: :post,
                         page: params[:page],
                         uprn: address['uprn'],
@@ -338,12 +346,13 @@ get '/cases/:case_id/paper/new' do |case_id|
                         eventtext: '',
                         customername: '',
                         createdby: '',
+                        sample_id: sample_id,
                         address: address
                       }
 end
 
 # Request printed questionnaire and create associated event.
-post '/cases/:case_id/paper' do |case_id|
+post '/cases/:case_id/uprn/:uprn/sample/:sample_id/paper' do |case_id, uprn, sample_id|
   authenticate!
 
   form do
@@ -356,7 +365,7 @@ post '/cases/:case_id/paper' do |case_id|
     kase       = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}"))
     address    = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/addresses/#{case_id}"))
     erb :paper, locals: { title: "Request Individual Form for Case #{case_id}",
-                          action: "/cases/#{case_id}/paper",
+                          action: "/cases/#{case_id}/uprn/#{case_id}/sample/#{sample_id}/paper",
                           method: :post,
                           page: params[:page],
                           uprn: address['uprn'],
@@ -365,6 +374,7 @@ post '/cases/:case_id/paper' do |case_id|
                           eventtext: '',
                           customername: customername,
                           createdby: '',
+                          sample_id: sample_id,
                           address: address
                         }
   else
@@ -388,19 +398,19 @@ post '/cases/:case_id/paper' do |case_id|
       end
     end
 
-    event_url = "/cases/#{case_id}"
+    event_url = "/cases/#{case_id}/uprn/#{uprn}/sample/#{sample_id}"
     event_url += "?page=#{params[:page]}" if params[:page].present?
     redirect event_url
   end
 end
 
 # Present a form for requesting a replacement IAC.
-get '/cases/:case_id/iac/new' do |case_id|
+get '/cases/:case_id/uprn/:uprn/sample/:sample_id/iac/new' do |case_id, uprn, sample_id|
   authenticate!
   kase       = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}"))
   address    = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/addresses/#{case_id}"))
   erb :iac, locals: { title: "Request Replacement IAC for Case #{case_id}",
-                        action: "/cases/#{case_id}/iac",
+                        action: "/cases/#{case_id}/uprn/#{case_id}/sample/#{sample_id}/iac",
                         method: :post,
                         page: params[:page],
                         uprn: address['uprn'],
@@ -412,12 +422,13 @@ get '/cases/:case_id/iac/new' do |case_id|
                         contactmode: '',
                         eventcategory: '',
                         createdby: '',
+                        sample_id: sample_id,
                         address: address
                       }
 end
 
 # Request new IAC and create associated event.
-post '/cases/:case_id/iac' do |case_id|
+post '/cases/:case_id/uprn/:uprn/sample/:sample_id/iac' do |case_id, uprn, sample_id|
   authenticate!
 
   form do
@@ -446,7 +457,7 @@ post '/cases/:case_id/iac' do |case_id|
     kase       = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}"))
     address    = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/addresses/#{case_id}"))
     erb :iac, locals: { title: "Request Individual Form for Case #{case_id}",
-                          action: "/cases/#{case_id}/iac",
+                          action: "/cases/#{case_id}/uprn/#{case_id}/sample/#{sample_id}/iac",
                           method: :post,
                           page: params[:page],
                           uprn: address['uprn'],
@@ -458,6 +469,7 @@ post '/cases/:case_id/iac' do |case_id|
                           eventcategory: '',
                           createdby: '',
                           contactmode: contactmode,
+                          sample_id: sample_id,
                           address: address
                         }
   else
@@ -482,20 +494,20 @@ post '/cases/:case_id/iac' do |case_id|
       end
     end
 
-    event_url = "/cases/#{case_id}"
+    event_url = "/cases/#{case_id}/uprn/#{uprn}/sample/#{sample_id}"
     event_url += "?page=#{params[:page]}" if params[:page].present?
     redirect event_url
   end
 end
 
 # Present a form for requesting a translation booklet.
-get '/cases/:case_id/translate/new' do |case_id|
+get '/cases/:case_id/uprn/:uprn/sample/:sample_id/translate/new' do |case_id, uprn, sample_id|
   authenticate!
   kase       = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}"))
   address    = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/addresses/#{case_id}"))
   products   = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/categories?group=translation"))
   erb :translate, locals: { title: "Request Translation Booklet for Case #{case_id}",
-                        action: "/cases/#{case_id}/translate",
+                        action: "/cases/#{case_id}/uprn/#{case_id}/sample/#{sample_id}/translate",
                         method: :post,
                         page: params[:page],
                         uprn: address['uprn'],
@@ -506,12 +518,13 @@ get '/cases/:case_id/translate/new' do |case_id|
                         eventcategory: '',
                         createdby: '',
                         address: address,
+                        sample_id: sample_id,
                         products: products
                       }
 end
 
 # Request a translation booklet and create associated event.
-post '/cases/:case_id/translate' do |case_id|
+post '/cases/:case_id/uprn/:uprn/sample/:sample_id/translate' do |case_id, uprn, sample_id|
   authenticate!
 
   form do
@@ -525,7 +538,7 @@ post '/cases/:case_id/translate' do |case_id|
     address    = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/addresses/#{case_id}"))
     products = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/categories?group=translate"))
     erb :translate, locals: { title: "Request Translation Booklet for Case #{case_id}",
-                          action: "/cases/#{case_id}/translate",
+                          action: "/cases/#{case_id}/uprn/#{case_id}/sample/#{sample_id}/translate",
                           method: :post,
                           page: params[:page],
                           uprn: address['uprn'],
@@ -536,6 +549,7 @@ post '/cases/:case_id/translate' do |case_id|
                           eventcategory: params[:eventcategory],
                           createdby: '',
                           address: address,
+                          sample_id: sample_id,
                           products: products
                         }
   else
@@ -562,7 +576,7 @@ post '/cases/:case_id/translate' do |case_id|
       end
     end
 
-    event_url = "/cases/#{case_id}"
+    event_url = "/cases/#{case_id}/uprn/#{uprn}/sample/#{sample_id}"
     event_url += "?page=#{params[:page]}" if params[:page].present?
     redirect event_url
   end

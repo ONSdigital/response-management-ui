@@ -12,23 +12,21 @@
   <% content_for :form_errors do %>
     <p class="message">&bull; Please Select Response Mode</p>
   <% end %>
-<% elsif responsemode != 'paper' %>
-  <% if form.failed_on? :contactmode  %>
-    <% content_for :form_errors do %>
-      <p class="message">&bull; Please Select Contact Mode</p>
-    <% end %>
-  <% elsif form.failed_on? :delivery %>
-    <% if contactmode != 'letter' %>
-      <% content_for :form_errors do %>
-        <p class="message">&bull; Please Input Delivery Mode</p>
-      <% end %>
-      <% elsif form.failed_on? :customername %>
-        <% content_for :form_errors do %>
-          <p class="message">&bull; Please Input Customer Name</p>
-        <% end %>
-    <% end %>
+<% end %>
+
+<% if form.failed_on? :contactmode  %>
+  <% content_for :form_errors do %>
+    <p class="message">&bull; Please Select Contact Mode</p>
   <% end %>
-<% elsif form.failed_on? :customername %>
+<% end %>
+
+<% if form.failed_on? :delivery %>
+  <% content_for :form_errors do %>
+    <p class="message">&bull; Please Input Delivery Mode</p>
+  <% end %>
+<% end %>
+
+<% if form.failed_on? :customername %>
   <% content_for :form_errors do %>
     <p class="message">&bull; Please Input Customer Name</p>
   <% end %>
@@ -114,6 +112,6 @@
   </fieldset>
   <p id="requiredfields"><span class="required">*</span> Required fields</p>
   <p class="buttons">
-    <input class="button" type="submit" value="Save"> or <% if params[:page].present? %><a href="/cases/<%=h case_id %>/childform?page=<%=h params[:page] %>"><% else %><a href="/cases/<%=h case_id %>"><% end %>Cancel</a>
+    <input class="button" type="submit" value="Save"> or <% if params[:page].present? %><a href="/cases/<%=h case_id %>/uprn/<%=h uprn %>/sample/<%=h sample_id %>/childform?page=<%=h params[:page] %>"><% else %><a href="/cases/<%=h case_id %>"><% end %>Cancel</a>
   </p>
 </form>

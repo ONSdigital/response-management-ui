@@ -46,9 +46,9 @@
        <% categories.each do |category| %>
         <% if category['manual'] %>
           <% if eventcategory == category['name'] %>
-            <option value='<%=h category['name'] %>' selected><%=h category['name'] %></option>
+            <option value='<%=h category['categoryId'] %>' selected><%=h category['name'] %></option>
             <% else %>
-            <option value='<%=h category['name'] %>'><%=h category['name'] %></option>
+            <option value='<%=h category['categoryId'] %>'><%=h category['name'] %></option>
           <% end %>
         <% end %>
       <% end %>
@@ -57,6 +57,6 @@
   </fieldset>
   <p id="requiredfields"><span class="required">*</span> Required fields</p>
   <p class="buttons">
-    <input class="button" type="submit" value="Save"> or <% if params[:page].present? %><a href="/cases/<%=h case_id %>/event?page=<%=h params[:page] %>"><% else %><a href="/cases/<%=h case_id %>"><% end %>Cancel</a>
+    <input class="button" type="submit" value="Save"> or <% if params[:page].present? %><a href="/cases/<%=h case_id %>/uprn/<%=h uprn %>/sample/<%=h sample_id %>/event?page=<%=h params[:page] %>"><% else %><a href="/cases/<%=h case_id %>"><% end %>Cancel</a>
   </p>
 </form>

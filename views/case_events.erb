@@ -8,30 +8,30 @@
   <%= erb :googlemaps_partial, locals: { coordinates: coordinates } %>
 <% end %>
 
-  <form action="/cases/<%=h case_id %>/childcase/new" method="get">
+  <form action="/cases/<%=h case_id %>/uprn/<%=h uprn %>/sample/<%=h sample_id %>/childcase/new" method="get">
     <% if question_set == 'HH' %>
       <input class="button" type="submit" value="Request Individual Form&hellip;">
-    <% end %>
-  <% if params[:actionpage].present? %>
-    <input type="hidden" name="page" value="<%=h params[:actionpage] %>">
+      <% if params[:actionpage].present? %>
+        <input type="hidden" name="page" value="<%=h params[:actionpage] %>">
+      <% end %>
   <% end %>
   </form>
 
-  <form action="/cases/<%=h case_id %>/iac/new" method="get">
+  <form action="/cases/<%=h case_id %>/uprn/<%=h uprn %>/sample/<%=h sample_id %>/iac/new" method="get">
     <input class="button" type="submit" value="Request Replacement IAC&hellip;">
   <% if params[:actionpage].present? %>
     <input type="hidden" name="page" value="<%=h params[:actionpage] %>">
   <% end %>
   </form>
 
-  <form action="/cases/<%=h case_id %>/translate/new" method="get">
+  <form action="/cases/<%=h case_id %>/uprn/<%=h uprn %>/sample/<%=h sample_id %>/translate/new" method="get">
     <input class="button" type="submit" value="Request Translation Booklet&hellip;">
   <% if params[:actionpage].present? %>
     <input type="hidden" name="page" value="<%=h params[:actionpage] %>">
   <% end %>
   </form>
 
-  <form action="/cases/<%=h case_id %>/paper/new" method="get">
+  <form action="/cases/<%=h case_id %>/uprn/<%=h uprn %>/sample/<%=h sample_id %>/paper/new" method="get">
     <input class="button" type="submit" value="Request Paper Form&hellip;">
   <% if params[:actionpage].present? %>
     <input type="hidden" name="page" value="<%=h params[:actionpage] %>">
@@ -65,8 +65,8 @@
       <% else %>
         <td>-</td>
       <% end %>
-      <% if survey['description'].present? %>
-        <td><%=h survey['description'] %></td>
+      <% if survey.present? %>
+        <td><%=h survey %></td>
       <% else %>
         <td>-</td>
       <% end %>
@@ -114,40 +114,34 @@
 <table class="secondary">
   <thead>
     <tr>
-      <th>Questionnaire ID</th>
+      <th>Case ID</th>
       <th>Internet Access Code</th>
       <th>Dispatch Date</th>
       <th>Response Date</th>
-      <th>Receipt Date</th>
       <th>Question Set</th>
     </tr>
   </thead>
   <tbody>
-  <% questionnaires.each_with_index do |questionnaire, i| %>
+  <% responses.each_with_index do |response, i| %>
     <tr class="<%= i.even? ? 'even' : 'odd ' %>">
-      <td><%=h questionnaire['questionnaireId'] %></td>
-    <% if questionnaire['iac'] %>
-      <td class="internetaccesscode"><%=h questionnaire['iac'] %></td>
+      <td><%=h kase['caseRef'] %></td>
+    <% if kase['iac'] %>
+      <td class="internetaccesscode"><%=h kase['iac'] %></td>
     <% else %>
       <td>-</td>
     <% end %>
-    <% if questionnaire['dispatchDateTime'] %>
-      <td><%=h questionnaire['dispatchDateTime'].to_date %></td>
+    <% if kase['createdDateTime'] %>
+      <td><%=h kase['createdDateTime'].to_date %></td>
     <% else %>
       <td>-</td>
     <% end %>
-    <% if questionnaire['responseDateTime'] %>
-      <td><%=h questionnaire['responseDateTime'].to_date %></td>
+    <% if response['responseDateTime'] %>
+      <td><%=h response['responseDateTime'].to_date %></td>
     <% else %>
       <td>-</td>
     <% end %>
-    <% if questionnaire['receiptDateTime'] %>
-      <td><%=h questionnaire['receiptDateTime'].to_date %></td>
-    <% else %>
-      <td>-</td>
-    <% end %>
-    <% if questionnaire['questionSet'] %>
-      <td><%=h questionnaire['questionSet'] %></td>
+    <% if question_set %>
+      <td><%=h question_set %></td>
     <% else %>
       <td>-</td>
     <% end %>
@@ -160,7 +154,7 @@
 
   <h3>Events</h3>
   <div id="events">
-    <form action="/cases/<%=h case_id %>/event/new" method="get">
+    <form action="/cases/<%=h case_id %>/uprn/<%=h uprn %>/sample/<%=h sample_id %>/event/new" method="get">
     <% if kase['state'] != 'CLOSED' %>
       <input class="button" type="submit" value="Create Event&hellip;"> or <% if params[:actionpage].present? %><a href="/addresses/<%=h uprn %>/questionnaires?page=<%=h params[:actionpage] %>"><% else %><a href="/cases/<%=h case_id %>"><% end %>Refresh</a>
     <% else %>
