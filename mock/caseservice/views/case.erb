@@ -2,7 +2,7 @@
   <% if case_id == '1' %>
   {
     "caseId": "<%= case_id %>",
-    "externalRef": "1234567890",
+    "caseRef": "1234567890",
     "caseGroupId": 1,
     "responses": [
       {
@@ -26,7 +26,7 @@
   <% else %>
   {
     "caseId": "<%= case_id %>",
-    "externalRef": "1234567891",
+    "caseRef": "1234567891",
     "caseGroupId": 1,
     "responses": [
       {
@@ -42,12 +42,12 @@
     },
     "state": "INIT",
     "iac": "js7r hs93 bd4q i873 hd04",
-    "caseTypeId": 1,
+    "caseTypeId": 2,
     "createdDateTime": "2016-09-29T08:53:49.746Z",
     "createdBy": "SYSTEM",
     "actionPlanMappingId": 1
   }
-  <% end %> 
+  <% end %>
 <% else %>
 {
   "code": "code",

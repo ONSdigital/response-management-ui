@@ -9,9 +9,24 @@ get '/addresses/postcode/:postcode' do |postcode|
   erb :address, locals: { uprn: nil, postcode: postcode }
 end
 
+# Get actionplanmapping.
+get '/actionplanmapping/:mapping_id' do |mapping_id|
+  erb :actionplanmapping, locals: { mapping_id: mapping_id }
+end
+
+# Get actionplanmappings for casetype.
+get '/actionplanmappings/casetype/:casetype_id' do |casetype_id|
+  erb :actionplanmappings, locals: { casetype_id: casetype_id }
+end
+
 # Get casegroup
 get '/casegroup/uprn/:uprn' do |uprn|
   erb :casegroup, locals: { uprn: uprn }
+end
+
+# Get cases by casgroup.
+get '/cases/casegroup/:casegroup_id' do |casegroup_id|
+  erb :cases, locals: { casegroup_id: casegroup_id }
 end
 
 # Get case.
@@ -29,15 +44,9 @@ get '/casetypes/:casetype_id' do |casetype_id|
   erb :casetypes, locals: { casetype_id: casetype_id }
 end
 
-
 # create case event.
 post '/cases/:case_id/events' do |case_id|
   erb :new_event, locals: { case_id: case_id }
-end
-
-# Get cases by casgroup.
-get '/cases/casegroup/:casegroup_id' do |casegroup_id|
-  erb :cases, locals: { casegroup_id: casegroup_id }
 end
 
 # List categories.
@@ -48,14 +57,4 @@ end
 # Get sample.
 get '/samples/:sample_id' do |sample_id|
   erb :sample, locals: { sample_id: sample_id }
-end
-
-# Get actionplanmapping.
-get '/actionplanmapping/:mapping_id' do |mapping_id|
-  erb :actionplanmapping, locals: { mapping_id: mapping_id }
-end
-
-# Get actionplanmappings for casetype.
-get '/actionplanmappings/casetype/:casetype_id' do |casetype_id|
-  erb :actionplanmappings, locals: { casetype_id: casetype_id }
 end
