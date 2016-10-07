@@ -70,6 +70,6 @@
   </fieldset>
   <p id="requiredfields"><span class="required">*</span> Required fields</p>
   <p class="buttons">
-    <input class="button" type="submit" value="Save"> or <% if params[:page].present? %><a href="/cases/<%=h case_id %>/uprn/<%=h uprn %>/sample/<%=h sample_id %>/paper?page=<%=h params[:page] %>"><% else %><a href="/cases/<%=h case_id %>"><% end %>Cancel</a>
+    <input class="button" type="submit" value="Save"> or <% if params[:page].present? %><a href="/cases/<%=h case_id %>/uprn/<%=h uprn %>/sample/<%=h sample_id %>/paper?page=<%=h params[:page] %>"><% else %><a href="/cases/<%=h case_id %>/uprn/<%=h uprn %>/sample/<%=h sample_id %>"><% end %>Cancel</a>
   </p>
 </form>
