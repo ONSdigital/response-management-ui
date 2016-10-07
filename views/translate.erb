@@ -82,10 +82,10 @@
     <p>
       <select id="eventcategory" name="eventcategory">
        <% products.each do |product| %>
-          <% if eventcategory == product['name'] %>
-            <option value='<%=h product['name'] %>' selected><%=h product['name'] %></option>
-            <% else %>
-            <option value='<%=h product['name'] %>'><%=h product['name'] %></option>
+          <% if eventcategory == product['description'] %>
+            <option value='<%=h product['name'] %>' selected><%=h product['description'] %></option>
+          <% else %>
+            <option value='<%=h product['name'] %>'><%=h product['description'] %></option>
           <% end %>
         <% end %>
     </select>
