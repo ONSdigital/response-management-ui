@@ -1,0 +1,34 @@
+<% if category_id && category_id.match('1') %>
+{
+  "categoryId": <%= category_id %>,
+  "name": "General Enquiry",
+  "description": null,
+  "manual": true,
+  "role": "collect-csos, collect-admins",
+  "group": null
+}
+<% elsif category_id && category_id.match('2') %>
+{
+  "categoryId": <%= category_id %>,
+  "name": "Complaint",
+  "description": null,
+  "manual": true,
+  "role": "collect-csos, collect-admins",
+  "group": null
+}
+<% elsif category_id && category_id.match('3') %>
+{
+  "categoryId": <%= category_id %>,
+  "name": "Survey Enquiry",
+  "description": null,
+  "manual": true,
+  "role": "collect-csos, collect-admins",
+  "group": null
+}
+<% else %>
+{
+  "code": "code",
+  "timestamp": 0,
+  "message": "message"
+}
+<% end %>

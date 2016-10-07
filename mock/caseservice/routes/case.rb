@@ -51,7 +51,12 @@ end
 
 # List categories.
 get '/categories' do
-  erb :categories, locals: { role: params['role'], group: params['group']}
+  erb :categories, locals: { role: params['role'], group: params['group'] }
+end
+
+# List categories.
+get '/categories/:category_id' do |category_id|
+  erb :category, locals: { category_id: category_id }
 end
 
 # Get sample.
