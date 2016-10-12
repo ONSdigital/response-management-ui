@@ -20,8 +20,8 @@ get '/actionplanmappings/casetype/:casetype_id' do |casetype_id|
 end
 
 # Get casegroup
-get '/casegroup/uprn/:uprn' do |uprn|
-  erb :casegroup, locals: { uprn: uprn }
+get '/casegroups/uprn/:uprn' do |uprn|
+  erb :casegroups, locals: { uprn: uprn }
 end
 
 # Get cases by casgroup.
