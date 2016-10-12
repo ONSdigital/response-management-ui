@@ -9,7 +9,7 @@
 <% end %>
 
   <form action="/cases/<%=h case_id %>/uprn/<%=h uprn %>/sample/<%=h sample_id %>/childcase/new" method="get">
-    <% if question_set == 'HH' %>
+    <% if respondent_type == 'H' %>
       <input class="button" type="submit" value="Request Individual Form&hellip;">
       <% if params[:actionpage].present? %>
         <input type="hidden" name="page" value="<%=h params[:actionpage] %>">
@@ -115,39 +115,50 @@
   <thead>
     <tr>
       <th>Case ID</th>
-      <th>Internet Access Code</th>
       <th>Dispatch Date</th>
       <th>Response Date</th>
       <th>Question Set</th>
     </tr>
   </thead>
   <tbody>
-  <% responses.each_with_index do |response, i| %>
-    <tr class="<%= i.even? ? 'even' : 'odd ' %>">
-      <td><%=h kase['caseRef'] %></td>
-    <% if kase['iac'] %>
-      <td class="internetaccesscode"><%=h kase['iac'] %></td>
-    <% else %>
-      <td>-</td>
+  <% if !responses.empty? %>
+    <% responses.each_with_index do |response, i| %>
+      <tr class="<%= i.even? ? 'even' : 'odd ' %>">
+        <td><%=h kase['caseRef'] %></td>
+      <% if kase['createdDateTime'] %>
+        <td><%=h kase['createdDateTime'].to_date %></td>
+      <% else %>
+        <td>-</td>
+      <% end %>
+      <% if response['responseDateTime'] %>
+        <td><%=h response['responseDateTime'].to_date %></td>
+      <% else %>
+        <td>-</td>
+      <% end %>
+      <% if question_set %>
+        <td><%=h question_set %></td>
+      <% else %>
+        <td>-</td>
+      <% end %>
+      </tr>
     <% end %>
+  <%else%>
+    <tr class="even">
+      <td><%=h kase['caseRef'] %></td>
     <% if kase['createdDateTime'] %>
       <td><%=h kase['createdDateTime'].to_date %></td>
     <% else %>
       <td>-</td>
     <% end %>
-    <% if response['responseDateTime'] %>
-      <td><%=h response['responseDateTime'].to_date %></td>
-    <% else %>
-      <td>-</td>
-    <% end %>
+    <td>-</td>
     <% if question_set %>
       <td><%=h question_set %></td>
     <% else %>
       <td>-</td>
     <% end %>
     </tr>
-  <% end %>
-    </tbody>
+  <%end%>
+  </tbody>
 </table>
 
 <% content_for :footer do %>
@@ -155,14 +166,10 @@
   <h3>Events</h3>
   <div id="events">
     <form action="/cases/<%=h case_id %>/uprn/<%=h uprn %>/sample/<%=h sample_id %>/event/new" method="get">
-    <% if kase['state'] != 'CLOSED' %>
       <input class="button" type="submit" value="Create Event&hellip;"> or <% if params[:actionpage].present? %><a href="/addresses/<%=h uprn %>/questionnaires?page=<%=h params[:actionpage] %>"><% else %><a href="/cases/<%=h case_id %>"><% end %>Refresh</a>
-    <% else %>
-      <input class="button" type="submit" value="Case Closed&hellip;" disabled> or <% if params[:actionpage].present? %><a href="/addresses/<%=h uprn %>/questionnaires?page=<%=h params[:actionpage] %>"><% else %><a href="/cases/<%=h case_id %>"><% end %>Refresh</a>
-    <% end %>
-    <% if params[:actionpage].present? %>
-      <input type="hidden" name="page" value="<%=h params[:actionpage] %>">
-    <% end %>
+      <% if params[:actionpage].present? %>
+        <input type="hidden" name="page" value="<%=h params[:actionpage] %>">
+      <% end %>
     </form>
   </div>
 

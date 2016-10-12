@@ -9,7 +9,11 @@ Select an administration option below:
 <% end %>
 
 <ul id="manage">
-  <li><a href="/manage/escalated/complaint">View escalated complaint cases</a></li>
-  <li><a href="/manage/escalated/general">View escalated general cases</a></li>
-  <li><a href="/manage/escalated/survey">View escalated survey cases</a></li>
+<% if user_role == 'collect-general-escalate'%>
+  <li><a href="/manage/escalated/general/complaint">View escalated general complaint cases</a></li>
+  <li><a href="/manage/escalated/general/enquiry">View escalated general enquiry cases</a></li>
+<% else %>
+  <li><a href="/manage/escalated/field/complaint">View escalated field complaint cases</a></li>
+  <li><a href="/manage/escalated/field/emergency">View escalated field emergency cases</a></li>
+<% end %>
 </ul>

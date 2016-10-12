@@ -13,9 +13,9 @@
   <script src="/javascripts/events.js" type="text/javascript"></script>
 <% end %>
 
-<% if form.failed_on? :customername %>
+<% if form.failed_on? :customertitle || :customerforename || :customersurname%>
   <% content_for :form_errors do %>
-    <p class="message">&bull; Name is required</p>
+    <p class="message">&bull; Please Complete Customer Name</p>
   <% end %>
 <% end %>
 
@@ -75,14 +75,33 @@
 <% end %>
 
   <fieldset>
-    <p><label for="customername">Name</label></p>
-    <input type="text" id="customername" name="customername" size="51" maxlength="40" value="<%=h customername %>">
+    <p><label for="customertitle">Title</label></p>
+    <select style="background:white" name="customertitle" id="customertitle">
+      <option value="">Select Title:</option>
+      <option value="mr">Mr</option>
+      <option value="mrs">Mrs</option>
+      <option value="miss">Miss</option>
+      <option value="ms">Ms</option>
+      <option value="dr">Dr</option>
+      <option value="prof">Prof.</option>
+      <option value="rev">Rev.</option>
+      <option value="sir">Sir</option>
+      <option value="capt">Capt.</option>
+      <option value="lady">Lady</option>
+      <option value="lord">Lord</option>
+    </select>
+
+    <p><label for="customerforename">Forename</label></p>
+    <input type="text" id="customerforename" name="customerforename" size="51" maxlength="40" value="<%=h customerforename %>">
+
+    <p><label for="customersurname">Surname</label></p>
+    <input type="text" id="customersurname" name="customersurname" size="51" maxlength="40" value="<%=h customersurname %>">
 
     <p><label for="eventcategory">Translation</label> <span class="required">*</span></p>
     <p>
       <select id="eventcategory" name="eventcategory">
        <% products.each do |product| %>
-          <% if eventcategory == product['description'] %>
+          <% if eventcategory == product['name'] %>
             <option value='<%=h product['name'] %>' selected><%=h product['description'] %></option>
           <% else %>
             <option value='<%=h product['name'] %>'><%=h product['description'] %></option>

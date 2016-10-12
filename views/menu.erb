@@ -1,6 +1,6 @@
 <% content_for :menu do %>
   <% if pageid == 'home' %><li id="active"><% else %><li><% end %><a href="/">Home</a></li>
-<% if authorised?("collect-admins") || authorised?("collect-escalate") %>
+<% if authorised?("collect-admins") || authorised?("collect-general-escalate") || authorised?("collect-field-escalate")%>
   <% if pageid == 'manage' %><li id="active"><% else %><li><% end %><a href="/manage">Manage</a></li>
 <% end %>
 <% end %>

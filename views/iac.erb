@@ -23,9 +23,9 @@
           <p class="message">&bull; Please Input Customer Name</p>
         <% end %>
     <% end %>
-<% elsif form.failed_on? :customername %>
+<% elsif form.failed_on? :customertitle || :customerforename || :customersurname%>
   <% content_for :form_errors do %>
-    <p class="message">&bull; Please Input Customer Name</p>
+    <p class="message">&bull; Please Complete Customer Name</p>
   <% end %>
 <% end %>
 
@@ -88,7 +88,7 @@
 
   <fieldset>
     <p><label for="contactmode">Select Contact Mode:</label></p>
-    <select name="contactmode" id="contactmode">
+    <select style="background:white" name="contactmode" id="contactmode">
       <option value="">Select IC Mode:</option>
       <option value="sms">SMS</option>
       <option value="email">eMail</option>
@@ -98,8 +98,27 @@
     <p><label id="deliverymode">Delivery Mode:</label><span class="required">*</span></p>
     <input type="text" id="delivery" name="delivery" size="51" maxlength="40" value="<%=h deliverymode %>" disabled></p>
 
-    <p><label id="customername">Input Name:</label><span class="required">*</span></p>
-    <input type="text" id="customername" name="customername" size="51" maxlength="40" value="<%=h customername %>"></p>
+    <p><label for="customertitle">Title</label></p>
+    <select style="background:white" name="customertitle" id="customertitle">
+      <option value="">Select Title:</option>
+      <option value="mr">Mr</option>
+      <option value="mrs">Mrs</option>
+      <option value="miss">Miss</option>
+      <option value="ms">Ms</option>
+      <option value="dr">Dr</option>
+      <option value="prof">Prof.</option>
+      <option value="rev">Rev.</option>
+      <option value="sir">Sir</option>
+      <option value="capt">Capt.</option>
+      <option value="lady">Lady</option>
+      <option value="lord">Lord</option>
+    </select>
+
+    <p><label for="customerforename">Forename</label></p>
+    <input type="text" id="customerforename" name="customerforename" size="51" maxlength="40" value="<%=h customerforename %>">
+
+    <p><label for="customersurname">Surname</label></p>
+    <input type="text" id="customersurname" name="customersurname" size="51" maxlength="40" value="<%=h customersurname %>">
 
   </fieldset>
   <p id="requiredfields"><span class="required">*</span> Required fields</p>

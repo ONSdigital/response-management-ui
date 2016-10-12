@@ -34,8 +34,27 @@
     <span id="chars">250</span> characters remaining
   <% end %>
 
-    <p><label for="customername">Name</label></p>
-    <input type="text" id="customername" name="customername" size="51" maxlength="40" value="<%=h customername %>">
+    <p><label for="customertitle">Title</label></p>
+    <select name="customertitle" id="customertitle">
+      <option value="">Select Title:</option>
+      <option value="mr">Mr</option>
+      <option value="mrs">Mrs</option>
+      <option value="miss">Miss</option>
+      <option value="ms">Ms</option>
+      <option value="dr">Dr</option>
+      <option value="prof">Prof.</option>
+      <option value="rev">Rev.</option>
+      <option value="sir">Sir</option>
+      <option value="capt">Capt.</option>
+      <option value="lady">Lady</option>
+      <option value="lord">Lord</option>
+    </select>
+
+    <p><label for="customerforename">Forename</label></p>
+    <input type="text" id="customerforename" name="customerforename" size="51" maxlength="40" value="<%=h customerforename %>">
+
+    <p><label for="customersurname">surname</label></p>
+    <input type="text" id="customersurname" name="customersurname" size="51" maxlength="40" value="<%=h customersurname %>">
 
     <p><label for="customercontact">Phone Number</label></p>
     <input type="text" id="customercontact" name="customercontact" size="51" maxlength="40" value="<%=h customercontact %>">
@@ -46,9 +65,9 @@
        <% categories.each do |category| %>
         <% if category['manual'] %>
           <% if eventcategory == category['name'] %>
-            <option value='<%=h category['categoryId'] %>' selected><%=h category['name'] %></option>
+            <option value='<%=h category['name'] %>' selected><%=h category['description'] %></option>
             <% else %>
-            <option value='<%=h category['categoryId'] %>'><%=h category['name'] %></option>
+            <option value='<%=h category['name'] %>'><%=h category['description'] %></option>
           <% end %>
         <% end %>
       <% end %>
