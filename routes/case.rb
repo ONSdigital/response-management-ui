@@ -83,6 +83,7 @@ get '/cases/:case_id/uprn/:uprn/sample/:sample_id?' do |case_id, uprn, sample_id
     events     = JSON.parse(response).paginate(page: params[:page]) unless response.code == 204
     events.each do |event|
       category_name         = event['category']
+      logger.info category_name
       category              = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/categories/#{category_name}"))
       event['categoryName'] = category['description']
     end
@@ -96,7 +97,7 @@ get '/cases/:case_id/uprn/:uprn/sample/:sample_id?' do |case_id, uprn, sample_id
   casetype        = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/casetypes/#{casetype_id}"))
   question_set    = casetype['questionSet']
   address         = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/addresses/#{uprn}"))
-  respondent_type = casetype['respondentType']
+  respondent_type = casetype['respondent']
 
   erb :case_events, layout: :sidebar_layout, locals: { title: "Event History for Case #{case_id}",
                                                        case_id: case_id,
@@ -200,6 +201,10 @@ post '/cases/:case_id/uprn/:uprn/sample/:sample_id/event' do |case_id, uprn, sam
     description = "name: #{name} #{description}" if !name.empty? && phone.empty?
     description = "phone: #{phone} #{description}" if name.empty? && !phone.empty?
     description = "name: #{name} phone: #{phone} #{description}" if !name.empty? && !phone.empty?
+
+    logger.info description
+    logger.info params[:eventcategory]
+    logger.info user.user_id
 
     RestClient.post("http://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}/events",
                     { description: description,
