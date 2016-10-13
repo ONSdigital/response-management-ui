@@ -55,8 +55,8 @@ get '/categories' do
 end
 
 # List categories.
-get '/categories/:category_id' do |category_id|
-  erb :category, locals: { category_id: category_id }
+get '/categories/:category_name' do |category_name|
+  erb :category, locals: { category_name: category_name }
 end
 
 # Get sample.

@@ -1,26 +1,26 @@
-<% if category_id && category_id.match('1') %>
+<% if category_name && category_name.match('GENERAL_ENQUIRY') %>
 {
-  "categoryId": <%= category_id %>,
-  "name": "General Enquiry",
-  "description": null,
+  "categoryId": "1",
+  "name": "GENERAL_ENQUIRY",
+  "description": "General Enquiry",
   "manual": true,
   "role": "collect-csos, collect-admins",
   "group": null
 }
-<% elsif category_id && category_id.match('2') %>
+<% elsif category_name && category_name.match('COMPLAINT') %>
 {
-  "categoryId": <%= category_id %>,
-  "name": "Complaint",
-  "description": null,
+  "categoryId": "2",
+  "name": "COMPLAINT",
+  "description": "complaint",
   "manual": true,
   "role": "collect-csos, collect-admins",
   "group": null
 }
-<% elsif category_id && category_id.match('3') %>
+<% elsif category_name && category_name.match('SURVEY_ENQUIRY') %>
 {
-  "categoryId": <%= category_id %>,
-  "name": "Survey Enquiry",
-  "description": null,
+  "categoryId": "3",
+  "name": "SURVEY_ENQUIRY",
+  "description": "Survey Enquiry",
   "manual": true,
   "role": "collect-csos, collect-admins",
   "group": null
