@@ -31,8 +31,6 @@ get '/addresses/:uprn/cases/?' do |uprn|
   casetype  = []
   sample_id = ''
 
-  categories = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/categories"))
-
   RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/casegroups/uprn/#{uprn}") do |response, _request, _result, &_block|
     casegroups = JSON.parse(response).paginate(page: params[:page]) unless response.code == 404
     casegroups.each do |casegroup|
@@ -45,7 +43,6 @@ get '/addresses/:uprn/cases/?' do |uprn|
       cases.each do |kase|
         sample_id   = casegroup['sampleId']
         sample      = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/samples/#{sample_id}"))
-        survey_id   = sample['surveyId']
         casetype_id = kase['caseTypeId']
         casetype    = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/casetypes/#{casetype_id}"))
 

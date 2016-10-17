@@ -23,6 +23,10 @@ get '/manage/escalated/:escalation_type/:escalation_subtype' do |escalation_type
     kase = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}"))
     casegroup_id = kase['caseGroupId']
     casegroup = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/casegroups/#{casegroup_id}"))
+    logger.info casegroup['sampleId']
+
+    logger.info casegroup['uprn']
+
     escalation['uprn'] = casegroup['uprn']
     escalation['sampleId'] = casegroup['sampleId']
   end
