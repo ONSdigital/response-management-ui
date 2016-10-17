@@ -94,7 +94,38 @@
     "group": null
   }
 ]
-<% elsif role && role.match('collect-escalate') %>
+<% elsif role && role.match('collect-field-escalate') %>
+[
+  {
+    "name": "Pending",
+    "description": "Pending",
+    "manual": true,
+    "role": "collect-escalate, collect-admins",
+    "group": null
+  },
+  {
+    "name": "Closed",
+    "description": "Closed",
+    "manual": true,
+    "role": "collect-escalate, collect-admins",
+    "group": null
+  },
+  {
+    "name": "Refusal",
+    "description": null,
+    "manual": true,
+    "role": "collect-csos, collect-escalate, collect-admins",
+    "group": null
+  },
+  {
+    "name": "IncorrectEscalation",
+    "description": "Incorrect Escalation",
+    "manual": true,
+    "role": "collect-escalate, collect-admins",
+    "group": null
+  }
+]
+<% elsif role && role.match('collect-general-escalate') %>
 [
   {
     "name": "Pending",

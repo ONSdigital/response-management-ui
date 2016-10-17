@@ -21,7 +21,12 @@ end
 
 # Get casegroup
 get '/casegroups/uprn/:uprn' do |uprn|
-  erb :casegroups, locals: { uprn: uprn }
+  erb :casegroup_uprn, locals: { uprn: uprn }
+end
+
+# Get casegroup
+get '/casegroups/:casegroup_id' do |casegroup_id|
+  erb :casegroup, locals: { casegroup_id: casegroup_id }
 end
 
 # Get cases by casgroup.
