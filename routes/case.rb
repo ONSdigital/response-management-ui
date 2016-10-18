@@ -166,7 +166,7 @@ post '/cases/:case_id/uprn/:uprn/sample/:sample_id/event' do |case_id, uprn, sam
   customertitle  = params[:customertitle]
   customerforename  = params[:customerforename]
   customersurname  = params[:customersurname]
-  name = params[:customertitle] + params[:customerforename] + params[:customersurname]
+  name = params[:customertitle] + ' ' + params[:customerforename] + ' ' + params[:customersurname]
   phone = params[:customercontact]
 
   if form.failed?
@@ -194,13 +194,9 @@ post '/cases/:case_id/uprn/:uprn/sample/:sample_id/event' do |case_id, uprn, sam
   else
     user        = session[:user]
     description = params[:eventtext]
-    description = "name: #{name} #{description}" if !name.empty? && phone.empty?
-    description = "phone: #{phone} #{description}" if name.empty? && !phone.empty?
-    description = "name: #{name} phone: #{phone} #{description}" if !name.empty? && !phone.empty?
-
-    logger.info description
-    logger.info params[:eventcategory]
-    logger.info user.user_id
+    description = "name: #{name.capitalize} #{description}" if !customerforename.empty? && phone.empty?
+    description = "phone: #{phone} #{description}" if customerforename.empty? && !phone.empty?
+    description = "name: #{name.capitalize} phone: #{phone} #{description}" if !customerforename.empty? && !phone.empty?
 
     RestClient.post("http://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}/events",
                     { description: description,
@@ -212,30 +208,32 @@ post '/cases/:case_id/uprn/:uprn/sample/:sample_id/event' do |case_id, uprn, sam
         flash[:notice] = 'Successfully created event.'
         actions = []
 
-        if params[:eventcategory] == 'Closed' || params[:eventcategory] == 'IncorrectEscalation' || params[:eventcategory] == 'Undeliverable'
+        if params[:eventcategory] == 'INCORRECT_ESCALATION' || params[:eventcategory] == 'REFUSAL'
           RestClient.get("http://#{settings.action_service_host}:#{settings.action_service_port}/actions/case/#{case_id}") do |response, _request, _result, &_block|
             actions = JSON.parse(response).paginate(page: params[:page]) unless response.code == 204 # rubocop:disable Metrics/BlockNesting
           end
         end
 
         actions.each do |action|
-          next unless action['actionTypeName'] == 'GeneralEscalation' || action['actionTypeName'] == 'SurveyEscalation' || action['actionTypeName'] == 'ComplaintEscalation'
-          action_id = action['actionId']
-          feedback_xml = <<-XML
-            <p:actionFeedback xmlns:p="http://ons.gov.uk/ctp/response/action/message/feedback" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://ons.gov.uk/ctp/response/action/message/feedback actionFeedback.xsd">
-              <actionId>#{action_id}</actionId>
-              <situation></situation>
-              <outcome>REQUEST_COMPLETED</outcome>
-              <notes></notes>
-            </p:actionFeedback>
-          XML
+          next unless action['actionTypeName'] == 'GE_ESCALATION' || action['actionTypeName'] == 'GC_ESCALATION' || action['actionTypeName'] == 'FE_ESCALATION' || action['actionTypeName'] == 'FC_ESCALATION'
+          if action['state'] == 'PENDING'
+            action_id = action['actionId']
+            feedback_xml = <<-XML
+              <p:actionFeedback xmlns:p="http://ons.gov.uk/ctp/response/action/message/feedback" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://ons.gov.uk/ctp/response/action/message/feedback actionFeedback.xsd">
+                <actionId>#{action_id}</actionId>
+                <situation></situation>
+                <outcome>REQUEST_COMPLETED</outcome>
+                <notes></notes>
+              </p:actionFeedback>
+            XML
 
-          RestClient.put("http://#{settings.action_service_host}:#{settings.action_service_port}/actions/#{action_id}/feedback", feedback_xml, content_type: :xml) do |put_response, _request, _result, &_block|
-            if put_response.code == 200
-              logger.info 'Successfully completed action.'
-            else
-              logger.error put_response
-              error_flash('Unable to complete action', put_response)
+            RestClient.put("http://#{settings.action_service_host}:#{settings.action_service_port}/actions/#{action_id}/feedback", feedback_xml, content_type: :xml) do |put_response, _request, _result, &_block|
+              if put_response.code == 200
+                logger.info 'Successfully completed action.'
+              else
+                logger.error put_response
+                error_flash('Unable to complete action', put_response)
+              end
             end
           end
         end
