@@ -65,9 +65,9 @@
        <% categories.each do |category| %>
         <% if category['manual'] %>
           <% if eventcategory == category['name'] %>
-            <option value='<%=h category['name'] %>' selected><%=h category['description'] %></option>
+            <option value='<%=h category['name'] %>' selected><%=h category['longDescription'] %></option>
             <% else %>
-            <option value='<%=h category['name'] %>'><%=h category['description'] %></option>
+            <option value='<%=h category['name'] %>'><%=h category['longDescription'] %></option>
           <% end %>
         <% end %>
       <% end %>

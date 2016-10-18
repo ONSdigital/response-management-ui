@@ -32,7 +32,7 @@ get '/addresses/:uprn/cases/?' do |uprn|
   sample_id = ''
 
   RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/casegroups/uprn/#{uprn}") do |response, _request, _result, &_block|
-    casegroups = JSON.parse(response).paginate(page: params[:page]) unless response.code == 404
+    casegroups = JSON.parse(response).paginate(page: params[:page]) unless response.code == 404 || response.code == 204
     casegroups.each do |casegroup|
       casegroup_id = casegroup['caseGroupId']
 
@@ -80,9 +80,8 @@ get '/cases/:case_id/uprn/:uprn/sample/:sample_id?' do |case_id, uprn, sample_id
     events     = JSON.parse(response).paginate(page: params[:page]) unless response.code == 204
     events.each do |event|
       category_name         = event['category']
-      logger.info category_name
       category              = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/categories/#{category_name}"))
-      event['categoryName'] = category['description']
+      event['categoryName'] = category['longDescription']
     end
   end
 
@@ -94,7 +93,7 @@ get '/cases/:case_id/uprn/:uprn/sample/:sample_id?' do |case_id, uprn, sample_id
   casetype        = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/casetypes/#{casetype_id}"))
   question_set    = casetype['questionSet']
   address         = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/addresses/#{uprn}"))
-  respondent_type = casetype['respondent']
+  respondent_type = casetype['respondentType']
 
   erb :case_events, layout: :sidebar_layout, locals: { title: "Event History for Case #{case_id}",
                                                        case_id: case_id,
@@ -633,7 +632,7 @@ post '/cases/:case_id/uprn/:uprn/sample/:sample_id/translate' do |case_id, uprn,
   else
     user           = session[:user]
     category       = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/categories/#{event_category}"))
-    language       = category['description']
+    language       = category['shortDescription']
     description    = "Translation Booklet in #{language} supplied to "
     description    = "#{description} #{customertitle.capitalize} #{customerforename} #{customersurname}"
 
