@@ -8,7 +8,7 @@
   <%= erb :googlemaps_partial, locals: { coordinates: coordinates } %>
 <% end %>
 
-  <form action="/cases/<%=h case_id %>/uprn/<%=h uprn %>/sample/<%=h sample_id %>/childcase/new" method="get">
+  <form action="/cases/<%=h case_id %>/uprn/<%=h uprn %>/sample/<%=h sample_id %>/individual/new" method="get">
     <% if respondent_type == 'H' %>
       <input class="button" type="submit" value="Request Individual Form&hellip;">
       <% if params[:actionpage].present? %>
@@ -114,7 +114,7 @@
 <table class="secondary">
   <thead>
     <tr>
-      <th>Case ID</th>
+      <th>Case Reference</th>
       <th>Dispatch Date</th>
       <th>Response Date</th>
       <th>Question Set</th>

@@ -4,31 +4,22 @@
 <a href="/">Home</a> &gt; <a href="/postcodes/<%=url_format postcode %>"><%=h postcode %></a> &gt; <a href="/addresses/<%=h uprn %>/cases">Cases</a> &gt; <a href="/cases/<%=h case_id %>">Case <%=h case_id %></a> &gt; Request Individual Form
 <% end %>
 
-<% content_for :javascript do %>
-  <script src="/javascripts/childcase.js" type="text/javascript"></script>
-<% end %>
-
-<% if form.failed_on? :responsemode %>
+<% if form.failed_on? :actionplanradio %>
   <% content_for :form_errors do %>
-    <p class="message">&bull; Please Select Response Mode</p>
+    <p class="message">&bull; Please Select Option</p>
   <% end %>
-<% end %>
-
-<% if form.failed_on? :contactmode  %>
-  <% content_for :form_errors do %>
-    <p class="message">&bull; Please Select Contact Mode</p>
-  <% end %>
-<% end %>
-
-<% if form.failed_on? :delivery %>
-  <% content_for :form_errors do %>
-    <p class="message">&bull; Please Input Delivery Mode</p>
-  <% end %>
-<% end %>
-
-<% if form.failed_on? :customertitle || :customerforename || :customersurname%>
+<% elsif form.failed_on? :customertitle || :customerforename || :customersurname%>
   <% content_for :form_errors do %>
     <p class="message">&bull; Please Complete Customer Name</p>
+  <% end %>
+  <% if form.failed_on? :emailaddress %>
+    <% content_for :form_errors do %>
+      <p class="message">&bull; Email Address is required when delivery mode is email</p>
+    <% end %>
+  <% elsif form.failed_on? :phonenumber %>
+      <% content_for :form_errors do %>
+        <p class="message">&bull; Phone Number is required when delivery mode is SMS</p>
+      <% end %>
   <% end %>
 <% end %>
 
@@ -88,27 +79,45 @@
 <% end %>
 
   <fieldset>
-    <p><label for="responsemode">Select Response Mode:</label></p>
-    <select style="background:white" name="responsemode" id="responsemode">
-      <option value="">Select Mode:</option>
-      <option value="paper">Paper</option>
-      <option value="online">Online</option>
-    </select>
 
-    <p><label for="contactmode">Select Contact Mode:</label></p>
-    <select style="background:white" name="contactmode" id="contactmode" disabled>
-      <option value="">Select IC Mode:</option>
-      <option value="sms">SMS</option>
-      <option value="email">eMail</option>
-      <option value="letter">Letter</option>
-    </select>
-
-    <p><label id="deliverymode">Delivery Mode:</label><span class="required">*</span></p>
-    <input type="text" id="delivery" name="delivery" size="51" maxlength="40" value="<%=h deliverymode %>" disabled></p>
+    <% if actionplanmappings.any? %>
+      <table class="secondary">
+        <thead>
+          <tr>
+            <th>Response Mode</th>
+            <th>Contact Mode</th>
+            <th>Language Variant</th>
+            <th>select</th>
+          </tr>
+        </thead>
+        <tbody>
+        <% actionplanmappings.each_with_index do |actionplanmapping, i| %>
+          <tr class="<%= i.even? ? 'even' : 'odd ' %>">
+            <% if actionplanmapping['inboundChannel'].present? %>
+              <td><%=h actionplanmapping['inboundChannel'] %></td>
+            <% else %>
+              <td>-</td>
+            <% end %>
+            <% if actionplanmapping['outboundChannel'].present? %>
+              <td><%=h actionplanmapping['outboundChannel'] %></td>
+              <% else %>
+                <td>-</td>
+              <% end %>
+            <% if actionplanmapping['variant'].present? %>
+              <td><%=h actionplanmapping['variant'] %></td>
+            <% else %>
+              <td>-</td>
+            <% end %>
+            <td><input type="radio" id='regular' name="actionplanradio" value="<%=h actionplanmapping['actionPlanMappingId'] %>"></td>
+          </tr>
+        <% end %>
+          </tbody>
+        </table>
+    <% end %>
 
     <p><label for="customertitle">Title</label></p>
     <select style="background:white" name="customertitle" id="customertitle">
-      <option value="">Select Title:</option>
+      <option value="">Select Title</option>
       <option value="mr">Mr</option>
       <option value="mrs">Mrs</option>
       <option value="miss">Miss</option>
@@ -127,6 +136,12 @@
 
     <p><label for="customersurname">Surname</label></p>
     <input type="text" id="customersurname" name="customersurname" size="51" maxlength="40" value="<%=h customersurname %>">
+
+    <p><label id="emailaddress">Email Address</label></p>
+    <input type="text" id="emailaddress" name="emailaddress" size="51" maxlength="40" value="<%=h emailaddress %>" ></p>
+
+    <p><label id="phonenumber">Phone Number</label></p>
+    <input type="text" id="phonenumber" name="phonenumber" size="51" maxlength="40" value="<%=h phonenumber %>" ></p>
 
   </fieldset>
   <p id="requiredfields"><span class="required">*</span> Required fields</p>

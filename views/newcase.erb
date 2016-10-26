@@ -1,0 +1,168 @@
+<%= erb :menu, locals: { pageid: 'home' } %>
+
+<% content_for :breadcrumbs do %>
+<a href="/">Home</a> &gt; <a href="/postcodes/<%=url_format postcode %>"><%=h postcode %></a> &gt; <a href="/addresses/<%=h uprn %>/cases">Cases</a> &gt; <a href="/cases/<%=h case_id %>">Case <%=h case_id %></a> &gt; Request Individual Form
+<% end %>
+
+<% if form.failed_on? :actionplanradio %>
+  <% content_for :form_errors do %>
+    <p class="message">&bull; Please Select Option</p>
+  <% end %>
+<% elsif form.failed_on? :customertitle %>
+  <% content_for :form_errors do %>
+    <p class="message">&bull; Please Select Customer Title</p>
+  <% end %>
+<% elsif form.failed_on? :customerforename %>
+  <% content_for :form_errors do %>
+    <p class="message">&bull; Please enter Customer Forename</p>
+  <% end %>
+<% elsif form.failed_on? :customersurname%>
+  <% content_for :form_errors do %>
+    <p class="message">&bull; Please enter Customer surname</p>
+  <% end %>
+<% elsif form.failed_on? :emailaddress %>
+  <% content_for :form_errors do %>
+    <p class="message">&bull; Email Address is required when delivery mode is email</p>
+  <% end %>
+<% elsif form.failed_on? :phonenumber %>
+  <% content_for :form_errors do %>
+    <p class="message">&bull; Phone Number is required when delivery mode is SMS</p>
+  <% end %>
+<% end %>
+
+<table class="primary">
+  <thead>
+    <tr>
+      <th>Address Line 1</th>
+      <th>Address Line 2</th>
+      <th>Town</th>
+      <th>Postcode</th>
+      <th>Address Type</th>
+      <th>Establishment Type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="even">
+    <% if address['line1'].present? %>
+        <td><%=h address['line1'] %></td>
+    <% else %>
+      <td>-</td>
+    <% end %>
+    <% if address['line2'].present? %>
+      <td><%=h address['line2'] %></td>
+    <% else %>
+      <td>-</td>
+    <% end %>
+    <% if address['townName'].present? %>
+      <td><%=h address['townName'] %></td>
+    <% else %>
+      <td>-</td>
+    <% end %>
+    <% if address['postcode'].present? %>
+      <td><%=h address['postcode'] %></td>
+    <% else %>
+      <td>-</td>
+    <% end %>
+    <% if address['type'].present? %>
+      <td><%=h address['type'].to_address_type %></td>
+    <% else %>
+      <td>-</td>
+    <% end %>
+    <% if address['estabtype'].present? %>
+      <td><%=h address['estabtype'] %></td>
+    <% else %>
+      <td>-</td>
+    <% end %>
+  </tr>
+  </tbody>
+</table>
+
+<form action="<%= action %>" method="post">
+<% if method.present? %>
+  <input type="hidden" name="_method" value="<%= method %>">
+<% end %>
+<% if params[:page].present? %>a
+  <input type="hidden" name="page" value="<%=h params[:page] %>">
+<% end %>
+
+  <fieldset>
+
+    <% if actionplanmappings.any? %>
+      <table class="secondary">
+        <thead>
+          <tr>
+            <th>Response Mode</th>
+            <th>Contact Mode</th>
+            <th>Language Variant</th>
+            <th>select</th>
+          </tr>
+        </thead>
+        <tbody>
+        <% actionplanmappings.each_with_index do |actionplanmapping, i| %>
+          <tr class="<%= i.even? ? 'even' : 'odd ' %>">
+            <% if actionplanmapping['inboundChannel'].present? %>
+              <td><%=h actionplanmapping['inboundChannel'] %></td>
+            <% else %>
+              <td>-</td>
+            <% end %>
+            <% if actionplanmapping['outboundChannel'].present? %>
+              <td><%=h actionplanmapping['outboundChannel'] %></td>
+            <% else %>
+              <td>-</td>
+            <% end %>
+            <% if actionplanmapping['variant'].present? %>
+              <td><%=h actionplanmapping['variant'] %></td>
+            <% else %>
+              <td>-</td>
+            <% end %>
+            <td>
+            <% if actionplanmappingid.to_i == actionplanmapping['actionPlanMappingId'].to_i %>
+              <input type="radio" checked id='regular' name="actionplanradio" value="<%=h actionplanmapping['actionPlanMappingId'] %>"></td>
+            <% else %>
+              <input type="radio" id='regular' name="actionplanradio" value="<%=h actionplanmapping['actionPlanMappingId'] %>"></td>
+            <% end %>
+            </td>
+          </tr>
+        <% end %>
+          </tbody>
+        </table>
+    <% end %>
+
+    <p><label for="customertitle">Title</label></p>
+    <select style="background:white" name="customertitle" id="customertitle">
+      <option value="">Select Title</option>
+      <% if customertitle == 'mr' %>
+        <option value='mr' selected>Mr</option>
+      <% else %>
+        <option value='mr'>Mr</option>
+      <% end %>
+      <option value="mrs">Mrs</option>
+      <option value="miss">Miss</option>
+      <option value="ms">Ms</option>
+      <option value="dr">Dr</option>
+      <option value="prof">Prof.</option>
+      <option value="rev">Rev.</option>
+      <option value="sir">Sir</option>
+      <option value="capt">Capt.</option>
+      <option value="lady">Lady</option>
+      <option value="lord">Lord</option>
+    </select>
+
+    <p><label for="customerforename">Forename</label></p>
+    <input type="text" id="customerforename" name="customerforename" size="51" maxlength="40" value="<%=h customerforename %>">
+
+    <p><label for="customersurname">Surname</label></p>
+    <input type="text" id="customersurname" name="customersurname" size="51" maxlength="40" value="<%=h customersurname %>">
+
+    <p><label id="emailaddress">Email Address</label></p>
+    <input type="text" id="emailaddress" name="emailaddress" size="51" maxlength="40" value="<%=h emailaddress %>" ></p>
+
+    <p><label id="phonenumber">Phone Number</label></p>
+    <input type="text" id="phonenumber" name="phonenumber" size="51" maxlength="40" value="<%=h phonenumber %>" ></p>
+
+  </fieldset>
+  <p id="requiredfields"><span class="required">*</span> Required fields</p>
+  <p class="buttons">
+    <input class="button" type="submit" value="Save"> or <% if params[:page].present? %><a href="/cases/<%=h case_id %>/uprn/<%=h uprn %>/sample/<%=h sample_id %>/childform?page=<%=h params[:page] %>"><% else %><a href="/cases/<%=h case_id %>/uprn/<%=h uprn %>/sample/<%=h sample_id %>"><% end %>Cancel</a>
+  </p>
+</form>
