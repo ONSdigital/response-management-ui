@@ -75,6 +75,7 @@ get '/cases/:case_id/uprn/:uprn/sample/:sample_id?' do |case_id, uprn, sample_id
   survey         = sample['survey']
   kase           = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}"))
   responses      = kase['responses']
+  case_state     = kase['state']
 
   RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}/events") do |response, _request, _result, &_block|
     events     = JSON.parse(response).paginate(page: params[:page]) unless response.code == 204
@@ -109,7 +110,8 @@ get '/cases/:case_id/uprn/:uprn/sample/:sample_id?' do |case_id, uprn, sample_id
                                                        responses: responses,
                                                        actions: actions,
                                                        question_set: question_set,
-                                                       respondent_type: respondent_type
+                                                       respondent_type: respondent_type,
+                                                       case_state: case_state
                                                      }
 end
 

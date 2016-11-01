@@ -8,6 +8,7 @@
   <%= erb :googlemaps_partial, locals: { coordinates: coordinates } %>
 <% end %>
 
+<% if case_state == 'ACTIONABLE' %>
   <form action="/cases/<%=h case_id %>/uprn/<%=h uprn %>/sample/<%=h sample_id %>/individual/new" method="get">
     <% if respondent_type == 'H' %>
       <input class="button" type="submit" value="Request Individual Form&hellip;">
@@ -37,6 +38,7 @@
     <input type="hidden" name="page" value="<%=h params[:actionpage] %>">
   <% end %>
   </form>
+<% end %>
 
   <table class="primary">
     <thead>
@@ -166,7 +168,7 @@
   <h3>Events</h3>
   <div id="events">
     <form action="/cases/<%=h case_id %>/uprn/<%=h uprn %>/sample/<%=h sample_id %>/event/new" method="get">
-      <input class="button" type="submit" value="Create Event&hellip;"> or <% if params[:actionpage].present? %><a href="/addresses/<%=h uprn %>/questionnaires?page=<%=h params[:actionpage] %>"><% else %><a href="/cases/<%=h case_id %>"><% end %>Refresh</a>
+      <input class="button" type="submit" value="Create Event&hellip;"> or <% if params[:actionpage].present? %><a href="/addresses/<%=h uprn %>/questionnaires?page=<%=h params[:actionpage] %>"><% else %><a href="/cases/<%=h case_id %>/uprn/<%=h uprn %>/sample/<%=h sample_id %>"><% end %>Refresh</a>
       <% if params[:actionpage].present? %>
         <input type="hidden" name="page" value="<%=h params[:actionpage] %>">
       <% end %>

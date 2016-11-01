@@ -29,15 +29,6 @@ form p, label {
   margin-bottom: 5px;
 }
 
-form table {
-  border-collapse: collapse;
-  margin-top: 0;
-}
-
-form td {
-  padding: 0 50px 5px 0;
-}
-
 form[action="/signin"] input, form[action="/signin/secondfactor"] input {
   margin-bottom: 5px;
 }

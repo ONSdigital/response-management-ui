@@ -86,20 +86,26 @@
 <% end %>
 
   <fieldset>
-
     <% if actionplanmappings.any? %>
-      <table class="secondary">
+      <table class="secondary" style="width: 60%;">
         <thead>
           <tr>
+            <th></th>
             <th>Response Mode</th>
-            <th>Contact Mode</th>
+            <th>Delivery Mode</th>
             <th>Language Variant</th>
-            <th>select</th>
           </tr>
         </thead>
         <tbody>
         <% actionplanmappings.each_with_index do |actionplanmapping, i| %>
           <tr class="<%= i.even? ? 'even' : 'odd ' %>">
+            <td style ="width: 10px">
+            <% if actionplanmappingid.to_i == actionplanmapping['actionPlanMappingId'].to_i %>
+              <input type="radio" checked id='regular' name="actionplanradio" value="<%=h actionplanmapping['actionPlanMappingId'] %>"></td>
+            <% else %>
+              <input type="radio" id='regular' name="actionplanradio" value="<%=h actionplanmapping['actionPlanMappingId'] %>"></td>
+            <% end %>
+            </td>
             <% if actionplanmapping['inboundChannel'].present? %>
               <td><%=h actionplanmapping['inboundChannel'] %></td>
             <% else %>
@@ -115,13 +121,6 @@
             <% else %>
               <td>-</td>
             <% end %>
-            <td>
-            <% if actionplanmappingid.to_i == actionplanmapping['actionPlanMappingId'].to_i %>
-              <input type="radio" checked id='regular' name="actionplanradio" value="<%=h actionplanmapping['actionPlanMappingId'] %>"></td>
-            <% else %>
-              <input type="radio" id='regular' name="actionplanradio" value="<%=h actionplanmapping['actionPlanMappingId'] %>"></td>
-            <% end %>
-            </td>
           </tr>
         <% end %>
           </tbody>
