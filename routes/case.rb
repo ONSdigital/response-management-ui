@@ -96,6 +96,20 @@ get '/cases/:case_id/uprn/:uprn/sample/:sample_id?' do |case_id, uprn, sample_id
   address         = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/addresses/#{uprn}"))
   respondent_type = casetype['respondentType']
 
+  isPaper            = false
+  isOnline           = false
+
+  actionplanmappings = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/actionplanmappings/casetype/#{casetype_id}"))
+  actionplanmappings.each do | actionplanmapping |
+    if !actionplanmapping['isDefault']
+      if actionplanmapping['inboundChannel'] == 'PAPER'
+        isPaper  = true
+      elsif actionplanmapping['inboundChannel'] == 'ONLINE'
+        isOnline = true
+      end
+    end
+  end
+
   erb :case_events, layout: :sidebar_layout, locals: { title: "Event History for Case #{case_id}",
                                                        case_id: case_id,
                                                        kase: kase,
@@ -111,7 +125,9 @@ get '/cases/:case_id/uprn/:uprn/sample/:sample_id?' do |case_id, uprn, sample_id
                                                        actions: actions,
                                                        question_set: question_set,
                                                        respondent_type: respondent_type,
-                                                       case_state: case_state
+                                                       case_state: case_state,
+                                                       isPaper: isPaper,
+                                                       isOnline: isOnline
                                                      }
 end
 
@@ -391,7 +407,8 @@ get '/cases/:case_id/uprn/:uprn/sample/:sample_id/:type/new' do |case_id, uprn, 
                             actionplanmappings: actionplanmappings,
                             emailaddress: '',
                             phonenumber: '',
-                            actionplanmappingid: ''
+                            actionplanmappingid: '',
+                            type: type
                           }
 end
 

@@ -18,12 +18,14 @@
   <% end %>
   </form>
 
-  <form action="/cases/<%=h case_id %>/uprn/<%=h uprn %>/sample/<%=h sample_id %>/iac/new" method="get">
-    <input class="button" type="submit" value="Request Replacement IAC&hellip;">
-  <% if params[:actionpage].present? %>
-    <input type="hidden" name="page" value="<%=h params[:actionpage] %>">
+  <% if isOnline %>
+    <form action="/cases/<%=h case_id %>/uprn/<%=h uprn %>/sample/<%=h sample_id %>/iac/new" method="get">
+      <input class="button" type="submit" value="Request Replacement IAC&hellip;">
+    <% if params[:actionpage].present? %>
+      <input type="hidden" name="page" value="<%=h params[:actionpage] %>">
+    <% end %>
+    </form>
   <% end %>
-  </form>
 
   <form action="/cases/<%=h case_id %>/uprn/<%=h uprn %>/sample/<%=h sample_id %>/translate/new" method="get">
     <input class="button" type="submit" value="Request Translation Booklet&hellip;">
@@ -32,12 +34,15 @@
   <% end %>
   </form>
 
-  <form action="/cases/<%=h case_id %>/uprn/<%=h uprn %>/sample/<%=h sample_id %>/paper/new" method="get">
-    <input class="button" type="submit" value="Request Paper Form&hellip;">
-  <% if params[:actionpage].present? %>
-    <input type="hidden" name="page" value="<%=h params[:actionpage] %>">
+  <% if isPaper %>
+    <form action="/cases/<%=h case_id %>/uprn/<%=h uprn %>/sample/<%=h sample_id %>/paper/new" method="get">
+      <input class="button" type="submit" value="Request Paper Form&hellip;">
+    <% if params[:actionpage].present? %>
+      <input type="hidden" name="page" value="<%=h params[:actionpage] %>">
+    <% end %>
+    </form>
   <% end %>
-  </form>
+
 <% end %>
 
   <table class="primary">
