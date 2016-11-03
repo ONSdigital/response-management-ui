@@ -22,11 +22,11 @@
   <% end %>
 <% elsif form.failed_on? :emailaddress %>
   <% content_for :form_errors do %>
-    <p class="message">&bull; Email Address is required when delivery mode is email</p>
+    <p class="message">&bull; Please enter a valid Email Address</p>
   <% end %>
 <% elsif form.failed_on? :phonenumber %>
   <% content_for :form_errors do %>
-    <p class="message">&bull; Phone Number is required when delivery mode is SMS</p>
+    <p class="message">&bull; Please enter a valid Phone Number</p>
   <% end %>
 <% end %>
 

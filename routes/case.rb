@@ -32,13 +32,15 @@ get '/addresses/:uprn/cases/?' do |uprn|
   sample_id = ''
 
   RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/casegroups/uprn/#{uprn}") do |response, _request, _result, &_block|
-    casegroups = JSON.parse(response).paginate(page: params[:page]) unless response.code == 404 || response.code == 204
+    casegroups = JSON.parse(response) unless response.code == 404 || response.code == 204
     casegroups.each do |casegroup|
       casegroup_id = casegroup['caseGroupId']
 
       RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/cases/casegroup/#{casegroup_id}") do |cases_response, _request, _result, &_block|
         cases = JSON.parse(cases_response).paginate(page: params[:page]) unless cases_response.code == 404
       end
+
+      puts "*** 1. #{cases.size} ***"
 
       cases.each do |kase|
         sample_id   = casegroup['sampleId']
@@ -53,6 +55,8 @@ get '/addresses/:uprn/cases/?' do |uprn|
       end
     end
   end
+
+  puts "*** 2. #{cases.size} ***"
 
   # Get the selected address details so they can be displayed for reference.
   address = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/addresses/#{uprn}"))
@@ -267,6 +271,224 @@ post '/cases/:case_id/uprn/:uprn/sample/:sample_id/event' do |case_id, uprn, sam
   end
 end
 
+
+
+# Present a form for paper/iac/post requests.
+get '/cases/:case_id/uprn/:uprn/sample/:sample_id/request/:type/new' do |case_id, uprn, sample_id, type|
+  authenticate!
+
+  if type == 'individual'
+    title = "Request Individual Form for Case #{case_id}"
+  elsif type == 'paper'
+    title = "Request Paper Questionnaire for Case #{case_id}"
+  elsif type == 'iac'
+    title = "Request Replacement IAC for Case #{case_id}"
+  end
+
+  casetype_id = ''
+  kase        = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}"))
+
+  if type == 'individual'
+    casegroup_id      = kase['caseGroupId']
+    casegroup         = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/casegroups/#{casegroup_id}"))
+    sample_id         = casegroup['sampleId']
+    sample            = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/samples/#{sample_id}"))
+    sample_case_types = sample['sampleCaseTypes']
+
+    sample_case_types.each do | sample_case_type |
+      if sample_case_type['respondentType'] == 'I'
+        casetype_id = sample_case_type['caseTypeId']
+      end
+    end
+  else
+    casetype_id         = kase['caseTypeId']
+  end
+
+  address            = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/addresses/#{uprn}"))
+  actionplanmappings = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/actionplanmappings/casetype/#{casetype_id}"))
+  erb :newcase, locals: { title: title,
+                            action: "/cases/#{case_id}/uprn/#{uprn}/sample/#{sample_id}/#{type}",
+                            method: :post,
+                            page: params[:page],
+                            uprn: address['uprn'],
+                            case_id: case_id,
+                            postcode: format_postcode(address['postcode']),
+                            eventtext: '',
+                            customertitle: '',
+                            customerforename: '',
+                            customersurname: '',
+                            eventcategory: '',
+                            createdby: '',
+                            sample_id: sample_id,
+                            address: address,
+                            actionplanmappings: actionplanmappings,
+                            emailaddress: '',
+                            phonenumber: '',
+                            actionplanmappingid: '',
+                            type: type
+                          }
+end
+
+
+# Request creation of new case for paper/iac/individual cases and create associated event.
+post '/cases/:case_id/uprn/:uprn/sample/:sample_id/:type' do |case_id, uprn, sample_id, type|
+  authenticate!
+  actionplanmappingid = params[:actionplanradio]
+  if !actionplanmappingid.nil?
+    actionplanmapping = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/actionplanmappings/#{actionplanmappingid}"))
+    outboundchannel   = actionplanmapping['outboundChannel']
+  end
+
+  customertitle     = params[:customertitle]
+  customerforename  = params[:customerforename]
+  customersurname   = params[:customersurname]
+  emailaddress      = params[:emailaddress]
+  phonenumber       = params[:phonenumber]
+  emailregex        = /^$|[_A-Za-z0-9\-\+]+(\.[_A-Za-z0-9\-]+)*@[A-Za-z0-9\-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})/
+  phoneregex        = /^$|\d{11}/
+
+  emailmatch        = emailregex.match(emailaddress)
+  phonematch        = phoneregex.match(phonenumber)
+
+  puts "emailmatch: #{emailmatch}"
+
+  form do
+    field :actionplanradio, present: true
+    field :customertitle, present: true
+    field :customerforename, present: true
+    field :customersurname, present: true
+    field :emailaddress, present: true, regexp: %r{^$|[_A-Za-z0-9\-\+]+(\.[_A-Za-z0-9\-]+)*@[A-Za-z0-9\-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})} if outboundchannel == 'EMAIL'
+    field :phonenumber, present: true, regexp: %r{^$|\d{11}} if outboundchannel == 'SMS'
+  end
+
+  if type == 'individual'
+    title = "Request Individual Form for Case #{case_id}"
+  elsif type == 'paper'
+    title = "Request Paper Questionnaire for Case #{case_id}"
+  elsif type == 'iac'
+    title = "Request Replacement IAC for Case #{case_id}"
+  end
+
+  if form.failed?
+    casetype_id = ''
+    kase        = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}"))
+    if type == 'individual'
+      casegroup_id      = kase['caseGroupId']
+      casegroup         = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/casegroups/#{casegroup_id}"))
+      sample_id         = casegroup['sampleId']
+      sample            = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/samples/#{sample_id}"))
+      sample_case_types = sample['sampleCaseTypes']
+
+      sample_case_types.each do | sample_case_type |
+        if sample_case_type['respondentType'] == 'I'
+          casetype_id = sample_case_type['caseTypeId']
+        end
+      end
+    else
+      casetype_id         = kase['caseTypeId']
+    end
+    address            = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/addresses/#{uprn}"))
+    actionplanmappings = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/actionplanmappings/casetype/#{casetype_id}"))
+
+    erb :newcase, locals: { title: title,
+                              action: "/cases/#{case_id}/uprn/#{uprn}/sample/#{sample_id}/#{type}",
+                              method: :post,
+                              page: params[:page],
+                              uprn: address['uprn'],
+                              case_id: case_id,
+                              postcode: format_postcode(address['postcode']),
+                              eventtext: '',
+                              customertitle: customertitle,
+                              customerforename: customerforename,
+                              customersurname: customersurname,
+                              eventcategory: '',
+                              createdby: '',
+                              sample_id: sample_id,
+                              address: address,
+                              actionplanmappings: actionplanmappings,
+                              emailaddress: emailaddress,
+                              phonenumber: phonenumber,
+                              actionplanmappingid: actionplanmappingid,
+                              type: type
+                            }
+  else
+    user        = session[:user]
+    if type    == 'individual'
+      description = "Individual Form sent to"
+    elsif type == 'paper'
+      description = "Paper Questionnaire sent to"
+    elsif type == 'iac'
+      description = "Replacement IAC sent to"
+    end
+    description = "#{description} #{customertitle} #{customerforename} #{customersurname}"
+
+    kase            = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}"))
+    casetype_id = ''
+    #get alternate casetypeid for individual cases
+    if type == 'individual'
+      casegroup_id      = kase['caseGroupId']
+      casegroup         = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/casegroups/#{casegroup_id}"))
+      sample_id         = casegroup['sampleId']
+      sample            = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/samples/#{sample_id}"))
+      sample_case_types = sample['sampleCaseTypes']
+      sample_case_types.each do | sample_case_type |
+        if sample_case_type['respondentType'] == 'I'
+          casetype_id = sample_case_type['caseTypeId']
+        end
+      end
+    else
+      casetype_id         = kase['caseTypeId']
+    end
+    casetype        = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/casetypes/#{casetype_id}"))
+    question_set    = casetype['questionSet']
+    respondent_type = casetype['respondentType']
+
+    if type == 'individual'
+      event_category = 'INDIVIDUAL_RESPONSE_REQUESTED'
+    elsif type == 'paper'
+      if respondent_type == 'H'
+        event_category = 'HOUSEHOLD_PAPER_REQUESTED'
+      elsif respondent_type == 'I'
+        event_category = 'INDIVIDUAL_PAPER_REQUESTED'
+      end
+    elsif type == 'iac'
+      if respondent_type == 'H'
+        event_category = 'HOUSEHOLD_REPLACEMENT_IAC_REQUESTED'
+      elsif respondent_type == 'I'
+        event_category = 'INDIVIDUAL_REPLACEMENT_IAC_REQUESTED'
+      end
+    end
+    case_group_id  = kase['caseGroupId']
+
+    RestClient.post("http://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}/events",
+                    { description: description,
+                      category: event_category,
+                      createdBy: user.user_id,
+                      caseCreationRequest: {
+                                              caseTypeId: casetype_id,
+                                              actionPlanMappingId: actionplanmappingid,
+                                              title: customertitle,
+                                              forename: customerforename,
+                                              surname: customersurname,
+                                              phoneNumber: phonenumber,
+                                              emailAddress: emailaddress
+                                            }
+                    }.to_json, content_type: :json, accept: :json
+                   ) do |post_response, _request, _result, &_block|
+      if post_response.code == 200
+        flash[:notice] = 'Successfully created event.'
+      else
+        logger.error post_response
+        error_flash('Unable to create event', post_response)
+      end
+    end
+
+    event_url = "/cases/#{case_id}/uprn/#{uprn}/sample/#{sample_id}"
+    event_url += "?page=#{params[:page]}" if params[:page].present?
+    redirect event_url
+  end
+end
+
 # Present a form for requesting a translation booklet.
 get '/cases/:case_id/uprn/:uprn/sample/:sample_id/translate/new' do |case_id, uprn, sample_id|
   authenticate!
@@ -340,214 +562,6 @@ post '/cases/:case_id/uprn/:uprn/sample/:sample_id/translate' do |case_id, uprn,
                     { description: description,
                       category: event_category,
                       createdBy: user.user_id
-                    }.to_json, content_type: :json, accept: :json
-                   ) do |post_response, _request, _result, &_block|
-      if post_response.code == 200
-        flash[:notice] = 'Successfully created event.'
-      else
-        logger.error post_response
-        error_flash('Unable to create event', post_response)
-      end
-    end
-
-    event_url = "/cases/#{case_id}/uprn/#{uprn}/sample/#{sample_id}"
-    event_url += "?page=#{params[:page]}" if params[:page].present?
-    redirect event_url
-  end
-end
-
-# Present a form for paper/iac/post requests.
-get '/cases/:case_id/uprn/:uprn/sample/:sample_id/:type/new' do |case_id, uprn, sample_id, type|
-  authenticate!
-
-  if type == 'individual'
-    title = "Request Individual Form for Case #{case_id}"
-  elsif type == 'paper'
-    title = "Request Paper Questionnaire for Case #{case_id}"
-  elsif type == 'iac'
-    title = "Request Replacement IAC for Case #{case_id}"
-  end
-
-  casetype_id = ''
-  kase        = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}"))
-
-  if type == 'individual'
-    casegroup_id      = kase['caseGroupId']
-    casegroup         = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/casegroups/#{casegroup_id}"))
-    sample_id         = casegroup['sampleId']
-    sample            = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/samples/#{sample_id}"))
-    sample_case_types = sample['sampleCaseTypes']
-
-    sample_case_types.each do | sample_case_type |
-      if sample_case_type['respondentType'] == 'I'
-        casetype_id = sample_case_type['caseTypeId']
-      end
-    end
-  else
-    casetype_id         = kase['caseTypeId']
-  end
-
-  address            = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/addresses/#{uprn}"))
-  actionplanmappings = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/actionplanmappings/casetype/#{casetype_id}"))
-  erb :newcase, locals: { title: title,
-                            action: "/cases/#{case_id}/uprn/#{uprn}/sample/#{sample_id}/#{type}",
-                            method: :post,
-                            page: params[:page],
-                            uprn: address['uprn'],
-                            case_id: case_id,
-                            postcode: format_postcode(address['postcode']),
-                            eventtext: '',
-                            customertitle: '',
-                            customerforename: '',
-                            customersurname: '',
-                            eventcategory: '',
-                            createdby: '',
-                            sample_id: sample_id,
-                            address: address,
-                            actionplanmappings: actionplanmappings,
-                            emailaddress: '',
-                            phonenumber: '',
-                            actionplanmappingid: '',
-                            type: type
-                          }
-end
-
-
-# Request creation of new case for paper/iac/individual cases and create associated event.
-post '/cases/:case_id/uprn/:uprn/sample/:sample_id/:type' do |case_id, uprn, sample_id, type|
-  authenticate!
-  actionplanmappingid = params[:actionplanradio]
-  if !actionplanmappingid.nil?
-    actionplanmapping = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/actionplanmappings/#{actionplanmappingid}"))
-    outboundchannel   = actionplanmapping['outboundChannel']
-  end
-
-  customertitle     = params[:customertitle]
-  customerforename  = params[:customerforename]
-  customersurname   = params[:customersurname]
-  emailaddress      = params[:emailaddress]
-  phonenumber       = params[:phonenumber]
-
-  form do
-    field :actionplanradio, present: true
-    field :customertitle, present: true
-    field :customerforename, present: true
-    field :customersurname, present: true
-    field :emailaddress, present: true if outboundchannel == 'EMAIL'
-    field :phonenumber, present: true if outboundchannel == 'SMS'
-  end
-
-  if type == 'individual'
-    title = "Request Individual Form for Case #{case_id}"
-  elsif type == 'paper'
-    title = "Request Paper Questionnaire for Case #{case_id}"
-  elsif type == 'iac'
-    title = "Request Replacement IAC for Case #{case_id}"
-  end
-
-  if form.failed?
-    casetype_id = ''
-    kase        = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}"))
-    if type == 'individual'
-      casegroup_id      = kase['caseGroupId']
-      casegroup         = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/casegroups/#{casegroup_id}"))
-      sample_id         = casegroup['sampleId']
-      sample            = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/samples/#{sample_id}"))
-      sample_case_types = sample['sampleCaseTypes']
-
-      sample_case_types.each do | sample_case_type |
-        if sample_case_type['respondentType'] == 'I'
-          casetype_id = sample_case_type['caseTypeId']
-        end
-      end
-    else
-      casetype_id         = kase['caseTypeId']
-    end
-    address            = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/addresses/#{uprn}"))
-    actionplanmappings = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/actionplanmappings/casetype/#{casetype_id}"))
-
-    erb :newcase, locals: { title: title,
-                              action: "/cases/#{case_id}/uprn/#{uprn}/sample/#{sample_id}/#{type}",
-                              method: :post,
-                              page: params[:page],
-                              uprn: address['uprn'],
-                              case_id: case_id,
-                              postcode: format_postcode(address['postcode']),
-                              eventtext: '',
-                              customertitle: customertitle,
-                              customerforename: customerforename,
-                              customersurname: customersurname,
-                              eventcategory: '',
-                              createdby: '',
-                              sample_id: sample_id,
-                              address: address,
-                              actionplanmappings: actionplanmappings,
-                              emailaddress: emailaddress,
-                              phonenumber: phonenumber,
-                              actionplanmappingid: actionplanmappingid
-                            }
-  else
-    user        = session[:user]
-    if type    == 'individual'
-      description = "Individual Form sent to"
-    elsif type == 'paper'
-      description = "Paper Questionnaire sent to"
-    elsif type == 'iac'
-      description = "Replacement IAC sent to"
-    end
-    description = "#{description} #{customertitle} #{customerforename} #{customersurname}"
-
-    kase            = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}"))
-    casetype_id = ''
-    #get alternate casetypeid for individual cases
-    if type == 'individual'
-      casegroup_id      = kase['caseGroupId']
-      casegroup         = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/casegroups/#{casegroup_id}"))
-      sample_id         = casegroup['sampleId']
-      sample            = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/samples/#{sample_id}"))
-      sample_case_types = sample['sampleCaseTypes']
-      sample_case_types.each do | sample_case_type |
-        if sample_case_type['respondentType'] == 'I'
-          casetype_id = sample_case_type['caseTypeId']
-        end
-      end
-    else
-      casetype_id         = kase['caseTypeId']
-    end
-    casetype        = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/casetypes/#{casetype_id}"))
-    question_set    = casetype['questionSet']
-    respondent_type = casetype['respondentType']
-
-    if type == 'individual'
-      event_category = 'INDIVIDUAL_RESPONSE_REQUESTED'
-    elsif type == 'paper'
-      if respondent_type == 'H'
-        event_category = 'HOUSEHOLD_PAPER_REQUESTED'
-      elsif respondent_type == 'I'
-        event_category = 'INDIVIDUAL_PAPER_REQUESTED'
-      end
-    elsif type == 'iac'
-      if respondent_type == 'H'
-        event_category = 'HOUSEHOLD_REPLACEMENT_IAC_REQUESTED'
-      elsif respondent_type == 'I'
-        event_category = 'INDIVIDUAL_REPLACEMENT_IAC_REQUESTED'
-      end
-    end
-    case_group_id  = kase['caseGroupId']
-
-    RestClient.post("http://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}/events",
-                    { description: description,
-                      category: event_category,
-                      createdBy: user.user_id,
-                      caseCreationRequest: {
-                                              caseTypeId: casetype_id,
-                                              actionPlanMappingId: actionplanmappingid,
-                                              title: customertitle,
-                                              forename: customerforename,
-                                              surname: customersurname,
-                                              phoneNumber: phonenumber,
-                                              emailAddress: emailaddress
-                                            }
                     }.to_json, content_type: :json, accept: :json
                    ) do |post_response, _request, _result, &_block|
       if post_response.code == 200

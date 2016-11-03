@@ -9,7 +9,7 @@
 <% end %>
 
 <% if case_state == 'ACTIONABLE' %>
-  <form action="/cases/<%=h case_id %>/uprn/<%=h uprn %>/sample/<%=h sample_id %>/individual/new" method="get">
+  <form action="/cases/<%=h case_id %>/uprn/<%=h uprn %>/sample/<%=h sample_id %>/request/individual/new" method="get">
     <% if respondent_type == 'H' %>
       <input class="button" type="submit" value="Request Individual Form&hellip;">
       <% if params[:actionpage].present? %>
@@ -19,7 +19,7 @@
   </form>
 
   <% if isOnline %>
-    <form action="/cases/<%=h case_id %>/uprn/<%=h uprn %>/sample/<%=h sample_id %>/iac/new" method="get">
+    <form action="/cases/<%=h case_id %>/uprn/<%=h uprn %>/sample/<%=h sample_id %>/request/iac/new" method="get">
       <input class="button" type="submit" value="Request Replacement IAC&hellip;">
     <% if params[:actionpage].present? %>
       <input type="hidden" name="page" value="<%=h params[:actionpage] %>">
@@ -35,7 +35,7 @@
   </form>
 
   <% if isPaper %>
-    <form action="/cases/<%=h case_id %>/uprn/<%=h uprn %>/sample/<%=h sample_id %>/paper/new" method="get">
+    <form action="/cases/<%=h case_id %>/uprn/<%=h uprn %>/sample/<%=h sample_id %>/request/paper/new" method="get">
       <input class="button" type="submit" value="Request Paper Form&hellip;">
     <% if params[:actionpage].present? %>
       <input type="hidden" name="page" value="<%=h params[:actionpage] %>">
@@ -128,7 +128,7 @@
     </tr>
   </thead>
   <tbody>
-  <% if !responses.empty? %>
+  <% if responses.any? %>
     <% responses.each_with_index do |response, i| %>
       <tr class="<%= i.even? ? 'even' : 'odd ' %>">
         <td><%=h kase['caseRef'] %></td>
