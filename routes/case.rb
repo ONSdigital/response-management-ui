@@ -271,6 +271,94 @@ post '/cases/:case_id/uprn/:uprn/sample/:sample_id/event' do |case_id, uprn, sam
   end
 end
 
+# Present a form for requesting a translation booklet.
+get '/cases/:case_id/uprn/:uprn/sample/:sample_id/translate/new' do |case_id, uprn, sample_id|
+  authenticate!
+  kase       = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}"))
+  address    = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/addresses/#{uprn}"))
+  products   = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/categories?group=translation"))
+  erb :translate, locals: { title: "Request Translation Booklet for Case #{case_id}",
+                        action: "/cases/#{case_id}/uprn/#{uprn}/sample/#{sample_id}/translate",
+                        method: :post,
+                        page: params[:page],
+                        uprn: address['uprn'],
+                        case_id: case_id,
+                        postcode: format_postcode(address['postcode']),
+                        eventtext: '',
+                        customertitle: '',
+                        customerforename: '',
+                        customersurname: '',
+                        eventcategory: '',
+                        createdby: '',
+                        address: address,
+                        sample_id: sample_id,
+                        products: products
+                      }
+end
+
+# Request a translation booklet and create associated event.
+post '/cases/:case_id/uprn/:uprn/sample/:sample_id/translate' do |case_id, uprn, sample_id|
+  authenticate!
+
+  form do
+    field :customertitle, present: true
+    field :customerforename, present: true
+    field :customersurname, present: true
+  end
+
+  customertitle       = params[:customertitle]
+  customerforename    = params[:customerforename]
+  customersurname     = params[:customersurname]
+  event_category      = params[:eventcategory]
+
+  if form.failed?
+    kase         = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}"))
+    address      = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/addresses/#{uprn}"))
+    products     = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/categories?group=translation"))
+
+    erb :translate, locals: { title: "Request Translation Booklet for Case #{case_id}",
+                          action: "/cases/#{case_id}/uprn/#{uprn}/sample/#{sample_id}/translate",
+                          method: :post,
+                          page: params[:page],
+                          uprn: uprn,
+                          case_id: case_id,
+                          postcode: format_postcode(address['postcode']),
+                          eventtext: '',
+                          customertitle: customertitle,
+                          customerforename: customerforename,
+                          customersurname: customersurname,
+                          eventcategory: event_category,
+                          createdby: '',
+                          address: address,
+                          sample_id: sample_id,
+                          products: products
+                        }
+  else
+    user           = session[:user]
+    category       = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/categories/#{event_category}"))
+    language       = category['shortDescription']
+    description    = "Translation Booklet in #{language} supplied to "
+    description    = "#{description} #{customertitle.capitalize} #{customerforename} #{customersurname}"
+
+    RestClient.post("http://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}/events",
+                    { description: description,
+                      category: event_category,
+                      createdBy: user.user_id
+                    }.to_json, content_type: :json, accept: :json
+                   ) do |post_response, _request, _result, &_block|
+      if post_response.code == 200
+        flash[:notice] = 'Successfully created event.'
+      else
+        logger.error post_response
+        error_flash('Unable to create event', post_response)
+      end
+    end
+
+    event_url = "/cases/#{case_id}/uprn/#{uprn}/sample/#{sample_id}"
+    event_url += "?page=#{params[:page]}" if params[:page].present?
+    redirect event_url
+  end
+end
 
 
 # Present a form for paper/iac/post requests.
@@ -473,95 +561,6 @@ post '/cases/:case_id/uprn/:uprn/sample/:sample_id/:type' do |case_id, uprn, sam
                                               phoneNumber: phonenumber,
                                               emailAddress: emailaddress
                                             }
-                    }.to_json, content_type: :json, accept: :json
-                   ) do |post_response, _request, _result, &_block|
-      if post_response.code == 200
-        flash[:notice] = 'Successfully created event.'
-      else
-        logger.error post_response
-        error_flash('Unable to create event', post_response)
-      end
-    end
-
-    event_url = "/cases/#{case_id}/uprn/#{uprn}/sample/#{sample_id}"
-    event_url += "?page=#{params[:page]}" if params[:page].present?
-    redirect event_url
-  end
-end
-
-# Present a form for requesting a translation booklet.
-get '/cases/:case_id/uprn/:uprn/sample/:sample_id/translate/new' do |case_id, uprn, sample_id|
-  authenticate!
-  kase       = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}"))
-  address    = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/addresses/#{uprn}"))
-  products   = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/categories?group=translation"))
-  erb :translate, locals: { title: "Request Translation Booklet for Case #{case_id}",
-                        action: "/cases/#{case_id}/uprn/#{uprn}/sample/#{sample_id}/translate",
-                        method: :post,
-                        page: params[:page],
-                        uprn: address['uprn'],
-                        case_id: case_id,
-                        postcode: format_postcode(address['postcode']),
-                        eventtext: '',
-                        customertitle: '',
-                        customerforename: '',
-                        customersurname: '',
-                        eventcategory: '',
-                        createdby: '',
-                        address: address,
-                        sample_id: sample_id,
-                        products: products
-                      }
-end
-
-# Request a translation booklet and create associated event.
-post '/cases/:case_id/uprn/:uprn/sample/:sample_id/translate' do |case_id, uprn, sample_id|
-  authenticate!
-
-  form do
-    field :customertitle, present: true
-    field :customerforename, present: true
-    field :customersurname, present: true
-  end
-
-  customertitle       = params[:customertitle]
-  customerforename    = params[:customerforename]
-  customersurname     = params[:customersurname]
-  event_category      = params[:eventcategory]
-
-  if form.failed?
-    kase         = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}"))
-    address      = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/addresses/#{uprn}"))
-    products     = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/categories?group=translation"))
-
-    erb :translate, locals: { title: "Request Translation Booklet for Case #{case_id}",
-                          action: "/cases/#{case_id}/uprn/#{uprn}/sample/#{sample_id}/translate",
-                          method: :post,
-                          page: params[:page],
-                          uprn: uprn,
-                          case_id: case_id,
-                          postcode: format_postcode(address['postcode']),
-                          eventtext: '',
-                          customertitle: customertitle,
-                          customerforename: customerforename,
-                          customersurname: customersurname,
-                          eventcategory: event_category,
-                          createdby: '',
-                          address: address,
-                          sample_id: sample_id,
-                          products: products
-                        }
-  else
-    user           = session[:user]
-    category       = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/categories/#{event_category}"))
-    language       = category['shortDescription']
-    description    = "Translation Booklet in #{language} supplied to "
-    description    = "#{description} #{customertitle.capitalize} #{customerforename} #{customersurname}"
-
-    RestClient.post("http://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}/events",
-                    { description: description,
-                      category: event_category,
-                      createdBy: user.user_id
                     }.to_json, content_type: :json, accept: :json
                    ) do |post_response, _request, _result, &_block|
       if post_response.code == 200
