@@ -19,6 +19,7 @@ get '/signin/?' do
   built = Date.today.strftime('%d_%b_%Y') if built == '01_Jan_1970'
   commit = `git rev-parse --short HEAD` if commit == 'commit'
   erb :signin, layout: :simple_layout, locals: { title: 'Sign In',
+                                                 host: settings.host,
                                                  built: built,
                                                  commit: commit,
                                                  environment: settings.environment }

@@ -27,8 +27,9 @@ set :ldap_groups, config['ldap-directory']['groups']
 set :google_maps_api_key, config['google-maps']['api-key']
 set :helpline_mi_directory, config['helpline-mi']['directory']
 
-# Display badges with the built date, environment and commit SHA on the
+# Display badges with the host, built date, commit SHA and environment on the
 # Sign In screen in non-production environments.
+set :host,        `hostname`.strip.gsub(/-/, '--')
 set :built, config['badges']['built']
 set :commit, config['badges']['commit']
 set :environment, config['badges']['environment']
