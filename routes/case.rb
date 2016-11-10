@@ -384,7 +384,7 @@ get '/cases/:case_id/uprn/:uprn/sample/:sample_id/request/:type/new' do |case_id
     sample_case_types = sample['sampleCaseTypes']
 
     sample_case_types.each do | sample_case_type |
-      if sample_case_type['respondentType'] == 'I'
+      if sample_case_type['respondentType'] == 'HI'
         casetype_id = sample_case_type['caseTypeId']
       else
         casetype_id         = kase['caseTypeId']
@@ -472,7 +472,7 @@ post '/cases/:case_id/uprn/:uprn/sample/:sample_id/:type' do |case_id, uprn, sam
       sample_case_types = sample['sampleCaseTypes']
 
       sample_case_types.each do | sample_case_type |
-        if sample_case_type['respondentType'] == 'I'
+        if sample_case_type['respondentType'] == 'HI'
           casetype_id = sample_case_type['caseTypeId']
         end
       end
@@ -524,7 +524,7 @@ post '/cases/:case_id/uprn/:uprn/sample/:sample_id/:type' do |case_id, uprn, sam
       sample            = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/samples/#{sample_id}"))
       sample_case_types = sample['sampleCaseTypes']
       sample_case_types.each do | sample_case_type |
-        if sample_case_type['respondentType'] == 'I'
+        if sample_case_type['respondentType'] == 'HI'
           casetype_id = sample_case_type['caseTypeId']
         end
       end
