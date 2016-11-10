@@ -9,7 +9,7 @@ class String
       'Communal Establishment'
     when 'HH'
       'Household'
-    when 'I'
+    when 'HI'
       'Individual'
     else
       '-'

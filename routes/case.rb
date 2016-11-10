@@ -40,8 +40,6 @@ get '/addresses/:uprn/cases/?' do |uprn|
         cases = JSON.parse(cases_response).paginate(page: params[:page]) unless cases_response.code == 404
       end
 
-      puts "*** 1. #{cases.size} ***"
-
       cases.each do |kase|
         sample_id   = casegroup['sampleId']
         sample      = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/samples/#{sample_id}"))
@@ -55,8 +53,6 @@ get '/addresses/:uprn/cases/?' do |uprn|
       end
     end
   end
-
-  puts "*** 2. #{cases.size} ***"
 
   # Get the selected address details so they can be displayed for reference.
   address = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/addresses/#{uprn}"))
@@ -373,6 +369,7 @@ get '/cases/:case_id/uprn/:uprn/sample/:sample_id/request/:type/new' do |case_id
     title = "Request Replacement IAC for Case #{case_id}"
   end
 
+  sample_case_types = []
   casetype_id = ''
   kase        = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}"))
 
@@ -383,18 +380,20 @@ get '/cases/:case_id/uprn/:uprn/sample/:sample_id/request/:type/new' do |case_id
     sample            = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/samples/#{sample_id}"))
     sample_case_types = sample['sampleCaseTypes']
 
+    puts "sample_case_types #{sample_case_types}"
+
     sample_case_types.each do | sample_case_type |
       if sample_case_type['respondentType'] == 'HI'
         casetype_id = sample_case_type['caseTypeId']
-      else
-        casetype_id         = kase['caseTypeId']
       end
     end
+  else
+    casetype_id = kase['caseTypeId']
   end
 
-  puts sample_case_types
-  puts kase
-  puts casetype_id
+
+  puts "case #{kase}"
+  puts "casetype_id #{casetype_id}"
 
   address            = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/addresses/#{uprn}"))
   actionplanmappings = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/actionplanmappings/casetype/#{casetype_id}"))
@@ -441,8 +440,6 @@ post '/cases/:case_id/uprn/:uprn/sample/:sample_id/:type' do |case_id, uprn, sam
 
   emailmatch        = emailregex.match(emailaddress)
   phonematch        = phoneregex.match(phonenumber)
-
-  puts "emailmatch: #{emailmatch}"
 
   form do
     field :actionplanradio, present: true
@@ -529,7 +526,7 @@ post '/cases/:case_id/uprn/:uprn/sample/:sample_id/:type' do |case_id, uprn, sam
         end
       end
     else
-      casetype_id         = kase['caseTypeId']
+      casetype_id = kase['caseTypeId']
     end
     casetype        = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/casetypes/#{casetype_id}"))
     question_set    = casetype['questionSet']
@@ -540,13 +537,13 @@ post '/cases/:case_id/uprn/:uprn/sample/:sample_id/:type' do |case_id, uprn, sam
     elsif type == 'paper'
       if respondent_type == 'H'
         event_category = 'HOUSEHOLD_PAPER_REQUESTED'
-      elsif respondent_type == 'I'
+      elsif respondent_type == 'HI'
         event_category = 'INDIVIDUAL_PAPER_REQUESTED'
       end
     elsif type == 'iac'
       if respondent_type == 'H'
         event_category = 'HOUSEHOLD_REPLACEMENT_IAC_REQUESTED'
-      elsif respondent_type == 'I'
+      elsif respondent_type == 'HI'
         event_category = 'INDIVIDUAL_REPLACEMENT_IAC_REQUESTED'
       end
     end
