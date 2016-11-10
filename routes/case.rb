@@ -386,11 +386,15 @@ get '/cases/:case_id/uprn/:uprn/sample/:sample_id/request/:type/new' do |case_id
     sample_case_types.each do | sample_case_type |
       if sample_case_type['respondentType'] == 'I'
         casetype_id = sample_case_type['caseTypeId']
+      else
+        casetype_id         = kase['caseTypeId']
       end
     end
-  else
-    casetype_id         = kase['caseTypeId']
   end
+
+  puts sample_case_types
+  puts kase
+  puts casetype_id
 
   address            = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/addresses/#{uprn}"))
   actionplanmappings = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/actionplanmappings/casetype/#{casetype_id}"))
