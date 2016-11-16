@@ -459,8 +459,10 @@ post '/cases/:case_id/uprn/:uprn/sample/:sample_id/:type' do |case_id, uprn, sam
   end
 
   if form.failed?
+    sample_case_types = []
     casetype_id = ''
     kase        = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}"))
+
     if type == 'individual'
       casegroup_id      = kase['caseGroupId']
       casegroup         = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/casegroups/#{casegroup_id}"))
@@ -468,14 +470,21 @@ post '/cases/:case_id/uprn/:uprn/sample/:sample_id/:type' do |case_id, uprn, sam
       sample            = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/samples/#{sample_id}"))
       sample_case_types = sample['sampleCaseTypes']
 
+      puts "sample_case_types #{sample_case_types}"
+
       sample_case_types.each do | sample_case_type |
         if sample_case_type['respondentType'] == 'HI'
           casetype_id = sample_case_type['caseTypeId']
         end
       end
     else
-      casetype_id         = kase['caseTypeId']
+      casetype_id = kase['caseTypeId']
     end
+
+
+    puts "case #{kase}"
+    puts "casetype_id #{casetype_id}"
+
     address            = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/addresses/#{uprn}"))
     actionplanmappings = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/actionplanmappings/casetype/#{casetype_id}"))
 
@@ -511,15 +520,19 @@ post '/cases/:case_id/uprn/:uprn/sample/:sample_id/:type' do |case_id, uprn, sam
     end
     description = "#{description} #{customertitle} #{customerforename} #{customersurname}"
 
-    kase            = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}"))
+    sample_case_types = []
     casetype_id = ''
-    #get alternate casetypeid for individual cases
+    kase        = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}"))
+
     if type == 'individual'
       casegroup_id      = kase['caseGroupId']
       casegroup         = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/casegroups/#{casegroup_id}"))
       sample_id         = casegroup['sampleId']
       sample            = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/samples/#{sample_id}"))
       sample_case_types = sample['sampleCaseTypes']
+
+      puts "sample_case_types #{sample_case_types}"
+
       sample_case_types.each do | sample_case_type |
         if sample_case_type['respondentType'] == 'HI'
           casetype_id = sample_case_type['caseTypeId']
@@ -528,6 +541,11 @@ post '/cases/:case_id/uprn/:uprn/sample/:sample_id/:type' do |case_id, uprn, sam
     else
       casetype_id = kase['caseTypeId']
     end
+
+
+    puts "case #{kase}"
+    puts "casetype_id #{casetype_id}"
+
     casetype        = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/casetypes/#{casetype_id}"))
     question_set    = casetype['questionSet']
     respondent_type = casetype['respondentType']
