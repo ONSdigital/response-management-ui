@@ -20,10 +20,6 @@
   <% content_for :form_errors do %>
     <p class="message">&bull; Please enter Customer surname</p>
   <% end %>
-<% elsif form.failed_on? :emailaddress %>
-  <% content_for :form_errors do %>
-    <p class="message">&bull; Please enter a valid Email Address</p>
-  <% end %>
 <% elsif form.failed_on? :phonenumber %>
   <% content_for :form_errors do %>
     <p class="message">&bull; Please enter a valid Phone Number</p>
@@ -93,7 +89,7 @@
             <th></th>
             <th>Response Mode</th>
             <th>Delivery Mode</th>
-            <th>Language Variant</th>
+            <th>Language</th>
           </tr>
         </thead>
         <tbody>
@@ -109,7 +105,7 @@
                 <% end %>
                 </td>
                 <% if actionplanmapping['inboundChannel'].present? %>
-                  <td><%=h actionplanmapping['inboundChannel'] %></td>
+                  <td><%=h actionplanmapping['inboundChannel'].capitalize %></td>
                 <% else %>
                   <td>-</td>
                 <% end %>
@@ -136,7 +132,7 @@
                 <% end %>
                 </td>
                 <% if actionplanmapping['inboundChannel'].present? %>
-                  <td><%=h actionplanmapping['inboundChannel'] %></td>
+                  <td><%=h actionplanmapping['inboundChannel'].capitalize %></td>
                 <% else %>
                   <td>-</td>
                 <% end %>
@@ -163,7 +159,7 @@
                 <% end %>
                 </td>
                 <% if actionplanmapping['inboundChannel'].present? %>
-                  <td><%=h actionplanmapping['inboundChannel'] %></td>
+                  <td><%=h actionplanmapping['inboundChannel'].capitalize %></td>
                 <% else %>
                   <td>-</td>
                 <% end %>
@@ -193,16 +189,66 @@
       <% else %>
         <option value='mr'>Mr</option>
       <% end %>
-      <option value="mrs">Mrs</option>
-      <option value="miss">Miss</option>
-      <option value="ms">Ms</option>
-      <option value="dr">Dr</option>
-      <option value="prof">Prof.</option>
-      <option value="rev">Rev.</option>
-      <option value="sir">Sir</option>
-      <option value="capt">Capt.</option>
-      <option value="lady">Lady</option>
-      <option value="lord">Lord</option>
+
+      <% if customertitle == 'mrs' %>
+        <option value='mrs' selected>Mrs</option>
+      <% else %>
+        <option value='mrs'>Mrs</option>
+      <% end %>
+
+      <% if customertitle == 'miss' %>
+        <option value='miss' selected>Miss</option>
+      <% else %>
+        <option value='miss'>Miss</option>
+      <% end %>
+
+      <% if customertitle == 'ms' %>
+        <option value='ms' selected>Ms</option>
+      <% else %>
+        <option value='ms'>Ms</option>
+      <% end %>
+
+      <% if customertitle == 'dr' %>
+        <option value='dr' selected>Dr</option>
+      <% else %>
+        <option value='dr'>Dr</option>
+      <% end %>
+
+      <% if customertitle == 'prof' %>
+        <option value='prof' selected>Prof.</option>
+      <% else %>
+        <option value='prof'>Prof.</option>
+      <% end %>
+
+      <% if customertitle == 'rev' %>
+        <option value='rev' selected>Rev.</option>
+      <% else %>
+        <option value='rev'>Rev.</option>
+      <% end %>
+
+      <% if customertitle == 'sir' %>
+        <option value='sir' selected>Sir</option>
+      <% else %>
+        <option value='sir'>Sir</option>
+      <% end %>
+
+      <% if customertitle == 'capt' %>
+        <option value='capt' selected>Capt.</option>
+      <% else %>
+        <option value='capt'>Capt.</option>
+      <% end %>
+
+      <% if customertitle == 'lady' %>
+        <option value='lady' selected>Lady</option>
+      <% else %>
+        <option value='lady'>Lady</option>
+      <% end %>
+
+      <% if customertitle == 'lord' %>
+        <option value='lord' selected>Lord</option>
+      <% else %>
+        <option value='lord'>Lord</option>
+      <% end %>
     </select>
 
     <p><label for="customerforename">Forename</label></p>
@@ -210,9 +256,6 @@
 
     <p><label for="customersurname">Surname</label></p>
     <input type="text" id="customersurname" name="customersurname" size="51" maxlength="40" value="<%=h customersurname %>">
-
-    <p><label for="emailaddress">Email Address</label></p>
-    <input type="text" id="emailaddress" name="emailaddress" size="51" maxlength="40" value="<%=h emailaddress %>">
 
     <p><label for="phonenumber">Phone Number</label></p>
     <input type="text" id="phonenumber" name="phonenumber" size="51" maxlength="40" value="<%=h phonenumber %>">
