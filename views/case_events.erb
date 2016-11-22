@@ -8,39 +8,47 @@
   <%= erb :googlemaps_partial, locals: { coordinates: coordinates } %>
 <% end %>
 
-<% if case_state == 'ACTIONABLE' %>
-  <form action="/cases/<%=h case_id %>/uprn/<%=h uprn %>/sample/<%=h sample_id %>/request/individual/new" method="get">
-    <% if respondent_type == 'H' %>
+<% if case_state == 'ACTIONABLE' || case_state == 'INACTIONABLE' %>
+
+  <% if respondent_type == 'H' %>
+    <form action="/cases/<%=h case_id %>/uprn/<%=h uprn %>/sample/<%=h sample_id %>/request/individual/new" method="get">
       <input class="button" type="submit" value="Request Individual Form&hellip;">
       <% if params[:actionpage].present? %>
         <input type="hidden" name="page" value="<%=h params[:actionpage] %>">
       <% end %>
+    </form>
   <% end %>
-  </form>
+
 
   <% if isOnline %>
-    <form action="/cases/<%=h case_id %>/uprn/<%=h uprn %>/sample/<%=h sample_id %>/request/iac/new" method="get">
-      <input class="button" type="submit" value="Request Replacement IAC&hellip;">
-    <% if params[:actionpage].present? %>
-      <input type="hidden" name="page" value="<%=h params[:actionpage] %>">
+    <% if respondent_type != 'C' %>
+      <form action="/cases/<%=h case_id %>/uprn/<%=h uprn %>/sample/<%=h sample_id %>/request/iac/new" method="get">
+        <input class="button" type="submit" value="Request Replacement IAC&hellip;">
+      <% if params[:actionpage].present? %>
+        <input type="hidden" name="page" value="<%=h params[:actionpage] %>">
+      <% end %>
+      </form>
     <% end %>
-    </form>
   <% end %>
 
-  <form action="/cases/<%=h case_id %>/uprn/<%=h uprn %>/sample/<%=h sample_id %>/translate/new" method="get">
-    <input class="button" type="submit" value="Request Translation Booklet&hellip;">
-  <% if params[:actionpage].present? %>
-    <input type="hidden" name="page" value="<%=h params[:actionpage] %>">
+  <% if respondent_type != "C" %>
+    <form action="/cases/<%=h case_id %>/uprn/<%=h uprn %>/sample/<%=h sample_id %>/translate/new" method="get">
+      <input class="button" type="submit" value="Request Translation Booklet&hellip;">
+      <% if params[:actionpage].present? %>
+        <input type="hidden" name="page" value="<%=h params[:actionpage] %>">
+      <% end %>
+    </form>
   <% end %>
-  </form>
 
   <% if isPaper %>
-    <form action="/cases/<%=h case_id %>/uprn/<%=h uprn %>/sample/<%=h sample_id %>/request/paper/new" method="get">
-      <input class="button" type="submit" value="Request Paper Form&hellip;">
-    <% if params[:actionpage].present? %>
-      <input type="hidden" name="page" value="<%=h params[:actionpage] %>">
+    <% if respondent_type == 'H' || respondent_type == 'HI' %>
+      <form action="/cases/<%=h case_id %>/uprn/<%=h uprn %>/sample/<%=h sample_id %>/request/paper/new" method="get">
+        <input class="button" type="submit" value="Request Paper Form&hellip;">
+      <% if params[:actionpage].present? %>
+        <input type="hidden" name="page" value="<%=h params[:actionpage] %>">
+      <% end %>
+      </form>
     <% end %>
-    </form>
   <% end %>
 
 <% end %>

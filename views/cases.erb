@@ -5,7 +5,7 @@
 <% end %>
 
 <% content_for :sub_heading do %>
-  Click a case to create or view questionnaires.
+  Click a case to review.
 <% end %>
 
 <% content_for :sidebar do %>
@@ -73,6 +73,7 @@
           <th>Question Set</th>
           <th>Survey Description</th>
           <th>Sample Name</th>
+          <th>Contact Name</th>
         </tr>
       </thead>
       <tbody>
@@ -101,6 +102,11 @@
         <% end %>
         <% if kase['name'].present? %>
           <td><%=h kase['name'] %></td>
+        <% else %>
+          <td>-</td>
+        <% end %>
+        <% if kase['contact'].present? %>
+          <td><%=h kase['contact'] %></td>
         <% else %>
           <td>-</td>
         <% end %>
