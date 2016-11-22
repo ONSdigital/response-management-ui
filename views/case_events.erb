@@ -21,7 +21,7 @@
 
 
   <% if isOnline %>
-    <% if respondent_type != 'C' %>
+    <% unless respondent_type == 'C' %>
       <form action="/cases/<%=h case_id %>/uprn/<%=h uprn %>/sample/<%=h sample_id %>/request/iac/new" method="get">
         <input class="button" type="submit" value="Request Replacement IAC&hellip;">
       <% if params[:actionpage].present? %>
@@ -31,7 +31,7 @@
     <% end %>
   <% end %>
 
-  <% if respondent_type != "C" %>
+  <% unless respondent_type == "C" %>
     <form action="/cases/<%=h case_id %>/uprn/<%=h uprn %>/sample/<%=h sample_id %>/translate/new" method="get">
       <input class="button" type="submit" value="Request Translation Booklet&hellip;">
       <% if params[:actionpage].present? %>
