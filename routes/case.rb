@@ -45,18 +45,22 @@ get '/addresses/:uprn/cases/?' do |uprn|
         sample      = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/samples/#{sample_id}"))
         casetype_id = kase['caseTypeId']
         casetype    = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/casetypes/#{casetype_id}"))
-
+        contact     = kase['contact']
         #add extra values to the kase object
         kase['surveyDescription'] = sample['survey']
         kase['name']              = sample['name']
         kase['questionSet']       = casetype['questionSet']
+
+        if !contact.nil?
+          kase['contact']         = contact['forename'] +" "+ contact['surname']
+        end
       end
     end
   end
 
   # Get the selected address details so they can be displayed for reference.
   address = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/addresses/#{uprn}"))
-  erb :cases, layout: :sidebar_layout, locals: { title: "Cases for Address #{uprn}",
+  erb :cases, layout: :sidebar_layout, locals: { title: "Cases for Address",
                                                  uprn: uprn,
                                                  sample_id: sample_id,
                                                  cases: cases,
@@ -413,7 +417,6 @@ get '/cases/:case_id/uprn/:uprn/sample/:sample_id/request/:type/new' do |case_id
                             sample_id: sample_id,
                             address: address,
                             actionplanmappings: actionplanmappings,
-                            emailaddress: '',
                             phonenumber: '',
                             actionplanmappingid: '',
                             type: type
@@ -433,12 +436,9 @@ post '/cases/:case_id/uprn/:uprn/sample/:sample_id/:type' do |case_id, uprn, sam
   customertitle     = params[:customertitle]
   customerforename  = params[:customerforename]
   customersurname   = params[:customersurname]
-  emailaddress      = params[:emailaddress]
   phonenumber       = params[:phonenumber]
-  emailregex        = /^$|[_A-Za-z0-9\-\+]+(\.[_A-Za-z0-9\-]+)*@[A-Za-z0-9\-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})/
   phoneregex        = /^$|\d{11}/
 
-  emailmatch        = emailregex.match(emailaddress)
   phonematch        = phoneregex.match(phonenumber)
 
   form do
@@ -446,7 +446,6 @@ post '/cases/:case_id/uprn/:uprn/sample/:sample_id/:type' do |case_id, uprn, sam
     field :customertitle, present: true
     field :customerforename, present: true
     field :customersurname, present: true
-    field :emailaddress, present: true, regexp: %r{^$|[_A-Za-z0-9\-\+]+(\.[_A-Za-z0-9\-]+)*@[A-Za-z0-9\-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})} if outboundchannel == 'EMAIL'
     field :phonenumber, present: true, regexp: %r{^$|\d{11}} if outboundchannel == 'SMS'
   end
 
@@ -504,7 +503,6 @@ post '/cases/:case_id/uprn/:uprn/sample/:sample_id/:type' do |case_id, uprn, sam
                               sample_id: sample_id,
                               address: address,
                               actionplanmappings: actionplanmappings,
-                              emailaddress: emailaddress,
                               phonenumber: phonenumber,
                               actionplanmappingid: actionplanmappingid,
                               type: type
@@ -518,7 +516,7 @@ post '/cases/:case_id/uprn/:uprn/sample/:sample_id/:type' do |case_id, uprn, sam
     elsif type == 'iac'
       description = "Replacement IAC sent to"
     end
-    description = "#{description} #{customertitle} #{customerforename} #{customersurname}"
+    description = "#{description} #{customertitle.capitalize} #{customerforename} #{customersurname}"
 
     sample_case_types = []
     casetype_id = ''
@@ -577,8 +575,7 @@ post '/cases/:case_id/uprn/:uprn/sample/:sample_id/:type' do |case_id, uprn, sam
                                               title: customertitle,
                                               forename: customerforename,
                                               surname: customersurname,
-                                              phoneNumber: phonenumber,
-                                              emailAddress: emailaddress
+                                              phoneNumber: phonenumber
                                             }
                     }.to_json, content_type: :json, accept: :json
                    ) do |post_response, _request, _result, &_block|
