@@ -8,9 +8,10 @@
   <%= erb :googlemaps_partial, locals: { coordinates: coordinates } %>
 <% end %>
 
+
 <% if case_state == 'ACTIONABLE' || case_state == 'INACTIONABLE' %>
 
-  <% if respondent_type == 'H' %>
+  <% if respondent_type == 'H' && (case_state == 'ACTIONABLE' || case_state == 'INACTIONABLE') %>
     <form action="/cases/<%=h case_id %>/uprn/<%=h uprn %>/sample/<%=h sample_id %>/request/individual/new" method="get">
       <input class="button" type="submit" value="Request Individual Form&hellip;">
       <% if params[:actionpage].present? %>
@@ -21,7 +22,7 @@
 
 
   <% if isOnline %>
-    <% unless respondent_type == 'C' %>
+    <% unless respondent_type == 'C' || case_state == 'INACTIONABLE' %>
       <form action="/cases/<%=h case_id %>/uprn/<%=h uprn %>/sample/<%=h sample_id %>/request/iac/new" method="get">
         <input class="button" type="submit" value="Request Replacement IAC&hellip;">
       <% if params[:actionpage].present? %>
@@ -31,7 +32,7 @@
     <% end %>
   <% end %>
 
-  <% unless respondent_type == "C" %>
+  <% unless respondent_type == "C" || case_state == 'INACTIONABLE'%>
     <form action="/cases/<%=h case_id %>/uprn/<%=h uprn %>/sample/<%=h sample_id %>/translate/new" method="get">
       <input class="button" type="submit" value="Request Translation Booklet&hellip;">
       <% if params[:actionpage].present? %>
@@ -40,7 +41,7 @@
     </form>
   <% end %>
 
-  <% if isPaper %>
+  <% if isPaper && case_state == 'ACTIONABLE' %>
     <% if respondent_type == 'H' || respondent_type == 'HI' %>
       <form action="/cases/<%=h case_id %>/uprn/<%=h uprn %>/sample/<%=h sample_id %>/request/paper/new" method="get">
         <input class="button" type="submit" value="Request Paper Form&hellip;">
@@ -50,8 +51,8 @@
       </form>
     <% end %>
   <% end %>
-
 <% end %>
+
 
   <table class="primary">
     <thead>
