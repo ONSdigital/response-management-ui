@@ -181,7 +181,7 @@
       </table>
     <% end %>
 
-    <p><label for="customertitle">Title</label></p>
+    <p><label for="customertitle">Title</label><span class="required">*</span></p>
     <select style="background:white" name="customertitle" id="customertitle">
       <option value="">Select Title</option>
       <% if customertitle == 'mr' %>
@@ -251,10 +251,10 @@
       <% end %>
     </select>
 
-    <p><label for="customerforename">Forename</label></p>
+    <p><label for="customerforename">Forename</label><span class="required">*</span></p>
     <input type="text" id="customerforename" name="customerforename" size="51" maxlength="40" value="<%=h customerforename %>">
 
-    <p><label for="customersurname">Surname</label></p>
+    <p><label for="customersurname">Surname</label><span class="required">*</span></p>
     <input type="text" id="customersurname" name="customersurname" size="51" maxlength="40" value="<%=h customersurname %>">
 
     <p><label for="phonenumber">Phone Number</label></p>
