@@ -143,7 +143,7 @@ get '/postcodes/:postcode' do |postcode|
 
   # CTPA-477 Need to URI encode the postcode search string.
   RestClient.get(URI.encode(search_url)) do |response, _request, _result, &_block|
-    addresses = JSON.parse(response).paginate(page: params[:page]) unless response.code == 404
+    addresses = JSON.parse(response).paginate(page: params[:page]) unless response.code == 404 || response.code == 500
   end
 
   formatted_postcode = format_postcode(postcode)
