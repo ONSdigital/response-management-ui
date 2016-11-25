@@ -41,7 +41,6 @@
     </form>
   <% end %>
 
-  <% if isPaper && case_state == 'ACTIONABLE' %>
   <% if paper && case_state == 'ACTIONABLE' %>
     <% if respondent_type == 'H' || respondent_type == 'HI' %>
       <form action="/cases/<%=h case_id %>/uprn/<%=h uprn %>/sample/<%=h sample_id %>/request/paper/new" method="get">
