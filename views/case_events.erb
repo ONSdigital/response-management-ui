@@ -41,7 +41,6 @@
     </form>
   <% end %>
 
-  <% if isPaper && case_state == 'ACTIONABLE' %>
   <% if paper && case_state == 'ACTIONABLE' %>
     <% if respondent_type == 'H' || respondent_type == 'HI' %>
       <form action="/cases/<%=h case_id %>/uprn/<%=h uprn %>/sample/<%=h sample_id %>/request/paper/new" method="get">
@@ -66,8 +65,6 @@
         <th>Address Line 2</th>
         <th>Town</th>
         <th>Postcode</th>
-        <th>Address Type</th>
-        <th>Establishment Type</th>
       </tr>
     </thead>
     <tbody>
@@ -112,17 +109,29 @@
       <% else %>
         <td>-</td>
       <% end %>
-      <% if address['type'].present? %>
-        <td><%=h address['type'].to_address_type %></td>
-      <% else %>
-        <td>-</td>
-      <% end %>
-      <% if address['estabtype'].present? %>
-        <td><%=h address['estabtype'] %></td>
-      <% else %>
-        <td>-</td>
-      <% end %>
     </tr>
+    </tbody>
+  </table>
+  <table class="primary">
+    <thead>
+      <tr>
+        <th>Address Type</th>
+        <th>Establishment Type</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="even">
+        <% if address['type'].present? %>
+          <td><%=h address['type'].to_address_type %></td>
+        <% else %>
+          <td>-</td>
+        <% end %>
+        <% if address['estabtype'].present? %>
+          <td><%=h address['estabtype'] %></td>
+        <% else %>
+          <td>-</td>
+        <% end %>
+      </tr>
     </tbody>
   </table>
 
