@@ -375,6 +375,7 @@ end
 
 
 # Present a form for paper/iac/post requests.
+# Present a form for paper/accesscode/post requests.
 get '/cases/:case_id/uprn/:uprn/sample/:sample_id/request/:type/new' do |case_id, uprn, sample_id, type|
   authenticate!
 
@@ -384,6 +385,7 @@ get '/cases/:case_id/uprn/:uprn/sample/:sample_id/request/:type/new' do |case_id
     title = "Request Paper Questionnaire for Case #{case_id}"
   elsif type == 'iac'
     title = "Request Replacement IAC for Case #{case_id}"
+  elsif type == 'accesscode'
   end
 
   sample_case_types = []
@@ -468,6 +470,7 @@ post '/cases/:case_id/uprn/:uprn/sample/:sample_id/:type' do |case_id, uprn, sam
     title = "Request Paper Questionnaire for Case #{case_id}"
   elsif type == 'iac'
     title = "Request Replacement IAC for Case #{case_id}"
+  elsif type == 'accesscode'
   end
 
   if form.failed?
@@ -528,6 +531,8 @@ post '/cases/:case_id/uprn/:uprn/sample/:sample_id/:type' do |case_id, uprn, sam
       description = "Paper Questionnaire sent to"
     elsif type == 'iac'
       description = "Replacement IAC sent to"
+    elsif type == 'accesscode'
+      description = "Replacement Access Code sent to"
     end
     description = "#{description} #{customertitle.capitalize} #{customerforename} #{customersurname}"
 
@@ -570,6 +575,7 @@ post '/cases/:case_id/uprn/:uprn/sample/:sample_id/:type' do |case_id, uprn, sam
         event_category = 'INDIVIDUAL_PAPER_REQUESTED'
       end
     elsif type == 'iac'
+    elsif type == 'accesscode'
       if respondent_type == 'H'
         event_category = 'HOUSEHOLD_REPLACEMENT_IAC_REQUESTED'
       elsif respondent_type == 'HI'

@@ -21,11 +21,10 @@
   <% end %>
 
 
-  <% if isOnline %>
   <% if online %>
     <% unless respondent_type == 'C' || case_state == 'INACTIONABLE' %>
-      <form action="/cases/<%=h case_id %>/uprn/<%=h uprn %>/sample/<%=h sample_id %>/request/iac/new" method="get">
-        <input class="button" type="submit" value="Request Replacement IAC&hellip;">
+      <form action="/cases/<%=h case_id %>/uprn/<%=h uprn %>/sample/<%=h sample_id %>/request/accesscode/new" method="get">
+        <input class="button" type="submit" value="Request Replacement Access Code&hellip;">
       <% if params[:actionpage].present? %>
         <input type="hidden" name="page" value="<%=h params[:actionpage] %>">
       <% end %>
