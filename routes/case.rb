@@ -374,18 +374,19 @@ post '/cases/:case_id/uprn/:uprn/sample/:sample_id/translate' do |case_id, uprn,
 end
 
 
-# Present a form for paper/iac/post requests.
 # Present a form for paper/accesscode/post requests.
 get '/cases/:case_id/uprn/:uprn/sample/:sample_id/request/:type/new' do |case_id, uprn, sample_id, type|
   authenticate!
 
   if type == 'individual'
+    breadcrumb = "Request Individual Form"
     title = "Request Individual Form for Case #{case_id}"
   elsif type == 'paper'
+    breadcrumb = "Request Paper Questionnaire"
     title = "Request Paper Questionnaire for Case #{case_id}"
-  elsif type == 'iac'
-    title = "Request Replacement IAC for Case #{case_id}"
   elsif type == 'accesscode'
+    breadcrumb = "Request Replacement Access Code"
+    title = "Request Replacement Access Code for Case #{case_id}"
   end
 
   sample_case_types = []
@@ -398,8 +399,6 @@ get '/cases/:case_id/uprn/:uprn/sample/:sample_id/request/:type/new' do |case_id
     sample_id         = casegroup['sampleId']
     sample            = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/samples/#{sample_id}"))
     sample_case_types = sample['sampleCaseTypes']
-
-    puts "sample_case_types #{sample_case_types}"
 
     sample_case_types.each do | sample_case_type |
       if sample_case_type['respondentType'] == 'HI'
@@ -445,15 +444,16 @@ get '/cases/:case_id/uprn/:uprn/sample/:sample_id/request/:type/new' do |case_id
                             createdby: '',
                             sample_id: sample_id,
                             address: address,
-                            actionplanmappings: actionplanmappings,
+                            actionplanmappings: actionplanmaps,
                             phonenumber: '',
                             actionplanmappingid: '',
-                            type: type
+                            type: type,
+                            breadcrumb: breadcrumb
                           }
 end
 
 
-# Request creation of new case for paper/iac/individual cases and create associated event.
+# Request creation of new case for paper/accesscode/individual cases and create associated event.
 post '/cases/:case_id/uprn/:uprn/sample/:sample_id/:type' do |case_id, uprn, sample_id, type|
   authenticate!
   actionplanmappingid = params[:actionplanradio]
@@ -479,12 +479,14 @@ post '/cases/:case_id/uprn/:uprn/sample/:sample_id/:type' do |case_id, uprn, sam
   end
 
   if type == 'individual'
+    breadcrumb = "Request Individual Form"
     title = "Request Individual Form for Case #{case_id}"
   elsif type == 'paper'
+    breadcrumb = "Request Paper Questionnaire"
     title = "Request Paper Questionnaire for Case #{case_id}"
-  elsif type == 'iac'
-    title = "Request Replacement IAC for Case #{case_id}"
   elsif type == 'accesscode'
+    breadcrumb = "Request Replacement Access Code"
+    title = "Request Replacement Access Code for Case #{case_id}"
   end
 
   if form.failed?
@@ -499,8 +501,6 @@ post '/cases/:case_id/uprn/:uprn/sample/:sample_id/:type' do |case_id, uprn, sam
       sample            = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/samples/#{sample_id}"))
       sample_case_types = sample['sampleCaseTypes']
 
-      puts "sample_case_types #{sample_case_types}"
-
       sample_case_types.each do | sample_case_type |
         if sample_case_type['respondentType'] == 'HI'
           casetype_id = sample_case_type['caseTypeId']
@@ -509,10 +509,6 @@ post '/cases/:case_id/uprn/:uprn/sample/:sample_id/:type' do |case_id, uprn, sam
     else
       casetype_id = kase['caseTypeId']
     end
-
-
-    puts "case #{kase}"
-    puts "casetype_id #{casetype_id}"
 
     address            = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/addresses/#{uprn}"))
     actionplanmappings = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/actionplanmappings/casetype/#{casetype_id}"))
@@ -535,7 +531,8 @@ post '/cases/:case_id/uprn/:uprn/sample/:sample_id/:type' do |case_id, uprn, sam
                               actionplanmappings: actionplanmappings,
                               phonenumber: phonenumber,
                               actionplanmappingid: actionplanmappingid,
-                              type: type
+                              type: type,
+                              breadcrumb: breadcrumb
                             }
   else
     user        = session[:user]
@@ -543,8 +540,6 @@ post '/cases/:case_id/uprn/:uprn/sample/:sample_id/:type' do |case_id, uprn, sam
       description = "Individual Form sent to"
     elsif type == 'paper'
       description = "Paper Questionnaire sent to"
-    elsif type == 'iac'
-      description = "Replacement IAC sent to"
     elsif type == 'accesscode'
       description = "Replacement Access Code sent to"
     end
@@ -581,19 +576,20 @@ post '/cases/:case_id/uprn/:uprn/sample/:sample_id/:type' do |case_id, uprn, sam
     respondent_type = casetype['respondentType']
 
     if type == 'individual'
-      event_category = 'INDIVIDUAL_RESPONSE_REQUESTED'
+      event_category = 'H_INDIVIDUAL_RESPONSE_REQUESTED'
     elsif type == 'paper'
       if respondent_type == 'H'
         event_category = 'HOUSEHOLD_PAPER_REQUESTED'
       elsif respondent_type == 'HI'
-        event_category = 'INDIVIDUAL_PAPER_REQUESTED'
+        event_category = 'H_INDIVIDUAL_PAPER_REQUESTED'
       end
-    elsif type == 'iac'
     elsif type == 'accesscode'
       if respondent_type == 'H'
         event_category = 'HOUSEHOLD_REPLACEMENT_IAC_REQUESTED'
       elsif respondent_type == 'HI'
-        event_category = 'INDIVIDUAL_REPLACEMENT_IAC_REQUESTED'
+        event_category = 'H_INDIVIDUAL_REPLACEMENT_IAC_REQUESTED'
+      elsif respondent_type == 'CI'
+        event_category = 'C_INDIVIDUAL_REPLACEMENT_IAC_REQUESTED'
       end
     end
     case_group_id  = kase['caseGroupId']
