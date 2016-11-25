@@ -4,11 +4,6 @@
 <a href="/">Home</a> &gt; <a href="/postcodes/<%=url_format postcode %>"><%=h postcode %></a> &gt; <a href="/addresses/<%=h uprn %>/cases">Cases</a> &gt; Case <%=h case_id %>
 <% end %>
 
-<% content_for :sidebar do %>
-  <%= erb :googlemaps_partial, locals: { coordinates: coordinates } %>
-<% end %>
-
-
 <% if case_state == 'ACTIONABLE' || case_state == 'INACTIONABLE' %>
 
   <% if respondent_type == 'H' && (case_state == 'ACTIONABLE' || case_state == 'INACTIONABLE') %>
