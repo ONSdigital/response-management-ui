@@ -141,15 +141,28 @@ get '/postcodes/:postcode' do |postcode|
   addresses  = []
   search_url = "http://#{settings.case_service_host}:#{settings.case_service_port}/addresses/postcode/#{postcode}"
 
-  # CTPA-477 Need to URI encode the postcode search string.
-  RestClient.get(URI.encode(search_url)) do |response, _request, _result, &_block|
-    addresses = JSON.parse(response).paginate(page: params[:page]) unless response.code == 404 || response.code == 500
+  form do
+    field :postcode, length: 5..8
   end
 
-  formatted_postcode = format_postcode(postcode)
-  erb :addresses, locals: { title: "Addresses for Postcode #{formatted_postcode}",
-                            addresses: addresses,
-                            postcode: formatted_postcode }
+  if form.failed?
+    puts "in form failed"
+    formatted_postcode = format_postcode(postcode)
+    erb :addresses, locals: { title: "Addresses for Postcode #{formatted_postcode}",
+                              addresses: addresses,
+                              postcode: formatted_postcode }
+  else
+      puts "in form succeed"
+    # CTPA-477 Need to URI encode the postcode search string.
+    RestClient.get(URI.encode(search_url)) do |response, _request, _result, &_block|
+      addresses = JSON.parse(response).paginate(page: params[:page]) unless response.code == 404
+    end
+
+    formatted_postcode = format_postcode(postcode)
+    erb :addresses, locals: { title: "Addresses for Postcode #{formatted_postcode}",
+                              addresses: addresses,
+                              postcode: formatted_postcode }
+  end
 end
 
 # Present a form for creating a new event.

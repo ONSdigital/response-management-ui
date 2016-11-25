@@ -4,6 +4,12 @@
 <a href="/">Home</a> &gt; <%=postcode.upcase %>
 <% end %>
 
+<% if form.failed_on? :postcode %>
+  <% content_for :form_errors do %>
+    <p class="message">&bull; Please Enter Valid Postcode</p>
+  <% end %>
+<% end %>
+
 <% if addresses.any? %>
 <% content_for :sub_heading do %>
   Click to view cases for an address.
