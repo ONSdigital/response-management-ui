@@ -100,16 +100,16 @@ get '/cases/:case_id/uprn/:uprn/sample/:sample_id?' do |case_id, uprn, sample_id
   address         = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/addresses/#{uprn}"))
   respondent_type = casetype['respondentType']
 
-  isPaper            = false
-  isOnline           = false
+  paper            = false
+  online           = false
 
   actionplanmappings = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/actionplanmappings/casetype/#{casetype_id}"))
   actionplanmappings.each do | actionplanmapping |
     if !actionplanmapping['isDefault']
       if actionplanmapping['inboundChannel'] == 'PAPER'
-        isPaper  = true
+        paper  = true
       elsif actionplanmapping['inboundChannel'] == 'ONLINE'
-        isOnline = true
+        online = true
       end
     end
   end
@@ -130,8 +130,8 @@ get '/cases/:case_id/uprn/:uprn/sample/:sample_id?' do |case_id, uprn, sample_id
                                                        question_set: question_set,
                                                        respondent_type: respondent_type,
                                                        case_state: case_state,
-                                                       isPaper: isPaper,
-                                                       isOnline: isOnline
+                                                       paper: paper,
+                                                       online: online
                                                      }
 end
 
