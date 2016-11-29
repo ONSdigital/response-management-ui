@@ -254,7 +254,7 @@ post '/cases/:case_id/uprn/:uprn/sample/:sample_id/event' do |case_id, uprn, sam
         flash[:notice] = 'Successfully created event.'
         actions = []
 
-        if params[:eventcategory] == 'INCORRECT_ESCALATION' || params[:eventcategory] == 'REFUSAL' || params[:eventcategory] == 'CLOSE_ESCALATION'
+        if params[:eventcategory] == 'INCORRECT_ESCALATION' || params[:eventcategory] == 'REFUSAL' || params[:eventcategory] == 'CLOSE_ESCALATION' || params[:eventcategory] == 'ESCALATED_REFUSAL'
           RestClient.get("http://#{settings.action_service_host}:#{settings.action_service_port}/actions/case/#{case_id}") do |response, _request, _result, &_block|
             actions = JSON.parse(response).paginate(page: params[:page]) unless response.code == 204 # rubocop:disable Metrics/BlockNesting
           end
