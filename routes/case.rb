@@ -194,15 +194,26 @@ end
 post '/cases/:case_id/uprn/:uprn/sample/:sample_id/event' do |case_id, uprn, sample_id|
   authenticate!
 
-  form do
-    field :eventtext, present: true
-  end
-
   customertitle    = params[:customertitle]
   customerforename = params[:customerforename]
   customersurname  = params[:customersurname]
   name             = params[:customertitle] + ' ' + params[:customerforename] + ' ' + params[:customersurname]
-  phone            = params[:customercontact]
+  customercontact  = params[:customercontact]
+  eventtext        = params[:eventtext]
+
+  if params[:eventcategory] == 'FIELD_COMPLAINT_ESCALATED' || params[:eventcategory] == 'FIELD_EMERGENCY_ESCALATED' || params[:eventcategory] == 'GENERAL_ENQUIRY_ESCALATED' || params[:eventcategory] == 'GENERAL_COMPLAINT_ESCALATED'
+    form do
+      field :customertitle, present: true
+      field :customerforename, present: true
+      field :customersurname, present: true
+      field :customercontact, present: true
+      field :eventtext, present: true
+    end
+  else
+    form do
+      field :eventtext, present: true
+    end
+  end
 
   if form.failed?
     kase       = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}"))
@@ -216,11 +227,11 @@ post '/cases/:case_id/uprn/:uprn/sample/:sample_id/event' do |case_id, uprn, sam
                           uprn: uprn,
                           case_id: case_id,
                           postcode: format_postcode(address['postcode']),
-                          eventtext: '',
+                          eventtext: eventtext,
                           customertitle: customertitle,
                           customerforename: customerforename,
                           customersurname: customersurname,
-                          customercontact: phone,
+                          customercontact: customercontact,
                           eventcategory: params[:eventcategory],
                           createdby: '',
                           sample_id: sample_id,
@@ -229,9 +240,9 @@ post '/cases/:case_id/uprn/:uprn/sample/:sample_id/event' do |case_id, uprn, sam
   else
     user        = session[:user]
     description = params[:eventtext]
-    description = "name: #{name.capitalize} #{description}" if !customerforename.empty? && phone.empty?
-    description = "phone: #{phone} #{description}" if customerforename.empty? && !phone.empty?
-    description = "name: #{name.capitalize} phone: #{phone} #{description}" if !customerforename.empty? && !phone.empty?
+    description = "name: #{name.capitalize} #{description}" if !customerforename.empty? && customercontact.empty?
+    description = "phone: #{customercontact} #{description}" if customerforename.empty? && !customercontact.empty?
+    description = "name: #{name.capitalize} phone: #{customercontact} #{description}" if !customerforename.empty? && !customercontact.empty?
 
     RestClient.post("http://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}/events",
                     { description: description,
