@@ -326,12 +326,13 @@ post '/cases/:case_id/uprn/:uprn/sample/:sample_id/translate' do |case_id, uprn,
     field :customertitle, present: true
     field :customerforename, present: true
     field :customersurname, present: true
+    field :eventcategory, present: true
   end
 
   customertitle       = params[:customertitle]
   customerforename    = params[:customerforename]
   customersurname     = params[:customersurname]
-  event_category      = params[:eventcategory]
+  eventcategory       = params[:eventcategory]
 
   if form.failed?
     kase         = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}"))
@@ -349,7 +350,7 @@ post '/cases/:case_id/uprn/:uprn/sample/:sample_id/translate' do |case_id, uprn,
                           customertitle: customertitle,
                           customerforename: customerforename,
                           customersurname: customersurname,
-                          eventcategory: event_category,
+                          eventcategory: eventcategory,
                           createdby: '',
                           address: address,
                           sample_id: sample_id,
@@ -357,14 +358,14 @@ post '/cases/:case_id/uprn/:uprn/sample/:sample_id/translate' do |case_id, uprn,
                         }
   else
     user           = session[:user]
-    category       = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/categories/#{event_category}"))
+    category       = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/categories/#{eventcategory}"))
     language       = category['shortDescription']
     description    = "Translation Booklet in #{language} supplied to "
     description    = "#{description} #{customertitle.capitalize} #{customerforename} #{customersurname}"
 
     RestClient.post("http://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}/events",
                     { description: description,
-                      category: event_category,
+                      category: eventcategory,
                       createdBy: user.user_id
                     }.to_json, content_type: :json, accept: :json
                    ) do |post_response, _request, _result, &_block|

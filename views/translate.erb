@@ -17,6 +17,10 @@
   <% content_for :form_errors do %>
     <p class="message">&bull; Please Complete Customer Name</p>
   <% end %>
+<% elsif form.failed_on? :eventcategory%>
+  <% content_for :form_errors do %>
+    <p class="message">&bull; Please Select Language</p>
+  <% end %>
 <% end %>
 
 <table class="primary">
@@ -77,18 +81,72 @@
   <fieldset>
     <p><label for="customertitle">Title</label><span class="required">*</span></p>
     <select style="background:white" name="customertitle" id="customertitle">
-      <option value="">Select Title:</option>
-      <option value="mr">Mr</option>
-      <option value="mrs">Mrs</option>
-      <option value="miss">Miss</option>
-      <option value="ms">Ms</option>
-      <option value="dr">Dr</option>
-      <option value="prof">Prof.</option>
-      <option value="rev">Rev.</option>
-      <option value="sir">Sir</option>
-      <option value="capt">Capt.</option>
-      <option value="lady">Lady</option>
-      <option value="lord">Lord</option>
+      <option value="">Select Title</option>
+      <% if customertitle == 'mr' %>
+        <option value='mr' selected>Mr</option>
+      <% else %>
+        <option value='mr'>Mr</option>
+      <% end %>
+
+      <% if customertitle == 'mrs' %>
+        <option value='mrs' selected>Mrs</option>
+      <% else %>
+        <option value='mrs'>Mrs</option>
+      <% end %>
+
+      <% if customertitle == 'miss' %>
+        <option value='miss' selected>Miss</option>
+      <% else %>
+        <option value='miss'>Miss</option>
+      <% end %>
+
+      <% if customertitle == 'ms' %>
+        <option value='ms' selected>Ms</option>
+      <% else %>
+        <option value='ms'>Ms</option>
+      <% end %>
+
+      <% if customertitle == 'dr' %>
+        <option value='dr' selected>Dr</option>
+      <% else %>
+        <option value='dr'>Dr</option>
+      <% end %>
+
+      <% if customertitle == 'prof' %>
+        <option value='prof' selected>Prof.</option>
+      <% else %>
+        <option value='prof'>Prof.</option>
+      <% end %>
+
+      <% if customertitle == 'rev' %>
+        <option value='rev' selected>Rev.</option>
+      <% else %>
+        <option value='rev'>Rev.</option>
+      <% end %>
+
+      <% if customertitle == 'sir' %>
+        <option value='sir' selected>Sir</option>
+      <% else %>
+        <option value='sir'>Sir</option>
+      <% end %>
+
+      <% if customertitle == 'capt' %>
+        <option value='capt' selected>Capt.</option>
+      <% else %>
+        <option value='capt'>Capt.</option>
+      <% end %>
+
+      <% if customertitle == 'lady' %>
+        <option value='lady' selected>Lady</option>
+      <% else %>
+        <option value='lady'>Lady</option>
+      <% end %>
+
+      <% if customertitle == 'lord' %>
+        <option value='lord' selected>Lord</option>
+      <% else %>
+        <option value='lord'>Lord</option>
+      <% end %>
     </select>
 
     <p><label for="customerforename">Forename</label><span class="required">*</span></p>
@@ -100,14 +158,15 @@
     <p><label for="eventcategory">Translation</label> <span class="required">*</span></p>
     <p>
       <select id="eventcategory" name="eventcategory">
-       <% products.each do |product| %>
-          <% if eventcategory == product['name'] %>
-            <option value='<%=h product['name'] %>' selected><%=h product['shortDescription'] %></option>
-          <% else %>
-            <option value='<%=h product['name'] %>'><%=h product['shortDescription'] %></option>
+        <option value="">Select Language</option>
+         <% products.each do |product| %>
+            <% if eventcategory == product['name'] %>
+              <option value='<%=h product['name'] %>' selected><%=h product['shortDescription'] %></option>
+            <% else %>
+              <option value='<%=h product['name'] %>'><%=h product['shortDescription'] %></option>
+            <% end %>
           <% end %>
-        <% end %>
-    </select>
+      </select>
     </p>
   </fieldset>
   <p id="requiredfields"><span class="required">*</span> Required fields</p>
