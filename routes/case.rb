@@ -256,9 +256,7 @@ post '/cases/:case_id/uprn/:uprn/sample/:sample_id/event' do |case_id, uprn, sam
             feedback_xml = <<-XML
               <p:actionFeedback xmlns:p="http://ons.gov.uk/ctp/response/action/message/feedback" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://ons.gov.uk/ctp/response/action/message/feedback actionFeedback.xsd">
                 <actionId>#{action_id}</actionId>
-                <situation></situation>
                 <outcome>REQUEST_COMPLETED</outcome>
-                <notes></notes>
               </p:actionFeedback>
             XML
 
