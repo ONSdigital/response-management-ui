@@ -15,9 +15,6 @@ ldap-directory:
     users: collect-users
     csos: collect-csos
 
-google-maps:
-  api-key: AIzaSyAtKmYXuijfiPsstjNsczBocKw149--fqM
-
 helpline-mi:
   directory: /home/centos/code/responsemanagement-ui/reports
 
