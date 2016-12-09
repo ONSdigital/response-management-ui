@@ -369,7 +369,7 @@ post '/cases/:case_id/uprn/:uprn/sample/:sample_id/translate' do |case_id, uprn,
                       createdBy: user.user_id
                     }.to_json, content_type: :json, accept: :json
                    ) do |post_response, _request, _result, &_block|
-      if post_response.code == 200
+      if post_response.code == 201
         flash[:notice] = 'Successfully created event.'
       else
         logger.error post_response
@@ -618,7 +618,7 @@ post '/cases/:case_id/uprn/:uprn/sample/:sample_id/:type' do |case_id, uprn, sam
                                             }
                     }.to_json, content_type: :json, accept: :json
                    ) do |post_response, _request, _result, &_block|
-      if post_response.code == 200
+      if post_response.code == 201
         flash[:notice] = 'Successfully created event.'
       else
         logger.error post_response
