@@ -142,7 +142,7 @@ get '/postcodes/:postcode' do |postcode|
   search_url = "http://#{settings.case_service_host}:#{settings.case_service_port}/addresses/postcode/#{postcode}"
 
   form do
-    field :postcode, length: 5..8
+    field :postcode, present: true, filters: :upcase, regexp: /^([A-PR-UWYZ0-9][A-HK-Y0-9][AEHMNPRTVXY0-9]?[ABEHMNPRVWXY0-9]? {0,2}[0-9][ABD-HJLN-UW-Z]{2}|GIR 0AA)$/
   end
 
   if form.failed?
@@ -475,16 +475,13 @@ post '/cases/:case_id/uprn/:uprn/sample/:sample_id/:type' do |case_id, uprn, sam
   customerforename  = params[:customerforename]
   customersurname   = params[:customersurname]
   phonenumber       = params[:phonenumber]
-  phoneregex        = /^$|\d{11}/
-
-  phonematch        = phoneregex.match(phonenumber)
 
   form do
     field :actionplanradio, present: true
     field :customertitle, present: true
     field :customerforename, present: true
     field :customersurname, present: true
-    field :phonenumber, present: true, regexp: %r{^$|\d{11}} if outboundchannel == 'SMS'
+    field :phonenumber, present: true, regexp: /^(\+44\s?7\d{3}|\(?07\d{3}\)?)\s?\d{3}\s?\d{3}$/ if outboundchannel == 'SMS'
   end
 
   if type == 'individual'
