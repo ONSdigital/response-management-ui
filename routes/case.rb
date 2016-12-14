@@ -501,7 +501,23 @@ post '/cases/:case_id/uprn/:uprn/sample/:sample_id/:type' do |case_id, uprn, sam
 
     address            = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/addresses/#{uprn}"))
     actionplanmappings = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/actionplanmappings/casetype/#{casetype_id}"))
+    actionplanmaps     = []
 
+    actionplanmappings.each do |actionplanmapping|
+      unless actionplanmapping['isDefault']
+        if type == 'accesscode'
+          if actionplanmapping['inboundChannel'] == 'ONLINE'
+            actionplanmaps.push(actionplanmapping)
+          end
+        elsif type == 'paper'
+          if actionplanmapping['inboundChannel'] == 'PAPER'
+            actionplanmaps.push(actionplanmapping)
+          end
+        else
+          actionplanmaps.push(actionplanmapping)
+        end
+      end
+    end
     erb :newcase, locals: { title: title,
                             action: "/cases/#{case_id}/uprn/#{uprn}/sample/#{sample_id}/#{type}",
                             method: :post,
@@ -517,7 +533,7 @@ post '/cases/:case_id/uprn/:uprn/sample/:sample_id/:type' do |case_id, uprn, sam
                             createdby: '',
                             sample_id: sample_id,
                             address: address,
-                            actionplanmappings: actionplanmappings,
+                            actionplanmappings: actionplanmaps,
                             phonenumber: phonenumber,
                             actionplanmappingid: actionplanmappingid,
                             type: type,
