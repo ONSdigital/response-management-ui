@@ -3,8 +3,7 @@
 get '/manage' do
   authenticate!
   erb :manage, locals: { title: 'Manage',
-                         user: user_role
-                        }
+                         user: user_role }
 end
 
 # Get all escalated cases.
@@ -28,6 +27,5 @@ get '/manage/escalated/:escalation_type/:escalation_subtype' do |escalation_type
   end
 
   erb :escalated_cases, locals: { title: "Escalated #{escalation_type.capitalize} #{escalation_subtype.capitalize} Cases",
-                                  escalations: escalations
-                                }
+                                  escalations: escalations }
 end

@@ -28,7 +28,7 @@ set :helpline_mi_directory, config['helpline-mi']['directory']
 
 # Display badges with the host, built date, commit SHA and environment on the
 # Sign In screen in non-production environments.
-set :host,        `hostname`.strip.gsub(/-/, '--')
+set :host, `hostname`.strip.gsub(/-/, '--')
 set :built, config['badges']['built']
 set :commit, config['badges']['commit']
 set :environment, config['badges']['environment']

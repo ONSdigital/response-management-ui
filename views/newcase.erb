@@ -6,23 +6,23 @@
 
 <% if form.failed_on? :actionplanradio %>
   <% content_for :form_errors do %>
-    <p class="message">&bull; Please Select Option</p>
+    <p class="message">&bull; Please select option</p>
   <% end %>
 <% elsif form.failed_on? :customertitle %>
   <% content_for :form_errors do %>
-    <p class="message">&bull; Please Select Customer Title</p>
+    <p class="message">&bull; Please select customer title</p>
   <% end %>
 <% elsif form.failed_on? :customerforename %>
   <% content_for :form_errors do %>
-    <p class="message">&bull; Please enter Customer Forename</p>
+    <p class="message">&bull; Please enter customer forename</p>
   <% end %>
 <% elsif form.failed_on? :customersurname%>
   <% content_for :form_errors do %>
-    <p class="message">&bull; Please enter Customer surname</p>
+    <p class="message">&bull; Please enter customer surname</p>
   <% end %>
 <% elsif form.failed_on? :phonenumber %>
   <% content_for :form_errors do %>
-    <p class="message">&bull; Please enter a valid Phone Number</p>
+    <p class="message">&bull; Please enter a valid mobile phone number</p>
   <% end %>
 <% end %>
 
@@ -203,7 +203,7 @@
     <p><label for="customersurname">Surname</label><span class="required">*</span></p>
     <input type="text" id="customersurname" name="customersurname" size="51" maxlength="40" value="<%=h customersurname %>">
 
-    <p><label for="phonenumber">Phone Number</label></p>
+    <p><label for="phonenumber">Mobile number</label></p>
     <input type="text" id="phonenumber" name="phonenumber" size="51" maxlength="40" value="<%=h phonenumber %>">
 
   </fieldset>

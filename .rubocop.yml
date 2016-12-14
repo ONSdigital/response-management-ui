@@ -19,6 +19,9 @@ Metrics/MethodLength:
 Metrics/ParameterLists:
   Max: 6
 
+Metrics/BlockNesting:
+  Enabled: false
+
 Style/Documentation:
   Enabled: false
 
@@ -41,4 +44,7 @@ Style/TrailingWhitespace:
   Enabled: false
 
 Style/TrivialAccessors:
+  Enabled: false
+
+Style/Next:
   Enabled: false
