@@ -152,7 +152,6 @@ get '/postcodes/:postcode' do |postcode|
                               addresses: addresses,
                               postcode: formatted_postcode }
   else
-      puts "in form succeed"
     # CTPA-477 Need to URI encode the postcode search string.
     RestClient.get(URI.encode(search_url)) do |response, _request, _result, &_block|
       addresses = JSON.parse(response).paginate(page: params[:page]) unless response.code == 404
@@ -566,7 +565,6 @@ post '/cases/:case_id/uprn/:uprn/sample/:sample_id/:type' do |case_id, uprn, sam
       sample            = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/samples/#{sample_id}"))
       sample_case_types = sample['sampleCaseTypes']
 
-      puts "sample_case_types #{sample_case_types}"
 
       sample_case_types.each do | sample_case_type |
         if sample_case_type['respondentType'] == 'HI'
@@ -578,8 +576,6 @@ post '/cases/:case_id/uprn/:uprn/sample/:sample_id/:type' do |case_id, uprn, sam
     end
 
 
-    puts "case #{kase}"
-    puts "casetype_id #{casetype_id}"
 
     casetype        = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/casetypes/#{casetype_id}"))
     question_set    = casetype['questionSet']
