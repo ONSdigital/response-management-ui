@@ -15,9 +15,6 @@ ldap-directory:
     users: collect-users
     csos: collect-csos
 
-helpline-mi:
-  directory: /home/centos/code/responsemanagement-ui/reports
-
 badges:
   built: 01_Jan_1970
   commit: commit
