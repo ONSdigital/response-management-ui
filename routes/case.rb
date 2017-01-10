@@ -407,18 +407,18 @@ get '/cases/:case_id/uprn/:uprn/sample/:sample_id/request/:type/new' do |case_id
   actionplanmappings = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/actionplanmappings/casetype/#{casetype_id}"))
   actionplanmaps     = []
 
-  actionplanmappings.each do |actionplanmapping|
-    unless actionplanmapping['isDefault']
+  actionplanmappings.each do |actionplanmap|
+    unless actionplanmap['isDefault']
       if type == 'accesscode'
-        if actionplanmapping['inboundChannel'] == 'ONLINE'
-          actionplanmaps.push(actionplanmapping)
+        if actionplanmap['inboundChannel'] == 'ONLINE'
+          actionplanmaps.push(actionplanmap)
         end
       elsif type == 'paper'
-        if actionplanmapping['inboundChannel'] == 'PAPER'
-          actionplanmaps.push(actionplanmapping)
+        if actionplanmap['inboundChannel'] == 'PAPER'
+          actionplanmaps.push(actionplanmap)
         end
       else
-        actionplanmaps.push(actionplanmapping)
+        actionplanmaps.push(actionplanmap)
       end
     end
   end
@@ -503,18 +503,18 @@ post '/cases/:case_id/uprn/:uprn/sample/:sample_id/:type' do |case_id, uprn, sam
     actionplanmappings = JSON.parse(RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/actionplanmappings/casetype/#{casetype_id}"))
     actionplanmaps     = []
 
-    actionplanmappings.each do |actionplanmapping|
-      unless actionplanmapping['isDefault']
+    actionplanmappings.each do |actionplanmap|
+      unless actionplanmap['isDefault']
         if type == 'accesscode'
-          if actionplanmapping['inboundChannel'] == 'ONLINE'
-            actionplanmaps.push(actionplanmapping)
+          if actionplanmap['inboundChannel'] == 'ONLINE'
+            actionplanmaps.push(actionplanmap)
           end
         elsif type == 'paper'
-          if actionplanmapping['inboundChannel'] == 'PAPER'
-            actionplanmaps.push(actionplanmapping)
+          if actionplanmap['inboundChannel'] == 'PAPER'
+            actionplanmaps.push(actionplanmap)
           end
         else
-          actionplanmaps.push(actionplanmapping)
+          actionplanmaps.push(actionplanmap)
         end
       end
     end
