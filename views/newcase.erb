@@ -95,7 +95,7 @@
         <tbody>
         <% actionplanmappings.each_with_index do |actionplanmapping, i| %>
               <tr class="<%= i.even? ? 'even' : 'odd ' %>">
-                <td style ="width: 10px">
+                <td style="width: 10px;">
                 <% if actionplanmappingid.to_i == actionplanmapping['actionPlanMappingId'].to_i || actionplanmappings.count == 1 %>
                   <input type="radio" checked id='regular' name="actionplanradio" value="<%=h actionplanmapping['actionPlanMappingId'] %>"></td>
                 <% else %>
