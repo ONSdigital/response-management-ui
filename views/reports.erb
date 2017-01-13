@@ -1,0 +1,32 @@
+<%= erb :menu, locals: { pageid: 'reports' } %>
+
+<% content_for :breadcrumbs do %>
+Reports
+<% end %>
+
+<% if report_types.any? %>
+  <% content_for :sub_heading do %>
+    Click to view all reports for each type.
+  <%end%>
+
+  <%= will_paginate report_types, :previous_label => '&lt; Prev', :next_label => 'Next &gt;' %>
+  <br>
+  <table class="primary" style="margin-top: 0px; width: 100%">
+    <thead>
+      <tr>
+        <th>Report Types</th>
+      </tr>
+    </thead>
+    <tbody>
+    <% report_types.each_with_index do |type, i| %>
+      <tr class="<%= i.even? ? 'even' : 'odd ' %>">
+      <% if type.present? %>
+        <td><a href="/reports/<%=h type%>"> <%=h type_format(type)%></a></td>
+      <% else %>
+        <td>-</td>
+      <% end %>
+    <%end%>
+    </tbody>
+  </table>
+  <%= will_paginate report_types, :previous_label => '&lt; Prev', :next_label => 'Next &gt;' %>
+<%end%>
