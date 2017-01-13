@@ -1,9 +1,9 @@
 action-webservice:
-  host: localhost
+  host: collect-server
   port: 8151
 
 case-webservice:
-  host: localhost
+  host: collect-server
   port: 8171
 
 ldap-directory:
