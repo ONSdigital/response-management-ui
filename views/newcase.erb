@@ -6,7 +6,7 @@
 
 <% if form.failed_on? :actionplanradio %>
   <% content_for :form_errors do %>
-    <p class="message">&bull; Please select option</p>
+    <p class="message">&bull; Please select response mode</p>
   <% end %>
 <% end %>
 <% if form.failed_on? :customertitle %>
@@ -98,35 +98,35 @@
         </thead>
         <tbody>
         <% actionplanmappings.each_with_index do |actionplanmapping, i| %>
-              <tr class="<%= i.even? ? 'even' : 'odd ' %>">
-                <td style ="width: 10px">
-                <% if actionplanmappingid.to_i == actionplanmapping['actionPlanMappingId'].to_i || actionplanmappings.count == 1 %>
-                  <input type="radio" checked id='regular' name="actionplanradio" value="<%=h actionplanmapping['actionPlanMappingId'] %>"></td>
-                <% else %>
-                  <input type="radio" id='regular' name="actionplanradio" value="<%=h actionplanmapping['actionPlanMappingId'] %>"></td>
-                <% end %>
-                </td>
-                <% if actionplanmapping['inboundChannel'].present? %>
-                  <td><%=h actionplanmapping['inboundChannel'].capitalize %></td>
-                <% else %>
-                  <td>-</td>
-                <% end %>
-                <% if actionplanmapping['outboundChannel'].present? %>
-                  <% if actionplanmapping['outboundChannel'] == 'POST' %>
-                    <td><%=h actionplanmapping['outboundChannel'].capitalize %></td>
-                  <% else %>
-                    <td><%=h actionplanmapping['outboundChannel'] %></td>
-                  <% end %>
-                <% else %>
-                  <td>-</td>
-                <% end %>
-                <% if actionplanmapping['variant'].present? %>
-                  <td><%=h actionplanmapping['variant'].capitalize %></td>
-                <% else %>
-                  <td>-</td>
-                <% end %>
-              </tr>
-            <% end %>
+          <tr class="<%= i.even? ? 'even' : 'odd ' %>">
+            <td style="width: 10px;">
+          <% if actionplanmappingid.to_i == actionplanmapping['actionPlanMappingId'].to_i || actionplanmappings.count == 1 %>
+              <input type="radio" checked id='regular' name="actionplanradio" value="<%=h actionplanmapping['actionPlanMappingId'] %>">
+          <% else %>
+              <input type="radio" id='regular' name="actionplanradio" value="<%=h actionplanmapping['actionPlanMappingId'] %>">
+          <% end %>
+            </td>
+          <% if actionplanmapping['inboundChannel'].present? %>
+            <td><%=h actionplanmapping['inboundChannel'].capitalize %></td>
+          <% else %>
+            <td>-</td>
+          <% end %>
+        <% if actionplanmapping['outboundChannel'].present? %>
+          <% if actionplanmapping['outboundChannel'] == 'POST' %>
+            <td><%=h actionplanmapping['outboundChannel'].capitalize %></td>
+          <% else %>
+            <td><%=h actionplanmapping['outboundChannel'] %></td>
+          <% end %>
+        <% else %>
+            <td>-</td>
+        <% end %>
+          <% if actionplanmapping['variant'].present? %>
+            <td><%=h actionplanmapping['variant'].capitalize %></td>
+          <% else %>
+            <td>-</td>
+          <% end %>
+          </tr>
+        <% end %>
         </tbody>
       </table>
     <% end %>

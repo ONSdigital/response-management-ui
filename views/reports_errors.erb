@@ -1,0 +1,15 @@
+<%= erb :menu, locals: { pageid: 'reports' } %>
+
+<% content_for :breadcrumbs do %>
+  <%if error == 0 %>
+    <a href="/reports">Reports</a> &gt; <%=h report_type %>
+  <% else %>
+    <a href="/reports">Reports</a> &gt; <%=h report_id %>
+  <% end %>
+<% end %>
+
+<%if error == 0 %>
+  <p id="information"><strong> Report type <%=h report_type%> does not exist. </strong></p>
+<% else %>
+  <p id="information"><strong> There is no report with ID <%=h report_id%>. </strong></p>
+<% end %>

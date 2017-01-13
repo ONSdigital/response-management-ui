@@ -8,6 +8,7 @@ require_relative 'routes/authentication'
 require_relative 'routes/error'
 require_relative 'routes/case'
 require_relative 'routes/manage'
+require_relative 'routes/reports'
 
 require 'rack/etag'
 require 'rack/conditionalget'

@@ -1,0 +1,31 @@
+<%= erb :menu, locals: { pageid: 'reports' } %>
+
+<% content_for :breadcrumbs do %>
+  <a href="/reports">Reports</a> &gt; <a href="/reports/<%=h report_type %>"><%=h report_type %></a> &gt; <%=h report_date.to_report_date %>
+<% end %>
+
+<% isFirst = true %>
+<% contents = CSV.parse(csv, headers:true) %>
+<% contents = contents.to_a %>
+
+<table class="primary" style="margin-top: 0px; width: 100%">
+  <% contents.each_with_index do |contents_row, i| %>
+    <% if i != 0 %>
+      <tbody>
+        <tr class="<%= i.even? ? 'odd' : 'even' %>">
+          <% contents_row.each do |element| %>
+            <td><%= element %></td>
+          <% end %>
+        </tr>
+      <tbody>
+    <% else %>
+      <thead>
+        <tr>
+          <% contents_row.each do |element| %>
+            <th><%= element %></th>
+          <% end %>
+        </tr>
+      </thead>
+    <% end %>
+  <% end %>
+</table>

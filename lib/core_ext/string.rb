@@ -21,6 +21,11 @@ class String
     t.localtime.strftime(DATE_FORMAT)
   end
 
+  def to_report_date
+    t = Time.parse(self)
+    t.localtime.strftime('%A %d %m %Y')
+  end
+
   # Naive conversion to title case.
   def to_title_case
     split.map(&:capitalize).join(' ')

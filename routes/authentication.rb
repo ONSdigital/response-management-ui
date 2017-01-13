@@ -7,6 +7,10 @@ before '/manage*' do
   halt 403 unless authorised?('collect-admins') || authorised?('collect-general-escalate') || authorised?('collect-field-escalate')
 end
 
+before '/reports*' do
+  halt 403 unless authorised?('collect-admins') || authorised?('collect-reports')
+end
+
 get '/signin/?' do
 
   # CTPA-404 Always bypass the two factor authentication screen for 2016.
