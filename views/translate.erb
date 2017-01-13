@@ -13,11 +13,22 @@
   <script src="/javascripts/events.js" type="text/javascript"></script>
 <% end %>
 
-<% if form.failed_on? :customertitle || :customerforename || :customersurname%>
+<% if form.failed_on? :customertitle %>
   <% content_for :form_errors do %>
-    <p class="message">&bull; Please Complete Customer Name</p>
+    <p class="message">&bull; Please select customer title</p>
   <% end %>
-<% elsif form.failed_on? :eventcategory%>
+<% end %>
+<% if form.failed_on? :customerforename %>
+  <% content_for :form_errors do %>
+    <p class="message">&bull; Please enter customer forename</p>
+  <% end %>
+<% end %>
+<% if form.failed_on? :customersurname%>
+  <% content_for :form_errors do %>
+    <p class="message">&bull; Please enter customer surname</p>
+  <% end %>
+<% end %>
+<% if form.failed_on? :eventcategory%>
   <% content_for :form_errors do %>
     <p class="message">&bull; Please Select Language</p>
   <% end %>

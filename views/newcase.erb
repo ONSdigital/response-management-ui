@@ -8,19 +8,23 @@
   <% content_for :form_errors do %>
     <p class="message">&bull; Please select option</p>
   <% end %>
-<% elsif form.failed_on? :customertitle %>
+<% end %>
+<% if form.failed_on? :customertitle %>
   <% content_for :form_errors do %>
     <p class="message">&bull; Please select customer title</p>
   <% end %>
-<% elsif form.failed_on? :customerforename %>
+<% end %>
+<% if form.failed_on? :customerforename %>
   <% content_for :form_errors do %>
     <p class="message">&bull; Please enter customer forename</p>
   <% end %>
-<% elsif form.failed_on? :customersurname%>
+<% end %>
+<% if form.failed_on? :customersurname%>
   <% content_for :form_errors do %>
     <p class="message">&bull; Please enter customer surname</p>
   <% end %>
-<% elsif form.failed_on? :phonenumber %>
+<% end %>
+<% if form.failed_on? :phonenumber %>
   <% content_for :form_errors do %>
     <p class="message">&bull; Please enter a valid mobile phone number</p>
   <% end %>
