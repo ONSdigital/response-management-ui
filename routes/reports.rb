@@ -46,7 +46,7 @@ get '/reports/download/:report_id' do |report_id|
   RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/reports/#{report_id}") do |response, _request, _result, &_block|
     report_details = JSON.parse(response) unless response.code == 204 || response.code == 500
     t = Time.parse(report_details['createdDateTime'])
-    t = t.localtime.strftime('%d%m%Y')
+    t = t.localtime.strftime('%Y%m%d')
     attachment "#{type_format(report_details['reportType']).tr(' ', '_')}_#{t}.csv"
     report_details['contents']
   end
