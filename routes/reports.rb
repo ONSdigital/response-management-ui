@@ -22,7 +22,7 @@ get '/reports/:report_type' do |report_type|
   report_details = []
   error = 0
 
-  RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/reports/#{report_type}/details") do |response, _request, _result, &_block|
+  RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/reports/types/#{report_type.upcase}") do |response, _request, _result, &_block|
     report_details = JSON.parse(response).paginate(page: params[:page]) unless response.code == 204 || response.code == 400
 
     if response.code == 200 || response.code == 204
@@ -60,10 +60,11 @@ get '/reports/view/:report_id' do |report_id|
   RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/reports/#{report_id}") do |response, _request, _result, &_block|
     report_details = JSON.parse(response) unless response.code == 204 || response.code == 500
     if response.code == 200
+      contents = CSV.parse(report_details['contents'], headers:true)
       erb :view_report, locals: { title: type_format(report_details['reportType']) + ' ' + report_details['createdDateTime'].to_report_date,
                                   user: user_role,
                                   report_date: report_details['createdDateTime'],
-                                  csv: report_details['contents'],
+                                  contents: contents,
                                   report_type: report_details['reportType'] }
     else
       erb :reports_errors, locals: { title: 'Error!',
