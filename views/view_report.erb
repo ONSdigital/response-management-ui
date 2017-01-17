@@ -6,24 +6,30 @@
 
 <% contents = contents.to_a %>
 
+<% hasContent = false %>
+
 <table class="primary" style="margin-top: 0px; width: 100%">
   <% contents.each_with_index do |contents_row, i| %>
-    <% if i != 0 %>
-      <tbody>
-        <tr class="<%= i.even? ? 'odd' : 'even' %>">
-          <% contents_row.each do |element| %>
-            <td><%= element %></td>
-          <% end %>
-        </tr>
-      <tbody>
+    <% if i == 0 %>
+    <thead>
+      <tr>
+        <% contents_row.each do |element| %>
+          <th><%= element %></th>
+        <% end %>
+      </tr>
+    </thead>
     <% else %>
-      <thead>
-        <tr>
-          <% contents_row.each do |element| %>
-            <th><%= element %></th>
-          <% end %>
-        </tr>
-      </thead>
+    <% hasContent = true %>
+    <tbody>
+      <tr class="<%= i.even? ? 'odd' : 'even' %>">
+        <% contents_row.each do |element| %>
+          <td><%= element %></td>
+        <% end %>
+      </tr>
+    <tbody>
     <% end %>
   <% end %>
 </table>
+<% if hasContent == false %>
+  <p>Report is empty.</p>
+<% end %>
