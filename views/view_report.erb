@@ -3,9 +3,6 @@
 <% content_for :breadcrumbs do %>
   <a href="/reports">Reports</a> &gt; <a href="/reports/<%=h report_type %>"><%=h type_format(report_type) %></a> &gt; <%=h report_date.to_report_date %>
 <% end %>
-
-<% contents = contents.to_a %>
-
 <table class="primary" style="margin-top: 0px; width: 100%">
   <% contents.each_with_index do |contents_row, i| %>
     <% if i != 0 %>
