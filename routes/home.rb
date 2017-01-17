@@ -55,7 +55,11 @@ helpers do
   # View helper for parsing and displaying JSON error responses.
   def error_flash(message, response)
     error = JSON.parse(response)
-    flash[:error] = "#{message}: #{error['error']['message']}<br>Please quote reference #{error['error']['timestamp']} when contacting support."
+    if error['error']['timestamp']
+      flash[:error] = "#{message}: #{error['error']['message']}<br>Please quote reference #{error['error']['timestamp']} when contacting support."
+    elsif error['timestamp']
+      flash[:error] = "#{message}: #{error['message']}<br>Please quote reference #{error['timestamp']} when contacting support."
+    end
   end
 
   # View helper for escaping HTML output.
