@@ -21,7 +21,7 @@ Reports
     <% report_types.each_with_index do |type, i| %>
       <tr class="<%= i.even? ? 'even' : 'odd ' %>">
       <% if type.present? %>
-        <td><a href="/reports/<%=h type['reportType'].downcase%>"> <%=h type_format(type['reportType'])%></a></td>
+        <td><a href="/reports/<%=h type['reportType'].downcase%>"> <%=h type['displayName']%></a></td>
       <% else %>
         <td>-</td>
       <% end %>
