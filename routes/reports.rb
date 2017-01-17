@@ -60,11 +60,7 @@ get '/reports/view/:report_id' do |report_id|
   RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/reports/#{report_id}") do |response, _request, _result, &_block|
     report_details = JSON.parse(response) unless response.code == 204 || response.code == 500
     if response.code == 200
-<<<<<<< HEAD
       contents = CSV.parse(report_details['contents'], headers:false)
-=======
-      contents = CSV.parse(report_details['contents'], headers:true).to_a
->>>>>>> f14f77513c7bca3327db6ce9c8b99f0690cbf351
       erb :view_report, locals: { title: type_format(report_details['reportType']) + ' ' + report_details['createdDateTime'].to_report_date,
                                   user: user_role,
                                   report_date: report_details['createdDateTime'],
