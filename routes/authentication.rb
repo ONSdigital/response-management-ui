@@ -2,6 +2,8 @@ NO_2FA_COOKIE = 'response_operations_no_2fa'.freeze
 CLOCK_DRIFT   = 120
 THIRTY_DAYS   = 60 * 60 * 24 * 30
 
+auth_logger   = Syslog::Logger.new(PROGRAM, Syslog::LOG_AUTHPRIV)
+
 # Only administrators and escalation team can access the management screens.
 before '/manage*' do
   halt 403 unless authorised?('collect-admins') || authorised?('collect-general-escalate') || authorised?('collect-field-escalate')
@@ -34,7 +36,7 @@ post '/signin/?' do
                                        settings.ldap_directory_port,
                                        settings.ldap_directory_base,
                                        settings.ldap_groups,
-                                       logger)
+                                       auth_logger)
 
   if user = User.authenticate(ldap_connection, params) # rubocop:disable Lint/AssignmentInCondition
     session[:user] = user
@@ -64,7 +66,7 @@ post '/signin/secondfactor/?' do
     redirect '/signin'
   end
   if session[:user].valid_code?(CLOCK_DRIFT, params)
-    logger.info "'#{session[:user].display_name}' entered a valid 2FA token"
+    auth_logger.info "'#{session[:user].display_name}' entered a valid 2FA token"
     if params[:rememberme]
       response.set_cookie(NO_2FA_COOKIE, value: '1', max_age: THIRTY_DAYS.to_s)
     else
@@ -73,14 +75,14 @@ post '/signin/secondfactor/?' do
     session[:valid_token] = true
     redirect_to_original_request
   else
-    logger.info "'#{session[:user].display_name}' entered an invalid 2FA token"
+    auth_logger.info "'#{session[:user].display_name}' entered an invalid 2FA token"
     flash[:notice] = 'The code you entered is incorrect. Please try again.'
     redirect '/signin/secondfactor'
   end
 end
 
 get '/signout' do
-  logger.info "'#{session[:user].display_name}' signed out"
+  auth_logger.info "'#{session[:user].display_name}' signed out"
   session[:user] = nil
   session[:valid_token] = nil
   flash[:notice] = 'You have been signed out.'

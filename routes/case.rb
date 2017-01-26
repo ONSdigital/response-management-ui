@@ -1,6 +1,8 @@
 require_relative '../lib/core_ext/nilclass'
 require_relative '../lib/core_ext/string'
 
+logger = Syslog::Logger.new(PROGRAM, Syslog::LOG_USER)
+
 helpers do
   def coordinates_for(address)
     "#{address['latitude']},#{address['longitude']}"

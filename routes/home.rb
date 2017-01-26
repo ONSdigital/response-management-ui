@@ -1,6 +1,7 @@
 require 'sinatra'
 require 'sinatra/content_for2'
 require 'sinatra/flash'
+require 'syslog/logger'
 require 'will_paginate'
 require 'will_paginate/array'
 require 'rest_client'
@@ -14,6 +15,7 @@ require 'csv'
 require_relative '../lib/authentication'
 require_relative '../models/user'
 
+PROGRAM = 'responseoperations'.freeze
 SESSION_EXPIRATION_PERIOD = 60 * 60 * 6
 
 # Load various settings from a configuration file.
