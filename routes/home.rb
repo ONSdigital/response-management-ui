@@ -18,6 +18,7 @@ SESSION_EXPIRATION_PERIOD = 60 * 60 * 6
 
 # Load various settings from a configuration file.
 config = YAML.load_file(File.join(__dir__, '../config.yml'))
+set :protocol, config['http']['protocol']
 set :action_service_host, config['action-webservice']['host']
 set :action_service_port, config['action-webservice']['port']
 set :case_service_host, config['case-webservice']['host']

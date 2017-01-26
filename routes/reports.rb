@@ -8,7 +8,7 @@ get '/reports' do
   authenticate!
   report_types = []
 
-  RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/reports/types") do |response, _request, _result, &_block|
+  RestClient.get("#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/reports/types") do |response, _request, _result, &_block|
     report_types = JSON.parse(response).paginate(page: params[:page]) unless response.code == 204
   end
 
@@ -22,7 +22,7 @@ get '/reports/:report_type' do |report_type|
   report_details = []
   error = 0
 
-  RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/reports/types/#{report_type.upcase}") do |response, _request, _result, &_block|
+  RestClient.get("#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/reports/types/#{report_type.upcase}") do |response, _request, _result, &_block|
     report_details = JSON.parse(response).paginate(page: params[:page]) unless response.code == 204 || response.code == 400
 
     if response.code == 200 || response.code == 204
@@ -43,7 +43,7 @@ get '/reports/download/:report_id' do |report_id|
   authenticate!
   report_details = []
 
-  RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/reports/#{report_id}") do |response, _request, _result, &_block|
+  RestClient.get("#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/reports/#{report_id}") do |response, _request, _result, &_block|
     report_details = JSON.parse(response) unless response.code == 204 || response.code == 500
     t = Time.parse(report_details['createdDateTime'])
     t = t.localtime.strftime('%Y%m%d')
@@ -57,7 +57,7 @@ get '/reports/view/:report_id' do |report_id|
   report_details = []
   error = 1
 
-  RestClient.get("http://#{settings.case_service_host}:#{settings.case_service_port}/reports/#{report_id}") do |response, _request, _result, &_block|
+  RestClient.get("#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/reports/#{report_id}") do |response, _request, _result, &_block|
     report_details = JSON.parse(response) unless response.code == 204 || response.code == 500
     if response.code == 200
       contents = CSV.parse(report_details['contents'], headers:false).to_a

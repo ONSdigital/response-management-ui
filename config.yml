@@ -1,3 +1,6 @@
+http:
+  protocol: http
+
 action-webservice:
   host: collect-server
   port: 8151
