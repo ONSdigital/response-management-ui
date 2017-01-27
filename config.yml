@@ -14,10 +14,8 @@ ldap-directory:
   port: 389
   base: dc=ctp,dc=ons,dc=gov,dc=uk
   groups:
-    admins: collect-admins
     users: collect-users
-    csos: collect-csos
-
+    
 badges:
   built: 01_Jan_1970
   commit: commit
