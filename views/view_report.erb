@@ -4,7 +4,7 @@
   <a href="/reports">Reports</a> &gt; <a href="/reports/<%=h report_type %>"><%=h type_format(report_type) %></a> &gt; <%=h report_date.to_report_date %>
 <% end %>
 
-<% hasContent = false %>
+<% has_content = false %>
 
 <table class="primary" style="margin-top: 0px; width: 100%">
   <% contents.each_with_index do |contents_row, i| %>
@@ -17,7 +17,7 @@
       </tr>
     </thead>
     <% else %>
-    <% hasContent = true %>
+    <% has_content = true %>
     <tbody>
       <tr class="<%= i.even? ? 'odd' : 'even' %>">
         <% contents_row.each do |element| %>
@@ -28,6 +28,6 @@
     <% end %>
   <% end %>
 </table>
-<% if hasContent == false %>
+<% if has_content == false %>
   <p>Report is empty.</p>
 <% end %>
