@@ -23,7 +23,7 @@ class String
 
   def to_report_date
     t = Time.parse(self)
-    t.localtime.strftime('%A %d %m %Y')
+    t.localtime.strftime('%A, %d %b %Y')
   end
 
   # Naive conversion to title case.
