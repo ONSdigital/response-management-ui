@@ -9,10 +9,11 @@ Select an administration option below:
 <% end %>
 
 <ul id="manage">
-<% if user_role == 'collect-general-escalate'%>
+<% if user_role.include? 'collect-general-escalate'%>
   <li><a href="/manage/escalated/general/complaint">View escalated general complaint cases</a></li>
   <li><a href="/manage/escalated/general/enquiry">View escalated general enquiry cases</a></li>
-<% else %>
+<% end %>
+<% if user_role.include? 'collect-field-escalate' %>
   <li><a href="/manage/escalated/field/complaint">View escalated field complaint cases</a></li>
   <li><a href="/manage/escalated/field/emergency">View escalated field emergency cases</a></li>
 <% end %>

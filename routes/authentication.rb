@@ -4,6 +4,12 @@ THIRTY_DAYS   = 60 * 60 * 24 * 30
 
 auth_logger   = Syslog::Logger.new(PROGRAM, Syslog::LOG_AUTHPRIV)
 
+helpers do
+  def user_role
+    session[:user].groups.join(',')
+  end
+end
+
 # Only administrators and escalation team can access the management screens.
 before '/manage*' do
   halt 403 unless authorised?('collect-admins') || authorised?('collect-general-escalate') || authorised?('collect-field-escalate')

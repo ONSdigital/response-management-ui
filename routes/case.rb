@@ -19,10 +19,6 @@ helpers do
   def url_format(str)
     str.gsub(/\s+/, '').downcase
   end
-
-  def user_role
-    session[:user].groups.delete_if { |group| group == 'collect-users' }.first
-  end
 end
 
 # Get all cases for the selected address.
@@ -159,9 +155,25 @@ end
 # Present a form for creating a new event.
 get '/cases/:case_id/uprn/:uprn/sample/:sample_id/event/new' do |case_id, uprn, sample_id|
   authenticate!
+  actions    = []
+  role       = 'collect-csos'
   kase       = JSON.parse(RestClient.get("#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}"))
   address    = JSON.parse(RestClient.get("#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/addresses/#{uprn}"))
-  categories = JSON.parse(RestClient.get("#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/categories?role=#{user_role}&group=general"))
+
+  if user_role.include?('escalate')
+    RestClient.get("#{settings.protocol}://#{settings.action_service_host}:#{settings.action_service_port}/actions/case/#{case_id}") do |response, _request, _result, &_block|
+      actions = JSON.parse(response) unless response.code == 204
+      actions.each do |action|
+        action_type_name = action['actionTypeName']
+        action_state     = action['state']
+        if action_type_name.include?('ESCALATION') && action_state == 'PENDING'
+          role = 'collect-general-escalate'
+        end
+      end
+    end
+  end
+
+  categories = JSON.parse(RestClient.get("#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/categories?role=#{role}&group=general"))
   erb :event, locals: { title: "Create Event for Case #{case_id}",
                         action: "/cases/#{case_id}/uprn/#{uprn}/sample/#{sample_id}/event",
                         method: :post,
