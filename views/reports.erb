@@ -8,7 +8,6 @@ Reports
   <% content_for :sub_heading do %>
     Click to view all reports for each type.
   <%end%>
-
   <%= will_paginate report_types, :previous_label => '&lt; Prev', :next_label => 'Next &gt;' %>
   <br>
   <table class="primary" style="margin-top: 0px; width: 100%">
@@ -21,7 +20,7 @@ Reports
     <% report_types.each_with_index do |type, i| %>
       <tr class="<%= i.even? ? 'even' : 'odd ' %>">
       <% if type.present? %>
-        <td><a href="/reports/<%=h type['reportType'].downcase%>"> <%=h type['displayName']%></a></td>
+        <td><a href="/reports/<%=h type['reportClass']%>/<%=h type['reportType'].downcase%>"> <%=h type['displayName']%></a></td>
       <% else %>
         <td>-</td>
       <% end %>

@@ -25,10 +25,17 @@ set :action_service_host, config['action-webservice']['host']
 set :action_service_port, config['action-webservice']['port']
 set :case_service_host, config['case-webservice']['host']
 set :case_service_port, config['case-webservice']['port']
+set :action_exporter_host, config['action-exporter-webservice']['host']
+set :action_exporter_port, config['action-exporter-webservice']['port']
+set :action_exporter_user, config['action-exporter-webservice']['user']
+set :action_exporter_password, config['action-exporter-webservice']['password']
 set :ldap_directory_host, config['ldap-directory']['host']
 set :ldap_directory_port, config['ldap-directory']['port']
 set :ldap_directory_base, config['ldap-directory']['base']
 set :ldap_groups, config['ldap-directory']['groups']
+set :report_hosts, config['reports']['host']
+set :report_ports, config['reports']['port']
+set :report_auth, config['reports']['auth']
 
 # Display badges with the host, built date, commit SHA and environment on the
 # Sign In screen in non-production environments.

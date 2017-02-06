@@ -1,7 +1,7 @@
 <%= erb :menu, locals: { pageid: 'reports' } %>
 
 <% content_for :breadcrumbs do %>
-  <a href="/reports">Reports</a> &gt; <a href="/reports/<%=h report_type %>"><%=h type_format(report_type) %></a> &gt; <%=h report_date.to_report_date %>
+  <a href="/reports">Reports</a> &gt; <a href="/reports/<%=h report_class %>/<%=h report_type %>"><%=h type_format(report_type) %></a> &gt; <%=h report_date.to_report_date %>
 <% end %>
 
 <% has_content = false %>
