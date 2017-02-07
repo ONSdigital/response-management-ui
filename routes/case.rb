@@ -340,7 +340,7 @@ post '/cases/:case_id/uprn/:uprn/sample/:sample_id/translate' do |case_id, uprn,
     field :eventcategory, present: true
   end
 
-  eventcategory       = params[:eventcategory]
+  eventcategory = params[:eventcategory]
 
   if form.failed?
     kase         = JSON.parse(RestClient.get("#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}"))
