@@ -12,19 +12,6 @@ case-webservice:
 action-exporter-webservice:
   host: collect-server
   port: 8141
-  user: actionexporter
-  password: ctp
-
-reports:
-  host:
-    action: collect-server
-    case: collect-server
-  port:
-    action: 8141
-    case: 8171
-  auth:
-    action: true
-    case: false
 
 ldap-directory:
   host: ldap-server

@@ -8,7 +8,7 @@
   <% content_for :sub_heading do %>
     Use the links below to either download a report or view in your browser.
   <%end%>
-  
+
   <%= will_paginate report_details, :previous_label => '&lt; Prev', :next_label => 'Next &gt;' %>
   <br>
   <table class="primary" style="margin-top: 0px; width: 100%">
@@ -22,8 +22,8 @@
       <tr class="<%= i.even? ? 'even' : 'odd ' %>">
       <% if detail['reportId'].present? %>
         <td><%=h detail['createdDateTime'].to_report_date%></td>
-        <td><a href="/reports/view/<%=h report_class%>/<%=h detail['reportId']%>"> View</a></td>
-        <td><a href="/reports/download/<%=h report_class%>/<%=h detail['reportId']%>"> Download</a></td>
+        <td><a href="/reports/view/<%=h report_class%>/<%=h detail['reportId']%>">View</a></td>
+        <td><a href="/reports/download/<%=h report_class%>/<%=h detail['reportId']%>">Download</a></td>
       <% else %>
         <td>-</td>
       <% end %>
