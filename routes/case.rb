@@ -325,9 +325,6 @@ get '/cases/:case_id/uprn/:uprn/sample/:sample_id/translate/new' do |case_id, up
                             case_id: case_id,
                             postcode: format_postcode(address['postcode']),
                             eventtext: '',
-                            customertitle: '',
-                            customerforename: '',
-                            customersurname: '',
                             eventcategory: '',
                             createdby: '',
                             address: address,
@@ -340,15 +337,9 @@ post '/cases/:case_id/uprn/:uprn/sample/:sample_id/translate' do |case_id, uprn,
   authenticate!
 
   form do
-    field :customertitle, present: true
-    field :customerforename, present: true
-    field :customersurname, present: true
     field :eventcategory, present: true
   end
 
-  customertitle       = params[:customertitle]
-  customerforename    = params[:customerforename]
-  customersurname     = params[:customersurname]
   eventcategory       = params[:eventcategory]
 
   if form.failed?
@@ -364,9 +355,6 @@ post '/cases/:case_id/uprn/:uprn/sample/:sample_id/translate' do |case_id, uprn,
                               case_id: case_id,
                               postcode: format_postcode(address['postcode']),
                               eventtext: '',
-                              customertitle: customertitle,
-                              customerforename: customerforename,
-                              customersurname: customersurname,
                               eventcategory: eventcategory,
                               createdby: '',
                               address: address,
@@ -376,8 +364,7 @@ post '/cases/:case_id/uprn/:uprn/sample/:sample_id/translate' do |case_id, uprn,
     user           = session[:user]
     category       = JSON.parse(RestClient.get("#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/categories/#{eventcategory}"))
     language       = category['shortDescription']
-    description    = "Translation Booklet in #{language} supplied to "
-    description    = "#{description} #{customertitle.capitalize} #{customerforename} #{customersurname}"
+    description    = "Translation Booklet in #{language} requested"
 
     RestClient.post("#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}/events",
                     {

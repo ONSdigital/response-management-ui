@@ -13,21 +13,6 @@
   <script src="/javascripts/events.js" type="text/javascript"></script>
 <% end %>
 
-<% if form.failed_on? :customertitle %>
-  <% content_for :form_errors do %>
-    <p class="message">&bull; Please select customer title</p>
-  <% end %>
-<% end %>
-<% if form.failed_on? :customerforename %>
-  <% content_for :form_errors do %>
-    <p class="message">&bull; Please enter customer forename</p>
-  <% end %>
-<% end %>
-<% if form.failed_on? :customersurname%>
-  <% content_for :form_errors do %>
-    <p class="message">&bull; Please enter customer surname</p>
-  <% end %>
-<% end %>
 <% if form.failed_on? :eventcategory%>
   <% content_for :form_errors do %>
     <p class="message">&bull; Please Select Language</p>
@@ -90,82 +75,6 @@
 <% end %>
 
   <fieldset>
-    <p><label for="customertitle">Title</label><span class="required">*</span></p>
-    <select style="background:white" name="customertitle" id="customertitle">
-      <option value="">Select Title</option>
-      <% if customertitle == 'mr' %>
-        <option value='mr' selected>Mr</option>
-      <% else %>
-        <option value='mr'>Mr</option>
-      <% end %>
-
-      <% if customertitle == 'mrs' %>
-        <option value='mrs' selected>Mrs</option>
-      <% else %>
-        <option value='mrs'>Mrs</option>
-      <% end %>
-
-      <% if customertitle == 'miss' %>
-        <option value='miss' selected>Miss</option>
-      <% else %>
-        <option value='miss'>Miss</option>
-      <% end %>
-
-      <% if customertitle == 'ms' %>
-        <option value='ms' selected>Ms</option>
-      <% else %>
-        <option value='ms'>Ms</option>
-      <% end %>
-
-      <% if customertitle == 'dr' %>
-        <option value='dr' selected>Dr</option>
-      <% else %>
-        <option value='dr'>Dr</option>
-      <% end %>
-
-      <% if customertitle == 'prof' %>
-        <option value='prof' selected>Prof.</option>
-      <% else %>
-        <option value='prof'>Prof.</option>
-      <% end %>
-
-      <% if customertitle == 'rev' %>
-        <option value='rev' selected>Rev.</option>
-      <% else %>
-        <option value='rev'>Rev.</option>
-      <% end %>
-
-      <% if customertitle == 'sir' %>
-        <option value='sir' selected>Sir</option>
-      <% else %>
-        <option value='sir'>Sir</option>
-      <% end %>
-
-      <% if customertitle == 'capt' %>
-        <option value='capt' selected>Capt.</option>
-      <% else %>
-        <option value='capt'>Capt.</option>
-      <% end %>
-
-      <% if customertitle == 'lady' %>
-        <option value='lady' selected>Lady</option>
-      <% else %>
-        <option value='lady'>Lady</option>
-      <% end %>
-
-      <% if customertitle == 'lord' %>
-        <option value='lord' selected>Lord</option>
-      <% else %>
-        <option value='lord'>Lord</option>
-      <% end %>
-    </select>
-
-    <p><label for="customerforename">Forename</label><span class="required">*</span></p>
-    <input type="text" id="customerforename" name="customerforename" size="51" maxlength="40" value="<%=h customerforename %>">
-
-    <p><label for="customersurname">Surname</label><span class="required">*</span></p>
-    <input type="text" id="customersurname" name="customersurname" size="51" maxlength="40" value="<%=h customersurname %>">
-
     <p><label for="eventcategory">Translation</label> <span class="required">*</span></p>
     <p>
       <select id="eventcategory" name="eventcategory">
