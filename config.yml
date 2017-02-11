@@ -1,6 +1,10 @@
 http:
   protocol: http
 
+action-exporter-webservice:
+  host: collect-server
+  port: 8141
+
 action-webservice:
   host: collect-server
   port: 8151
@@ -8,10 +12,6 @@ action-webservice:
 case-webservice:
   host: collect-server
   port: 8171
-
-action-exporter-webservice:
-  host: collect-server
-  port: 8141
 
 ldap-directory:
   host: ldap-server
