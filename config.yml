@@ -15,7 +15,7 @@ case-webservice:
 
 ldap-directory:
   host: ldap-server
-  port: 389
+  port: 636
   base: dc=ctp,dc=ons,dc=gov,dc=uk
   groups:
     users: collect-users
