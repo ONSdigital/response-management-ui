@@ -135,7 +135,7 @@ get '/postcodes/:postcode' do |postcode|
   search_url = "#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/addresses/postcode/#{postcode}"
 
   form do
-    field :postcode, present: true, filters: :upcase, regexp: /^([A-PR-UWYZ0-9][A-HK-Y0-9][AEHMNPRTVXY0-9]?[ABEHMNPRVWXY0-9]? {0,2}[0-9][ABD-HJLN-UW-Z]{2}|GIR 0AA)$/
+    field :postcode, present: true, filters: :upcase, regexp: /^([A-PR-UWYZ0-9][A-HK-Y0-9][A-Z0-9]?[A-Z0-9]? {0,2}[0-9][ABD-HJLN-UW-Z]{2}|GIR 0AA)$/
   end
 
   formatted_postcode = format_postcode(postcode)
