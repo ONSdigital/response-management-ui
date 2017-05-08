@@ -41,7 +41,7 @@ set :built, config['badges']['built']
 set :commit, config['badges']['commit']
 set :environment, config['badges']['environment']
 
-# Expire sessions after SESSION_EXPIRATION_PERIOD of inactivity.
+# Expire sessions after SESSION_EXPIRATION_PERIOD of inactivity
 use Rack::Session::Cookie, key: 'rack.session', path: '/',
                            secret: 'eb46fa947d8411e5996329c9ef0ba35d',
                            expire_after: SESSION_EXPIRATION_PERIOD
