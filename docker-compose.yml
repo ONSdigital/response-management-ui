@@ -1,0 +1,12 @@
+version: "3"
+services:
+  sample:
+    container_name: rmui 
+    image: rmui
+    ports:
+     - "9292:9292"
+    hostname: rmui
+networks:
+  default:
+    external:
+      name: rmdockerdev_default
