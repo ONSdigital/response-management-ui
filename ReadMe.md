@@ -1,3 +1,5 @@
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/ab8e513f5e8d48ec8ac8afd945293f8a)](https://www.codacy.com/app/sdcplatform/response-management-ui?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=ONSdigital/response-management-ui&amp;utm_campaign=Badge_Grade)
+
 # Response Management User Interface
 Response Management is part of ONS's Survey Data Collection platform. It covers overall management of the survey (across all survey modes). It manages the survey sample, tracks responses and initiates required follow-up actions during the collection period.
 
