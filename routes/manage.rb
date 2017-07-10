@@ -1,14 +1,14 @@
 
 # Management home page.
 get '/manage' do
-  authenticate!
+  #authenticate!
   erb :manage, locals: { title: 'Manage',
                          user: user_role }
 end
 
 # Get all escalated cases.
 get '/manage/escalated/:escalation_type/:escalation_subtype' do |escalation_type, escalation_subtype|
-  authenticate!
+  #authenticate!
   escalations = []
   casegroup   = []
   type        = "#{escalation_type.chars.first.upcase}#{escalation_subtype.chars.first.upcase}_ESCALATION"

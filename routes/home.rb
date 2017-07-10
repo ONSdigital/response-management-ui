@@ -12,9 +12,6 @@ require 'open-uri'
 require 'sinatra/formkeeper'
 require 'csv'
 
-require_relative '../lib/authentication'
-require_relative '../models/user'
-
 PROGRAM = 'responseoperations'.freeze
 SESSION_EXPIRATION_PERIOD = 60 * 60 * 6
 
@@ -56,7 +53,6 @@ end
 
 # View helper for defining blocks inside views for rendering in templates.
 helpers Sinatra::ContentFor2
-helpers Authentication
 helpers do
 
   # View helper for parsing and displaying JSON error responses.

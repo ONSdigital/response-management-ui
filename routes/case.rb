@@ -23,7 +23,7 @@ end
 
 # Get all cases for the selected address.
 get '/addresses/:uprn/cases/?' do |uprn|
-  authenticate!
+  #authenticate!
   cases      = []
   casegroups = []
   casetype   = []
@@ -66,7 +66,7 @@ end
 
 # Get a specific case.
 get '/cases/:case_id/uprn/:uprn/sample/:sample_id?' do |case_id, uprn, sample_id|
-  authenticate!
+  #authenticate!
   events         = []
   actions        = []
   sample         = JSON.parse(RestClient.get("#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/samples/#{sample_id}"))
@@ -130,7 +130,7 @@ end
 
 # Postcode search.
 get '/postcodes/:postcode' do |postcode|
-  authenticate!
+  #authenticate!
   addresses  = []
   search_url = "#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/addresses/postcode/#{postcode}"
 
@@ -154,7 +154,7 @@ end
 
 # Present a form for creating a new event.
 get '/cases/:case_id/uprn/:uprn/sample/:sample_id/event/new' do |case_id, uprn, sample_id|
-  authenticate!
+  #authenticate!
   actions    = []
   role       = 'collect-csos'
   kase       = JSON.parse(RestClient.get("#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}"))
@@ -194,7 +194,7 @@ end
 
 # Create a new event.
 post '/cases/:case_id/uprn/:uprn/sample/:sample_id/event' do |case_id, uprn, sample_id|
-  authenticate!
+  #authenticate!
 
   customertitle    = params[:customertitle]
   customerforename = params[:customerforename]
@@ -313,7 +313,7 @@ end
 
 # Present a form for requesting a translation booklet.
 get '/cases/:case_id/uprn/:uprn/sample/:sample_id/translate/new' do |case_id, uprn, sample_id|
-  authenticate!
+  #authenticate!
   kase       = JSON.parse(RestClient.get("#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}"))
   address    = JSON.parse(RestClient.get("#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/addresses/#{uprn}"))
   products   = JSON.parse(RestClient.get("#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/categories?group=translation"))
@@ -334,7 +334,7 @@ end
 
 # Request a translation booklet and create associated event.
 post '/cases/:case_id/uprn/:uprn/sample/:sample_id/translate' do |case_id, uprn, sample_id|
-  authenticate!
+  #authenticate!
 
   form do
     field :eventcategory, present: true
@@ -388,7 +388,7 @@ end
 
 # Present a form for paper/accesscode/post requests.
 get '/cases/:case_id/uprn/:uprn/sample/:sample_id/request/:type/new' do |case_id, uprn, sample_id, type|
-  authenticate!
+  #authenticate!
 
   if type == 'individual'
     breadcrumb = 'Request Individual Form'
@@ -465,7 +465,7 @@ end
 
 # Request creation of new case for paper/accesscode/individual cases and create associated event.
 post '/cases/:case_id/uprn/:uprn/sample/:sample_id/:type' do |case_id, uprn, sample_id, type|
-  authenticate!
+  #authenticate!
   actionplanmappingid = params[:actionplanradio]
   unless actionplanmappingid.nil?
     actionplanmapping = JSON.parse(RestClient.get("#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/actionplanmappings/#{actionplanmappingid}"))

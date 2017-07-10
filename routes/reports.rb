@@ -5,7 +5,7 @@ def type_format(report_type)
 end
 
 get '/reports' do
-  authenticate!
+  #authenticate!
   case_report_types = []
   action_report_types = []
   RestClient.get("#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/reports/types") do |response, _request, _result, &_block|
@@ -24,7 +24,7 @@ get '/reports' do
 end
 
 get '/reports/:report_class/:report_type' do |report_class, report_type|
-  authenticate!
+  #authenticate!
   report_details = []
   error = 0
   if report_class == 'action-exporter'
@@ -54,7 +54,7 @@ get '/reports/:report_class/:report_type' do |report_class, report_type|
 end
 
 get '/reports/download/:report_class/:report_id' do |report_class, report_id|
-  authenticate!
+  #authenticate!
   report_details = []
   if report_class == 'action-exporter'
     host = settings.action_exporter_host
@@ -74,7 +74,7 @@ get '/reports/download/:report_class/:report_id' do |report_class, report_id|
 end
 
 get '/reports/view/:report_class/:report_id' do |report_class, report_id|
-  authenticate!
+  #authenticate!
   report_details = []
   error = 1
   if report_class == 'action-exporter'
