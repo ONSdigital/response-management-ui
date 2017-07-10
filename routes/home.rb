@@ -77,6 +77,6 @@ end
 
 # Home page.
 get '/' do
-  authenticate!
+  #authenticate!
   erb :index, locals: { title: 'Home' }
 end

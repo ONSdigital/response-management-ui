@@ -59,6 +59,3 @@ DEPENDENCIES
   sinatra-flash
   sinatra-formkeeper
   will_paginate
-
-BUNDLED WITH
-   1.14.3

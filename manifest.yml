@@ -1,0 +1,6 @@
+applications:
+- name: response_management_ui
+  instances: 1
+  timeout: 180
+  host: response_management_ui
+  memory: 512M

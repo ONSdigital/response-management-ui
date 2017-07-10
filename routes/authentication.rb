@@ -43,7 +43,7 @@ post '/signin/?' do
                                        settings.ldap_directory_base,
                                        settings.ldap_groups,
                                        auth_logger)
-
+                                       
   if user = User.authenticate(ldap_connection, params) # rubocop:disable Lint/AssignmentInCondition
     session[:user] = user
     if request.cookies[NO_2FA_COOKIE]

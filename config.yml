@@ -2,20 +2,20 @@ http:
   protocol: http
 
 action-exporter-webservice:
-  host: collect-server
-  port: 8141
+  host: cactionsvc.apps.devtest.onsclofo.uk
+  port: 80
 
 action-webservice:
-  host: collect-server
-  port: 8151
+  host: actionsvc.apps.devtest.onsclofo.uk
+  port: 80
 
 case-webservice:
-  host: collect-server
-  port: 8171
+  host: casesvc.apps.devtest.onsclofo.uk
+  port: 80
 
 ldap-directory:
-  host: ldap-server
-  port: 636
+  host: ldap.forumsys.com
+  port: 389
   base: dc=ctp,dc=ons,dc=gov,dc=uk
   groups:
     users: collect-users
