@@ -1,59 +1,71 @@
 <%= erb :menu, locals: { pageid: 'home' } %>
 
 <% content_for :breadcrumbs do %>
-<a href="/">Home</a> &gt; <a href="/postcodes/<%=url_format postcode %>"><%=h postcode %></a> &gt; Cases
+<a href="/">Home</a> &gt; <%=h sampleunitref %> &gt; Cases
 <% end %>
 
+<% if sampleunit.any? %>
 <% content_for :sub_heading do %>
   Click a case to review.
 <% end %>
 
-  <table class="primary" style="margin-top: 0px; width: 100%">
-    <thead>
-      <tr>
-        <th>Address Line 1</th>
-        <th>Address Line 2</th>
-        <th>Town</th>
-        <th>Postcode</th>
-        <th>Address Type</th>
-        <th>Establishment Type</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr class="even">
-      <% if address['line1'].present? %>
-          <td><%=h address['line1'] %></td>
-        <% else %>
-          <td>-</td>
-        <% end %>
-        <% if address['line2'].present? %>
-          <td><%=h address['line2'] %></td>
-        <% else %>
-          <td>-</td>
-        <% end %>
-        <% if address['townName'].present? %>
-          <td><%=h address['townName'] %></td>
-        <% else %>
-          <td>-</td>
-        <% end %>
-        <% if address['postcode'].present? %>
-          <td><%=h address['postcode'] %></td>
-        <% else %>
-          <td>-</td>
-        <% end %>
-        <% if address['type'].present? %>
-        <td><%=h address['type'].to_address_type %></td>
+<table class="primary">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Sample Unit Type</th>
+      <th>Trading Name</th>
+    </tr>
+  </thead>
+  <tbody>
+      <% if sampleunit['attributes']['name'].present? %>
+        <td><%=h sampleunit['attributes']['name'] %></td>
       <% else %>
         <td>-</td>
       <% end %>
-      <% if address['estabtype'].present? %>
-        <td><%=h address['estabtype'] %></td>
+      <% if sampleunit['sampleUnitType'].present? %>
+        <td><%=h sampleunit['sampleUnitType'] %></td>
+      <% else %>
+        <td>-</td>
+      <% end %>
+      <% if sampleunit['attributes']['tradingName'].present? %>
+        <td><%=h sampleunit['attributes']['tradingName'] %></td>
       <% else %>
         <td>-</td>
       <% end %>
     </tr>
-    </tbody>
-  </table>
+  </tbody>
+</table>
+
+<table class="primary">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Email Address</th>
+      <th>Telephone Number</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+      <% if respondent['firstName'].present? %>
+        <td><%=h respondent['firstName'] %> <%=h respondent['lastName'] %></td>
+      <% else %>
+        <td>-</td>
+      <% end %>
+      <% if respondent['emailAddress'].present? %>
+        <td><%=h respondent['emailAddress'] %></td>
+      <% else %>
+        <td>-</td>
+      <% end %>
+      <% if respondent['telephone'].present? %>
+        <td><%=h respondent['telephone'] %></td>
+      <% else %>
+        <td>-</td>
+      <% end %>
+      <td><a href="/respondents/<%=h respondent['id'] %>">Edit</a></td>
+    </tr>
+  </tbody>
+</table>
 
 <% content_for :footer do %>
   <h3>Cases</h3>
@@ -63,19 +75,16 @@
     <table class="secondary">
       <thead>
         <tr>
-          <th>Case Reference</th>
           <th>Case Status</th>
           <th>Case Created</th>
-          <th>Question Set</th>
-          <th>Survey Description</th>
-          <th>Sample Name</th>
-          <th>Contact Name</th>
+          <th>Sample Unit Type</th>
+          <th>Respondent</th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
       <% cases.each_with_index do |kase, i| %>
         <tr class="<%= i.even? ? 'even' : 'odd ' %>">
-          <td><a href="/cases/<%=h kase['caseId'] %>/uprn/<%=h uprn%>/sample/<%=h sample_id%>"><%=h kase['caseId'] %></a></td>
         <% if kase['state'].present? %>
           <td><%=h kase['state'] %></td>
           <% else %>
@@ -86,26 +95,17 @@
         <% else %>
           <td>-</td>
         <% end %>
-        <% if kase['questionSet'].present? %>
-          <td><%=h kase['questionSet'] %></td>
+        <% if kase['sampleUnitType'].present? %>
+          <td><%=h kase['sampleUnitType'] %></td>
         <% else %>
           <td>-</td>
         <% end %>
-        <% if kase['surveyDescription'].present? %>
-          <td><%=h kase['surveyDescription'] %></td>
+        <% if kase['respondent'].present? %>
+          <td><%=h kase['respondent'] %></td>
         <% else %>
           <td>-</td>
         <% end %>
-        <% if kase['name'].present? %>
-          <td><%=h kase['name'] %></td>
-        <% else %>
-          <td>-</td>
-        <% end %>
-        <% if kase['contact'].present? %>
-          <td><%=h kase['contact'] %></td>
-        <% else %>
-          <td>-</td>
-        <% end %>
+        <td><a href="/sampleunitref/<%=h sampleunitref %>/cases/<%=h kase['id'] %>/events">View</a></td>
         </tr>
       <% end %>
         </tbody>
@@ -114,4 +114,7 @@
   <% else %>
     <p id="information"><strong>There are no cases for this address.</strong></p>
   <% end %>
+<% end %>
+<% else %>
+  <p id="information"><strong>There are no businesses for this reference.</strong></p>
 <% end %>

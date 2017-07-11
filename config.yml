@@ -2,23 +2,20 @@ http:
   protocol: http
 
 action-exporter-webservice:
-  host: cactionsvc.apps.devtest.onsclofo.uk
+  host: cactionsvc-int.apps.devtest.onsclofo.uk
   port: 80
 
 action-webservice:
-  host: actionsvc.apps.devtest.onsclofo.uk
+  host: actionsvc-int.apps.devtest.onsclofo.uk
   port: 80
 
 case-webservice:
-  host: casesvc.apps.devtest.onsclofo.uk
+  host: casesvc-int.apps.devtest.onsclofo.uk
   port: 80
 
-ldap-directory:
-  host: ldap.forumsys.com
-  port: 389
-  base: dc=ctp,dc=ons,dc=gov,dc=uk
-  groups:
-    users: collect-users
+party-webservice:
+  host: ras-party-service-int.apps.devtest.onsclofo.uk
+  port: 80
 
 badges:
   built: 01_Jan_1970

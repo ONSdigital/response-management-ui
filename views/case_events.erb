@@ -1,124 +1,66 @@
 <%= erb :menu, locals: { pageid: 'home' } %>
 
 <% content_for :breadcrumbs do %>
-<a href="/">Home</a> &gt; <a href="/postcodes/<%=url_format postcode %>"><%=h postcode %></a> &gt; <a href="/addresses/<%=h uprn %>/cases">Cases</a> &gt; Case <%=h case_id %>
+<a href="/">Home</a> &gt; <%=h sampleunitref %> &gt; Cases
 <% end %>
 
-<% if case_state == 'ACTIONABLE' || case_state == 'INACTIONABLE' %>
-
-  <% if respondent_type == 'H' && (case_state == 'ACTIONABLE' || case_state == 'INACTIONABLE') %>
-    <form action="/cases/<%=h case_id %>/uprn/<%=h uprn %>/sample/<%=h sample_id %>/request/individual/new" method="get">
-      <input class="button" type="submit" value="Request Individual Form&hellip;">
-      <% if params[:actionpage].present? %>
-        <input type="hidden" name="page" value="<%=h params[:actionpage] %>">
-      <% end %>
-    </form>
-  <% end %>
-
-
-  <% if online %>
-    <% unless respondent_type == 'C' || case_state == 'INACTIONABLE' %>
-      <form action="/cases/<%=h case_id %>/uprn/<%=h uprn %>/sample/<%=h sample_id %>/request/accesscode/new" method="get">
-        <input class="button" type="submit" value="Request Replacement Access Code&hellip;">
-      <% if params[:actionpage].present? %>
-        <input type="hidden" name="page" value="<%=h params[:actionpage] %>">
-      <% end %>
-      </form>
-    <% end %>
-  <% end %>
-
-  <% unless respondent_type == "C" || case_state == 'INACTIONABLE'%>
-    <form action="/cases/<%=h case_id %>/uprn/<%=h uprn %>/sample/<%=h sample_id %>/translate/new" method="get">
-      <input class="button" type="submit" value="Request Translation Booklet&hellip;">
-      <% if params[:actionpage].present? %>
-        <input type="hidden" name="page" value="<%=h params[:actionpage] %>">
-      <% end %>
-    </form>
-  <% end %>
-
-  <% if paper && case_state == 'ACTIONABLE' %>
-    <% if respondent_type == 'H' || respondent_type == 'HI' %>
-      <form action="/cases/<%=h case_id %>/uprn/<%=h uprn %>/sample/<%=h sample_id %>/request/paper/new" method="get">
-        <input class="button" type="submit" value="Request Paper Form&hellip;">
-      <% if params[:actionpage].present? %>
-        <input type="hidden" name="page" value="<%=h params[:actionpage] %>">
-      <% end %>
-      </form>
-    <% end %>
-  <% end %>
-<% end %>
-
-
-  <table class="primary">
-    <thead>
-      <tr>
-        <th>Case Status</th>
-        <th>Case Created</th>
-        <th>Survey Description</th>
-        <th>Sample Name</th>
-        <th>Address Line 1</th>
-        <th>Address Line 2</th>
-        <th>Town</th>
-        <th>Postcode</th>
-        <th>Address Type</th>
-        <th>Establishment Type</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr class="even">
-        <% if kase['state'].present? %>
-      <td><%=h kase['state'] %></td>
+<table class="primary">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Sample Unit Type</th>
+      <th>Trading Name</th>
+    </tr>
+  </thead>
+  <tbody>
+      <% if sampleunit['attributes']['name'].present? %>
+        <td><%=h sampleunit['attributes']['name'] %></td>
       <% else %>
         <td>-</td>
       <% end %>
-      <% if kase['createdDateTime'].present? %>
-        <td><%=h kase['createdDateTime'].to_date %></td>
+      <% if sampleunit['sampleUnitType'].present? %>
+        <td><%=h sampleunit['sampleUnitType'] %></td>
       <% else %>
         <td>-</td>
       <% end %>
-      <% if survey.present? %>
-        <td><%=h survey %></td>
-      <% else %>
-        <td>-</td>
-      <% end %>
-      <% if sample['name'].present? %>
-        <td><%=h sample['name'] %></td>
-      <% else %>
-        <td>-</td>
-      <% end %>
-      <% if address['line1'].present? %>
-          <td><%=h address['line1'] %></td>
-      <% else %>
-        <td>-</td>
-      <% end %>
-      <% if address['line2'].present? %>
-        <td><%=h address['line2'] %></td>
-      <% else %>
-        <td>-</td>
-      <% end %>
-      <% if address['townName'].present? %>
-        <td><%=h address['townName'] %></td>
-      <% else %>
-        <td>-</td>
-      <% end %>
-      <% if address['postcode'].present? %>
-        <td><%=h address['postcode'] %></td>
-      <% else %>
-        <td>-</td>
-      <% end %>
-      <% if address['type'].present? %>
-        <td><%=h address['type'].to_address_type %></td>
-      <% else %>
-        <td>-</td>
-      <% end %>
-      <% if address['estabtype'].present? %>
-        <td><%=h address['estabtype'] %></td>
+      <% if sampleunit['attributes']['tradingName'].present? %>
+        <td><%=h sampleunit['attributes']['tradingName'] %></td>
       <% else %>
         <td>-</td>
       <% end %>
     </tr>
-    </tbody>
-  </table>
+  </tbody>
+</table>
+
+<table class="primary">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Email Address</th>
+      <th>Telephone Number</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+      <% if respondent['firstName'].present? %>
+        <td><%=h respondent['firstName'] %> <%=h respondent['lastName'] %></td>
+      <% else %>
+        <td>-</td>
+      <% end %>
+      <% if respondent['emailAddress'].present? %>
+        <td><%=h respondent['emailAddress'] %></td>
+      <% else %>
+        <td>-</td>
+      <% end %>
+      <% if respondent['telephone'].present? %>
+        <td><%=h respondent['telephone'] %></td>
+      <% else %>
+        <td>-</td>
+      <% end %>
+      <td><a href="/respondents/<%=h respondent['id'] %>">Edit</a></td>
+    </tr>
+  </tbody>
+</table>
 
 <h3>Questionnaires</h3>
 
@@ -128,7 +70,6 @@
       <th>Case Reference</th>
       <th>Dispatch Date</th>
       <th>Response Date</th>
-      <th>Question Set</th>
     </tr>
   </thead>
   <tbody>
@@ -146,11 +87,6 @@
       <% else %>
         <td>-</td>
       <% end %>
-      <% if question_set %>
-        <td><%=h question_set %></td>
-      <% else %>
-        <td>-</td>
-      <% end %>
       </tr>
     <% end %>
   <%else%>
@@ -162,11 +98,6 @@
       <td>-</td>
     <% end %>
     <td>-</td>
-    <% if question_set %>
-      <td><%=h question_set %></td>
-    <% else %>
-      <td>-</td>
-    <% end %>
     </tr>
   <%end%>
   </tbody>
@@ -175,9 +106,10 @@
 <% content_for :footer do %>
 
   <h3>Events</h3>
+
   <div id="events">
-    <form action="/cases/<%=h case_id %>/uprn/<%=h uprn %>/sample/<%=h sample_id %>/event/new" method="get">
-      <input class="button" type="submit" value="Create Event&hellip;"> or <% if params[:actionpage].present? %><a href="/addresses/<%=h uprn %>/questionnaires?page=<%=h params[:actionpage] %>"><% else %><a href="/cases/<%=h case_id %>/uprn/<%=h uprn %>/sample/<%=h sample_id %>"><% end %>Refresh</a>
+    <form action="/sampleunitref/<%=h sampleunitref %>/cases/<%=h case_id %>/event/new" method="get">
+      <input class="button" type="submit" value="Create Event&hellip;">
       <% if params[:actionpage].present? %>
         <input type="hidden" name="page" value="<%=h params[:actionpage] %>">
       <% end %>

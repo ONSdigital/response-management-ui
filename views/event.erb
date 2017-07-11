@@ -1,7 +1,7 @@
 <%= erb :menu, locals: { pageid: 'home' } %>
 
 <% content_for :breadcrumbs do %>
-<a href="/">Home</a> &gt; <a href="/postcodes/<%=url_format postcode %>"><%=h postcode %></a> &gt; <a href="/addresses/<%=h uprn %>/cases">Cases</a> &gt; <a href="/cases/<%=h case_id %>/uprn/<%=h uprn %>/sample/<%=h sample_id %>">Case <%=h case_id %></a> &gt; Create Event
+<a href="/">Home</a> &gt; <%=h sampleunitref %> &gt; Create Event
 <% end %>
 
 <% content_for :stylesheet do %>
@@ -133,19 +133,17 @@
     <p>
       <select id="eventcategory" name="eventcategory">
        <% categories.each do |category| %>
-        <% if category['manual'] %>
           <% if eventcategory == category['name'] %>
             <option value='<%=h category['name'] %>' selected><%=h category['longDescription'] %></option>
             <% else %>
             <option value='<%=h category['name'] %>'><%=h category['longDescription'] %></option>
           <% end %>
-        <% end %>
       <% end %>
     </select>
     </p>
   </fieldset>
   <p id="requiredfields"><span class="required">*</span> Required fields</p>
   <p class="buttons">
-    <input class="button" type="submit" value="Save"> or <% if params[:page].present? %><a href="/cases/<%=h case_id %>/uprn/<%=h uprn %>/sample/<%=h sample_id %>/event?page=<%=h params[:page] %>"><% else %><a href="/cases/<%=h case_id %>/uprn/<%=h uprn %>/sample/<%=h sample_id %>"><% end %>Cancel</a>
+    <input class="button" type="submit" value="Save"> or <% if params[:page].present? %><a href="/cases/<%=h case_id %>/event?page=<%=h params[:page] %>"><% else %><a href="/sampleunitref/<%=h sampleunitref %>/cases/<%=h case_id %>/events"><% end %>Cancel</a>
   </p>
 </form>
