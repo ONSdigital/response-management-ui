@@ -1,6 +1,6 @@
 applications:
-- name: response_management_ui
+- name: response-operations-ui
   instances: 1
   timeout: 180
-  host: response_management_ui
+  host: response-operations-ui
   memory: 512M

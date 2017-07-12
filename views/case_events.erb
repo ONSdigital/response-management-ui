@@ -13,13 +13,13 @@
     </tr>
   </thead>
   <tbody>
-      <% if sampleunit['attributes']['name'].present? %>
-        <td><%=h sampleunit['attributes']['name'] %></td>
+      <% if sampleunit['attributes']['enterpriseName'].present? %>
+        <td><%=h sampleunit['attributes']['enterpriseName'] %></td>
       <% else %>
         <td>-</td>
       <% end %>
-      <% if sampleunit['sampleUnitType'].present? %>
-        <td><%=h sampleunit['sampleUnitType'] %></td>
+      <% if kase['sampleUnitType'].present? %>
+        <td><%=h kase['sampleUnitType'] %></td>
       <% else %>
         <td>-</td>
       <% end %>
@@ -67,7 +67,6 @@
 <table class="secondary">
   <thead>
     <tr>
-      <th>Case Reference</th>
       <th>Dispatch Date</th>
       <th>Response Date</th>
     </tr>
@@ -76,7 +75,6 @@
   <% if responses.any? %>
     <% responses.each_with_index do |response, i| %>
       <tr class="<%= i.even? ? 'even' : 'odd ' %>">
-        <td><%=h kase['caseRef'] %></td>
       <% if kase['createdDateTime'] %>
         <td><%=h kase['createdDateTime'].to_date %></td>
       <% else %>
@@ -91,7 +89,6 @@
     <% end %>
   <%else%>
     <tr class="even">
-      <td><%=h kase['caseRef'] %></td>
     <% if kase['createdDateTime'] %>
       <td><%=h kase['createdDateTime'].to_date %></td>
     <% else %>
@@ -121,7 +118,6 @@
     <table class="secondary">
       <thead>
         <tr>
-          <th>Case Event ID</th>
           <th>Created Date</th>
           <th>Created By</th>
           <th>Event Category</th>
@@ -131,11 +127,6 @@
       <tbody>
       <% events.each_with_index do |events, i| %>
         <tr class="<%= i.even? ? 'even' : 'odd ' %>">
-        <% if events['caseEventId'] %>
-          <td><%=h events['caseEventId'] %></td>
-        <% else %>
-          <td>-</td>
-        <% end %>
         <% if events['createdDateTime'] %>
           <td><%=h events['createdDateTime'].to_date %></td>
         <% else %>
