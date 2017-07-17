@@ -1,7 +1,7 @@
 <%= erb :menu, locals: { pageid: 'home' } %>
 
 <% content_for :breadcrumbs do %>
-<a href="/">Home</a> &gt; <%=h sampleunitref %> &gt; Create Event
+<a href="/">Home</a> &gt; <a href="/sampleunitref/<%=h sampleunitref %>/cases"><%=h sampleunitref %></a> &gt; Cases &gt; <a href="/sampleunitref/<%=h sampleunitref %>/cases/<%=h case_id %>/events"><%=h case_id %></a> &gt; Create Event
 <% end %>
 
 <% content_for :stylesheet do %>

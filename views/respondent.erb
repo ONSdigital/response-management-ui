@@ -1,0 +1,10 @@
+<%= erb :menu, locals: { pageid: 'respondent' } %>
+
+<% content_for :breadcrumbs do %>
+Respondent
+<% end %>
+
+
+  <% content_for :sub_heading do %>
+    This is a stub page for editing Respondent <%=h respondent['firstName'] %> <%=h respondent['lastName'] %>
+  <%end%>
