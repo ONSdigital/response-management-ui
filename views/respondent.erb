@@ -4,7 +4,17 @@
 Respondent
 <% end %>
 
-
   <% content_for :sub_heading do %>
-    This is a stub page for editing Respondent <%=h respondent['firstName'] %> <%=h respondent['lastName'] %>
+    Amend the email address for Respondent <%=h respondent['firstName'] %> <%=h respondent['lastName'] %>
   <%end%>
+
+  <p>Current email address: <%= respondent['emailAddress'] %></p>
+  <br>
+  <form action="/respondents/amendemail" method="post">
+    <fieldset>
+      <p>New email address:</p>
+      <input type="email" id="emailaddresstext" name="emailaddresstext" value="">
+      <br><br>
+      <input type="submit" value="Submit">
+    </fieldset>
+  </form>
