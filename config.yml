@@ -20,6 +20,8 @@ party-webservice:
 notify-gateway-webservice:
   host: notifygatewaysvc-int.apps.devtest.onsclofo.uk
   port: 80
+  #host: localhost
+  #port: 8181
 
 badges:
   built: 01_Jan_1970
