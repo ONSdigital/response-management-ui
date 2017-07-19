@@ -1,0 +1,6 @@
+applications:
+- name: response-operations-ui-int
+  instances: 1
+  timeout: 180
+  host: response-operations-ui-int
+  memory: 512M

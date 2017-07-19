@@ -63,8 +63,7 @@ get '/sampleunitref/:sampleunitref/cases/?' do |sampleunitref|
   erb :cases, layout: :sidebar_layout, locals: { title: "Cases for Sample Unit Ref #{sampleunitref}",
                                                  sampleunitref: sampleunitref,
                                                  sampleunit: sampleunit,
-                                                 cases: cases,
-                                                 respondent: respondent}
+                                                 cases: cases}
 end
 
 # Get a specific case.

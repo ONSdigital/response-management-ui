@@ -37,36 +37,6 @@
   </tbody>
 </table>
 
-<table class="primary">
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Email Address</th>
-      <th>Telephone Number</th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-      <% if respondent['firstName'].present? %>
-        <td><%=h respondent['firstName'] %> <%=h respondent['lastName'] %></td>
-      <% else %>
-        <td>-</td>
-      <% end %>
-      <% if respondent['emailAddress'].present? %>
-        <td><%=h respondent['emailAddress'] %></td>
-      <% else %>
-        <td>-</td>
-      <% end %>
-      <% if respondent['telephone'].present? %>
-        <td><%=h respondent['telephone'] %></td>
-      <% else %>
-        <td>-</td>
-      <% end %>
-      <td><a href="/respondents/<%=h respondent['id'] %>">Edit</a></td>
-    </tr>
-  </tbody>
-</table>
-
 <% content_for :footer do %>
   <h3>Cases</h3>
 
