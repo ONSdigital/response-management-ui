@@ -15,12 +15,32 @@ To run this project in development using its [Rackup](http://rack.github.io/) fi
 
 and access using [http://localhost:9292](http://localhost:9292)
 
-## Running Using the Mock Backend
-This project includes two Sinatra applications that provide mock versions of the Action and Case web services. To run them, edit your hosts file so that `collect-server` uses 127.0.0.1. Then run:
+## Environment Variables
+The environment variables below must be provided:
 
-  `./run.sh` from within the `mock` directory. This is a shell script that starts both mock web services in the background. Use Ctrl + C to terminate them. The output from the background processes is written to `mock/nohup.out`. This file can be deleted if not required.
+```
+RESPONSE_OPERATIONS_HTTP_PROTOCOL
+RESPONSE_OPERATIONS_ACTIONEXPORTER_SERVICE_HOST
+RESPONSE_OPERATIONS_ACTIONEXPORTER_SERVICE_PORT
+RESPONSE_OPERATIONS_ACTION_SERVICE_HOST
+RESPONSE_OPERATIONS_ACTION_SERVICE_PORT
+RESPONSE_OPERATIONS_CASE_SERVICE_HOST
+RESPONSE_OPERATIONS_CASE_SERVICE_PORT
+RESPONSE_OPERATIONS_PARTY_SERVICE_HOST
+RESPONSE_OPERATIONS_PARTY_SERVICE_PORT
+RESPONSE_OPERATIONS_NOTIFYGATEWAY_SERVICE_HOST
+RESPONSE_OPERATIONS_NOTIFYGATEWAY_SERVICE_PORT
+RESPONSE_OPERATIONS_OAUTHSERVER_HOST
+```
 
-Start the user interface normally as described above.
+The script `/env.sh` can be sourced in development to set these variables with reasonable defaults.
+
+There are two additional environment variables required RESPONSE_OPERATIONS_CLIENT_PASS and RESPONSE_OPERATIONS_CLIENT_USER the values for these are found in the wiki page for deploying to Cloud Foundry
+
+```
+export RESPONSE_OPERATIONS_CLIENTPASS=
+export RESPONSE_OPERATIONS_CLIENTUSER=
+```
 
 ## Compiling the Style Sheet using Sass
 This project uses the CSS preprocessor [Sass](http://sass-lang.com/) so that features such as variables and mixins that don't exist in pure CSS can be used. The SCSS syntax is used rather than the older Sass syntax. The application style sheet `public/screen.css` is compiled from the main Sass style sheet `views/stylesheets/screen.scss`, which in turn imports the other Sass style sheets in the same directory. To generate `screen.css` from `screen.scss` use:
