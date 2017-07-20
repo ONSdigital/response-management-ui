@@ -85,7 +85,7 @@ end
 
 get '/signout' do
   # auth_logger.info "'#{session[:user].display_name}' signed out"
-  auth_logger.info "signed out"
+  auth_logger.info 'signed out'
   session[:user] = nil
   session[:valid_token] = nil
   flash[:notice] = 'You have been signed out.'

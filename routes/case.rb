@@ -39,7 +39,7 @@ get '/sampleunitref/:sampleunitref/cases/?' do |sampleunitref|
     sampleunit = JSON.parse(response) unless response.code == 404
     if !sampleunit.empty?
       sampleunituuid = sampleunit['id']
-      #find a case for the given partyid - from here get the case group and then return all cases for the originally supplied sampleunitref
+      # find a case for the given partyid - from here get the case group and then return all cases for the originally supplied sampleunitref
       RestClient.get("#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/cases/partyid/#{sampleunituuid}") do |sample_response, _request, _result, &_block|
         sampleunitcases = JSON.parse(sample_response) unless sample_response.code == 404 || sample_response.code == 204
         sampleunitcases.each do |sampleunitcase|
@@ -47,7 +47,7 @@ get '/sampleunitref/:sampleunitref/cases/?' do |sampleunitref|
         end
         RestClient.get("#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/cases/casegroupid/#{casegroup_id}") do |cases_response, _request, _result, &_block|
           cases = JSON.parse(cases_response).paginate(page: params[:page]) unless cases_response.code == 404
-          cases.each do | kase |
+          cases.each do |kase|
             kase['respondent'] = 'Respondent Name'
           end
         end
@@ -58,12 +58,11 @@ get '/sampleunitref/:sampleunitref/cases/?' do |sampleunitref|
     end
   end
 
-
   # Get the selected address details so they can be displayed for reference.
   erb :cases, layout: :sidebar_layout, locals: { title: "Cases for Sample Unit Ref #{sampleunitref}",
                                                  sampleunitref: sampleunitref,
                                                  sampleunit: sampleunit,
-                                                 cases: cases}
+                                                 cases: cases }
 end
 
 # Get a specific case.
@@ -73,13 +72,11 @@ get '/sampleunitref/:sampleunitref/cases/:case_id/events?' do |sampleunitref, ca
   actions    = []
   sampleunit = []
   kase       = JSON.parse(RestClient.get("#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}"))
-  puts "#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}"
   responses  = kase['responses']
   case_state = kase['state']
   party_id = kase['partyId']
   respondent = []
   sampleunituuid = ''
-
 
   RestClient.get("#{settings.protocol}://#{settings.party_service_host}:#{settings.party_service_port}/party-api/v1/parties/type/B/ref/#{sampleunitref}") do |response, _request, _result, &_block|
     sampleunit = JSON.parse(response) unless response.code == 404
@@ -100,14 +97,11 @@ get '/sampleunitref/:sampleunitref/cases/:case_id/events?' do |sampleunitref, ca
 
   RestClient.get("#{settings.protocol}://#{settings.party_service_host}:#{settings.party_service_port}/party-api/v1/parties/type/B/ref/#{sampleunitref}") do |response, _request, _result, &_block|
     sampleunit = JSON.parse(response) unless response.code == 404
-      sampleunituuid = sampleunit['id']
-      RestClient.get("#{settings.protocol}://#{settings.party_service_host}:#{settings.party_service_port}/party-api/v1/respondents/id/#{party_id}") do |respondent_response, _request, _result, &_block|
-        respondent = JSON.parse(respondent_response) unless respondent_response.code == 404
-      end
+    sampleunituuid = sampleunit['id']
+    RestClient.get("#{settings.protocol}://#{settings.party_service_host}:#{settings.party_service_port}/party-api/v1/respondents/id/#{party_id}") do |respondent_response, _request, _result, &_block|
+      respondent = JSON.parse(respondent_response) unless respondent_response.code == 404
     end
-
- puts "SampleUnit: #{settings.protocol}://#{settings.party_service_host}:#{settings.party_service_port}/party-api/v1/parties/type/B/ref/#{sampleunitref}"
- puts "Respondent: #{settings.protocol}://#{settings.party_service_host}:#{settings.party_service_port}/party-api/v1/respondents/id/#{party_id}"
+  end
 
   erb :case_events, layout: :sidebar_layout, locals: { title: "Event History for Case #{case_id}",
                                                        case_id: case_id,
@@ -118,26 +112,17 @@ get '/sampleunitref/:sampleunitref/cases/:case_id/events?' do |sampleunitref, ca
                                                        responses: responses,
                                                        actions: actions,
                                                        case_state: case_state,
-                                                       respondent: respondent}
+                                                       respondent: respondent }
 end
 
 # Postcode search.
 get '/sampleunitref/:sampleunitref' do |sampleunitref|
   authenticate!
-  sampleunits  = []
-  #search_url = "#{settings.protocol}://#{settings.party_service_host}:#{settings.party_service_port}/party-api/v1/parties/type/B/ref/#{sampleunitref}"
-  #puts search_url
+  sampleunits = []
 
-  #form do
-  #  field :sampleunitref, present: true, filters: :upcase, regexp: /^([A-PR-UWYZ0-9][A-HK-Y0-9][A-Z0-9]?[A-Z0-9]? {0,2}[0-9][ABD-HJLN-UW-Z]{2}|GIR 0AA)$/
-  #end
-
-  #formatted_postcode = format_postcode(postcode)
   RestClient.get("#{settings.protocol}://#{settings.party_service_host}:#{settings.party_service_port}/party-api/v1/parties/type/B/ref/#{sampleunitref}") do |response, _request, _result, &_block|
     sampleunits = JSON.parse(response) unless response.code == 404
   end
-
-  puts sampleunits
 
   erb :addresses, locals: { title: "Addresses for Sample Unit Ref #{sampleunitref}",
                             sampleunits: sampleunits,
@@ -145,7 +130,7 @@ get '/sampleunitref/:sampleunitref' do |sampleunitref|
 end
 
 # Present a form for creating a new event.
-get '/sampleunitref/:sampleunitref/cases/:case_id/event/new' do |sampleunitref,case_id|
+get '/sampleunitref/:sampleunitref/cases/:case_id/event/new' do |sampleunitref, case_id|
   authenticate!
   actions    = []
   role       = 'collect-csos'
@@ -219,8 +204,6 @@ post '/sampleunitref/:sampleunitref/cases/:case_id/event' do |sampleunitref, cas
     description = "name: #{name.capitalize} #{description}" if !customerforename.empty? && customercontact.empty?
     description = "phone: #{customercontact} #{description}" if customerforename.empty? && !customercontact.empty?
     description = "name: #{name.capitalize} phone: #{customercontact} #{description}" if !customerforename.empty? && !customercontact.empty?
-
-    puts "#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}/events"
 
     RestClient.post("#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}/events",
                     {

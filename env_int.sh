@@ -1,9 +1,9 @@
 #!/bin/sh
 #
-# Script for setting the required environment variables in development.
+# Script for setting the required environment variables in integration.
 # Adjust as required.
 #
-# Usage: source ./env.sh
+# Usage: . ./env_int.sh
 #
 # Author: Philip Sharland (philip.sharland@ons.gov.uk)
 #

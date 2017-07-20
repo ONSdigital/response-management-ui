@@ -33,7 +33,7 @@ RESPONSE_OPERATIONS_NOTIFYGATEWAY_SERVICE_PORT
 RESPONSE_OPERATIONS_OAUTHSERVER_HOST
 ```
 
-The script `/env.sh` can be sourced in development to set these variables with reasonable defaults.
+The script `/env_<cf env>.sh` can be sourced in development to set these variables with reasonable defaults.
 
 There are two additional environment variables required RESPONSE_OPERATIONS_CLIENT_PASS and RESPONSE_OPERATIONS_CLIENT_USER the values for these are found in the wiki page for deploying to Cloud Foundry
 

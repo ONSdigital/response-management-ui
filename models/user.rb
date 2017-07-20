@@ -8,27 +8,19 @@ class User
   attr_reader :display_name
   attr_reader :groups
 
-  def self.authenticate(clientuser, clientpass, oauth_server, params = {})
+  def self.authenticate(client_username, client_password, oauth_server, params = {})
     username = params[:username]
     password = params[:password]
-    return nil if username.blank? || password.blank?  
+    return nil if username.blank? || password.blank?
 
-    response = RestClient::Request.new({ method: :post,
-                                   url: oauth_server,
-                                   user: clientuser,
-                                   password: clientpass,
-                                   payload: { grant_type: 'password',
-                                              username: username,
-                                              password: password }
-                                  }).execute do |response, request, result|
-                                    puts response
-                                    puts response.code
-    case response.code
-      when 201
-        user_entry = true
-      else
-        user_entry = false
-      end
+    RestClient::Request.execute(method: :post,
+                                url: oauth_server,
+                                user: client_username,
+                                password: client_password,
+                                payload: { grant_type: 'password',
+                                           username: username,
+                                           password: password }) do |response|
+      user_entry = (response.code == 201)
     end
   end
 

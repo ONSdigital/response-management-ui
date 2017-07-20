@@ -1,8 +1,8 @@
 source 'https://rubygems.org'
 
 gem 'json'
-gem 'rest-client'
 gem 'ons-ldap'
+gem 'rest-client'
 gem 'rotp'
 gem 'sinatra'
 gem 'sinatra-content-for2'

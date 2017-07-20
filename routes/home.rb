@@ -15,7 +15,6 @@ require 'csv'
 require_relative '../lib/authentication'
 require_relative '../models/user'
 
-
 PROGRAM = 'responseoperations'.freeze
 SESSION_EXPIRATION_PERIOD = 60 * 60 * 6
 
@@ -34,7 +33,6 @@ set :oauth_server, ENV['RESPONSE_OPERATIONS_OAUTHSERVER_HOST']
 set :client_user, ENV['RESPONSE_OPERATIONS_CLIENT_USER']
 set :client_pass, ENV['RESPONSE_OPERATIONS_CLIENT_PASS']
 
-
 # Load various settings from a configuration file.
 config = YAML.load_file(File.join(__dir__, '../config.yml'))
 # Display badges with the host, built date, commit SHA and environment on the
@@ -48,7 +46,6 @@ set :environment, config['badges']['environment']
 use Rack::Session::Cookie, key: 'rack.session', path: '/',
                            secret: 'eb46fa947d8411e5996329c9ef0ba35d',
                            expire_after: SESSION_EXPIRATION_PERIOD
-
 # Set global pagination options.
 WillPaginate.per_page = 20
 
