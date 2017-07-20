@@ -12,25 +12,31 @@ require 'open-uri'
 require 'sinatra/formkeeper'
 require 'csv'
 
+require_relative '../lib/authentication'
+require_relative '../models/user'
+
+
 PROGRAM = 'responseoperations'.freeze
 SESSION_EXPIRATION_PERIOD = 60 * 60 * 6
 
+set :protocol, ENV['RESPONSE_OPERATIONS_HTTP_PROTOCOL']
+set :action_service_host, ENV['RESPONSE_OPERATIONS_ACTION_SERVICE_HOST']
+set :action_service_port, ENV['RESPONSE_OPERATIONS_ACTION_SERVICE_PORT']
+set :case_service_host, ENV['RESPONSE_OPERATIONS_CASE_SERVICE_HOST']
+set :case_service_port, ENV['RESPONSE_OPERATIONS_CASE_SERVICE_PORT']
+set :party_service_host, ENV['RESPONSE_OPERATIONS_PARTY_SERVICE_HOST']
+set :party_service_port, ENV['RESPONSE_OPERATIONS_PARTY_SERVICE_PORT']
+set :notifygateway_host, ENV['RESPONSE_OPERATIONS_NOTIFYGATEWAY_SERVICE_HOST']
+set :notifygateway_port, ENV['RESPONSE_OPERATIONS_NOTIFYGATEWAY_SERVICE_PORT']
+set :action_exporter_host, ENV['RESPONSE_OPERATIONS_ACTIONEXPORTER_SERVICE_HOST']
+set :action_exporter_port, ENV['RESPONSE_OPERATIONS_ACTIONEXPORTER_SERVICE_PORT']
+set :oauth_server, ENV['RESPONSE_OPERATIONS_OAUTHSERVER_HOST']
+set :client_user, ENV['RESPONSE_OPERATIONS_CLIENT_USER']
+set :client_pass, ENV['RESPONSE_OPERATIONS_CLIENT_PASS']
+
+
 # Load various settings from a configuration file.
 config = YAML.load_file(File.join(__dir__, '../config.yml'))
-set :protocol, config['http']['protocol']
-set :action_service_host, config['action-webservice']['host']
-set :action_service_port, config['action-webservice']['port']
-set :case_service_host, config['case-webservice']['host']
-set :case_service_port, config['case-webservice']['port']
-set :party_service_host, config['party-webservice']['host']
-set :party_service_port, config['party-webservice']['port']
-set :notifygateway_host, config['notify-gateway-webservice']['host']
-set :notifygateway_port, config['notify-gateway-webservice']['port']
-set :action_exporter_host, config['action-exporter-webservice']['host']
-set :action_exporter_port, config['action-exporter-webservice']['port']
-set :action_exporter_user, config['action-exporter-webservice']['user']
-set :action_exporter_password, config['action-exporter-webservice']['password']
-
 # Display badges with the host, built date, commit SHA and environment on the
 # Sign In screen in non-production environments.
 set :host, `hostname`.strip.gsub(/-/, '--')
@@ -53,6 +59,7 @@ end
 
 # View helper for defining blocks inside views for rendering in templates.
 helpers Sinatra::ContentFor2
+helpers Authentication
 helpers do
 
   # View helper for parsing and displaying JSON error responses.
@@ -73,6 +80,6 @@ end
 
 # Home page.
 get '/' do
-  #authenticate!
+  authenticate!
   erb :index, locals: { title: 'Home' }
 end

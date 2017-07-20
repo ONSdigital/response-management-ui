@@ -1,28 +1,3 @@
-http:
-  protocol: http
-
-action-exporter-webservice:
-  host: cactionsvc-int.apps.devtest.onsclofo.uk
-  port: 80
-
-action-webservice:
-  host: actionsvc-int.apps.devtest.onsclofo.uk
-  port: 80
-
-case-webservice:
-  host: casesvc-int.apps.devtest.onsclofo.uk
-  port: 80
-
-party-webservice:
-  host: ras-party-service-int.apps.devtest.onsclofo.uk
-  port: 80
-
-notify-gateway-webservice:
-  host: notifygatewaysvc-int.apps.devtest.onsclofo.uk
-  port: 80
-  #host: localhost
-  #port: 8181
-
 badges:
   built: 01_Jan_1970
   commit: commit

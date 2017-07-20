@@ -38,13 +38,9 @@ get '/signin/?' do
 end
 
 post '/signin/?' do
-  ldap_connection = LDAPConnection.new(settings.ldap_directory_host,
-                                       settings.ldap_directory_port,
-                                       settings.ldap_directory_base,
-                                       settings.ldap_groups,
-                                       auth_logger)
-                                       
-  if user = User.authenticate(ldap_connection, params) # rubocop:disable Lint/AssignmentInCondition
+
+  if user = User.authenticate("#{settings.client_user}", "#{settings.client_pass}", "#{settings.oauth_server}", params)
+
     session[:user] = user
     if request.cookies[NO_2FA_COOKIE]
       session[:valid_token] = true
@@ -88,7 +84,8 @@ post '/signin/secondfactor/?' do
 end
 
 get '/signout' do
-  auth_logger.info "'#{session[:user].display_name}' signed out"
+  # auth_logger.info "'#{session[:user].display_name}' signed out"
+  auth_logger.info "signed out"
   session[:user] = nil
   session[:valid_token] = nil
   flash[:notice] = 'You have been signed out.'

@@ -24,7 +24,7 @@ end
 
 # Get all cases for the selected address.
 get '/sampleunitref/:sampleunitref/cases/?' do |sampleunitref|
-  #authenticate!
+  authenticate!
   cases      = []
   casegroups = []
   casetype   = []
@@ -68,7 +68,7 @@ end
 
 # Get a specific case.
 get '/sampleunitref/:sampleunitref/cases/:case_id/events?' do |sampleunitref, case_id|
-  #authenticate!
+  authenticate!
   events     = []
   actions    = []
   sampleunit = []
@@ -123,7 +123,7 @@ end
 
 # Postcode search.
 get '/sampleunitref/:sampleunitref' do |sampleunitref|
-  #authenticate!
+  authenticate!
   sampleunits  = []
   #search_url = "#{settings.protocol}://#{settings.party_service_host}:#{settings.party_service_port}/party-api/v1/parties/type/B/ref/#{sampleunitref}"
   #puts search_url
@@ -146,7 +146,7 @@ end
 
 # Present a form for creating a new event.
 get '/sampleunitref/:sampleunitref/cases/:case_id/event/new' do |sampleunitref,case_id|
-  #authenticate!
+  authenticate!
   actions    = []
   role       = 'collect-csos'
   kase       = JSON.parse(RestClient.get("#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}"))
@@ -170,7 +170,7 @@ end
 
 # Create a new event.
 post '/sampleunitref/:sampleunitref/cases/:case_id/event' do |sampleunitref, case_id|
-  #authenticate!
+  authenticate!
 
   customertitle    = params[:customertitle]
   customerforename = params[:customerforename]
