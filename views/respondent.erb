@@ -10,11 +10,13 @@ Respondent
 
   <p>Current email address: <%= respondent['emailAddress'] %></p>
   <br>
-  <form action="/respondents/amendemail" method="post">
+  <form action="/sampleunitref/<%=h sampleunitref %>/cases/<%=h case_id %>/events" method="post">
     <fieldset>
       <p>New email address:</p>
       <input type="email" id="emailaddresstext" name="emailaddresstext" value="">
-      <br><br>
-      <input type="submit" value="Submit">
     </fieldset>
+    <p class="buttons">
+      <input class="button" type="submit" value="Save"> or <a href="/sampleunitref/<%=h sampleunitref %>/cases/<%=h case_id %>/events">Cancel</a>
+    </p>
+
   </form>
