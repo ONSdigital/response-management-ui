@@ -12,12 +12,18 @@
 <table class="primary">
   <thead>
     <tr>
+      <th>Collection Exercise</th>
       <th>Name</th>
       <th>Sample Unit Type</th>
       <th>Trading Name</th>
     </tr>
   </thead>
   <tbody>
+      <% if collectionexercisename.present? %>
+        <td><%=h collectionexercisename %></td>
+      <% else %>
+        <td>-</td>
+      <% end %>
       <% if sampleunit['attributes']['name'].present? %>
         <td><%=h sampleunit['attributes']['name'] %></td>
       <% else %>

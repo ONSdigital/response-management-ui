@@ -34,6 +34,8 @@ get '/sampleunitref/:sampleunitref/cases/?' do |sampleunitref|
   sampleunitcases = []
   respondent = []
   sampleunituuid = ''
+  collectionexerciseid = ''
+  collectionexercisename = ''
 
   RestClient.get("#{settings.protocol}://#{settings.party_service_host}:#{settings.party_service_port}/party-api/v1/parties/type/B/ref/#{sampleunitref}") do |response, _request, _result, &_block|
     sampleunit = JSON.parse(response) unless response.code == 404
@@ -44,6 +46,11 @@ get '/sampleunitref/:sampleunitref/cases/?' do |sampleunitref|
         sampleunitcases = JSON.parse(sample_response) unless sample_response.code == 404 || sample_response.code == 204
         sampleunitcases.each do |sampleunitcase|
           casegroup_id = sampleunitcase['caseGroup']['id']
+          collectionexerciseid = sampleunitcase['caseGroup']['collectionExerciseId']
+        end
+        RestClient.get("#{settings.protocol}://#{settings.collection_exercise_service_host}:#{settings.collection_exercise_service_port}/collectionexercises/#{collectionexerciseid}") do |respondent_response, _request, _result, &_block|
+          collectionexercise = JSON.parse(respondent_response) unless respondent_response.code == 404
+          collectionexercisename = collectionexercise['name']
         end
         RestClient.get("#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/cases/casegroupid/#{casegroup_id}") do |cases_response, _request, _result, &_block|
           cases = JSON.parse(cases_response).paginate(page: params[:page]) unless cases_response.code == 404
@@ -62,7 +69,8 @@ get '/sampleunitref/:sampleunitref/cases/?' do |sampleunitref|
   erb :cases, layout: :sidebar_layout, locals: { title: "Cases for Sample Unit Ref #{sampleunitref}",
                                                  sampleunitref: sampleunitref,
                                                  sampleunit: sampleunit,
-                                                 cases: cases }
+                                                 cases: cases,
+                                                 collectionexercisename: collectionexercisename }
 end
 
 # Get a specific case.

@@ -38,8 +38,8 @@ The script `/env_<cf env>.sh` can be sourced in development to set these variabl
 There are two additional environment variables required RESPONSE_OPERATIONS_CLIENT_PASS and RESPONSE_OPERATIONS_CLIENT_USER the values for these are found in the wiki page for deploying to Cloud Foundry
 
 ```
-export RESPONSE_OPERATIONS_CLIENTPASS=
-export RESPONSE_OPERATIONS_CLIENTUSER=
+export RESPONSE_OPERATIONS_CLIENT_PASS=
+export RESPONSE_OPERATIONS_CLIENT_USER=
 ```
 
 ## Compiling the Style Sheet using Sass
@@ -48,6 +48,18 @@ This project uses the CSS preprocessor [Sass](http://sass-lang.com/) so that fea
  `sass -t compressed screen.scss ../../public/css/screen.css`
 
  from within the `views/stylesheets` directory. Omit `-t compressed` for non-minified CSS output.
+
+## Authentication
+
+The Response Operations UI is authenticated against oauth.
+
+The Django administration page will need to be logged into and Client Identifiers/users will need to be added
+
+```
+http://ras-django-<cf environment>.apps.devtest.onsclofo.uk/admin
+```
+
+Credentails can be obatained from RAS Colleagues in Newport
 
 ## Copyright
 Copyright (C) 2016 Crown Copyright (Office for National Statistics)
