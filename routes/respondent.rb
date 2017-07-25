@@ -10,7 +10,7 @@ get '/sampleunitref/:sampleunitref/cases/:case_id/events/:respondent_id/update' 
     puts respondent['firstName']
     puts respondent['lastName']
 
-    erb :respondent, locals: { title: "Update email for Respondent " + respondent['firstName'] + " " + respondent['lastName'],
+    erb :respondent, locals: { title: "Update email for Respondent #{respondent['firstName']} #{respondent['lastName']}",
                           action: "/sampleunitref/#{sampleunitref}/cases/#{case_id}/events/#{respondent_id}",
                           method: :post,
                           page: params[:page],
