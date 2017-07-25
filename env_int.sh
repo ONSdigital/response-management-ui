@@ -7,6 +7,10 @@
 #
 # Author: Philip Sharland (philip.sharland@ons.gov.uk)
 #
+export BRES_2017_COLLECTION_EXERCISE="14fb3e68-4dca-46db-bf49-04b84e07e77c"
+export RAS_BACKSTAGE_UI_COLLECTION_EXERCISES="collection-exercises"
+export RAS_BACKSTAGE_UI_HTTP_PROTOCOL="http"
+export RAS_BACKSTAGE_UI_HOST="ras-backstage-int.apps.devtest.onsclofo.uk"
 export RESPONSE_OPERATIONS_ACTION_SERVICE_HOST="actionsvc-int.apps.devtest.onsclofo.uk"
 export RESPONSE_OPERATIONS_ACTION_SERVICE_PORT="80"
 export RESPONSE_OPERATIONS_ACTIONEXPORTER_SERVICE_HOST="actionexportersvc-int.apps.devtest.onsclofo.uk"
