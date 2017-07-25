@@ -33,7 +33,7 @@ set :action_exporter_host, ENV['RESPONSE_OPERATIONS_ACTIONEXPORTER_SERVICE_HOST'
 set :action_exporter_port, ENV['RESPONSE_OPERATIONS_ACTIONEXPORTER_SERVICE_PORT']
 set :oauth_server, ENV['RESPONSE_OPERATIONS_OAUTHSERVER_HOST']
 set :client_user, ENV['RESPONSE_OPERATIONS_CLIENT_USER']
-set :client_pass, ENV['RESPONSE_OPERATIONS_CLIENT_PASS']
+set :client_password, ENV['RESPONSE_OPERATIONS_CLIENT_PASSWORD']
 set :email_template_id, ENV['RESPONSE_OPERATIONS_EMAIL_TEMPLATE_ID']
 
 # Load various settings from a configuration file.
