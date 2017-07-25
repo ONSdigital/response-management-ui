@@ -13,12 +13,6 @@ class User
     password = params[:password]
     return nil if username.blank? || password.blank?
 
-    puts client_username
-    puts client_password
-    puts oauth_server
-    puts username
-    puts password
-
     RestClient::Request.execute(method: :post,
                                 url: oauth_server,
                                 user: client_username,
