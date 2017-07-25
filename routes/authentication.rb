@@ -39,7 +39,7 @@ end
 
 post '/signin/?' do
 
-  if user = User.authenticate("#{settings.client_user}", "#{settings.client_pass}", "#{settings.oauth_server}", params)
+  if user = User.authenticate(settings.client_user, settings.client_password, settings.oauth_server, params)
 
     session[:user] = user
     if request.cookies[NO_2FA_COOKIE]
