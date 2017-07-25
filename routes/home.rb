@@ -18,26 +18,27 @@ require_relative '../models/user'
 PROGRAM = 'responseoperations'.freeze
 SESSION_EXPIRATION_PERIOD = 60 * 60 * 6
 
-set :protocol, ENV['RESPONSE_OPERATIONS_HTTP_PROTOCOL']
-set :action_service_host, ENV['RESPONSE_OPERATIONS_ACTION_SERVICE_HOST']
-set :action_service_port, ENV['RESPONSE_OPERATIONS_ACTION_SERVICE_PORT']
-set :case_service_host, ENV['RESPONSE_OPERATIONS_CASE_SERVICE_HOST']
-set :case_service_port, ENV['RESPONSE_OPERATIONS_CASE_SERVICE_PORT']
-set :party_service_host, ENV['RESPONSE_OPERATIONS_PARTY_SERVICE_HOST']
-set :party_service_port, ENV['RESPONSE_OPERATIONS_PARTY_SERVICE_PORT']
+set :action_exporter_host,             ENV['RESPONSE_OPERATIONS_ACTIONEXPORTER_SERVICE_HOST']
+set :action_exporter_port,             ENV['RESPONSE_OPERATIONS_ACTIONEXPORTER_SERVICE_PORT']
+set :action_service_host,              ENV['RESPONSE_OPERATIONS_ACTION_SERVICE_HOST']
+set :action_service_port,              ENV['RESPONSE_OPERATIONS_ACTION_SERVICE_PORT']
+set :case_service_host,                ENV['RESPONSE_OPERATIONS_CASE_SERVICE_HOST']
+set :case_service_port,                ENV['RESPONSE_OPERATIONS_CASE_SERVICE_PORT']
+set :client_password,                  ENV['RESPONSE_OPERATIONS_CLIENT_PASSWORD']
+set :client_user,                      ENV['RESPONSE_OPERATIONS_CLIENT_USER']
 set :collection_exercise_service_host, ENV['RESPONSE_OPERATIONS_COLLECTION_EXERCISE_SERVICE_HOST']
 set :collection_exercise_service_port, ENV['RESPONSE_OPERATIONS_COLLECTION_EXERCISE_SERVICE_PORT']
-set :notifygateway_host, ENV['RESPONSE_OPERATIONS_NOTIFYGATEWAY_SERVICE_HOST']
-set :notifygateway_port, ENV['RESPONSE_OPERATIONS_NOTIFYGATEWAY_SERVICE_PORT']
-set :action_exporter_host, ENV['RESPONSE_OPERATIONS_ACTIONEXPORTER_SERVICE_HOST']
-set :action_exporter_port, ENV['RESPONSE_OPERATIONS_ACTIONEXPORTER_SERVICE_PORT']
-set :oauth_server, ENV['RESPONSE_OPERATIONS_OAUTHSERVER_HOST']
-set :client_user, ENV['RESPONSE_OPERATIONS_CLIENT_USER']
-set :client_password, ENV['RESPONSE_OPERATIONS_CLIENT_PASSWORD']
-set :email_template_id, ENV['RESPONSE_OPERATIONS_EMAIL_TEMPLATE_ID']
+set :email_template_id,                ENV['RESPONSE_OPERATIONS_EMAIL_TEMPLATE_ID']
+set :notifygateway_host,               ENV['RESPONSE_OPERATIONS_NOTIFYGATEWAY_SERVICE_HOST']
+set :notifygateway_port,               ENV['RESPONSE_OPERATIONS_NOTIFYGATEWAY_SERVICE_PORT']
+set :oauth_server,                     ENV['RESPONSE_OPERATIONS_OAUTHSERVER_HOST']
+set :party_service_host,               ENV['RESPONSE_OPERATIONS_PARTY_SERVICE_HOST']
+set :party_service_port,               ENV['RESPONSE_OPERATIONS_PARTY_SERVICE_PORT']
+set :protocol,                         ENV['RESPONSE_OPERATIONS_HTTP_PROTOCOL']
 
 # Load various settings from a configuration file.
 config = YAML.load_file(File.join(__dir__, '../config.yml'))
+
 # Display badges with the host, built date, commit SHA and environment on the
 # Sign In screen in non-production environments.
 set :host, `hostname`.strip.gsub(/-/, '--')
