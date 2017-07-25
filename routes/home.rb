@@ -53,9 +53,13 @@ use Rack::Session::Cookie, key: 'rack.session', path: '/',
 # Set global pagination options.
 WillPaginate.per_page = 20
 
-# Always send UTF-8 Content-Type HTTP header.
 before do
   headers 'Content-Type' => 'text/html; charset=utf-8'
+  protocol             = ENV['RAS_BACKSTAGE_UI_PROTOCOL']
+  host                 = ENV['RAS_BACKSTAGE_UI_HOST']
+  collection_exercises = ENV['RAS_BACKSTAGE_UI_COLLECTION_EXERCISES']
+  collection_exercise  = ENV['BRES_2017_COLLECTION_EXERCISE']
+  @bres_2017_url = "#{protocol}://#{host}/#{collection_exercises}/#{collection_exercise}" if host.present? && protocol.present? && collection_exercises.present? && collection_exercise.present?
 end
 
 # View helper for defining blocks inside views for rendering in templates.
