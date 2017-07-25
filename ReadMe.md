@@ -59,7 +59,7 @@ The Django administration page will need to be logged into and Client Identifier
 http://ras-django-<cf environment>.apps.devtest.onsclofo.uk/admin
 ```
 
-Credentails can be obatained from RAS Colleagues in Newport
+Credentials can be obtained from RAS colleagues in Newport.
 
 ## Copyright
 Copyright (C) 2016 Crown Copyright (Office for National Statistics)
