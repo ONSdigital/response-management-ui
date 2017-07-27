@@ -23,24 +23,11 @@ get '/signin/?' do
 
   # CTPA-404 Always bypass the two factor authentication screen for 2016.
   response.set_cookie(NO_2FA_COOKIE, value: '1', max_age: THIRTY_DAYS.to_s)
-
-  built  = settings.built
-  commit = settings.commit
-
-  # Display the correct built date and commit SHA when running locally.
-  built = Date.today.strftime('%d_%b_%Y') if built == '01_Jan_1970'
-  commit = `git rev-parse --short HEAD` if commit == 'commit'
-  erb :signin, layout: :simple_layout, locals: { title: 'Sign In',
-                                                 host: settings.host,
-                                                 built: built,
-                                                 commit: commit,
-                                                 environment: settings.environment }
+  erb :signin, layout: :simple_layout, locals: { title: 'Sign In' }
 end
 
 post '/signin/?' do
-
   if user = User.authenticate(settings.client_user, settings.client_password, settings.oauth_server, params)
-
     session[:user] = user
     if request.cookies[NO_2FA_COOKIE]
       session[:valid_token] = true

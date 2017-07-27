@@ -36,16 +36,6 @@ set :party_service_host,               ENV['RESPONSE_OPERATIONS_PARTY_SERVICE_HO
 set :party_service_port,               ENV['RESPONSE_OPERATIONS_PARTY_SERVICE_PORT']
 set :protocol,                         ENV['RESPONSE_OPERATIONS_HTTP_PROTOCOL']
 
-# Load various settings from a configuration file.
-config = YAML.load_file(File.join(__dir__, '../config.yml'))
-
-# Display badges with the host, built date, commit SHA and environment on the
-# Sign In screen in non-production environments.
-set :host, `hostname`.strip.gsub(/-/, '--')
-set :built, config['badges']['built']
-set :commit, config['badges']['commit']
-set :environment, config['badges']['environment']
-
 # Expire sessions after SESSION_EXPIRATION_PERIOD of inactivity
 use Rack::Session::Cookie, key: 'rack.session', path: '/',
                            secret: 'eb46fa947d8411e5996329c9ef0ba35d',
