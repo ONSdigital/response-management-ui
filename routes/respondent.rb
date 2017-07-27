@@ -6,15 +6,11 @@ get '/sampleunitref/:sampleunitref/cases/:case_id/events/:respondent_id/update' 
 
     respondent = JSON.parse(respondent_response) unless respondent_response.code == 404
 
-    puts respondent
-    puts respondent['firstName']
-    puts respondent['lastName']
-
     erb :respondent, locals: { title: "Update email for Respondent #{respondent['firstName']} #{respondent['lastName']}",
                           action: "/sampleunitref/#{sampleunitref}/cases/#{case_id}/events/#{respondent_id}",
                           method: :post,
                           page: params[:page],
-                          emailaddress: '',
+                          email_address: '',
                           respondent: respondent,
                           respondent_id: respondent_id,
                           case_id: case_id,
@@ -23,22 +19,42 @@ get '/sampleunitref/:sampleunitref/cases/:case_id/events/:respondent_id/update' 
   end
 end
 
-post '/sampleunitref/:sampleunitref/cases/:case_id/events' do |sampleunitref, case_id|
+post '/sampleunitref/:sampleunitref/cases/:case_id/events/:respondent_id' do |sampleunitref, case_id, respondent_id|
 
-  emailaddress = params[:emailaddress]
+  email_address = params[:email_address]
 
-  RestClient.post("#{settings.protocol}://#{settings.notifygateway_host}:#{settings.notifygateway_port}/notify/emails/#{settings.email_template_id}",
+  RestClient.post("#{settings.protocol}://#{settings.notifygateway_host}:#{settings.notifygateway_port}/emails/#{settings.email_template_id}",
                   {
-                    emailaddress: emailaddress
+                    emailAddress: email_address,
+                    reference: 'Test Email'
                   }.to_json, content_type: :json, accept: :json) do |post_response, _request, _result, &_block|
 
-    puts 'post response ' + post_response
-    puts 'post response code ' + post_response.code.to_s
-
-    #Change back to 201
-    if post_response.code == 200
+    if post_response.code == 201
       flash[:notice] = 'Successfully amended email.'
       actions = []
+
+      RestClient.post("#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}/events",
+                      {
+                        description: 'Placeholder email updated',
+                        category: "MISCELLANEOUS",
+                        subCategory: nil,
+                        partyId: case_id,
+                        createdBy: 'test user Edward'
+                      }.to_json, content_type: :json, accept: :json) do |post_response, _request, _result, &_block|
+
+
+
+        puts 'casePostResponse ' + post_response.to_s
+
+        if post_response.code == 201
+          flash[:notice] = 'Successfully created event.'
+          actions = []
+        else
+          logger.error post_response
+          error_flash('Unable to create event', post_response)
+        end
+      end
+
     else
       logger.error post_response
       error_flash('Unable to amend email', post_response)
