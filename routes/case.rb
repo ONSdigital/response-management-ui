@@ -83,6 +83,8 @@ get '/sampleunitref/:sampleunitref/cases/:case_id/events?' do |sampleunitref, ca
   responses  = kase['responses']
   case_state = kase['state']
   party_id = kase['partyId']
+  collection_exercise_id = kase['caseGroup']['collectionExerciseId']
+  survey_id  = []
   respondent = []
   sampleunituuid = ''
 
@@ -109,7 +111,22 @@ get '/sampleunitref/:sampleunitref/cases/:case_id/events?' do |sampleunitref, ca
     RestClient.get("#{settings.protocol}://#{settings.party_service_host}:#{settings.party_service_port}/party-api/v1/respondents/id/#{party_id}") do |respondent_response, _request, _result, &_block|
       respondent = JSON.parse(respondent_response) unless respondent_response.code == 404
     end
+
   end
+
+  RestClient.get("#{settings.protocol}://#{settings.collection_exercise_service_host}:#{settings.collection_exercise_service_port}/collectionexercises/#{collection_exercise_id}") do |respondent_response, _request, _result, &_block|
+    collectionexercise = JSON.parse(respondent_response) unless respondent_response.code == 404
+    survey_id = collectionexercise['surveyId']
+  end
+
+  url = "#{settings.protocol}://#{settings.secure_message_service_host}"
+  params = {  respondentId: respondent['id'],
+              caseId: kase['id'],
+              collectionExerciseId: collection_exercise_id,
+              surveyId: survey_id,
+              reportingUnitId: party_id }
+  uri       = URI.parse url
+  uri.query = URI.encode_www_form URI.decode_www_form(uri.query || '').concat(params.to_a)
 
   erb :case_events, layout: :sidebar_layout, locals: { title: "Event History for Case #{case_id}",
                                                        case_id: case_id,
@@ -120,7 +137,11 @@ get '/sampleunitref/:sampleunitref/cases/:case_id/events?' do |sampleunitref, ca
                                                        responses: responses,
                                                        actions: actions,
                                                        case_state: case_state,
-                                                       respondent: respondent }
+                                                       respondent: respondent,
+                                                       collection_exercise_id: collection_exercise_id,
+                                                       survey_id: survey_id,
+                                                       party_id: party_id,
+                                                       secure_message_url: uri }
 end
 
 # Postcode search.

@@ -6,20 +6,20 @@ get '/sampleunitref/:sampleunitref/cases/:case_id/events/:respondent_id/update' 
 
     respondent = JSON.parse(respondent_response) unless respondent_response.code == 404
 
-    erb :respondent, locals: { title: "Update email for Respondent #{respondent['firstName']} #{respondent['lastName']}",
-                          action: "/sampleunitref/#{sampleunitref}/cases/#{case_id}/events/#{respondent_id}",
-                          method: :post,
-                          page: params[:page],
-                          email_address: '',
-                          respondent: respondent,
-                          respondent_id: respondent_id,
-                          case_id: case_id,
-                          sampleunitref: sampleunitref }
+    erb :respondent, locals: {  title: "Update email for Respondent #{respondent['firstName']} #{respondent['lastName']}",
+                                action: "/sampleunitref/#{sampleunitref}/cases/#{case_id}/events/update",
+                                method: :post,
+                                page: params[:page],
+                                email_address: '',
+                                respondent: respondent,
+                                respondent_id: respondent_id,
+                                case_id: case_id,
+                                sampleunitref: sampleunitref }
 
   end
 end
 
-post '/sampleunitref/:sampleunitref/cases/:case_id/events/:respondent_id' do |sampleunitref, case_id, respondent_id|
+post '/sampleunitref/:sampleunitref/cases/:case_id/events/update' do |sampleunitref, case_id|
 
   email_address = params[:email_address]
 
@@ -36,22 +36,18 @@ post '/sampleunitref/:sampleunitref/cases/:case_id/events/:respondent_id' do |sa
       RestClient.post("#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}/events",
                       {
                         description: 'Placeholder email updated',
-                        category: "MISCELLANEOUS",
+                        category: 'MISCELLANEOUS',
                         subCategory: nil,
                         partyId: case_id,
                         createdBy: 'test user Edward'
-                      }.to_json, content_type: :json, accept: :json) do |post_response, _request, _result, &_block|
+                      }.to_json, content_type: :json, accept: :json) do |post_response_event, _request, _result, &_block|
 
-
-
-        puts 'casePostResponse ' + post_response.to_s
-
-        if post_response.code == 201
+        if post_response_event.code == 201
           flash[:notice] = 'Successfully created event.'
           actions = []
         else
-          logger.error post_response
-          error_flash('Unable to create event', post_response)
+          logger.error post_response_event
+          error_flash('Unable to create event', post_response_event)
         end
       end
 

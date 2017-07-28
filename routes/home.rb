@@ -34,6 +34,8 @@ set :notifygateway_port,               ENV['RESPONSE_OPERATIONS_NOTIFYGATEWAY_SE
 set :oauth_server,                     ENV['RESPONSE_OPERATIONS_OAUTHSERVER_HOST']
 set :party_service_host,               ENV['RESPONSE_OPERATIONS_PARTY_SERVICE_HOST']
 set :party_service_port,               ENV['RESPONSE_OPERATIONS_PARTY_SERVICE_PORT']
+set :secure_message_service_host,      ENV['RESPONSE_OPERATIONS_SECURE_MESSAGE_SERVICE_HOST']
+set :secure_message_service_port,      ENV['RESPONSE_OPERATIONS_SECURE_MESSAGE_SERVICE_PORT']
 set :protocol,                         ENV['RESPONSE_OPERATIONS_HTTP_PROTOCOL']
 
 # Expire sessions after SESSION_EXPIRATION_PERIOD of inactivity

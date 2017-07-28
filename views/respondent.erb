@@ -10,7 +10,7 @@ Respondent
 
   <p>Current email address: <%= respondent['emailAddress'] %></p>
   <br>
-  <form action="/sampleunitref/<%=h sampleunitref %>/cases/<%=h case_id %>/events/<%=h respondent_id %>" method="post">
+  <form action="/sampleunitref/<%=h sampleunitref %>/cases/<%=h case_id %>/events/update" method="post">
     <fieldset>
       <p>New email address:</p>
       <input type="email" id="email_address" name="email_address" value="">
