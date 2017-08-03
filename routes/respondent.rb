@@ -36,7 +36,7 @@ post '/sampleunitref/:sampleunitref/cases/:case_id/events/update' do |sampleunit
       RestClient.post("#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}/events",
                       {
                         description: 'Placeholder email updated',
-                        category: 'MISCELLANEOUS',
+                        category: 'SECURE_MESSAGE_SENT',
                         subCategory: nil,
                         partyId: case_id,
                         createdBy: 'test user Edward'

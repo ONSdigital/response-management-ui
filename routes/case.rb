@@ -234,14 +234,18 @@ post '/sampleunitref/:sampleunitref/cases/:case_id/event' do |sampleunitref, cas
     description = "phone: #{customercontact} #{description}" if customerforename.empty? && !customercontact.empty?
     description = "name: #{name.capitalize} phone: #{customercontact} #{description}" if !customerforename.empty? && !customercontact.empty?
 
+    post_json = {
+      description: description,
+      category: params[:eventcategory],
+      subCategory: nil,
+      partyId: case_id,
+      createdBy: 'test user'
+    }.to_json
+
+    puts "PostJson: " + post_json.to_s
+
     RestClient.post("#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}/events",
-                    {
-                      description: description,
-                      category: params[:eventcategory],
-                      subCategory: nil,
-                      partyId: case_id,
-                      createdBy: 'test user'
-                    }.to_json, content_type: :json, accept: :json) do |post_response, _request, _result, &_block|
+                  post_json  , content_type: :json, accept: :json) do |post_response, _request, _result, &_block|
       if post_response.code == 201
         flash[:notice] = 'Successfully created event.'
         actions = []
@@ -255,4 +259,66 @@ post '/sampleunitref/:sampleunitref/cases/:case_id/event' do |sampleunitref, cas
     event_url += "?page=#{params[:page]}" if params[:page].present?
     redirect event_url
   end
+end
+
+post '/sampleunitref/:sampleunitref/cases/:case_id/events/resend_verification_code' do |sampleunitref, case_id|
+
+  RestClient.get("#{settings.protocol}://#{settings.party_service_host}:#{settings.party_service_port}/party-api/v1/parties/type/B/ref/#{sampleunitref}") do |response, _request, _result, &_block|
+    sampleunit = JSON.parse(response) unless response.code == 404
+    if sampleunit.any?
+      sampleunituuid = sampleunit['id']
+      RestClient.get("#{settings.protocol}://#{settings.party_service_host}:#{settings.party_service_port}/party-api/v1/respondents/id/#{sampleunituuid}") do |respondent_response, _request, _result, &_block|
+        respondent = JSON.parse(respondent_response) unless respondent_response.code == 404
+
+        puts respondent['emailAddress']
+
+        RestClient.post("#{settings.protocol}://#{settings.notifygateway_host}:#{settings.notifygateway_port}/emails/#{settings.email_template_id}",
+                        {
+                          emailAddress: respondent['emailAddress'],
+                          reference: 'Test Email',
+                          personalisation: {
+                            personal1: 'personalValue'
+                          }
+                        }.to_json, content_type: :json, accept: :json) do |post_response, _request, _result, &_block|
+
+
+          puts post_response
+
+          if post_response.code == 201
+            flash[:notice] = 'Verification code successfully resent.'
+            actions = []
+
+            puts 'case_id: ' + case_id.to_s
+
+            RestClient.post("#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}/events",
+                            {
+                              description: 'Verification code successfully resent.',
+                              category: 'VERIFICATION_CODE_SENT',
+                              subCategory: nil,
+                              partyId: case_id,
+                              createdBy: 'test user Edward'
+                            }.to_json, content_type: :json, accept: :json) do |post_response_event, _request, _result, &_block|
+
+              if post_response_event.code == 201
+                flash[:notice] = 'Successfully created event.'
+                actions = []
+              else
+                logger.error post_response_event
+                error_flash('Unable to create event', post_response_event)
+              end
+            end
+
+          else
+            logger.error post_response
+            error_flash('Unable to send verification code', post_response)
+          end
+        end
+
+      end
+    end
+  end
+
+  event_url = "/sampleunitref/#{sampleunitref}/cases/#{case_id}/events"
+  redirect event_url
+
 end
