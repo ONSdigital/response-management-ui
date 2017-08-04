@@ -268,29 +268,22 @@ post '/sampleunitref/:sampleunitref/cases/:case_id/events/resend_verification_co
 
         RestClient.post("#{settings.protocol}://#{settings.notifygateway_host}:#{settings.notifygateway_port}/emails/#{settings.email_template_id}",
                         {
-                          emailAddress: respondent['emailAddress'],
-                          reference: 'Test Email',
-                          personalisation: {
-                            personal1: 'personalValue'
-                          }
+                          emailAddress: respondent['emailAddress']
                         }.to_json, content_type: :json, accept: :json) do |post_response, _request, _result, &_block|
 
           if post_response.code == 201
             flash[:notice] = 'Verification code successfully resent.'
-            actions = []
 
             RestClient.post("#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}/events",
                             {
                               description: 'Verification code successfully resent.',
                               category: 'VERIFICATION_CODE_SENT',
                               subCategory: nil,
-                              partyId: case_id,
-                              createdBy: 'test user Edward'
+                              createdBy: 'placeholder - logged in user'
                             }.to_json, content_type: :json, accept: :json) do |post_response_event, _request, _result, &_block|
 
               if post_response_event.code == 201
                 flash[:notice] = 'Successfully created event.'
-                actions = []
               else
                 logger.error post_response_event
                 error_flash('Unable to create event', post_response_event)
