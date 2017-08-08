@@ -19,7 +19,6 @@
     </thead>
     <tbody>
     <% report_details.each_with_index do |detail, i| %>
-    <% puts detail %>
       <tr class="<%= i.even? ? 'even' : 'odd ' %>">
       <% if detail['id'].present? %>
         <td><%=h detail['createdDateTime'].to_report_date%></td>
