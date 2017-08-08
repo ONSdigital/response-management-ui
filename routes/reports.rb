@@ -37,7 +37,7 @@ get '/reports/:report_class/:report_type' do |report_class, report_type|
   RestClient.get("#{settings.protocol}://#{host}:#{port}/reports/types/#{report_type.upcase}") do |response, _request, _result, &_block|
     report_details = JSON.parse(response).paginate(page: params[:page]) unless response.code == 204 || response.code == 400
     code = response.code
-    if code == 200 || code == 204
+    if [200, 204].include?(code)
       erb :report_type, locals: { title: type_format(report_type),
                                   report_details: report_details,
                                   report_type: report_type,

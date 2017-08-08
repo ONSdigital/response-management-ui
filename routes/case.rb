@@ -69,7 +69,6 @@ get '/sampleunitref/:sampleunitref/cases/?' do |sampleunitref|
     end
   end
 
-
   RestClient.get("#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}/events") do |response, _request, _result, &_block|
     events = JSON.parse(response).paginate(page: params[:page]) unless response.code == 204
     events.each do |event|
@@ -97,8 +96,6 @@ get '/sampleunitref/:sampleunitref/cases/?' do |sampleunitref|
     survey_id = collectionexercise['surveyId']
   end
 
-
-
   url = "#{settings.protocol}://#{settings.secure_message_service_host}"
   params = {  respondentId: respondent['id'],
               caseId: case_id,
@@ -108,20 +105,20 @@ get '/sampleunitref/:sampleunitref/cases/?' do |sampleunitref|
   uri       = URI.parse url
   uri.query = URI.encode_www_form URI.decode_www_form(uri.query || '').concat(params.to_a)
 
-  erb :reporting_unit_events, layout: :sidebar_layout, locals: { title: "#{collectionexercise['name']} for #{sampleunit['attributes']['enterpriseName']}",
-                                                       case_id: case_id,
-                                                       sampleunit: sampleunit,
-                                                       sampleunitref: sampleunitref,
-                                                       kase: kase,
-                                                       events: events,
-                                                       responses: responses,
-                                                       actions: actions,
-                                                       case_state: case_state,
-                                                       respondent: respondent,
-                                                       collection_exercise_id: collection_exercise_id,
-                                                       survey_id: survey_id,
-                                                       party_id: party_id,
-                                                       secure_message_url: uri }
+  erb :reporting_unit_events, layout: :sidebar_layout, locals: {  title: "#{collectionexercise['name']} for #{sampleunit['attributes']['enterpriseName']}",
+                                                                  case_id: case_id,
+                                                                  sampleunit: sampleunit,
+                                                                  sampleunitref: sampleunitref,
+                                                                  kase: kase,
+                                                                  events: events,
+                                                                  responses: responses,
+                                                                  actions: actions,
+                                                                  case_state: case_state,
+                                                                  respondent: respondent,
+                                                                  collection_exercise_id: collection_exercise_id,
+                                                                  survey_id: survey_id,
+                                                                  party_id: party_id,
+                                                                  secure_message_url: uri }
 end
 
 # Get a specific case.
@@ -180,20 +177,20 @@ get '/sampleunitref/:sampleunitref/cases/:case_id/events?' do |sampleunitref, ca
   uri       = URI.parse url
   uri.query = URI.encode_www_form URI.decode_www_form(uri.query || '').concat(params.to_a)
 
-  erb :respondent_events, layout: :sidebar_layout, locals: { title: "#{collectionexercise['name']} for respondent #{respondent['firstName']} #{respondent['lastName']} (#{sampleunit['attributes']['enterpriseName']})",
-                                                       case_id: case_id,
-                                                       sampleunit: sampleunit,
-                                                       sampleunitref: sampleunitref,
-                                                       kase: kase,
-                                                       events: events,
-                                                       responses: responses,
-                                                       actions: actions,
-                                                       case_state: case_state,
-                                                       respondent: respondent,
-                                                       collection_exercise_id: collection_exercise_id,
-                                                       survey_id: survey_id,
-                                                       party_id: party_id,
-                                                       secure_message_url: uri }
+  erb :respondent_events, layout: :sidebar_layout, locals: {  title: "#{collectionexercise['name']} for respondent #{respondent['firstName']} #{respondent['lastName']} (#{sampleunit['attributes']['enterpriseName']})",
+                                                              case_id: case_id,
+                                                              sampleunit: sampleunit,
+                                                              sampleunitref: sampleunitref,
+                                                              kase: kase,
+                                                              events: events,
+                                                              responses: responses,
+                                                              actions: actions,
+                                                              case_state: case_state,
+                                                              respondent: respondent,
+                                                              collection_exercise_id: collection_exercise_id,
+                                                              survey_id: survey_id,
+                                                              party_id: party_id,
+                                                              secure_message_url: uri }
 end
 
 # sampleunitref search.
