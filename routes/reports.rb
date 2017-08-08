@@ -10,6 +10,8 @@ get '/reports' do
   action_report_types = []
   RestClient.get("#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/reports/types") do |response, _request, _result, &_block|
     case_report_types = JSON.parse(response) unless response.code == 204
+    puts 'response' + response.to_s
+    puts 'case_report_types' + case_report_types.to_s
     case_report_types.map { |report_type| report_type['reportClass'] = 'case' }
   end
   RestClient.get("#{settings.protocol}://#{settings.action_exporter_host}:#{settings.action_exporter_port}/reports/types") do |response, _request, _result, &_block|
@@ -19,7 +21,6 @@ get '/reports' do
   report_types = case_report_types + action_report_types
   report_types = report_types.paginate(page: params[:page])
   erb :reports, locals: { title: 'Reports',
-                          user: user_role,
                           report_types: report_types }
 end
 
@@ -40,13 +41,11 @@ get '/reports/:report_class/:report_type' do |report_class, report_type|
     code = response.code
     if code == 200 || code == 204
       erb :report_type, locals: { title: type_format(report_type),
-                                  user: user_role,
                                   report_details: report_details,
                                   report_type: report_type,
                                   report_class: report_class }
     else
       erb :reports_errors, locals: { title: 'Error!',
-                                     user: user_role,
                                      report_type: report_type,
                                      error: error }
     end
@@ -90,14 +89,12 @@ get '/reports/view/:report_class/:report_id' do |report_class, report_id|
     if code == 200
       contents = CSV.parse(report_details['contents'], headers: false).to_a
       erb :view_report, locals: { title: type_format(report_details['reportType']) + ' ' + report_details['createdDateTime'].to_report_date,
-                                  user: user_role,
                                   report_date: report_details['createdDateTime'],
                                   contents: contents,
                                   report_type: report_details['reportType'],
                                   report_class: report_class }
     else
       erb :reports_errors, locals: { title: 'Error!',
-                                     user: user_role,
                                      report_id: report_id,
                                      error: error }
     end
