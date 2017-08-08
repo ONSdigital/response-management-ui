@@ -31,6 +31,8 @@ get '/sampleunitref/:sampleunitref/cases/?' do |sampleunitref|
   survey_id              = []
   respondent             = []
   collectionexercise     = []
+  sampleunitcases        = []
+  cases                  = []
   kase                   = ''
   responses              = ''
   case_state             = ''
@@ -47,68 +49,75 @@ get '/sampleunitref/:sampleunitref/cases/?' do |sampleunitref|
       # find a case for the given partyid - from here get the case group and then return all cases for the originally supplied sampleunitref
       RestClient.get("#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/cases/partyid/#{sampleunituuid}") do |sample_response, _request, _result, &_block|
         sampleunitcases = JSON.parse(sample_response) unless sample_response.code == 404 || sample_response.code == 204
-        sampleunitcases.each do |sampleunitcase|
-          casegroup_id = sampleunitcase['caseGroup']['id']
-        end
+        puts sampleunitcases
+        if sampleunitcases.any?
 
-        RestClient.get("#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/cases/casegroupid/#{casegroup_id}") do |cases_response, _request, _result, &_block|
-          cases = JSON.parse(cases_response).paginate(page: params[:page]) unless cases_response.code == 404
-          cases.each do |kase|
-            if kase['sampleUnitType'] == 'B'
-              case_id                = kase['id']
-              party_id               = kase['partyId']
-              ru_kase                = JSON.parse(RestClient.get("#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}"))
-              collection_exercise_id = ru_kase['caseGroup']['collectionExerciseId']
-              responses  = kase['responses']
-              case_state = kase['state']
-              kase['respondent'] = 'Respondent Name'
+          sampleunitcases.each do |sampleunitcase|
+            casegroup_id = sampleunitcase['caseGroup']['id']
+          end
+
+          RestClient.get("#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/cases/casegroupid/#{casegroup_id}") do |cases_response, _request, _result, &_block|
+            cases = JSON.parse(cases_response).paginate(page: params[:page]) unless cases_response.code == 404
+              cases.each do |kase|
+              if kase['sampleUnitType'] == 'B'
+                case_id                = kase['id']
+                party_id               = kase['partyId']
+                ru_kase                = JSON.parse(RestClient.get("#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}"))
+                collection_exercise_id = ru_kase['caseGroup']['collectionExerciseId']
+                responses  = kase['responses']
+                case_state = kase['state']
+                kase['respondent'] = 'Respondent Name'
+              end
             end
           end
+
+          RestClient.get("#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}/events") do |response, _request, _result, &_block|
+            events = JSON.parse(response).paginate(page: params[:page]) unless response.code == 204
+            events.each do |event|
+              category_name         = event['category']
+              category              = JSON.parse(RestClient.get("#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/categories/name/#{category_name}"))
+              event['categoryName'] = category['longDescription']
+            end
+          end
+
+          RestClient.get("#{settings.protocol}://#{settings.action_service_host}:#{settings.action_service_port}/actions/case/#{case_id}") do |response, _request, _result, &_block|
+            actions = JSON.parse(response) unless response.code == 204
+          end
+
+          RestClient.get("#{settings.protocol}://#{settings.party_service_host}:#{settings.party_service_port}/party-api/v1/parties/type/B/ref/#{sampleunitref}") do |response, _request, _result, &_block|
+            sampleunit = JSON.parse(response) unless response.code == 404
+            sampleunituuid = sampleunit['id']
+            RestClient.get("#{settings.protocol}://#{settings.party_service_host}:#{settings.party_service_port}/party-api/v1/respondents/id/#{party_id}") do |respondent_response, _request, _result, &_block|
+              respondent = JSON.parse(respondent_response) unless respondent_response.code == 404
+            end
+
+          end
+
+          RestClient.get("#{settings.protocol}://#{settings.collection_exercise_service_host}:#{settings.collection_exercise_service_port}/collectionexercises/#{collection_exercise_id}") do |respondent_response, _request, _result, &_block|
+            collectionexercise = JSON.parse(respondent_response) unless respondent_response.code == 404
+            survey_id = collectionexercise['surveyId']
+          end
+
+          url = "#{settings.protocol}://#{settings.secure_message_service_host}"
+          params = {  respondentId: respondent['id'],
+                      caseId: case_id,
+                      collectionExerciseId: collection_exercise_id,
+                      surveyId: survey_id,
+                      reportingUnitId: party_id }
+          uri       = URI.parse url
+          uri.query = URI.encode_www_form URI.decode_www_form(uri.query || '').concat(params.to_a)
         end
       end
     end
   end
 
-
-  RestClient.get("#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}/events") do |response, _request, _result, &_block|
-    events = JSON.parse(response).paginate(page: params[:page]) unless response.code == 204
-    events.each do |event|
-      category_name         = event['category']
-      category              = JSON.parse(RestClient.get("#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/categories/name/#{category_name}"))
-      event['categoryName'] = category['longDescription']
-    end
+  if collectionexercise.any?
+    title = "#{collectionexercise['name']} for #{sampleunit['attributes']['entname1']}"
+  else
+    title = "No Events for #{sampleunit['attributes']['entname1']}"
   end
 
-  RestClient.get("#{settings.protocol}://#{settings.action_service_host}:#{settings.action_service_port}/actions/case/#{case_id}") do |response, _request, _result, &_block|
-    actions = JSON.parse(response) unless response.code == 204
-  end
-
-  RestClient.get("#{settings.protocol}://#{settings.party_service_host}:#{settings.party_service_port}/party-api/v1/parties/type/B/ref/#{sampleunitref}") do |response, _request, _result, &_block|
-    sampleunit = JSON.parse(response) unless response.code == 404
-    sampleunituuid = sampleunit['id']
-    RestClient.get("#{settings.protocol}://#{settings.party_service_host}:#{settings.party_service_port}/party-api/v1/respondents/id/#{party_id}") do |respondent_response, _request, _result, &_block|
-      respondent = JSON.parse(respondent_response) unless respondent_response.code == 404
-    end
-
-  end
-
-  RestClient.get("#{settings.protocol}://#{settings.collection_exercise_service_host}:#{settings.collection_exercise_service_port}/collectionexercises/#{collection_exercise_id}") do |respondent_response, _request, _result, &_block|
-    collectionexercise = JSON.parse(respondent_response) unless respondent_response.code == 404
-    survey_id = collectionexercise['surveyId']
-  end
-
-
-
-  url = "#{settings.protocol}://#{settings.secure_message_service_host}"
-  params = {  respondentId: respondent['id'],
-              caseId: case_id,
-              collectionExerciseId: collection_exercise_id,
-              surveyId: survey_id,
-              reportingUnitId: party_id }
-  uri       = URI.parse url
-  uri.query = URI.encode_www_form URI.decode_www_form(uri.query || '').concat(params.to_a)
-
-  erb :reporting_unit_events, layout: :sidebar_layout, locals: { title: "#{collectionexercise['name']} for #{sampleunit['attributes']['enterpriseName']}",
+  erb :reporting_unit_events, layout: :sidebar_layout, locals: { title: title,
                                                        case_id: case_id,
                                                        sampleunit: sampleunit,
                                                        sampleunitref: sampleunitref,

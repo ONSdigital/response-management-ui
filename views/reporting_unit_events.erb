@@ -14,13 +14,13 @@
     </tr>
   </thead>
   <tbody>
-      <% if sampleunit['attributes']['enterpriseName'].present? %>
-        <td><%=h sampleunit['attributes']['enterpriseName'] %></td>
+      <% if sampleunit['attributes']['entname1'].present? %>
+        <td><%=h sampleunit['attributes']['entname1'] %></td>
       <% else %>
         <td>-</td>
       <% end %>
-      <% if sampleunit['attributes']['tradingName'].present? %>
-        <td><%=h sampleunit['attributes']['tradingName'] %></td>
+      <% if sampleunit['attributes']['name'].present? %>
+        <td><%=h sampleunit['attributes']['name'] %></td>
       <% else %>
         <td>-</td>
       <% end %>
@@ -30,47 +30,52 @@
 
 <h3>Respondents</h3>
 
-<table class="primary">
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Email Address</th>
-      <th>Telephone Number</th>
-      <th></th>
-      <th></th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-      <% if respondent['firstName'].present? %>
-        <td><%=h respondent['firstName'] %> <%=h respondent['lastName'] %></td>
-      <% else %>
-        <td>-</td>
-      <% end %>
-      <% if respondent['emailAddress'].present? %>
-        <td><%=h respondent['emailAddress'] %></td>
-      <% else %>
-        <td>-</td>
-      <% end %>
-      <% if respondent['telephone'].present? %>
-        <td><%=h respondent['telephone'] %></td>
-      <% else %>
-        <td>-</td>
-      <% end %>
-      <td><a href="/sampleunitref/<%=h sampleunitref %>/cases/<%=h case_id %>/events/<%=h respondent['id'] %>/update">Edit</a></td>
-      <td><a href="/sampleunitref/<%=h sampleunitref %>/cases/ab548d78-c2f1-400f-9899-79d944b87300/events">View Events</a></td>
-      <td><a href="<%=h secure_message_url %>">Secure Message</a></td>
-    </tr>
-  </tbody>
-</table>
+<% if respondent.any? %>
+  <table class="primary">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Email Address</th>
+        <th>Telephone Number</th>
+        <th></th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+        <% if respondent['firstName'].present? %>
+          <td><%=h respondent['firstName'] %> <%=h respondent['lastName'] %></td>
+        <% else %>
+          <td>-</td>
+        <% end %>
+        <% if respondent['emailAddress'].present? %>
+          <td><%=h respondent['emailAddress'] %></td>
+        <% else %>
+          <td>-</td>
+        <% end %>
+        <% if respondent['telephone'].present? %>
+          <td><%=h respondent['telephone'] %></td>
+        <% else %>
+          <td>-</td>
+        <% end %>
+        <td><a href="/sampleunitref/<%=h sampleunitref %>/cases/<%=h case_id %>/events/<%=h respondent['id'] %>/update">Edit</a></td>
+        <td><a href="/sampleunitref/<%=h sampleunitref %>/cases/ab548d78-c2f1-400f-9899-79d944b87300/events">View Events</a></td>
+        <td><a href="<%=h secure_message_url %>">Secure Message</a></td>
+      </tr>
+    </tbody>
+  </table>
 
-<!--Only show if user/email has not been validated. Is there a way to check this?-->
-<div id="resend_verification_code">
-  <form action="/sampleunitref/<%=h sampleunitref %>/cases/<%=h case_id %>/events/resend_verification_code" method="post">
-    <input class="button" type="submit" value="Resend Verification Code">
-  </form>
-</div>
-<br><br>
+  <!--Only show if user/email has not been validated. Is there a way to check this?-->
+  <div id="resend_verification_code">
+    <form action="/sampleunitref/<%=h sampleunitref %>/cases/<%=h case_id %>/events/resend_verification_code" method="post">
+      <input class="button" type="submit" value="Resend Verification Code">
+    </form>
+  </div>
+  <br><br>  
+<% else %>
+  <p id="information"><strong>There are no Respondents for this Reporting Unit.</strong></p>
+<% end %>
+
 
 <% content_for :footer do %>
 
