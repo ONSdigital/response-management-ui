@@ -1,0 +1,171 @@
+<%= erb :menu, locals: { pageid: 'home' } %>
+
+<% content_for :breadcrumbs do %>
+<a href="/">Home</a> &gt; <a href="/sampleunitref/<%=h sampleunitref %>/cases"><%=h sampleunit['attributes']['enterpriseName']%></a> &gt; Reporting Unit
+<% end %>
+
+<h3>Reporting Unit</h3>
+
+<table class="primary">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Trading Name</th>
+    </tr>
+  </thead>
+  <tbody>
+      <% if sampleunit['attributes']['enterpriseName'].present? %>
+        <td><%=h sampleunit['attributes']['enterpriseName'] %></td>
+      <% else %>
+        <td>-</td>
+      <% end %>
+      <% if sampleunit['attributes']['tradingName'].present? %>
+        <td><%=h sampleunit['attributes']['tradingName'] %></td>
+      <% else %>
+        <td>-</td>
+      <% end %>
+    </tr>
+  </tbody>
+</table>
+
+<h3>Respondents</h3>
+
+<table class="primary">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Email Address</th>
+      <th>Telephone Number</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+      <% if respondent['firstName'].present? %>
+        <td><%=h respondent['firstName'] %> <%=h respondent['lastName'] %></td>
+      <% else %>
+        <td>-</td>
+      <% end %>
+      <% if respondent['emailAddress'].present? %>
+        <td><%=h respondent['emailAddress'] %></td>
+      <% else %>
+        <td>-</td>
+      <% end %>
+      <% if respondent['telephone'].present? %>
+        <td><%=h respondent['telephone'] %></td>
+      <% else %>
+        <td>-</td>
+      <% end %>
+      <td><a href="/sampleunitref/<%=h sampleunitref %>/cases/<%=h case_id %>/events/<%=h respondent['id'] %>/update">Edit</a></td>
+      <td><a href="/sampleunitref/<%=h sampleunitref %>/cases/ab548d78-c2f1-400f-9899-79d944b87300/events">View Events</a></td>
+      <td><a href="<%=h secure_message_url %>">Secure Message</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<!--Only show if user/email has not been validated. Is there a way to check this?-->
+<div id="resend_verification_code">
+  <form action="/sampleunitref/<%=h sampleunitref %>/cases/<%=h case_id %>/events/resend_verification_code" method="post">
+    <input class="button" type="submit" value="Resend Verification Code">
+  </form>
+</div>
+<br><br>
+
+<% content_for :footer do %>
+
+  <h3>Events</h3>
+
+  <% if events.any? %>
+    <%= will_paginate events, :previous_label => '&lt; Prev', :next_label => 'Next &gt;' %>
+    <table class="secondary">
+      <thead>
+        <tr>
+          <th>Created Date</th>
+          <th>Created By</th>
+          <th>Event Category</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+      <% events.each_with_index do |events, i| %>
+        <tr class="<%= i.even? ? 'even' : 'odd ' %>">
+        <% if events['createdDateTime'] %>
+          <td><%=h events['createdDateTime'].to_date %></td>
+        <% else %>
+          <td>-</td>
+        <% end %>
+        <% if events['createdBy'] %>
+          <td><%=h events['createdBy'] %></td>
+        <% else %>
+          <td>-</td>
+        <% end %>
+        <% if events['categoryName'] %>
+          <td><%=h events['categoryName'] %></td>
+        <% else %>
+          <td>-</td>
+        <% end %>
+        <% if events['description'] %>
+          <td><%=h events['description'] %></td>
+        <% else %>
+          <td>-</td>
+        <% end %>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+    <%= will_paginate events, :previous_label => '&lt; Prev', :next_label => 'Next &gt;' %>
+
+  <% content_for :footer do %>
+    <h3>Actions</h3>
+  <% if actions.any? %>
+    <table class="secondary">
+      <thead>
+        <tr>
+          <th>Action ID</th>
+          <th>Action Type</th>
+          <th>Created By</th>
+          <th>State</th>
+          <th>Created Date</th>
+        </tr>
+      </thead>
+      <tbody>
+      <% actions.each_with_index do |action, i| %>
+        <tr class="<%= i.even? ? 'even' : 'odd ' %>">
+        <% if action['actionId'] %>
+          <td><%=h action['actionId'] %></td>
+        <% else %>
+          <td>-</td>
+        <% end %>
+        <% if action['actionTypeName'] %>
+          <td><%=h action['actionTypeName'] %></td>
+        <% else %>
+          <td>-</td>
+        <% end %>
+        <% if action['createdBy'] %>
+          <td><%=h action['createdBy'] %></td>
+        <% else %>
+          <td>-</td>
+        <% end %>
+        <% if action['state'] %>
+          <td><%=h action['state'].to_title_case %></td>
+        <% else %>
+          <td>-</td>
+        <% end %>
+        <% if action['createdDateTime'] %>
+          <td><%=h action['createdDateTime'].to_date %></td>
+        <% else %>
+          <td>-</td>
+        <% end %>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <p id="information"><strong>There are no actions for this case.</strong></p>
+  <% end %>
+  <% end %>
+  <% else %>
+    <p id="information"><strong>There are no events for this case.</strong></p>
+  <% end %>
+<% end %>
