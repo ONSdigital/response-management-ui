@@ -20,10 +20,10 @@
     <tbody>
     <% report_details.each_with_index do |detail, i| %>
       <tr class="<%= i.even? ? 'even' : 'odd ' %>">
-      <% if detail['reportId'].present? %>
+      <% if detail['id'].present? %>
         <td><%=h detail['createdDateTime'].to_report_date%></td>
-        <td><a href="/reports/view/<%=h report_class%>/<%=h detail['reportId']%>">View</a></td>
-        <td><a href="/reports/download/<%=h report_class%>/<%=h detail['reportId']%>">Download</a></td>
+        <td><a href="/reports/view/<%=h report_class%>/<%=h detail['id']%>">View</a></td>
+        <td><a href="/reports/download/<%=h report_class%>/<%=h detail['id']%>">Download</a></td>
       <% else %>
         <td>-</td>
       <% end %>

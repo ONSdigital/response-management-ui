@@ -19,7 +19,6 @@ get '/reports' do
   report_types = case_report_types + action_report_types
   report_types = report_types.paginate(page: params[:page])
   erb :reports, locals: { title: 'Reports',
-                          user: user_role,
                           report_types: report_types }
 end
 
@@ -38,15 +37,13 @@ get '/reports/:report_class/:report_type' do |report_class, report_type|
   RestClient.get("#{settings.protocol}://#{host}:#{port}/reports/types/#{report_type.upcase}") do |response, _request, _result, &_block|
     report_details = JSON.parse(response).paginate(page: params[:page]) unless response.code == 204 || response.code == 400
     code = response.code
-    if code == 200 || code == 204
+    if [200, 204].include?(code)
       erb :report_type, locals: { title: type_format(report_type),
-                                  user: user_role,
                                   report_details: report_details,
                                   report_type: report_type,
                                   report_class: report_class }
     else
       erb :reports_errors, locals: { title: 'Error!',
-                                     user: user_role,
                                      report_type: report_type,
                                      error: error }
     end
@@ -90,14 +87,12 @@ get '/reports/view/:report_class/:report_id' do |report_class, report_id|
     if code == 200
       contents = CSV.parse(report_details['contents'], headers: false).to_a
       erb :view_report, locals: { title: type_format(report_details['reportType']) + ' ' + report_details['createdDateTime'].to_report_date,
-                                  user: user_role,
                                   report_date: report_details['createdDateTime'],
                                   contents: contents,
                                   report_type: report_details['reportType'],
                                   report_class: report_class }
     else
       erb :reports_errors, locals: { title: 'Error!',
-                                     user: user_role,
                                      report_id: report_id,
                                      error: error }
     end
