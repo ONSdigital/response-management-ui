@@ -1,7 +1,7 @@
 <%= erb :menu, locals: { pageid: 'home' } %>
 
 <% content_for :breadcrumbs do %>
-<a href="/">Home</a> &gt; <a href="/sampleunitref/<%=h sampleunitref %>/cases"><%=h sampleunit['attributes']['enterpriseName']%></a> &gt; Reporting Unit
+<a href="/">Home</a> &gt; <%=h sampleunit['attributes']['enterpriseName']%>
 <% end %>
 
 <h3>Reporting Unit</h3>

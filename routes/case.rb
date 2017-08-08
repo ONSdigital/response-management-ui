@@ -25,20 +25,20 @@ end
 # Get Reporting Unit for sampleunitref
 get '/sampleunitref/:sampleunitref/cases/?' do |sampleunitref|
   authenticate!
-  events     = []
-  actions    = []
-  sampleunit = []
-  kase       = ''
-  responses  = ''
-  case_state = ''
-  party_id = ''
+  events                 = []
+  actions                = []
+  sampleunit             = []
+  survey_id              = []
+  respondent             = []
+  collectionexercise     = []
+  kase                   = ''
+  responses              = ''
+  case_state             = ''
+  party_id               = ''
   collection_exercise_id = ''
-  casegroup_id = ''
-  survey_id  = []
-  respondent = []
-  sampleunituuid = ''
-  case_id = ''
-  collectionexercise = []
+  casegroup_id           = ''
+  sampleunituuid         = ''
+  case_id                = ''
 
   RestClient.get("#{settings.protocol}://#{settings.party_service_host}:#{settings.party_service_port}/party-api/v1/parties/type/B/ref/#{sampleunitref}") do |response, _request, _result, &_block|
     sampleunit = JSON.parse(response) unless response.code == 404
@@ -107,8 +107,6 @@ get '/sampleunitref/:sampleunitref/cases/?' do |sampleunitref|
               reportingUnitId: party_id }
   uri       = URI.parse url
   uri.query = URI.encode_www_form URI.decode_www_form(uri.query || '').concat(params.to_a)
-
- puts kase
 
   erb :reporting_unit_events, layout: :sidebar_layout, locals: { title: "#{collectionexercise['name']} for #{sampleunit['attributes']['enterpriseName']}",
                                                        case_id: case_id,
