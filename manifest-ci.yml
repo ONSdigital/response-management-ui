@@ -1,6 +1,6 @@
 applications:
 - name: response-operations-ui-ci
-  instances: 1
+  instances: 2
   timeout: 180
   host: response-operations-ui-ci
   memory: 512M
