@@ -29,7 +29,7 @@ get '/sampleunitref/:sampleunitref/cases/?' do |sampleunitref|
   actions                = []
   sampleunit             = []
   survey_id              = []
-  respondent             = []
+  respondents            = []
   collectionexercise     = []
   sampleunitcases        = []
   cases                  = []
@@ -58,16 +58,16 @@ get '/sampleunitref/:sampleunitref/cases/?' do |sampleunitref|
           RestClient.get("#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/cases/casegroupid/#{casegroup_id}") do |cases_response, _request, _result, &_block|
             cases = JSON.parse(cases_response).paginate(page: params[:page]) unless cases_response.code == 404
               cases.each do |kase|
-              if kase['sampleUnitType'] == 'B'
-                case_id                = kase['id']
-                party_id               = kase['partyId']
-                ru_kase                = JSON.parse(RestClient.get("#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}"))
-                collection_exercise_id = ru_kase['caseGroup']['collectionExerciseId']
-                responses  = kase['responses']
-                case_state = kase['state']
-                kase['respondent'] = 'Respondent Name'
+                if kase['sampleUnitType'] == 'B'
+                  case_id                = kase['id']
+                  party_id               = kase['partyId']
+                  ru_kase                = JSON.parse(RestClient.get("#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}"))
+                  collection_exercise_id = ru_kase['caseGroup']['collectionExerciseId']
+                  responses  = kase['responses']
+                  case_state = kase['state']
+                  kase['respondent'] = 'Respondent Name'
+                end
               end
-            end
           end
 
           RestClient.get("#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}/events") do |response, _request, _result, &_block|
@@ -95,6 +95,7 @@ get '/sampleunitref/:sampleunitref/cases/?' do |sampleunitref|
             url.query = URI.encode_www_form URI.decode_www_form(url.query || '').concat(params.to_a)
             respondent['url'] = url
 
+            respondents.push(respondent)
           end
 
           RestClient.get("#{settings.protocol}://#{settings.collection_exercise_service_host}:#{settings.collection_exercise_service_port}/collectionexercises/#{collection_exercise_id}") do |respondent_response, _request, _result, &_block|
@@ -118,18 +119,18 @@ get '/sampleunitref/:sampleunitref/cases/?' do |sampleunitref|
   end
 
   erb :reporting_unit_events, layout: :sidebar_layout, locals: { title: title,
-                                                       case_id: case_id,
-                                                       sampleunit: sampleunit,
-                                                       sampleunitref: sampleunitref,
-                                                       kase: kase,
-                                                       events: events,
-                                                       responses: responses,
-                                                       actions: actions,
-                                                       case_state: case_state,
-                                                       respondent: respondent,
-                                                       collection_exercise_id: collection_exercise_id,
-                                                       survey_id: survey_id,
-                                                       party_id: party_id }
+                                                                 case_id: case_id,
+                                                                 sampleunit: sampleunit,
+                                                                 sampleunitref: sampleunitref,
+                                                                 kase: kase,
+                                                                 events: events,
+                                                                 responses: responses,
+                                                                 actions: actions,
+                                                                 case_state: case_state,
+                                                                 respondents: respondents,
+                                                                 collection_exercise_id: collection_exercise_id,
+                                                                 survey_id: survey_id,
+                                                                 party_id: party_id }
 end
 
 # Get a specific case.
@@ -143,8 +144,8 @@ get '/sampleunitref/:sampleunitref/cases/:case_id/events?' do |sampleunitref, ca
   case_state = kase['state']
   party_id = kase['partyId']
   collection_exercise_id = kase['caseGroup']['collectionExerciseId']
-  survey_id  = []
-  respondent = []
+  survey_id = []
+  respondents = []
   sampleunituuid = ''
   collectionexercise = []
 
@@ -169,16 +170,16 @@ get '/sampleunitref/:sampleunitref/cases/:case_id/events?' do |sampleunitref, ca
     sampleunit = JSON.parse(response) unless response.code == 404
     sampleunituuid = sampleunit['id']
     RestClient.get("#{settings.protocol}://#{settings.party_service_host}:#{settings.party_service_port}/party-api/v1/respondents/id/#{party_id}") do |respondent_response, _request, _result, &_block|
-      respondent = JSON.parse(respondent_response) unless respondent_response.code == 404
+      respondents = JSON.parse(respondent_response) unless respondent_response.code == 404
 
-      params = {  respondentId: respondent['id'],
+      params = {  respondentId: respondents['id'],
                   caseId: case_id,
                   collectionExerciseId: collection_exercise_id,
                   surveyId: survey_id,
                   reportingUnitId: party_id }
       url       = URI.parse "#{settings.protocol}://#{settings.secure_message_service_host}"
       url.query = URI.encode_www_form URI.decode_www_form(url.query || '').concat(params.to_a)
-      respondent['url'] = url
+      respondents['url'] = url
 
     end
 
@@ -189,19 +190,19 @@ get '/sampleunitref/:sampleunitref/cases/:case_id/events?' do |sampleunitref, ca
     survey_id = collectionexercise['surveyId']
   end
 
-  erb :respondent_events, layout: :sidebar_layout, locals: { title: "#{collectionexercise['name']} for respondent #{respondent['firstName']} #{respondent['lastName']} (#{sampleunit['attributes']['entname1']})",
-                                                       case_id: case_id,
-                                                       sampleunit: sampleunit,
-                                                       sampleunitref: sampleunitref,
-                                                       kase: kase,
-                                                       events: events,
-                                                       responses: responses,
-                                                       actions: actions,
-                                                       case_state: case_state,
-                                                       respondent: respondent,
-                                                       collection_exercise_id: collection_exercise_id,
-                                                       survey_id: survey_id,
-                                                       party_id: party_id }
+  erb :respondent_events, layout: :sidebar_layout, locals: { title: "#{collectionexercise['name']} for respondent #{respondents['firstName']} #{respondents['lastName']} (#{sampleunit['attributes']['entname1']})",
+                                                             case_id: case_id,
+                                                             sampleunit: sampleunit,
+                                                             sampleunitref: sampleunitref,
+                                                             kase: kase,
+                                                             events: events,
+                                                             responses: responses,
+                                                             actions: actions,
+                                                             case_state: case_state,
+                                                             respondents: respondents,
+                                                             collection_exercise_id: collection_exercise_id,
+                                                             survey_id: survey_id,
+                                                             party_id: party_id }
 end
 
 # sampleunitref search.
@@ -225,11 +226,11 @@ post '/sampleunitref/:sampleunitref/cases/:case_id/events/resend_verification_co
     if sampleunit.any?
       sampleunituuid = sampleunit['id']
       RestClient.get("#{settings.protocol}://#{settings.party_service_host}:#{settings.party_service_port}/party-api/v1/respondents/id/#{sampleunituuid}") do |respondent_response, _request, _result, &_block|
-        respondent = JSON.parse(respondent_response) unless respondent_response.code == 404
+        respondents = JSON.parse(respondent_response) unless respondent_response.code == 404
 
         RestClient.post("#{settings.protocol}://#{settings.notifygateway_host}:#{settings.notifygateway_port}/emails/#{settings.email_template_id}",
                         {
-                          emailAddress: respondent['emailAddress']
+                          emailAddress: respondents['emailAddress']
                         }.to_json, content_type: :json, accept: :json) do |post_response, _request, _result, &_block|
 
           if post_response.code == 201

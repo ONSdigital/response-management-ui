@@ -31,7 +31,8 @@
 
   <h3>Respondents</h3>
 
-  <% if respondent.any? %>
+  <% if respondents.any? %>
+  <% puts respondents %>
     <table class="primary">
       <thead>
         <tr>
@@ -44,6 +45,8 @@
         </tr>
       </thead>
       <tbody>
+        <% respondents.each_with_index do |respondent, i| %>
+          <% puts respondent %>
           <% if respondent['firstName'].present? %>
             <td><%=h respondent['firstName'] %> <%=h respondent['lastName'] %></td>
           <% else %>
@@ -63,6 +66,7 @@
           <td><a href="/sampleunitref/<%=h sampleunitref %>/cases/ab548d78-c2f1-400f-9899-79d944b87300/events">View Events</a></td>
           <td><a href="<%=h respondent['url'] %>">Secure Message</a></td>
         </tr>
+        <% end %>
       </tbody>
     </table>
 
@@ -76,7 +80,6 @@
   <% else %>
     <p id="information"><strong>There are no Respondents for this Reporting Unit.</strong></p>
   <% end %>
-
 
   <% content_for :footer do %>
 
