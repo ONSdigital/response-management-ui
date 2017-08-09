@@ -112,7 +112,7 @@ get '/sampleunitref/:sampleunitref/cases/?' do |sampleunitref|
     if sampleunit.any?
       title = "No Events for #{sampleunit['attributes']['entname1']}"
     else
-      title = 'No matching Response Units'
+      title = 'No matching Reporting Units'
     end
   end
 
