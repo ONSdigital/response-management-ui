@@ -32,13 +32,13 @@
   <h3>Respondents</h3>
 
   <% if respondents.any? %>
-  <% puts respondents %>
     <table class="primary">
       <thead>
         <tr>
           <th>Name</th>
           <th>Email Address</th>
           <th>Telephone Number</th>
+          <th>State</th>
           <th></th>
           <th></th>
           <th></th>
@@ -46,7 +46,6 @@
       </thead>
       <tbody>
         <% respondents.each_with_index do |respondent, i| %>
-          <% puts respondent %>
           <% if respondent['firstName'].present? %>
             <td><%=h respondent['firstName'] %> <%=h respondent['lastName'] %></td>
           <% else %>
@@ -62,8 +61,13 @@
           <% else %>
             <td>-</td>
           <% end %>
+          <td><%= respondent['enrolments'][0]['enrolmentStatus'] %></td>
           <td><a href="/sampleunitref/<%=h sampleunitref %>/cases/<%=h case_id %>/events/<%=h respondent['id'] %>/update">Edit</a></td>
-          <td><a href="/sampleunitref/<%=h sampleunitref %>/cases/ab548d78-c2f1-400f-9899-79d944b87300/events">View Events</a></td>
+          <% if respondent['enrolments'][0]['enrolmentStatus'] == 'ACTIVE' %>
+            <td><a href="/sampleunitref/<%=h sampleunitref %>/cases/ab548d78-c2f1-400f-9899-79d944b87300/events">View Events</a></td>
+          <% else %>
+            <td>No Respondent Events</td>
+          <% end %>
           <td><a href="<%=h respondent['url'] %>">Secure Message</a></td>
         </tr>
         <% end %>

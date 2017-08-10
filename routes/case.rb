@@ -83,26 +83,39 @@ get '/sampleunitref/:sampleunitref/cases/?' do |sampleunitref|
             actions = JSON.parse(response) unless response.code == 204
           end
 
-          RestClient.get("#{settings.protocol}://#{settings.party_service_host}:#{settings.party_service_port}/party-api/v1/respondents/id/#{party_id}") do |respondent_response, _request, _result, &_block|
-            respondent = JSON.parse(respondent_response) unless respondent_response.code == 404
-
-            params = {  respondentId: respondent['id'],
-                        caseId: case_id,
-                        collectionExerciseId: collection_exercise_id,
-                        surveyId: survey_id,
-                        reportingUnitId: party_id }
-            url       = URI.parse "#{settings.protocol}://#{settings.secure_message_service_host}"
-            url.query = URI.encode_www_form URI.decode_www_form(url.query || '').concat(params.to_a)
-            respondent['url'] = url
-
-            respondents.push(respondent)
-          end
-
           RestClient.get("#{settings.protocol}://#{settings.collection_exercise_service_host}:#{settings.collection_exercise_service_port}/collectionexercises/#{collection_exercise_id}") do |respondent_response, _request, _result, &_block|
             collectionexercise = JSON.parse(respondent_response) unless respondent_response.code == 404
             survey_id = collectionexercise['surveyId']
           end
 
+          respondents = sampleunit['associations']
+          if respondents.any?
+            respondents.each do | respondent |
+              respondentuuid = respondent['partyId']
+              RestClient.get("#{settings.protocol}://#{settings.party_service_host}:#{settings.party_service_port}/party-api/v1/respondents/id/#{respondentuuid}") do |respondent_response, _request, _result, &_block|
+                partyRespondent = JSON.parse(respondent_response) unless respondent_response.code == 404
+                params = {  respondentId: partyRespondent['id'],
+                            caseId: case_id,
+                            collectionExerciseId: collection_exercise_id,
+                            surveyId: survey_id,
+                            reportingUnitId: party_id }
+                url       = URI.parse "#{settings.protocol}://#{settings.secure_message_service_host}"
+                url.query = URI.encode_www_form URI.decode_www_form(url.query || '').concat(params.to_a)
+                respondent['url'] = url
+                respondent['id'] = partyRespondent['id']
+                respondent['firstName'] = partyRespondent['firstName']
+                respondent['lastName'] = partyRespondent['lastName']
+                respondent['emailAddress'] = partyRespondent['emailAddress']
+                respondent['telephone'] = partyRespondent['telephone']
+                enrolments = respondent['enrolments']
+                enrolments.each do | enrolment |
+                  if enrolment['SurveyId'] = survey_id
+                    respondent['status'] = enrolment['status']
+                  end
+                end
+              end
+            end
+          end
         end
       end
     end
