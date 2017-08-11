@@ -42,6 +42,7 @@
           <th></th>
           <th></th>
           <th></th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
@@ -63,24 +64,21 @@
           <% end %>
           <td><%= respondent['enrolments'][0]['enrolmentStatus'] %></td>
           <td><a href="/sampleunitref/<%=h sampleunitref %>/cases/<%=h case_id %>/events/<%=h respondent['id'] %>/update">Edit</a></td>
-          <% if respondent['enrolments'][0]['enrolmentStatus'] == 'ACTIVE' %>
-            <td><a href="/sampleunitref/<%=h sampleunitref %>/cases/ab548d78-c2f1-400f-9899-79d944b87300/events">View Events</a></td>
+          <% if respondent['enrolments'][0]['enrolmentStatus'] == 'ENABLED' %>
+            <td><a href="/sampleunitref/<%=h sampleunitref %>/cases/<%= respondent['partyId'] %>/events">View Events</a></td>
           <% else %>
             <td>No Respondent Events</td>
+          <% end %>
+          <% if respondent['enrolments'][0]['enrolmentStatus'] == 'PENDING' %>
+            <td><a href="/sampleunitref/<%=h sampleunitref %>/cases/<%=h case_id %>/events/resend_verification_code">Resend Verification Email</a></td>
+          <% else %>
+            <td>-</td>
           <% end %>
           <td><a href="<%=h respondent['url'] %>">Secure Message</a></td>
         </tr>
         <% end %>
       </tbody>
     </table>
-
-    <!--Only show if user/email has not been validated. Is there a way to check this?-->
-    <div id="resend_verification_code">
-      <form action="/sampleunitref/<%=h sampleunitref %>/cases/<%=h case_id %>/events/resend_verification_code" method="post">
-        <input class="button" type="submit" value="Resend Verification Code">
-      </form>
-    </div>
-    <br><br>
   <% else %>
     <p id="information"><strong>There are no Respondents for this Reporting Unit.</strong></p>
   <% end %>

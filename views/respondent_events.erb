@@ -36,14 +36,6 @@
   </tbody>
 </table>
 
-<!--Only show if user/email has not been validated. Is there a way to check this?-->
-<div id="resend_verification_code">
-  <form action="/sampleunitref/<%=h sampleunitref %>/cases/<%=h case_id %>/events/resend_verification_code" method="post">
-    <input class="button" type="submit" value="Resend Verification Code">
-  </form>
-</div>
-<br><br>
-
 <% content_for :footer do %>
 
   <h3>Events</h3>
