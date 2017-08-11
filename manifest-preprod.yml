@@ -8,7 +8,7 @@ env:
   BRES_2017_COLLECTION_EXERCISE: 14fb3e68-4dca-46db-bf49-04b84e07e77c
   RAS_BACKSTAGE_UI_COLLECTION_EXERCISES: collection-exercises
   RAS_BACKSTAGE_UI_HOST: ras-backstage-preprod.apps.prod.cf5.onsclofo.uk
-  RAS_BACKSTAGE_UI_PROTOCOL: https
+  RAS_BACKSTAGE_UI_PROTOCOL: http
   RESPONSE_OPERATIONS_ACTION_SERVICE_HOST: actionsvc-preprod.apps.prod.cf5.onsclofo.uk
   RESPONSE_OPERATIONS_ACTION_SERVICE_PORT: 80
   RESPONSE_OPERATIONS_ACTIONEXPORTER_SERVICE_HOST: actionexportersvc-preprod.apps.prod.cf5.onsclofo.uk
