@@ -94,6 +94,7 @@ get '/sampleunitref/:sampleunitref/cases/?' do |sampleunitref|
               respondentuuid = respondent['partyId']
               RestClient.get("#{settings.protocol}://#{settings.party_service_host}:#{settings.party_service_port}/party-api/v1/respondents/id/#{respondentuuid}") do |respondent_response, _request, _result, &_block|
                 partyRespondent = JSON.parse(respondent_response) unless respondent_response.code == 404
+                puts respondent['partyId']
                 params = {  respondentId: partyRespondent['id'],
                             caseId: case_id,
                             collectionExerciseId: collection_exercise_id,
