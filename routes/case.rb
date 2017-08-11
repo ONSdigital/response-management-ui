@@ -163,7 +163,6 @@ get '/sampleunitref/:sampleunitref/cases/:party_id/events?' do |sampleunitref, p
 
   kases       = JSON.parse(RestClient.get("#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/cases/partyid/#{party_id}"))
   kases.each do | kase |
-     #responses  = kase['responses']
     case_state = kase['state']
     case_id = kase['id']
     collection_exercise_id = kase['caseGroup']['collectionExerciseId']
@@ -216,7 +215,6 @@ get '/sampleunitref/:sampleunitref/cases/:party_id/events?' do |sampleunitref, p
                                                              sampleunit: sampleunit,
                                                              sampleunitref: sampleunitref,
                                                              events: events,
-                                                             #responses: responses,
                                                              actions: actions,
                                                              case_state: case_state,
                                                              respondents: respondents,
