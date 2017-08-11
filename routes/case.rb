@@ -95,11 +95,11 @@ get '/sampleunitref/:sampleunitref/cases/?' do |sampleunitref|
               RestClient.get("#{settings.protocol}://#{settings.party_service_host}:#{settings.party_service_port}/party-api/v1/respondents/id/#{respondentuuid}") do |respondent_response, _request, _result, &_block|
                 partyRespondent = JSON.parse(respondent_response) unless respondent_response.code == 404
                 puts respondent['partyId']
-                params = {  respondentId: partyRespondent['id'],
-                            caseId: case_id,
-                            collectionExerciseId: collection_exercise_id,
-                            surveyId: survey_id,
-                            reportingUnitId: party_id }
+                params = {  respondent: partyRespondent['id'],
+                            reporting_unit: party_id,
+                            survey: survey_id,
+                            respondent_case: case_id,
+                            collection_exercise: collection_exercise_id }
                 url       = URI.parse "#{settings.protocol}://#{settings.secure_message_service_host}"
                 url.query = URI.encode_www_form URI.decode_www_form(url.query || '').concat(params.to_a)
                 respondent['url'] = url
@@ -192,11 +192,11 @@ get '/sampleunitref/:sampleunitref/cases/:party_id/events?' do |sampleunitref, p
       RestClient.get("#{settings.protocol}://#{settings.party_service_host}:#{settings.party_service_port}/party-api/v1/respondents/id/#{party_id}") do |respondent_response, _request, _result, &_block|
         respondents = JSON.parse(respondent_response) unless respondent_response.code == 404
 
-        params = {  respondentId: respondents['id'],
-                    caseId: case_id,
-                    collectionExerciseId: collection_exercise_id,
-                    surveyId: survey_id,
-                    reportingUnitId: party_id }
+        params = {  respondent: partyRespondent['id'],
+                    reporting_unit: party_id,
+                    survey: survey_id,
+                    respondent_case: case_id,
+                    collection_exercise: collection_exercise_id }
         url       = URI.parse "#{settings.protocol}://#{settings.secure_message_service_host}"
         url.query = URI.encode_www_form URI.decode_www_form(url.query || '').concat(params.to_a)
         respondents['url'] = url
