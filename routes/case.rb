@@ -191,8 +191,8 @@ get '/sampleunitref/:sampleunitref/cases/:party_id/events?' do |sampleunitref, p
       RestClient.get("#{settings.protocol}://#{settings.party_service_host}:#{settings.party_service_port}/party-api/v1/respondents/id/#{party_id}") do |respondent_response, _request, _result, &_block|
         respondents = JSON.parse(respondent_response) unless respondent_response.code == 404
 
-        params = {  respondent: partyRespondent['id'],
-                    reporting_unit: party_id,
+        params = {  respondent: party_id,
+                    reporting_unit: sampleunituuid,
                     survey: survey_id,
                     respondent_case: case_id,
                     collection_exercise: collection_exercise_id }
