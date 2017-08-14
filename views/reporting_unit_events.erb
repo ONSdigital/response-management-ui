@@ -70,7 +70,7 @@
             <td>No Respondent Events</td>
           <% end %>
           <% if respondent['enrolments'][0]['enrolmentStatus'] == 'PENDING' %>
-            <td><a href="/sampleunitref/<%=h sampleunitref %>/cases/<%=h case_id %>/events/resend_verification_code">Resend Verification Email</a></td>
+            <td><a href="/sampleunitref/<%=h sampleunitref %>/cases/<%=h case_id %>/events/<%=h respondent['id'] %>/resend_verification_code">Resend Verification Email</a></td>
           <% else %>
             <td>-</td>
           <% end %>
