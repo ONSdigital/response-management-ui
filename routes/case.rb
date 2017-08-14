@@ -239,7 +239,6 @@ get '/sampleunitref/:sampleunitref/cases/:case_id/events/:respondent_id/resend_v
 
   RestClient.get("#{settings.protocol}://#{settings.party_service_host}:#{settings.party_service_port}/party-api/v1/respondents/id/#{respondent_id}") do |respondent_response, _request, _result, &_block|
     respondents = JSON.parse(respondent_response) unless respondent_response.code == 404
-    puts 'RESPONDENTS: ' + respondents.to_s
 
     RestClient.post("#{settings.protocol}://#{settings.notifygateway_host}:#{settings.notifygateway_port}/emails/#{settings.email_template_id}",
                     {
@@ -258,7 +257,7 @@ get '/sampleunitref/:sampleunitref/cases/:case_id/events/:respondent_id/resend_v
                         }.to_json, content_type: :json, accept: :json) do |post_response_event, _request, _result, &_block|
 
           if post_response_event.code == 201
-            flash[:notice] = 'Successfully created event.'
+            flash[:notice] = 'Verification code successfully resent.'
           else
             logger.error post_response_event
             error_flash('Unable to create event', post_response_event)

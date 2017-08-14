@@ -25,6 +25,8 @@ end
 post '/signin/?' do
   if user = User.authenticate(settings.client_user, settings.client_password, settings.oauth_server, params)
     session[:user] = user
+    session[:display_name] = params['username'].split('@')[0].tr('.', ' ').gsub(/\b\w/, &:capitalize)
+    auth_logger.info "#{session[:display_name]} signed in"
     if request.cookies[NO_2FA_COOKIE]
       session[:valid_token] = true
       redirect_to_original_request
@@ -51,7 +53,7 @@ post '/signin/secondfactor/?' do
     redirect '/signin'
   end
   if session[:user].valid_code?(CLOCK_DRIFT, params)
-    auth_logger.info "'#{session[:user].display_name}' entered a valid 2FA token"
+    auth_logger.info "'#{session[:display_name]}' entered a valid 2FA token"
     if params[:rememberme]
       response.set_cookie(NO_2FA_COOKIE, value: '1', max_age: THIRTY_DAYS.to_s)
     else
@@ -60,15 +62,14 @@ post '/signin/secondfactor/?' do
     session[:valid_token] = true
     redirect_to_original_request
   else
-    auth_logger.info "'#{session[:user].display_name}' entered an invalid 2FA token"
+    auth_logger.info "'#{session[:display_name]}' entered an invalid 2FA token"
     flash[:notice] = 'The code you entered is incorrect. Please try again.'
     redirect '/signin/secondfactor'
   end
 end
 
 get '/signout' do
-  # auth_logger.info "'#{session[:user].display_name}' signed out"
-  auth_logger.info 'signed out'
+  auth_logger.info "#{session[:display_name]} signed out"
   session[:user] = nil
   session[:valid_token] = nil
   flash[:notice] = 'You have been signed out.'

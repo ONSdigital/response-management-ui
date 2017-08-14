@@ -12,8 +12,7 @@ module Authentication
 
   def redirect_to_original_request
     user = session[:user]
-    # flash[:notice] = "Welcome back #{user.display_name}."
-    flash[:notice] = 'Welcome back.'
+    flash[:notice] = "Welcome back #{session[:display_name]}."
     original_request = session[:original_request]
     session[:original_request] = nil
     redirect original_request
