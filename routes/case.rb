@@ -110,7 +110,7 @@ get '/sampleunitref/:sampleunitref/cases/?' do |sampleunitref|
                 enrolments = respondent['enrolments']
                 enrolments.each do |enrolment|
                   if enrolment['SurveyId'] = survey_id
-                    respondent['status'] = enrolment['status']
+                    respondent['status'] = enrolment['enrolmentStatus']
                   end
                 end
               end
