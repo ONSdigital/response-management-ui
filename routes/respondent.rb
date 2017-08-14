@@ -32,32 +32,13 @@ post '/sampleunitref/:sampleunitref/cases/:case_id/events/update' do |sampleunit
     if post_response.code == 201
       flash[:notice] = 'Successfully amended email.'
       actions = []
-
-      RestClient.post("#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}/events",
-                      {
-                        description: 'Placeholder email updated',
-                        category: 'SECURE_MESSAGE_SENT',
-                        subCategory: nil,
-                        partyId: case_id,
-                        createdBy: 'test user Edward'
-                      }.to_json, content_type: :json, accept: :json) do |post_response_event, _request, _result, &_block|
-
-        if post_response_event.code == 201
-          flash[:notice] = 'Successfully created event.'
-          actions = []
-        else
-          logger.error post_response_event
-          error_flash('Unable to create event', post_response_event)
-        end
-      end
-
     else
       logger.error post_response
       error_flash('Unable to amend email', post_response)
     end
   end
 
-  event_url = "/sampleunitref/#{sampleunitref}/cases/#{case_id}/events"
+  event_url = "/sampleunitref/#{sampleunitref}/cases"
   redirect event_url
 
 end

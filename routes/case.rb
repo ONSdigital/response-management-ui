@@ -253,7 +253,7 @@ get '/sampleunitref/:sampleunitref/cases/:case_id/events/:respondent_id/resend_v
                           description: 'Verification code successfully resent.',
                           category: 'VERIFICATION_CODE_SENT',
                           subCategory: nil,
-                          createdBy: 'placeholder - logged in user'
+                          createdBy: session[:display_name]
                         }.to_json, content_type: :json, accept: :json) do |post_response_event, _request, _result, &_block|
 
           if post_response_event.code == 201
