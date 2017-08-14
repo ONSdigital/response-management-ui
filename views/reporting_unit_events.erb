@@ -62,14 +62,14 @@
           <% else %>
             <td>-</td>
           <% end %>
-          <td><%= respondent['enrolments'][0]['enrolmentStatus'] %></td>
+          <td><%= respondent['status'] %></td>
           <td><a href="/sampleunitref/<%=h sampleunitref %>/cases/<%=h case_id %>/events/<%=h respondent['id'] %>/update">Edit</a></td>
-          <% if respondent['enrolments'][0]['enrolmentStatus'] == 'ENABLED' %>
+          <% if respondent['status'] == 'ENABLED' %>
             <td><a href="/sampleunitref/<%=h sampleunitref %>/cases/<%= respondent['partyId'] %>/events">View Events</a></td>
           <% else %>
             <td>No Respondent Events</td>
           <% end %>
-          <% if respondent['enrolments'][0]['enrolmentStatus'] == 'PENDING' %>
+          <% if respondent['status'] == 'PENDING' %>
             <td><a href="/sampleunitref/<%=h sampleunitref %>/cases/<%=h case_id %>/events/<%=h respondent['id'] %>/resend_verification_code">Resend Verification Email</a></td>
           <% else %>
             <td>-</td>
