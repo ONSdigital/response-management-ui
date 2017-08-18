@@ -2,7 +2,20 @@
 get '/sampleunitref/:sampleunitref/cases/:case_id/events/:respondent_id/update' do |sampleunitref, case_id, respondent_id|
   authenticate!
 
+  sampleunit = ''
+  previous_page_url = request.env['HTTP_REFERER']
+
+  from_respondent = if previous_page_url.end_with? 'events'
+                      true
+                    else
+                      false
+                    end
+
   RestClient.get("#{settings.protocol}://#{settings.party_service_host}:#{settings.party_service_port}/party-api/v1/respondents/id/#{respondent_id}") do |respondent_response, _request, _result, &_block|
+
+    RestClient.get("#{settings.protocol}://#{settings.party_service_host}:#{settings.party_service_port}/party-api/v1/parties/type/B/ref/#{sampleunitref}") do |response, _request, _result, &_block|
+      sampleunit = JSON.parse(response) unless response.code == 404
+    end
 
     respondent = JSON.parse(respondent_response) unless respondent_response.code == 404
 
@@ -12,6 +25,9 @@ get '/sampleunitref/:sampleunitref/cases/:case_id/events/:respondent_id/update' 
                                 page: params[:page],
                                 email_address: '',
                                 respondent: respondent,
+                                sampleunit: sampleunit,
+                                previous_page_url: previous_page_url,
+                                from_respondent: from_respondent,
                                 respondent_id: respondent_id,
                                 case_id: case_id,
                                 sampleunitref: sampleunitref }
@@ -19,9 +35,10 @@ get '/sampleunitref/:sampleunitref/cases/:case_id/events/:respondent_id/update' 
   end
 end
 
-post '/sampleunitref/:sampleunitref/cases/:case_id/events/update' do |sampleunitref, case_id|
+post '/sampleunitref/:sampleunitref/cases/:case_id/events/update' do
 
   email_address = params[:email_address]
+  previous_page_url = params[:previous_page_url]
 
   RestClient.post("#{settings.protocol}://#{settings.notifygateway_host}:#{settings.notifygateway_port}/emails/#{settings.email_template_id}",
                   {
@@ -38,7 +55,6 @@ post '/sampleunitref/:sampleunitref/cases/:case_id/events/update' do |sampleunit
     end
   end
 
-  event_url = "/sampleunitref/#{sampleunitref}/cases"
-  redirect event_url
+  redirect previous_page_url
 
 end
