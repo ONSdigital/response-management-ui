@@ -24,7 +24,7 @@ env:
   RESPONSE_OPERATIONS_OAUTHSERVER_HOST: https://ras-django-prod.apps.prod.cf5.onsclofo.uk/api/v1/tokens
   RESPONSE_OPERATIONS_PARTY_SERVICE_HOST: ras-party-service-preprod.apps.prod.cf5.onsclofo.uk
   RESPONSE_OPERATIONS_PARTY_SERVICE_PORT: 443
-  RESPONSE_OPERATIONS_SECURE_MESSAGE_SERVICE_HOST: ras-frontstage-preprod.apps.prod.cf5.onsclofo.uk/secure-message/create-message
+  RESPONSE_OPERATIONS_SECURE_MESSAGE_SERVICE_HOST: ras-backstage-preprod.apps.prod.cf5.onsclofo.uk/secure-messages/create-message
   RESPONSE_OPERATIONS_SECURE_MESSAGE_SERVICE_PORT: 443
   RESPONSE_OPERATIONS_CLIENT_USER: REPLACE_USER
   RESPONSE_OPERATIONS_CLIENT_PASSWORD: REPLACE_PASSWORD
