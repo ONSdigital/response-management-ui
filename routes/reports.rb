@@ -9,7 +9,9 @@ get '/reports' do
   case_report_types = []
   action_report_types = []
   RestClient.get("#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/reports/types") do |response, _request, _result, &_block|
+    puts "#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/reports/types"
     case_report_types = JSON.parse(response) unless response.code == 204
+    puts case_report_types
     case_report_types.map { |report_type| report_type['reportClass'] = 'case' }
   end
   RestClient.get("#{settings.protocol}://#{settings.action_exporter_host}:#{settings.action_exporter_port}/reports/types") do |response, _request, _result, &_block|
