@@ -51,6 +51,7 @@ before do
   host                 = ENV['RAS_BACKSTAGE_UI_HOST']
   collection_exercises = ENV['RAS_BACKSTAGE_UI_COLLECTION_EXERCISES']
   collection_exercise  = ENV['BRES_2017_COLLECTION_EXERCISE']
+  @secure_messages_url = "#{settings.protocol}://#{settings.secure_message_service_host}"
   @bres_2017_url = "#{protocol}://#{host}/#{collection_exercises}/#{collection_exercise}" if host.present? && protocol.present? && collection_exercises.present? && collection_exercise.present?
 end
 
