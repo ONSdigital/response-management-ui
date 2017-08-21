@@ -61,53 +61,33 @@
         <div class="bar" role="banner">
           <div class="bar__inner container">
             <div class="bar__title neptune"><a href="/">Response Operations</a></div>
-            <div class="sitesearch">
-
-              <div id="postcodesearch">
-                 <form id="search-form" action="">
-                   <label for="sampleunitref">RU reference:</label>
-                   <input id="sampleunitref" required type="number" size="17" maxlength="11" placeholder="Enter Reference">
-                   <input class="btn--light btn--search" type="submit" name="search-submit-button" value="Search">
-                 </form>
-               </div>
-            </div>
           </div>
         </div>
 
-        <div class="bar bar__sitenavigation" role="banner">
-          <div class="bar__inner container">
-            <div class="sitenavigation">
-
-              <ul id="menu">
-                <%= yield_content :menu %>
-              </ul>
-
-            </div>
-          </div>
-        </div>
       </div>
-
-      <div id="hd" style="width:95%; margin:auto;">
-        <h2><span class="heavy">Response</span> Operations</h2>
-        <h1><%=h title %></h1>
-      <% if content_for? :sub_heading %>
-        <p class="subhead">
-          <%= yield_content :sub_heading %>
-        </p>
-      <% end %>
-      </div>
-      <div id="bd" style="width:95%; margin:auto;">
-        <div id="yui-main">
-          <div class="yui-b">
-            <% [:error, :notice].each do |key| %>
-        <% if flash[key] %>
-            <p class="message"><%= flash[key] %></p>
-          <% end %>
+      <div class="container">
+        <div id="hd">
+          <h2><span class="heavy">Response</span> Operations</h2>
+          <h1><%=h title %></h1>
+        <% if content_for? :sub_heading %>
+          <p class="subhead">
+            <%= yield_content :sub_heading %>
+          </p>
         <% end %>
-            <%= yield %>
-          </div> <!-- .yui-b -->
-        </div> <!-- #yui-main -->
-      </div> <!-- #bd -->
+        </div>
+        <div id="bd" style="width:95%; margin:auto;">
+          <div id="yui-main">
+            <div class="yui-b">
+              <% [:error, :notice].each do |key| %>
+          <% if flash[key] %>
+              <p class="message"><%= flash[key] %></p>
+            <% end %>
+          <% end %>
+              <%= yield %>
+            </div> <!-- .yui-b -->
+          </div> <!-- #yui-main -->
+        </div> <!-- #bd -->
+      </div>
     </div> <!-- #doc.yui-t7 -->
   </body>
 </html>
