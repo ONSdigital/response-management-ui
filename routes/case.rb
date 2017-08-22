@@ -99,7 +99,7 @@ get '/sampleunitref/:sampleunitref/cases/?' do |sampleunitref|
                             survey: survey_id,
                             respondent_case: case_id,
                             collection_exercise: collection_exercise_id }
-                url       = URI.parse "#{settings.protocol}://#{settings.secure_message_service_host}"
+                url       = URI.parse "#{settings.protocol}://#{settings.secure_message_service_host}/create-message"
                 url.query = URI.encode_www_form URI.decode_www_form(url.query || '').concat(params.to_a)
                 respondent['url'] = url
                 respondent['id'] = party_respondent['id']
