@@ -5,11 +5,7 @@ get '/sampleunitref/:sampleunitref/cases/:case_id/events/:respondent_id/update' 
   sampleunit = ''
   previous_page_url = request.env['HTTP_REFERER']
 
-  from_respondent = if previous_page_url.end_with? 'events'
-                      true
-                    else
-                      false
-                    end
+  from_respondent = previous_page_url.end_with? 'events'
 
   RestClient.get("#{settings.protocol}://#{settings.party_service_host}:#{settings.party_service_port}/party-api/v1/respondents/id/#{respondent_id}") do |respondent_response, _request, _result, &_block|
 

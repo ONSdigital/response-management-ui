@@ -1,13 +1,7 @@
 <%= erb :menu, locals: { pageid: 'respondent' } %>
 
-<% if from_respondent %>
-  <% content_for :breadcrumbs do %>
-  <a href="/">Home</a> &gt; <a href="/sampleunitref/<%=h sampleunitref %>/cases"><%=h sampleunit['attributes']['entname1']%></a> &gt; <a href="/sampleunitref/<%=h sampleunitref %>/cases/<%=h respondent_id %>/events"><%=h respondent['firstName'] %> <%=h respondent['lastName'] %></a> &gt; Update Email
-  <% end %>
-<% else %>
-  <% content_for :breadcrumbs do %>
-  <a href="/">Home</a>  &gt; <a href="/sampleunitref/<%=h sampleunitref %>/cases"><%=h sampleunit['attributes']['entname1']%></a> &gt; Update Email
-  <% end %>
+<% content_for :breadcrumbs do %>
+  <a href="/">Home</a> &gt; <a href="/sampleunitref/<%=h sampleunitref %>/cases"><%=h sampleunit['attributes']['entname1']%></a> &gt; <% if from_respondent %> <a href="/sampleunitref/<%=h sampleunitref %>/cases/<%=h respondent_id %>/events"><%=h respondent['firstName'] %> <%=h respondent['lastName'] %></a> &gt; Update Email <% else %> Update Email <% end %>
 <% end %>
 
   <% content_for :sub_heading do %>
