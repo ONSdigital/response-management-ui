@@ -17,6 +17,7 @@ Reports
       </tr>
     </thead>
     <tbody>
+    <% report_types.sort_by! { |type| type['displayName']} %>
     <% report_types.each_with_index do |type, i| %>
       <tr class="<%= i.even? ? 'even' : 'odd ' %>">
       <% if type.present? %>
