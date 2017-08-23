@@ -7,8 +7,8 @@ end
 get '/reports' do
   authenticate!
   case_report_types = []
+  action_exporter_report_types = []
   action_report_types = []
-  actionsvc_report_types = []
   collectionexercisesvc_report_types = []
   sample_report_types = []
   RestClient.get("#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/reports/types") do |response, _request, _result, &_block|
@@ -16,26 +16,23 @@ get '/reports' do
     case_report_types.map { |report_type| report_type['reportClass'] = 'case' }
   end
   RestClient.get("#{settings.protocol}://#{settings.action_exporter_host}:#{settings.action_exporter_port}/reports/types") do |response, _request, _result, &_block|
-    action_report_types = JSON.parse(response) unless response.code == 204
-    action_report_types.map { |report_type| report_type['reportClass'] = 'action-exporter' }
+    action_exporter_report_types = JSON.parse(response) unless response.code == 204
+    action_exporter_report_types.map { |report_type| report_type['reportClass'] = 'action-exporter' }
   end
   RestClient.get("#{settings.protocol}://#{settings.action_service_host}:#{settings.action_service_port}/reports/types") do |response, _request, _result, &_block|
-    actionsvc_report_types = JSON.parse(response) unless response.code == 204
-    puts actionsvc_report_types
-    actionsvc_report_types.map { |report_type| report_type['reportClass'] = 'actionsvc' }
+    action_report_types = JSON.parse(response) unless response.code == 204
+    action_report_types.map { |report_type| report_type['reportClass'] = 'actionsvc' }
   end
   RestClient.get("#{settings.protocol}://#{settings.collection_exercise_service_host}:#{settings.collection_exercise_service_port}/reports/types") do |response, _request, _result, &_block|
     collectionexercisesvc_report_types = JSON.parse(response) unless response.code == 204
-    puts collectionexercisesvc_report_types
     collectionexercisesvc_report_types.map { |report_type| report_type['reportClass'] = 'collection-exercise' }
   end
   RestClient.get("#{settings.protocol}://#{settings.sample_service_host}:#{settings.sample_service_port}/reports/types") do |response, _request, _result, &_block|
     sample_report_types = JSON.parse(response) unless response.code == 204
-    puts sample_report_types
     sample_report_types.map { |report_type| report_type['reportClass'] = 'sample' }
   end
 
-  report_types = case_report_types + action_report_types + actionsvc_report_types + collectionexercisesvc_report_types + sample_report_types
+  report_types = case_report_types + action_exporter_report_types + action_report_types + collectionexercisesvc_report_types + sample_report_types
   report_types = report_types.paginate(page: params[:page])
   erb :reports, locals: { title: 'Reports',
                           report_types: report_types }
