@@ -90,6 +90,9 @@ get '/reports/download/:report_class/:report_id' do |report_class, report_id|
   elsif report_class == 'collection-exercise'
     host = settings.collection_exercise_service_host
     port = settings.collection_exercise_service_port
+  elsif report_class == 'sample'
+    host = settings.sample_service_host
+    port = settings.sample_service_port
   end
 
   RestClient.get("#{settings.protocol}://#{host}:#{port}/reports/#{report_id}") do |response, _request, _result, &_block|
@@ -117,6 +120,9 @@ get '/reports/view/:report_class/:report_id' do |report_class, report_id|
   elsif report_class == 'collection-exercise'
     host = settings.collection_exercise_service_host
     port = settings.collection_exercise_service_port
+  elsif report_class == 'sample'
+    host = settings.sample_service_host
+    port = settings.sample_service_port
   end
   RestClient.get("#{settings.protocol}://#{host}:#{port}/reports/#{report_id}") do |response, _request, _result, &_block|
     report_details = JSON.parse(response) unless response.code == 204 || response.code == 400
