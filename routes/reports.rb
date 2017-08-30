@@ -4,6 +4,23 @@ def type_format(report_type)
   formatted_type
 end
 
+helpers do
+ def host_and_port_for_report_class(report_class)
+   case report_class
+     when 'action-exporter'
+       return settings.action_exporter_host, settings.action_exporter_port
+     when 'actionsvc'
+       return settings.action_service_host, settings.action_service_port
+     when 'case'
+       return settings.case_service_host, settings.case_service_port
+     when 'collection-exercise'
+       return settings.collection_exercise_service_host, settings.collection_exercise_service_port
+     when 'sample'
+       return settings.sample_service_host, settings.sample_service_port
+   end
+ end
+end
+
 get '/reports' do
   authenticate!
   case_report_types = []
@@ -42,22 +59,7 @@ get '/reports/:report_class/:report_type' do |report_class, report_type|
   authenticate!
   report_details = []
   error = 0
-  if report_class == 'action-exporter'
-    host = settings.action_exporter_host
-    port = settings.action_exporter_port
-  elsif report_class == 'case'
-    host = settings.case_service_host
-    port = settings.case_service_port
-  elsif report_class == 'actionsvc'
-    host = settings.action_service_host
-    port = settings.action_service_port
-  elsif report_class == 'collection-exercise'
-    host = settings.collection_exercise_service_host
-    port = settings.collection_exercise_service_port
-  elsif report_class == 'sample'
-    host = settings.sample_service_host
-    port = settings.sample_service_port
-  end
+  host, port = host_and_port_for_report_class(report_class)
 
   RestClient.get("#{settings.protocol}://#{host}:#{port}/reports/types/#{report_type.upcase}") do |response, _request, _result, &_block|
     report_details = JSON.parse(response).paginate(page: params[:page]) unless response.code == 204 || response.code == 400
@@ -78,22 +80,7 @@ end
 get '/reports/download/:report_class/:report_id' do |report_class, report_id|
   authenticate!
   report_details = []
-  if report_class == 'action-exporter'
-    host = settings.action_exporter_host
-    port = settings.action_exporter_port
-  elsif report_class == 'case'
-    host = settings.case_service_host
-    port = settings.case_service_port
-  elsif report_class == 'actionsvc'
-    host = settings.action_service_host
-    port = settings.action_service_port
-  elsif report_class == 'collection-exercise'
-    host = settings.collection_exercise_service_host
-    port = settings.collection_exercise_service_port
-  elsif report_class == 'sample'
-    host = settings.sample_service_host
-    port = settings.sample_service_port
-  end
+  host, port = host_and_port_for_report_class(report_class)
 
   RestClient.get("#{settings.protocol}://#{host}:#{port}/reports/#{report_id}") do |response, _request, _result, &_block|
     report_details = JSON.parse(response) unless response.code == 204 || response.code == 400
@@ -108,22 +95,8 @@ get '/reports/view/:report_class/:report_id' do |report_class, report_id|
   authenticate!
   report_details = []
   error = 1
-  if report_class == 'action-exporter'
-    host = settings.action_exporter_host
-    port = settings.action_exporter_port
-  elsif report_class == 'case'
-    host = settings.case_service_host
-    port = settings.case_service_port
-  elsif report_class == 'actionsvc'
-    host = settings.action_service_host
-    port = settings.action_service_port
-  elsif report_class == 'collection-exercise'
-    host = settings.collection_exercise_service_host
-    port = settings.collection_exercise_service_port
-  elsif report_class == 'sample'
-    host = settings.sample_service_host
-    port = settings.sample_service_port
-  end
+  host, port = host_and_port_for_report_class(report_class)
+
   RestClient.get("#{settings.protocol}://#{host}:#{port}/reports/#{report_id}") do |response, _request, _result, &_block|
     report_details = JSON.parse(response) unless response.code == 204 || response.code == 400
     code = response.code
