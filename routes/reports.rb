@@ -33,7 +33,7 @@ get '/reports' do
   end
 
   report_types = case_report_types + action_exporter_report_types + action_report_types + collectionexercisesvc_report_types + sample_report_types
-  report_types = report_types.paginate(page: params[:page])
+  report_types = report_types.sort_by{ |type| type['displayName']}.paginate(page: params[:page])
   erb :reports, locals: { title: 'Reports',
                           report_types: report_types }
 end
