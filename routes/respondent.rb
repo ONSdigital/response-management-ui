@@ -54,11 +54,11 @@ post '/sampleunitref/:sampleunitref/cases/:case_id/events/update' do
                               user: settings.security_user_name,
                               password: settings.security_user_password,
                               realm: settings.security_realm,
-                              {
-                                emailAddress: email_address,
-                                reference: 'Test Email'
-                              }.to_json,
-                              content_type: :json,
+                              payload: '{
+                                "emailAddress": "email_address",
+                                "reference": "Test Email"
+                              }',
+                              headers: {"Content-Type" => "application/json"},
                               accept: :json) do |post_response, _request, _result, &_block|
 
     if post_response.code == 201
