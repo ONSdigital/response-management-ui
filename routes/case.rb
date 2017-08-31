@@ -237,15 +237,12 @@ end
 
 get '/sampleunitref/:sampleunitref/cases/:case_id/events/:respondent_id/resend_verification_code' do |sampleunitref, case_id, respondent_id|
 
-  RestClient.get("#{settings.protocol}://#{settings.party_service_host}:#{settings.party_service_port}/party-api/v1/respondents/id/#{respondent_id}") do |respondent_response, _request, _result, &_block|
+  RestClient.get("#{settings.protocol}://#{settings.party_service_host}:#{settings.party_service_port}/party-api/v1/respondents/id/#{respondent_id}") do |respondent_response, _request, _result, &_block |
     respondents = JSON.parse(respondent_response) unless respondent_response.code == 404
 
-    RestClient.post("#{settings.protocol}://#{settings.notifygateway_host}:#{settings.notifygateway_port}/emails/#{settings.email_template_id}",
-                    {
-                      emailAddress: respondents['emailAddress']
-                    }.to_json, content_type: :json, accept: :json) do |post_response, _request, _result, &_block|
+    RestClient.get("#{settings.protocol}://#{settings.party_service_host}:#{settings.party_service_port}/party-api/v1/resend-verification-email/#{respondent_id}") do |get_response, _request, _result, &_block |
 
-      if post_response.code == 201
+      if get_response.code == 200
         flash[:notice] = 'Verification code successfully resent.'
 
         RestClient.post("#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}/events",
@@ -265,8 +262,8 @@ get '/sampleunitref/:sampleunitref/cases/:case_id/events/:respondent_id/resend_v
         end
 
       else
-        logger.error post_response
-        error_flash('Unable to send verification code', post_response)
+        logger.error get_response
+        error_flash_text('Unable to send verification code', get_response)
       end
     end
 

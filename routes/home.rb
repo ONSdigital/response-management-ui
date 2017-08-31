@@ -72,6 +72,10 @@ helpers do
     end
   end
 
+  def error_flash_text(message, response)
+    flash[:error] = "#{message}: #{response}"
+  end
+
   # View helper for escaping HTML output.
   def h(text)
     Rack::Utils.escape_html(text)
