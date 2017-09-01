@@ -48,6 +48,7 @@ get '/sampleunitref/:sampleunitref/cases/?' do |sampleunitref|
                               user: settings.security_user_name,
                               password: settings.security_user_password,
                               realm: settings.security_realm) do |response, _request, _result, &_block|
+
     sampleunit = JSON.parse(response) unless response.code == 404
     if sampleunit.any?
       sampleunituuid = sampleunit['id']
@@ -56,7 +57,7 @@ get '/sampleunitref/:sampleunitref/cases/?' do |sampleunitref|
                                   url: "#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/cases/partyid/#{sampleunituuid}",
                                   user: settings.security_user_name,
                                   password: settings.security_user_password,
-                                  realm: settings.security_realm) do |response, _request, _result, &_block|
+                                  realm: settings.security_realm) do |sample_response, _request, _result, &_block|
         sampleunitcases = JSON.parse(sample_response) unless sample_response.code == 404 || sample_response.code == 204
         if sampleunitcases.any?
           sampleunitcases.each do |sampleunitcase|
@@ -67,7 +68,7 @@ get '/sampleunitref/:sampleunitref/cases/?' do |sampleunitref|
                                       url: "#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/cases/casegroupid/#{casegroup_id}",
                                       user: settings.security_user_name,
                                       password: settings.security_user_password,
-                                      realm: settings.security_realm) do |response, _request, _result, &_block|
+                                      realm: settings.security_realm) do |cases_response, _request, _result, &_block|
             cases = JSON.parse(cases_response).paginate(page: params[:page]) unless cases_response.code == 404
             cases.each do |kase|
               if kase['sampleUnitType'] == 'B'
@@ -115,7 +116,7 @@ get '/sampleunitref/:sampleunitref/cases/?' do |sampleunitref|
                                       url: "#{settings.protocol}://#{settings.collection_exercise_service_host}:#{settings.collection_exercise_service_port}/collectionexercises/#{collection_exercise_id}",
                                       user: settings.security_user_name,
                                       password: settings.security_user_password,
-                                      realm: settings.security_realm) do |response, _request, _result, &_block|
+                                      realm: settings.security_realm) do |respondent_response, _request, _result, &_block|
             collectionexercise = JSON.parse(respondent_response) unless respondent_response.code == 404
             survey_id = collectionexercise['surveyId']
           end
@@ -128,7 +129,7 @@ get '/sampleunitref/:sampleunitref/cases/?' do |sampleunitref|
                                           url: "#{settings.protocol}://#{settings.party_service_host}:#{settings.party_service_port}/party-api/v1/respondents/id/#{respondentuuid}",
                                           user: settings.security_user_name,
                                           password: settings.security_user_password,
-                                          realm: settings.security_realm) do |response, _request, _result, &_block|
+                                          realm: settings.security_realm) do |respondent_response, _request, _result, &_block|
                 party_respondent = JSON.parse(respondent_response) unless respondent_response.code == 404
                 params = {  respondent: party_respondent['id'],
                             reporting_unit: party_id,
@@ -252,7 +253,7 @@ get '/sampleunitref/:sampleunitref/cases/:party_id/events?' do |sampleunitref, p
                                   url: "#{settings.protocol}://#{settings.party_service_host}:#{settings.party_service_port}/party-api/v1/respondents/id/#{party_id}",
                                   user: settings.security_user_name,
                                   password: settings.security_user_password,
-                                  realm: settings.security_realm) do |response, _request, _result, &_block|
+                                  realm: settings.security_realm) do |respondent_response, _request, _result, &_block|
         respondents = JSON.parse(respondent_response) unless respondent_response.code == 404
 
         params = {  respondent: party_id,
@@ -272,7 +273,7 @@ get '/sampleunitref/:sampleunitref/cases/:party_id/events?' do |sampleunitref, p
                             url: "#{settings.protocol}://#{settings.collection_exercise_service_host}:#{settings.collection_exercise_service_port}/collectionexercises/#{collection_exercise_id}",
                             user: settings.security_user_name,
                             password: settings.security_user_password,
-                            realm: settings.security_realm) do |response, _request, _result, &_block|
+                            realm: settings.security_realm) do |respondent_response, _request, _result, &_block|
       collectionexercise = JSON.parse(respondent_response) unless respondent_response.code == 404
       survey_id = collectionexercise['surveyId']
     end
@@ -315,7 +316,7 @@ get '/sampleunitref/:sampleunitref/cases/:case_id/events/:respondent_id/resend_v
                             url: "#{settings.protocol}://#{settings.party_service_host}:#{settings.party_service_port}/party-api/v1/respondents/id/#{respondent_id}",
                             user: settings.security_user_name,
                             password: settings.security_user_password,
-                            realm: settings.security_realm) do |response, _request, _result, &_block|
+                            realm: settings.security_realm) do |respondent_response, _request, _result, &_block|
     respondents = JSON.parse(respondent_response) unless respondent_response.code == 404
 
 
