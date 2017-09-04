@@ -312,21 +312,35 @@ end
 
 get '/sampleunitref/:sampleunitref/cases/:case_id/events/:respondent_id/resend_verification_code' do |sampleunitref, case_id, respondent_id|
 
-  RestClient.get("#{settings.protocol}://#{settings.party_service_host}:#{settings.party_service_port}/party-api/v1/respondents/id/#{respondent_id}") do |respondent_response, _request, _result, &_block |
-    respondents = JSON.parse(respondent_response) unless respondent_response.code == 404
+  RestClient::Request.execute(method: :get,
+                          url: "#{settings.protocol}://#{settings.party_service_host}:#{settings.party_service_port}/party-api/v1/respondents/id/#{respondent_id}",
+                          user: settings.security_user_name,
+                          password: settings.security_user_password,
+                          realm: settings.security_realm) do |respondent_response, _request, _result, &_block|
+  respondents = JSON.parse(respondent_response) unless respondent_response.code == 404
 
-    RestClient.get("#{settings.protocol}://#{settings.party_service_host}:#{settings.party_service_port}/party-api/v1/resend-verification-email/#{respondent_id}") do |get_response, _request, _result, &_block |
+  RestClient::Request.execute(method: :get,
+                          url: "#{settings.protocol}://#{settings.party_service_host}:#{settings.party_service_port}/party-api/v1/resend-verification-email/#{respondent_id}",
+                          user: settings.security_user_name,
+                          password: settings.security_user_password,
+                          realm: settings.security_realm) do |get_response, _request, _result, &_block|
 
       if get_response.code == 200
         flash[:notice] = 'Verification code successfully resent.'
 
-        RestClient.post("#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}/events",
-                        {
-                          description: 'Verification code successfully resent.',
-                          category: 'VERIFICATION_CODE_SENT',
-                          subCategory: nil,
-                          createdBy: session[:display_name]
-                        }.to_json, content_type: :json, accept: :json) do |post_response_event, _request, _result, &_block|
+        RestClient::Request.execute(method: :post,
+                                            url: "#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}/events",
+                                            user: settings.security_user_name,
+                                            password: settings.security_user_password,
+                                            realm: settings.security_realm,
+                                            payload: '{
+                                              "description": "Verification code successfully resent.",
+                                              "category": "VERIFICATION_CODE_SENT",
+                                              "subCategory": "nil",
+                                              "createdBy": "session[:display_name]"
+                                            }',
+                                            headers: {"Content-Type" => "application/json"},
+                                            accept: :json) do |post_response_event, _request, _result, &_block|
 
           if post_response_event.code == 201
             flash[:notice] = 'Verification code successfully resent.'
