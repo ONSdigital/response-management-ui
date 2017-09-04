@@ -10,6 +10,7 @@
       <th>Name</th>
       <th>Email Address</th>
       <th>Telephone Number</th>
+      <th>Case Ref</th>
       <th></th>
       <th></th>
     </tr>
@@ -27,6 +28,11 @@
       <% end %>
       <% if respondents['telephone'].present? %>
         <td><%=h respondents['telephone'] %></td>
+      <% else %>
+        <td>-</td>
+      <% end %>
+      <% if caseref.present? %>
+        <td><%=h caseref %></td>
       <% else %>
         <td>-</td>
       <% end %>

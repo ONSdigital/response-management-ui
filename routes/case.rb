@@ -42,6 +42,7 @@ get '/sampleunitref/:sampleunitref/cases/?' do |sampleunitref|
   sampleunituuid         = ''
   case_id                = ''
   uri                    = ''
+  caseref                = ''
 
   RestClient.get("#{settings.protocol}://#{settings.party_service_host}:#{settings.party_service_port}/party-api/v1/parties/type/B/ref/#{sampleunitref}") do |response, _request, _result, &_block|
     sampleunit = JSON.parse(response) unless response.code == 404
@@ -58,6 +59,7 @@ get '/sampleunitref/:sampleunitref/cases/?' do |sampleunitref|
           RestClient.get("#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/cases/casegroupid/#{casegroup_id}") do |cases_response, _request, _result, &_block|
             cases = JSON.parse(cases_response).paginate(page: params[:page]) unless cases_response.code == 404
             cases.each do |kase|
+              caseref = kase['caseRef']
               if kase['sampleUnitType'] == 'B'
                 case_id                = kase['id']
                 party_id               = kase['partyId']
@@ -143,7 +145,8 @@ get '/sampleunitref/:sampleunitref/cases/?' do |sampleunitref|
                                                                  respondents: respondents,
                                                                  collection_exercise_id: collection_exercise_id,
                                                                  survey_id: survey_id,
-                                                                 party_id: party_id }
+                                                                 party_id: party_id,
+                                                                 caseref: caseref }
 end
 
 # Get a specific case.
@@ -159,12 +162,21 @@ get '/sampleunitref/:sampleunitref/cases/:party_id/events?' do |sampleunitref, p
   collectionexercise = []
   case_state = ''
   collection_exercise_id = ''
+  caseref = ''
 
   kases = JSON.parse(RestClient.get("#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/cases/partyid/#{party_id}"))
   kases.each do |kase|
     case_state = kase['state']
     case_id = kase['id']
     collection_exercise_id = kase['caseGroup']['collectionExerciseId']
+    casegroup_id = kase['caseGroup']['id']
+
+    RestClient.get("#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/cases/casegroupid/#{casegroup_id}") do |cases_response, _request, _result, &_block|
+      cases = JSON.parse(cases_response).paginate(page: params[:page]) unless cases_response.code == 404
+      cases.each do |kase_g|
+        caseref = kase_g['caseRef']
+      end
+    end
 
     RestClient.get("#{settings.protocol}://#{settings.party_service_host}:#{settings.party_service_port}/party-api/v1/parties/type/B/ref/#{sampleunitref}") do |response, _request, _result, &_block|
       sampleunit = JSON.parse(response) unless response.code == 404
@@ -218,7 +230,8 @@ get '/sampleunitref/:sampleunitref/cases/:party_id/events?' do |sampleunitref, p
                                                              respondents: respondents,
                                                              collection_exercise_id: collection_exercise_id,
                                                              survey_id: survey_id,
-                                                             party_id: party_id }
+                                                             party_id: party_id,
+                                                             caseref: caseref }
 end
 
 # sampleunitref search.
@@ -237,10 +250,10 @@ end
 
 get '/sampleunitref/:sampleunitref/cases/:case_id/events/:respondent_id/resend_verification_code' do |sampleunitref, case_id, respondent_id|
 
-  RestClient.get("#{settings.protocol}://#{settings.party_service_host}:#{settings.party_service_port}/party-api/v1/respondents/id/#{respondent_id}") do |respondent_response, _request, _result, &_block |
+  RestClient.get("#{settings.protocol}://#{settings.party_service_host}:#{settings.party_service_port}/party-api/v1/respondents/id/#{respondent_id}") do |respondent_response, _request, _result, &_block|
     respondents = JSON.parse(respondent_response) unless respondent_response.code == 404
 
-    RestClient.get("#{settings.protocol}://#{settings.party_service_host}:#{settings.party_service_port}/party-api/v1/resend-verification-email/#{respondent_id}") do |get_response, _request, _result, &_block |
+    RestClient.get("#{settings.protocol}://#{settings.party_service_host}:#{settings.party_service_port}/party-api/v1/resend-verification-email/#{respondent_id}") do |get_response, _request, _result, &_block|
 
       if get_response.code == 200
         flash[:notice] = 'Verification code successfully resent.'
