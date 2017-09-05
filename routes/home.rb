@@ -28,8 +28,6 @@ set :client_password,                  ENV['RESPONSE_OPERATIONS_CLIENT_PASSWORD'
 set :client_user,                      ENV['RESPONSE_OPERATIONS_CLIENT_USER']
 set :collection_exercise_service_host, ENV['RESPONSE_OPERATIONS_COLLECTION_EXERCISE_SERVICE_HOST']
 set :collection_exercise_service_port, ENV['RESPONSE_OPERATIONS_COLLECTION_EXERCISE_SERVICE_PORT']
-set :sample_service_host,              ENV['RESPONSE_OPERATIONS_SAMPLE_SERVICE_HOST']
-set :sample_service_port,              ENV['RESPONSE_OPERATIONS_SAMPLE_SERVICE_PORT']
 set :email_template_id,                ENV['RESPONSE_OPERATIONS_EMAIL_TEMPLATE_ID']
 set :notifygateway_host,               ENV['RESPONSE_OPERATIONS_NOTIFYGATEWAY_SERVICE_HOST']
 set :notifygateway_port,               ENV['RESPONSE_OPERATIONS_NOTIFYGATEWAY_SERVICE_PORT']
@@ -39,6 +37,9 @@ set :party_service_port,               ENV['RESPONSE_OPERATIONS_PARTY_SERVICE_PO
 set :secure_message_service_host,      ENV['RESPONSE_OPERATIONS_SECURE_MESSAGE_SERVICE_HOST']
 set :secure_message_service_port,      ENV['RESPONSE_OPERATIONS_SECURE_MESSAGE_SERVICE_PORT']
 set :protocol,                         ENV['RESPONSE_OPERATIONS_HTTP_PROTOCOL']
+set :security_user_name,               ENV['security_user_name']
+set :security_user_password,           ENV['security_user_password']
+set :security_realm,                   ENV['security_realm'] 
 
 # Expire sessions after SESSION_EXPIRATION_PERIOD of inactivity
 use Rack::Session::Cookie, key: 'rack.session', path: '/',
@@ -53,7 +54,6 @@ before do
   host                 = ENV['RAS_BACKSTAGE_UI_HOST']
   collection_exercises = ENV['RAS_BACKSTAGE_UI_COLLECTION_EXERCISES']
   collection_exercise  = ENV['BRES_2017_COLLECTION_EXERCISE']
-  @secure_messages_url = "#{protocol}://#{settings.secure_message_service_host}"
   @bres_2017_url = "#{protocol}://#{host}/#{collection_exercises}/#{collection_exercise}" if host.present? && protocol.present? && collection_exercises.present? && collection_exercise.present?
 end
 
