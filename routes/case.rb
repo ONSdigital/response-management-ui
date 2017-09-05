@@ -327,20 +327,19 @@ get '/sampleunitref/:sampleunitref/cases/:case_id/events/:respondent_id/resend_v
 
       if get_response.code == 200
         flash[:notice] = 'Verification code successfully resent.'
-
         RestClient::Request.execute(method: :post,
-                                            url: "#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}/events",
-                                            user: settings.security_user_name,
-                                            password: settings.security_user_password,
-                                            realm: settings.security_realm,
-                                            payload: '{
-                                              "description": "Verification code successfully resent.",
-                                              "category": "VERIFICATION_CODE_SENT",
-                                              "subCategory": "nil",
-                                              "createdBy": "session[:display_name]"
-                                            }',
-                                            headers: {"Content-Type" => "application/json"},
-                                            accept: :json) do |post_response_event, _request, _result, &_block|
+                                    url: "#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}/events",
+                                    user: settings.security_user_name,
+                                    password: settings.security_user_password,
+                                    realm: settings.security_realm,
+                                    payload: {
+                                      "description": "Verification code successfully resent.",
+                                      "category": "VERIFICATION_CODE_SENT",
+                                      "subCategory": "nil",
+                                      "createdBy": "#{session[:display_name]}"
+                                    }.to_json,
+                                    headers: {"Content-Type" => "application/json"},
+                                    accept: :json) do |post_response_event, _request, _result, &_block|
 
           if post_response_event.code == 201
             flash[:notice] = 'Verification code successfully resent.'
