@@ -10,7 +10,7 @@ helpers do
     when 'action-exporter'
       host = settings.action_exporter_host
       port = settings.action_exporter_port
-    when 'actionsvc'
+    when 'action'
       host = settings.action_service_host
       port = settings.action_service_port
     when 'case'
@@ -30,7 +30,11 @@ end
 get '/reports' do
   authenticate!
   case_report_types = []
+  action_exporter_report_types = []
   action_report_types = []
+  collection_exercise_report_types = []
+  sample_report_types = []
+
   RestClient::Request.execute(method: :get,
                             url: "#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/reports/types",
                             user: settings.security_user_name,
@@ -44,10 +48,25 @@ get '/reports' do
                             user: settings.security_user_name,
                             password: settings.security_user_password,
                             realm: settings.security_realm) do |response, _request, _result, &_block|
-    action_report_types = JSON.parse(response) unless response.code == 204
-    action_report_types.map { |report_type| report_type['reportClass'] = 'action-exporter' }
+    action_exporter_report_types = JSON.parse(response) unless response.code == 204
+    action_exporter_report_types.map { |report_type| report_type['reportClass'] = 'action-exporter' }
   end
-
+  RestClient::Request.execute(method: :get,
+                            url: "#{settings.protocol}://#{settings.action_service_host}:#{settings.action_service_port}/reports/types",
+                            user: settings.security_user_name,
+                            password: settings.security_user_password,
+                            realm: settings.security_realm) do |response, _request, _result, &_block|
+    action_report_types = JSON.parse(response) unless response.code == 204
+    action_report_types.map { |report_type| report_type['reportClass'] = 'action' }
+  end
+  RestClient::Request.execute(method: :get,
+                            url: "#{settings.protocol}://#{settings.collection_exercise_service_host}:#{settings.collection_exercise_service_port}/reports/types",
+                            user: settings.security_user_name,
+                            password: settings.security_user_password,
+                            realm: settings.security_realm) do |response, _request, _result, &_block|
+    collection_exercise_report_types = JSON.parse(response) unless response.code == 204
+    collection_exercise_report_types.map { |report_type| report_type['reportClass'] = 'collection-exercise' }
+  end
   RestClient::Request.execute(method: :get,
                               url: "#{settings.protocol}://#{settings.sample_service_host}:#{settings.sample_service_port}/reports/types",
                               user: settings.security_user_name,
@@ -58,7 +77,7 @@ get '/reports' do
     sample_report_types.map { |report_type| report_type['reportClass'] = 'sample' }
   end
 
-  report_types = case_report_types + action_exporter_report_types + action_report_types + collectionexercisesvc_report_types + sample_report_types
+  report_types = case_report_types + action_exporter_report_types + action_report_types + collection_exercise_report_types + sample_report_types
   report_types = report_types.sort_by { |type| type['displayName'] }.paginate(page: params[:page])
   erb :reports, locals: { title: 'Reports',
                           report_types: report_types }
