@@ -65,6 +65,7 @@ get '/sampleunitref/:sampleunitref/cases/?' do |sampleunitref|
             casegroup_id = sampleunitcase['caseGroup']['id']
           end
 
+          puts casegroup_id
           RestClient::Request.execute(method: :get,
                                       url: "#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/cases/casegroupid/#{casegroup_id}",
                                       user: settings.security_user_name,
@@ -72,7 +73,9 @@ get '/sampleunitref/:sampleunitref/cases/?' do |sampleunitref|
                                       realm: settings.security_realm) do |cases_response, _request, _result, &_block|
             cases = JSON.parse(cases_response).paginate(page: params[:page]) unless cases_response.code == 404
             cases.each do |kase|
-              caseref = kase['caseRef']
+              if kase['sampleUnitType'] == 'BI'
+                caseref = kase['caseRef']
+              end
               if kase['sampleUnitType'] == 'B'
                 case_id                = kase['id']
                 party_id               = kase['partyId']
@@ -217,7 +220,9 @@ get '/sampleunitref/:sampleunitref/cases/:party_id/events?' do |sampleunitref, p
     RestClient.get("#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/cases/casegroupid/#{casegroup_id}") do |cases_response, _request, _result, &_block|
       cases = JSON.parse(cases_response).paginate(page: params[:page]) unless cases_response.code == 404
       cases.each do |kase_g|
-        caseref = kase_g['caseRef']
+        if kase_g['sampleUnitType'] == 'BI'
+          caseref = kase_g['caseRef']
+        end
       end
     end
 
