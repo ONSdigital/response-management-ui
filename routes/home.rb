@@ -24,6 +24,8 @@ set :action_service_host,              ENV['RESPONSE_OPERATIONS_ACTION_SERVICE_H
 set :action_service_port,              ENV['RESPONSE_OPERATIONS_ACTION_SERVICE_PORT']
 set :case_service_host,                ENV['RESPONSE_OPERATIONS_CASE_SERVICE_HOST']
 set :case_service_port,                ENV['RESPONSE_OPERATIONS_CASE_SERVICE_PORT']
+set :sample_service_host,              ENV['RESPONSE_OPERATIONS_SAMPLE_SERVICE_HOST']
+set :sample_service_port,              ENV['RESPONSE_OPERATIONS_SAMPLE_SERVICE_PORT']
 set :client_password,                  ENV['RESPONSE_OPERATIONS_CLIENT_PASSWORD']
 set :client_user,                      ENV['RESPONSE_OPERATIONS_CLIENT_USER']
 set :collection_exercise_service_host, ENV['RESPONSE_OPERATIONS_COLLECTION_EXERCISE_SERVICE_HOST']
@@ -39,7 +41,7 @@ set :secure_message_service_port,      ENV['RESPONSE_OPERATIONS_SECURE_MESSAGE_S
 set :protocol,                         ENV['RESPONSE_OPERATIONS_HTTP_PROTOCOL']
 set :security_user_name,               ENV['security_user_name']
 set :security_user_password,           ENV['security_user_password']
-set :security_realm,                   ENV['security_realm'] 
+set :security_realm,                   ENV['security_realm']
 
 # Expire sessions after SESSION_EXPIRATION_PERIOD of inactivity
 use Rack::Session::Cookie, key: 'rack.session', path: '/',
