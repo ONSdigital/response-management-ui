@@ -65,7 +65,6 @@ get '/sampleunitref/:sampleunitref/cases/?' do |sampleunitref|
             casegroup_id = sampleunitcase['caseGroup']['id']
           end
 
-          puts casegroup_id
           RestClient::Request.execute(method: :get,
                                       url: "#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/cases/casegroupid/#{casegroup_id}",
                                       user: settings.security_user_name,
