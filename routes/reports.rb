@@ -5,20 +5,26 @@ def type_format(report_type)
 end
 
 helpers do
- def host_and_port_for_report_class(report_class)
-   case report_class
-     when 'action-exporter'
-       return settings.action_exporter_host, settings.action_exporter_port
-     when 'actionsvc'
-       return settings.action_service_host, settings.action_service_port
-     when 'case'
-       return settings.case_service_host, settings.case_service_port
-     when 'collection-exercise'
-       return settings.collection_exercise_service_host, settings.collection_exercise_service_port
-     when 'sample'
-       return settings.sample_service_host, settings.sample_service_port
-   end
- end
+  def host_and_port_for_report_class(report_class)
+    case report_class
+    when 'action-exporter'
+      host = settings.action_exporter_host
+      port = settings.action_exporter_port
+    when 'actionsvc'
+      host = settings.action_service_host
+      port = settings.action_service_port
+    when 'case'
+      host = settings.case_service_host
+      port = settings.case_service_port
+    when 'collection-exercise'
+      host = settings.collection_exercise_service_host
+      port = settings.collection_exercise_service_port
+    when 'sample'
+      host = settings.sample_service_host
+      port = settings.sample_service_port
+    end
+    [host, port]
+  end
 end
 
 get '/reports' do
@@ -53,7 +59,7 @@ get '/reports' do
   end
 
   report_types = case_report_types + action_exporter_report_types + action_report_types + collectionexercisesvc_report_types + sample_report_types
-  report_types = report_types.sort_by{ |type| type['displayName']}.paginate(page: params[:page])
+  report_types = report_types.sort_by { |type| type['displayName'] }.paginate(page: params[:page])
   erb :reports, locals: { title: 'Reports',
                           report_types: report_types }
 end
