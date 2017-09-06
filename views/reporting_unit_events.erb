@@ -43,7 +43,6 @@
           <th></th>
           <th></th>
           <th></th>
-          <th></th>
         </tr>
       </thead>
       <tbody>
@@ -69,7 +68,6 @@
             <td>-</td>
           <% end %>
           <td><%= respondent['status'] %></td>
-          <td><a href="/sampleunitref/<%=h sampleunitref %>/cases/<%=h case_id %>/events/<%=h respondent['id'] %>/update">Edit</a></td>
           <% if respondent['status'] == 'ENABLED' %>
             <td><a href="/sampleunitref/<%=h sampleunitref %>/cases/<%= respondent['partyId'] %>/events">View Events</a></td>
           <% else %>
