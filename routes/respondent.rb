@@ -49,27 +49,6 @@ post '/sampleunitref/:sampleunitref/cases/:case_id/events/update' do
   email_address = params[:email_address]
   previous_page_url = params[:previous_page_url]
 
-  RestClient::Request.execute(method: :post,
-                              url: "#{settings.protocol}://#{settings.notifygateway_host}:#{settings.notifygateway_port}/emails/#{settings.email_template_id}",
-                              user: settings.security_user_name,
-                              password: settings.security_user_password,
-                              realm: settings.security_realm,
-                              payload: '{
-                                "emailAddress": "email_address",
-                                "reference": "Test Email"
-                              }',
-                              headers: {"Content-Type" => "application/json"},
-                              accept: :json) do |post_response, _request, _result, &_block|
-
-    if post_response.code == 201
-      flash[:notice] = 'Successfully amended email.'
-      actions = []
-    else
-      logger.error post_response
-      error_flash('Unable to amend email', post_response)
-    end
-  end
-
   redirect previous_page_url
 
 end

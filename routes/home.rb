@@ -30,7 +30,6 @@ set :client_password,                  ENV['RESPONSE_OPERATIONS_CLIENT_PASSWORD'
 set :client_user,                      ENV['RESPONSE_OPERATIONS_CLIENT_USER']
 set :collection_exercise_service_host, ENV['RESPONSE_OPERATIONS_COLLECTION_EXERCISE_SERVICE_HOST']
 set :collection_exercise_service_port, ENV['RESPONSE_OPERATIONS_COLLECTION_EXERCISE_SERVICE_PORT']
-set :email_template_id,                ENV['RESPONSE_OPERATIONS_EMAIL_TEMPLATE_ID']
 set :notifygateway_host,               ENV['RESPONSE_OPERATIONS_NOTIFYGATEWAY_SERVICE_HOST']
 set :notifygateway_port,               ENV['RESPONSE_OPERATIONS_NOTIFYGATEWAY_SERVICE_PORT']
 set :oauth_server,                     ENV['RESPONSE_OPERATIONS_OAUTHSERVER_HOST']
@@ -56,6 +55,7 @@ before do
   host                 = ENV['RAS_BACKSTAGE_UI_HOST']
   collection_exercises = ENV['RAS_BACKSTAGE_UI_COLLECTION_EXERCISES']
   collection_exercise  = ENV['BRES_2017_COLLECTION_EXERCISE']
+  @secure_messages_url = "#{protocol}://#{settings.secure_message_service_host}"
   @bres_2017_url = "#{protocol}://#{host}/#{collection_exercises}/#{collection_exercise}" if host.present? && protocol.present? && collection_exercises.present? && collection_exercise.present?
 end
 
