@@ -140,7 +140,7 @@ get '/sampleunitref/:sampleunitref/cases/?' do |sampleunitref|
                             survey: survey_id,
                             respondent_case: case_id,
                             collection_exercise: collection_exercise_id }
-                url       = URI.parse "#{settings.protocol}://#{settings.secure_message_service_host}"
+                url       = URI.parse "#{settings.protocol}://#{settings.secure_message_service_host}/create-message"
                 url.query = URI.encode_www_form URI.decode_www_form(url.query || '').concat(params.to_a)
                 respondent['url'] = url
                 respondent['id'] = party_respondent['id']
@@ -216,12 +216,8 @@ get '/sampleunitref/:sampleunitref/cases/:party_id/events?' do |sampleunitref, p
     collection_exercise_id = kase['caseGroup']['collectionExerciseId']
     casegroup_id = kase['caseGroup']['id']
 
-    RestClient::Request.execute(method: :get,
-                                url: "#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/cases/casegroupid/#{casegroup_id}",
-                                user: settings.security_user_name,
-                                password: settings.security_user_password,
-                                realm: settings.security_realm) do |cases_response, _request, _result, &_block|
-      cases = JSON.parse(cases_response) unless cases_response.code == 404
+    RestClient.get("#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/cases/casegroupid/#{casegroup_id}") do |cases_response, _request, _result, &_block|
+      cases = JSON.parse(cases_response).paginate(page: params[:page]) unless cases_response.code == 404
       cases.each do |kase_g|
         if kase_g['sampleUnitType'] == 'BI'
           caseref = kase_g['caseRef']
@@ -281,7 +277,7 @@ get '/sampleunitref/:sampleunitref/cases/:party_id/events?' do |sampleunitref, p
                     survey: survey_id,
                     respondent_case: case_id,
                     collection_exercise: collection_exercise_id }
-        url       = URI.parse "#{settings.protocol}://#{settings.secure_message_service_host}"
+        url       = URI.parse "#{settings.protocol}://#{settings.secure_message_service_host}/create-message"
         url.query = URI.encode_www_form URI.decode_www_form(url.query || '').concat(params.to_a)
         respondents['url'] = url
 
