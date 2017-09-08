@@ -216,8 +216,12 @@ get '/sampleunitref/:sampleunitref/cases/:party_id/events?' do |sampleunitref, p
     collection_exercise_id = kase['caseGroup']['collectionExerciseId']
     casegroup_id = kase['caseGroup']['id']
 
-    RestClient.get("#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/cases/casegroupid/#{casegroup_id}") do |cases_response, _request, _result, &_block|
-      cases = JSON.parse(cases_response).paginate(page: params[:page]) unless cases_response.code == 404
+    RestClient::Request.execute(method: :get,
+                                url: "#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/cases/casegroupid/#{casegroup_id}",
+                                user: settings.security_user_name,
+                                password: settings.security_user_password,
+                                realm: settings.security_realm) do |cases_response, _request, _result, &_block|
+      cases = JSON.parse(cases_response) unless cases_response.code == 404
       cases.each do |kase_g|
         if kase_g['sampleUnitType'] == 'BI'
           caseref = kase_g['caseRef']

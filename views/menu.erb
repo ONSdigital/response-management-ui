@@ -1,7 +1,5 @@
 <% content_for :menu do %>
   <% if pageid == 'home' %><li id="active"><% else %><li><% end %><a href="/">Home</a></li>
   <% if pageid == 'reports' %><li id="active"><% else %><li><% end %><a href="/reports">Reports</a></li>
-
   <li><a href="<%=h @secure_messages_url %>">Secure Message</a></li>
-  <% if @bres_2017_url %><li><a href="<%=h @bres_2017_url %>">BRES 2017</a></li><% end %>
 <% end %>
