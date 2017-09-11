@@ -7,79 +7,91 @@
 
   <h3>Reporting Unit</h3>
 
-  <table class="primary">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Trading Name</th>
-      </tr>
-    </thead>
-    <tbody>
+  <dl>
+
+        <dt>RU Reference</dt>
+        <dd><%=h sampleunitref %></dd>
+
+        <dt>Name</dt>
         <% if sampleunit['attributes']['entname1'].present? %>
-          <td><%=h sampleunit['attributes']['entname1'] %></td>
+          <dd><%=h sampleunit['attributes']['entname1'] %></dd>
         <% else %>
-          <td>-</td>
+          <dd>-</dd>
         <% end %>
+
+        <dt>Trading name</dt>
         <% if sampleunit['attributes']['name'].present? %>
-          <td><%=h sampleunit['attributes']['name'] %></td>
+          <dd><%=h sampleunit['attributes']['name'] %></dd>
         <% else %>
-          <td>-</td>
+          <dd>-</dd>
         <% end %>
-      </tr>
-    </tbody>
-  </table>
+
+  </dl>
+
+
+
 
   <h3>Respondents</h3>
 
   <% if respondents.any? %>
-    <table class="primary">
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Email Address</th>
-          <th>Telephone Number</th>
-          <th>Case Ref</th>
-          <th>State</th>
-          <th></th>
-          <th></th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
+
         <% respondents.each_with_index do |respondent, i| %>
-          <% if respondent['firstName'].present? %>
-            <td><%=h respondent['firstName'] %> <%=h respondent['lastName'] %></td>
-          <% else %>
-            <td>-</td>
-          <% end %>
-          <% if respondent['emailAddress'].present? %>
-            <td><%=h respondent['emailAddress'] %></td>
-          <% else %>
-            <td>-</td>
-          <% end %>
-          <% if respondent['telephone'].present? %>
-            <td><%=h respondent['telephone'] %></td>
-          <% else %>
-            <td>-</td>
-          <% end %>
-          <% if caseref.present? %>
-            <td><%=h caseref %></td>
-          <% else %>
-            <td>-</td>
-          <% end %>
-          <td><%= respondent['status'] %></td>
-          <% if respondent['status'] == 'ENABLED' %>
-            <td><a href="/sampleunitref/<%=h sampleunitref %>/cases/<%= respondent['partyId'] %>/events">View Events</a></td>
-          <% else %>
-            <td>No Respondent Events</td>
-          <% end %>
-          <% if respondent['status'] == 'PENDING' %>
-            <td><a href="/sampleunitref/<%=h sampleunitref %>/cases/<%=h case_id %>/events/<%=h respondent['id'] %>/resend_verification_code">Resend Verification Email</a></td>
-          <% else %>
-            <td>-</td>
-          <% end %>
-          <td><a href="<%=h respondent['url'] %>">Secure Message</a></td>
-        </tr>
+        <dl>
+
+          <dt>Name</dt>
+        <% if respondent['firstName'].present? %>
+          <dd><%=h respondent['firstName'] %> <%=h respondent['lastName'] %>
+            <% if respondent['status'] == 'ENABLED' %>
+          <br/>
+          <a href="/sampleunitref/<%=h sampleunitref %>/cases/<%= respondent['partyId'] %>/events">View respondent events</a>
+            <% end %>
+          </dd>
+        <% else %>
+          <dd>-</dd>
+        <% end %>
+
+        <dt>Enrolment state</dt>
+        <dd>
+        <%= respondent['status'] %>
+        </dd>
+
+          <dt>Email address</dt>
+        <% if respondent['emailAddress'].present? %>
+          <dd><%=h respondent['emailAddress'] %>
+            <!-- edit email address link here after a <br /> -->
+            <% if respondent['status'] == 'PENDING' %>
+            <br/>
+            <a href="/sampleunitref/<%=h sampleunitref %>/cases/<%=h case_id %>/events/<%=h respondent['id'] %>/resend_verification_code">Resend verification email</a>
+            <% end %>
+          </dd>
+        <% else %>
+          <dd>-</dd>
+        <% end %>
+
+          <dt>Telephone</dt>
+        <% if respondent['telephone'].present? %>
+          <dd><%=h respondent['telephone'] %></dd>
+        <% else %>
+          <dd>-</dd>
+        <% end %>
+
+          <dt>Case reference</dt>
+        <% if caseref.present? %>
+            <dd><%=h caseref %></dd>
+        <% else %>
+            <dd>-</dd>
+        <% end %>
+
+          <dt>Secure messages</dt>
+          <dd>
+        <% if respondent['status'] == 'ENABLED' %>
+            <a href="<%=h respondent['url'] %>">Create secure message</a>
+        <% else %>
+            Not available
+        <% end %>
+          </dd>
+
+        </dl>
         <% end %>
       </tbody>
     </table>
