@@ -14,7 +14,7 @@
 
         <dt>Name</dt>
         <% if sampleunit['attributes']['entname1'].present? %>
-          <dd><%=h sampleunit['attributes']['entname1'] %></dd>
+          <dd><b><%=h sampleunit['attributes']['entname1'] %></b></dd>
         <% else %>
           <dd>-</dd>
         <% end %>
@@ -40,7 +40,7 @@
 
           <dt>Name</dt>
         <% if respondent['firstName'].present? %>
-          <dd><%=h respondent['firstName'] %> <%=h respondent['lastName'] %>
+          <dd><b><%=h respondent['firstName'] %> <%=h respondent['lastName'] %></b>
             <% if respondent['status'] == 'ENABLED' %>
           <br/>
           <a href="/sampleunitref/<%=h sampleunitref %>/cases/<%= respondent['partyId'] %>/events">View respondent events</a>
