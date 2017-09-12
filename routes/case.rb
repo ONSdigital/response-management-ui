@@ -73,9 +73,8 @@ get '/sampleunitref/:sampleunitref/cases/?' do |sampleunitref|
                                       realm: settings.security_realm) do |cases_response, _request, _result, &_block|
             cases = JSON.parse(cases_response).paginate(page: params[:page]) unless cases_response.code == 404
             cases.each do |kase|
-              if kase['sampleUnitType'] == 'BI'
-                caseref = kase['caseRef']
-              end
+              caseref = kase['caseRef'] if kase['sampleUnitType'] == 'BI'
+
               if kase['sampleUnitType'] == 'B'
                 case_id                = kase['id']
                 party_id               = kase['partyId']
@@ -226,9 +225,7 @@ get '/sampleunitref/:sampleunitref/cases/:party_id/events?' do |sampleunitref, p
 
       cases = JSON.parse(cases_response).paginate(page: params[:page]) unless cases_response.code == 404
       cases.each do |kase_g|
-        if kase_g['sampleUnitType'] == 'BI'
-          caseref = kase_g['caseRef']
-        end
+        caseref = kase_g['caseRef'] if kase_g['sampleUnitType'] == 'BI'
       end
     end
   end
