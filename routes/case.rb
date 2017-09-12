@@ -352,10 +352,10 @@ get '/sampleunitref/:sampleunitref/cases/:case_id/events/:respondent_id/resend_v
                                     password: settings.security_user_password,
                                     realm: settings.security_realm,
                                     payload: {
-                                      description: "Verification code successfully resent.",
-                                      category: "VERIFICATION_CODE_SENT",
+                                      description: 'Verification code successfully resent.',
+                                      category: 'VERIFICATION_CODE_SENT',
                                       subCategory: nil,
-                                      createdBy: "#{session[:display_name]}"
+                                      createdBy: session[:display_name].to_s
                                     }.to_json,
                                     headers: { 'Content-Type' => 'application/json' },
                                     accept: :json) do |post_response_event, _request, _result, &_block|
