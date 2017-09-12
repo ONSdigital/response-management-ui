@@ -357,7 +357,7 @@ get '/sampleunitref/:sampleunitref/cases/:case_id/events/:respondent_id/resend_v
                                       "subCategory": "nil",
                                       "createdBy": "#{session[:display_name]}"
                                     }.to_json,
-                                    headers: { "Content-Type" => "application/json" },
+                                    headers: { 'Content-Type' => 'application/json' },
                                     accept: :json) do |post_response_event, _request, _result, &_block|
 
           if post_response_event.code == 201
