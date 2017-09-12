@@ -207,26 +207,26 @@ get '/sampleunitref/:sampleunitref/cases/:party_id/events?' do |sampleunitref, p
                             password: settings.security_user_password,
                             realm: settings.security_realm) do |kase_response, _request, _result, &_block|
 
- kases = JSON.parse(kase_response).paginate(page: params[:page]) unless kase_response.code == 404
+    kases = JSON.parse(kase_response).paginate(page: params[:page]) unless kase_response.code == 404
 
-  kases.each do |kase|
-    case_state = kase['state']
-    case_id = kase['id']
-    collection_exercise_id = kase['caseGroup']['collectionExerciseId']
-    casegroup_id = kase['caseGroup']['id']
+    kases.each do |kase|
+      case_state = kase['state']
+      case_id = kase['id']
+      collection_exercise_id = kase['caseGroup']['collectionExerciseId']
+      casegroup_id = kase['caseGroup']['id']
 
-    RestClient::Request.execute(method: :get,
-                              url: "#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/cases/casegroupid/#{casegroup_id}",
-                              user: settings.security_user_name,
-                              password: settings.security_user_password,
-                              realm: settings.security_realm) do |cases_response, _request, _result, &_block|
+      RestClient::Request.execute(method: :get,
+                                url: "#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/cases/casegroupid/#{casegroup_id}",
+                                user: settings.security_user_name,
+                                password: settings.security_user_password,
+                                realm: settings.security_realm) do |cases_response, _request, _result, &_block|
 
-      cases = JSON.parse(cases_response).paginate(page: params[:page]) unless cases_response.code == 404
-      cases.each do |kase_g|
-        caseref = kase_g['caseRef'] if kase_g['sampleUnitType'] == 'BI'
+        cases = JSON.parse(cases_response).paginate(page: params[:page]) unless cases_response.code == 404
+        cases.each do |kase_g|
+          caseref = kase_g['caseRef'] if kase_g['sampleUnitType'] == 'BI'
+        end
       end
     end
-  end
 
     RestClient::Request.execute(method: :get,
                             url: "#{settings.protocol}://#{settings.party_service_host}:#{settings.party_service_port}/party-api/v1/parties/type/B/ref/#{sampleunitref}",
