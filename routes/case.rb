@@ -150,7 +150,7 @@ get '/sampleunitref/:sampleunitref/cases/?' do |sampleunitref|
                 respondent['telephone'] = party_respondent['telephone']
                 enrolments = respondent['enrolments']
                 enrolments.each do |enrolment|
-                  if enrolment['SurveyId'] = survey_id
+                  if enrolment['SurveyId'] == survey_id
                     respondent['status'] = enrolment['enrolmentStatus']
                   end
                 end
