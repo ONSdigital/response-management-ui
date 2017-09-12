@@ -79,10 +79,10 @@ get '/sampleunitref/:sampleunitref/cases/?' do |sampleunitref|
                 case_id                = kase['id']
                 party_id               = kase['partyId']
                 ru_kase                = JSON.parse(RestClient::Request.execute(method: :get,
-                                                                     url: "#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}",
-                                                                     user: settings.security_user_name,
-                                                                     password: settings.security_user_password,
-                                                                     realm: settings.security_realm))
+                                                                                url: "#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}",
+                                                                                user: settings.security_user_name,
+                                                                                password: settings.security_user_password,
+                                                                                realm: settings.security_realm))
                 collection_exercise_id = ru_kase['caseGroup']['collectionExerciseId']
                 responses  = kase['responses']
                 case_state = kase['state']
@@ -100,10 +100,10 @@ get '/sampleunitref/:sampleunitref/cases/?' do |sampleunitref|
             events.each do |event|
               category_name         = event['category']
               category              = JSON.parse(RestClient::Request.execute(method: :get,
-                                                                  url: "#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/categories/name/#{category_name}",
-                                                                  user: settings.security_user_name,
-                                                                  password: settings.security_user_password,
-                                                                  realm: settings.security_realm))
+                                                                             url: "#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/categories/name/#{category_name}",
+                                                                             user: settings.security_user_name,
+                                                                             password: settings.security_user_password,
+                                                                             realm: settings.security_realm))
               event['categoryName'] = category['longDescription']
             end
           end
@@ -202,10 +202,10 @@ get '/sampleunitref/:sampleunitref/cases/:party_id/events?' do |sampleunitref, p
   caseref = ''
 
   RestClient::Request.execute(method: :get,
-                            url: "#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/cases/partyid/#{party_id}",
-                            user: settings.security_user_name,
-                            password: settings.security_user_password,
-                            realm: settings.security_realm) do |kase_response, _request, _result, &_block|
+                              url: "#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/cases/partyid/#{party_id}",
+                              user: settings.security_user_name,
+                              password: settings.security_user_password,
+                              realm: settings.security_realm) do |kase_response, _request, _result, &_block|
 
     kases = JSON.parse(kase_response).paginate(page: params[:page]) unless kase_response.code == 404
 
@@ -216,10 +216,10 @@ get '/sampleunitref/:sampleunitref/cases/:party_id/events?' do |sampleunitref, p
       casegroup_id = kase['caseGroup']['id']
 
       RestClient::Request.execute(method: :get,
-                                url: "#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/cases/casegroupid/#{casegroup_id}",
-                                user: settings.security_user_name,
-                                password: settings.security_user_password,
-                                realm: settings.security_realm) do |cases_response, _request, _result, &_block|
+                                  url: "#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/cases/casegroupid/#{casegroup_id}",
+                                  user: settings.security_user_name,
+                                  password: settings.security_user_password,
+                                  realm: settings.security_realm) do |cases_response, _request, _result, &_block|
 
         cases = JSON.parse(cases_response).paginate(page: params[:page]) unless cases_response.code == 404
         cases.each do |kase_g|
@@ -229,26 +229,26 @@ get '/sampleunitref/:sampleunitref/cases/:party_id/events?' do |sampleunitref, p
     end
 
     RestClient::Request.execute(method: :get,
-                            url: "#{settings.protocol}://#{settings.party_service_host}:#{settings.party_service_port}/party-api/v1/parties/type/B/ref/#{sampleunitref}",
-                            user: settings.security_user_name,
-                            password: settings.security_user_password,
-                            realm: settings.security_realm) do |response, _request, _result, &_block|
+                                url: "#{settings.protocol}://#{settings.party_service_host}:#{settings.party_service_port}/party-api/v1/parties/type/B/ref/#{sampleunitref}",
+                                user: settings.security_user_name,
+                                password: settings.security_user_password,
+                                realm: settings.security_realm) do |response, _request, _result, &_block|
       sampleunit = JSON.parse(response) unless response.code == 404
     end
 
     RestClient::Request.execute(method: :get,
-                            url: "#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}/events",
-                            user: settings.security_user_name,
-                            password: settings.security_user_password,
-                            realm: settings.security_realm) do |response, _request, _result, &_block|
+                                url: "#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}/events",
+                                user: settings.security_user_name,
+                                password: settings.security_user_password,
+                                realm: settings.security_realm) do |response, _request, _result, &_block|
       events = JSON.parse(response).paginate(page: params[:page]) unless response.code == 204
       events.each do |event|
         category_name         = event['category']
         category              = JSON.parse(RestClient::Request.execute(method: :get,
-                                                            url: "#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/categories/name/#{category_name}",
-                                                            user: settings.security_user_name,
-                                                            password: settings.security_user_password,
-                                                            realm: settings.security_realm))
+                                                                       url: "#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/categories/name/#{category_name}",
+                                                                       user: settings.security_user_name,
+                                                                       password: settings.security_user_password,
+                                                                       realm: settings.security_realm))
         event['categoryName'] = category['longDescription']
       end
     end
@@ -289,10 +289,10 @@ get '/sampleunitref/:sampleunitref/cases/:party_id/events?' do |sampleunitref, p
     end
 
     RestClient::Request.execute(method: :get,
-                            url: "#{settings.protocol}://#{settings.collection_exercise_service_host}:#{settings.collection_exercise_service_port}/collectionexercises/#{collection_exercise_id}",
-                            user: settings.security_user_name,
-                            password: settings.security_user_password,
-                            realm: settings.security_realm) do |respondent_response, _request, _result, &_block|
+                                url: "#{settings.protocol}://#{settings.collection_exercise_service_host}:#{settings.collection_exercise_service_port}/collectionexercises/#{collection_exercise_id}",
+                                user: settings.security_user_name,
+                                password: settings.security_user_password,
+                                realm: settings.security_realm) do |respondent_response, _request, _result, &_block|
       collectionexercise = JSON.parse(respondent_response) unless respondent_response.code == 404
       survey_id = collectionexercise['surveyId']
     end
@@ -318,10 +318,10 @@ get '/sampleunitref/:sampleunitref' do |sampleunitref|
   sampleunits = []
 
   RestClient::Request.execute(method: :get,
-                            url: "#{settings.protocol}://#{settings.party_service_host}:#{settings.party_service_port}/party-api/v1/parties/type/B/ref/#{sampleunitref}",
-                            user: settings.security_user_name,
-                            password: settings.security_user_password,
-                            realm: settings.security_realm) do |response, _request, _result, &_block|
+                              url: "#{settings.protocol}://#{settings.party_service_host}:#{settings.party_service_port}/party-api/v1/parties/type/B/ref/#{sampleunitref}",
+                              user: settings.security_user_name,
+                              password: settings.security_user_password,
+                              realm: settings.security_realm) do |response, _request, _result, &_block|
     sampleunits = JSON.parse(response) unless response.code == 404
   end
 
@@ -332,17 +332,17 @@ end
 
 get '/sampleunitref/:sampleunitref/cases/:case_id/events/:respondent_id/resend_verification_code' do |sampleunitref, case_id, respondent_id|
   RestClient::Request.execute(method: :get,
-                          url: "#{settings.protocol}://#{settings.party_service_host}:#{settings.party_service_port}/party-api/v1/respondents/id/#{respondent_id}",
-                          user: settings.security_user_name,
-                          password: settings.security_user_password,
-                          realm: settings.security_realm) do |respondent_response, _request, _result, &_block|
+                              url: "#{settings.protocol}://#{settings.party_service_host}:#{settings.party_service_port}/party-api/v1/respondents/id/#{respondent_id}",
+                              user: settings.security_user_name,
+                              password: settings.security_user_password,
+                              realm: settings.security_realm) do |respondent_response, _request, _result, &_block|
   respondents = JSON.parse(respondent_response) unless respondent_response.code == 404
 
   RestClient::Request.execute(method: :get,
-                          url: "#{settings.protocol}://#{settings.party_service_host}:#{settings.party_service_port}/party-api/v1/resend-verification-email/#{respondent_id}",
-                          user: settings.security_user_name,
-                          password: settings.security_user_password,
-                          realm: settings.security_realm) do |get_response, _request, _result, &_block|
+                              url: "#{settings.protocol}://#{settings.party_service_host}:#{settings.party_service_port}/party-api/v1/resend-verification-email/#{respondent_id}",
+                              user: settings.security_user_name,
+                              password: settings.security_user_password,
+                              realm: settings.security_realm) do |get_response, _request, _result, &_block|
 
       if get_response.code == 200
         flash[:notice] = 'Verification code successfully resent.'
