@@ -254,18 +254,18 @@ get '/sampleunitref/:sampleunitref/cases/:party_id/events?' do |sampleunitref, p
     end
 
     RestClient::Request.execute(method: :get,
-                            url: "#{settings.protocol}://#{settings.action_service_host}:#{settings.action_service_port}/actions/case/#{case_id}",
-                            user: settings.security_user_name,
-                            password: settings.security_user_password,
-                            realm: settings.security_realm) do |response, _request, _result, &_block|
+                                url: "#{settings.protocol}://#{settings.action_service_host}:#{settings.action_service_port}/actions/case/#{case_id}",
+                                user: settings.security_user_name,
+                                password: settings.security_user_password,
+                                realm: settings.security_realm) do |response, _request, _result, &_block|
       actions = JSON.parse(response) unless response.code == 204
     end
 
     RestClient::Request.execute(method: :get,
-                            url: "#{settings.protocol}://#{settings.party_service_host}:#{settings.party_service_port}/party-api/v1/parties/type/B/ref/#{sampleunitref}",
-                            user: settings.security_user_name,
-                            password: settings.security_user_password,
-                            realm: settings.security_realm) do |response, _request, _result, &_block|
+                                url: "#{settings.protocol}://#{settings.party_service_host}:#{settings.party_service_port}/party-api/v1/parties/type/B/ref/#{sampleunitref}",
+                                user: settings.security_user_name,
+                                password: settings.security_user_password,
+                                realm: settings.security_realm) do |response, _request, _result, &_block|
       sampleunit = JSON.parse(response) unless response.code == 404
       sampleunituuid = sampleunit['id']
       RestClient::Request.execute(method: :get,
