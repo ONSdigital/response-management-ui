@@ -9,5 +9,5 @@ error 404 do
 end
 
 error 500 do
-  erb :internal_server_error, { title: '500 Internal Server Error' }
+  erb :internal_server_error, locals: { title: '500 Internal Server Error' }
 end
