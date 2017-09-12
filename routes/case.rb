@@ -35,7 +35,6 @@ get '/sampleunitref/:sampleunitref/cases/?' do |sampleunitref|
   collectionexercise     = []
   sampleunitcases        = []
   cases                  = []
-  kase                   = ''
   responses              = ''
   case_state             = ''
   party_id               = ''
