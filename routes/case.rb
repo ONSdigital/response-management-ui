@@ -336,13 +336,13 @@ get '/sampleunitref/:sampleunitref/cases/:case_id/events/:respondent_id/resend_v
                               user: settings.security_user_name,
                               password: settings.security_user_password,
                               realm: settings.security_realm) do |respondent_response, _request, _result, &_block|
-  respondents = JSON.parse(respondent_response) unless respondent_response.code == 404
+    respondents = JSON.parse(respondent_response) unless respondent_response.code == 404
 
-  RestClient::Request.execute(method: :get,
-                              url: "#{settings.protocol}://#{settings.party_service_host}:#{settings.party_service_port}/party-api/v1/resend-verification-email/#{respondent_id}",
-                              user: settings.security_user_name,
-                              password: settings.security_user_password,
-                              realm: settings.security_realm) do |get_response, _request, _result, &_block|
+    RestClient::Request.execute(method: :get,
+                                url: "#{settings.protocol}://#{settings.party_service_host}:#{settings.party_service_port}/party-api/v1/resend-verification-email/#{respondent_id}",
+                                user: settings.security_user_name,
+                                password: settings.security_user_password,
+                                realm: settings.security_realm) do |get_response, _request, _result, &_block|
 
       if get_response.code == 200
         flash[:notice] = 'Verification code successfully resent.'
@@ -372,7 +372,6 @@ get '/sampleunitref/:sampleunitref/cases/:case_id/events/:respondent_id/resend_v
         error_flash_text('Unable to send verification code', get_response)
       end
     end
-
   end
 
   event_url = "/sampleunitref/#{sampleunitref}/cases/"
