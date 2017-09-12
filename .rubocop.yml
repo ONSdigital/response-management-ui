@@ -1,19 +1,22 @@
 #
 # This file contains overrides for the RuboCop (https://github.com/bbatsov/rubocop) Ruby static code analyser.
 #
-Layout/EmptyLinesAroundBlockBody:
+AllCops:
+  TargetRubyVersion: 2.4
+
+Style/EmptyLinesAroundBlockBody:
   Enabled: false
 
-Layout/EmptyLinesAroundClassBody:
+Style/EmptyLinesAroundClassBody:
   Enabled: false
 
-Layout/EmptyLinesAroundMethodBody:
+Style/EmptyLinesAroundMethodBody:
   Enabled: false
 
-Layout/TrailingBlankLines:
+Style/TrailingBlankLines:
   Enabled: false
 
-Layout/TrailingWhitespace:
+Style/TrailingWhitespace:
   Enabled: false
 
 Lint/UselessAssignment:
