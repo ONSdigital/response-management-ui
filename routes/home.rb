@@ -17,7 +17,7 @@ require 'csv'
 require_relative '../lib/authentication'
 require_relative '../models/user'
 
-PROGRAM = 'responseoperations'.freeze
+PROGRAM = 'responseoperations'
 SESSION_EXPIRATION_PERIOD = 60 * 60 * 6
 
 set :action_exporter_host,             ENV['RESPONSE_OPERATIONS_ACTIONEXPORTER_SERVICE_HOST']
