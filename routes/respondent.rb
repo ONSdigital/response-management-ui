@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Present a form for updating an email address
 get '/sampleunitref/:sampleunitref/cases/:case_id/events/:respondent_id/update' do |sampleunitref, case_id, respondent_id|
   authenticate!

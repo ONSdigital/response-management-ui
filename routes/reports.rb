@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 def type_format(report_type)
   formatted_type = report_type.tr('_', ' ').split.map(&:capitalize).join(' ')
   formatted_type[1] = formatted_type[1].upcase if formatted_type[2] == ' '

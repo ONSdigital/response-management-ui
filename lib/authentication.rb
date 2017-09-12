@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Authentication
   def authenticate!
     unless session[:user] && session[:valid_token] # rubocop:disable Style/GuardClause

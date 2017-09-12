@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 error 403 do
   erb :forbidden, locals: { title: '403 Forbidden' }
 end

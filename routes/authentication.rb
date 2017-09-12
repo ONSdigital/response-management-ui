@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 NO_2FA_COOKIE = 'response_operations_no_2fa'.freeze
 CLOCK_DRIFT   = 120
 THIRTY_DAYS   = 60 * 60 * 24 * 30
