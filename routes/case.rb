@@ -331,7 +331,6 @@ get '/sampleunitref/:sampleunitref' do |sampleunitref|
 end
 
 get '/sampleunitref/:sampleunitref/cases/:case_id/events/:respondent_id/resend_verification_code' do |sampleunitref, case_id, respondent_id|
-
   RestClient::Request.execute(method: :get,
                           url: "#{settings.protocol}://#{settings.party_service_host}:#{settings.party_service_port}/party-api/v1/respondents/id/#{respondent_id}",
                           user: settings.security_user_name,
