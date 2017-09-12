@@ -164,12 +164,10 @@ get '/sampleunitref/:sampleunitref/cases/?' do |sampleunitref|
 
   if collectionexercise.any?
     title = "#{collectionexercise['name']} for #{sampleunit['attributes']['entname1']}"
+  elsif sampleunit.any?
+    title = "No Events for #{sampleunit['attributes']['entname1']}"
   else
-    if sampleunit.any?
-      title = "No Events for #{sampleunit['attributes']['entname1']}"
-    else
-      title = 'No matching Reporting Units'
-    end
+    title = 'No matching reporting units'
   end
 
   erb :reporting_unit_events, layout: :sidebar_layout, locals: { title: title,
