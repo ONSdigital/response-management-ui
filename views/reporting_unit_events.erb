@@ -51,9 +51,13 @@
         <% end %>
 
         <dt>Enrolment state</dt>
-        <dd>
-        <%= respondent['status'] %>
-        </dd>
+        <% if respondent['status'].present? %>
+          <dd>
+          <%= respondent['status'] %>
+          </dd>
+        <% else %>
+            <dd>-</dd>
+        <% end %>
 
           <dt>Email address</dt>
         <% if respondent['emailAddress'].present? %>
