@@ -1,22 +1,25 @@
 <%= erb :menu, locals: { pageid: 'respondent' } %>
 
 <% content_for :breadcrumbs do %>
-  <a href="/">Home</a> &gt; <a href="/sampleunitref/<%=h sampleunitref %>/cases"><%=h sampleunit['attributes']['entname1']%></a> &gt; <% if from_respondent %> <a href="/sampleunitref/<%=h sampleunitref %>/cases/<%=h respondent_id %>/events"><%=h respondent['firstName'] %> <%=h respondent['lastName'] %></a> &gt; Update Email <% else %> Update Email <% end %>
+  <a href="/">Home</a> &gt; <a href="/sampleunitref/<%=h sampleunitref %>/cases"><%=h sampleunit['attributes']['entname1']%></a> &gt; <% if from_respondent %> <a href="/sampleunitref/<%=h sampleunitref %>/cases/<%=h respondent_id %>/events"><%=h respondent['firstName'] %> <%=h respondent['lastName'] %></a> &gt; Edit email address <% else %> Edit email address <% end %>
 <% end %>
 
   <% content_for :sub_heading do %>
-    Amend the email address for Respondent <%=h respondent['firstName'] %> <%=h respondent['lastName'] %>
+    Edit email address for <%=h respondent['firstName'] %> <%=h respondent['lastName'] %>
   <%end%>
 
-  <p>Current email address: <%= respondent['emailAddress'] %></p>
-  <br>
-  <form action="/sampleunitref/<%=h sampleunitref %>/cases/<%=h case_id %>/events/update" method="post">
-    <fieldset>
-      <p>New email address:</p>
-      <input type="email" id="email_address" name="email_address" value="">
-    </fieldset>
-    <p class="buttons">
-      <input class="button" type="submit" value="Save"> or <a href="<%=h previous_page_url %>">Cancel</a>
-      <input hidden id="previous_page_url" name="previous_page_url" value="<%=h previous_page_url %>">
-    </p>
+
+  <form action="/sampleunitref/<%=h sampleunitref %>/cases/<%=h case_id %>/events/update" method="post" class="form-edit-email">
+
+      <p>Current email address <br /><strong><%= respondent['emailAddress'] %></strong></p>
+
+      <label for="email_address">New email address</label>
+      <input class="input input-edit-email" type="email" required id="email_address" name="email_address" value="" />
+
+      <input class="btn btn-edit-email" type="submit" value="Update and send verification email" />
+
+      <a class="cancel-edit-email" href="<%=h previous_page_url %>">Cancel</a>
+
+      <input type="hidden" id="previous_page_url" name="previous_page_url" value="<%=h previous_page_url %>" />
+
   </form>

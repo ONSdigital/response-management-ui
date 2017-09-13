@@ -235,3 +235,35 @@ table.secondary th{
   background: #e4e8eb;
   background: #fff;
 }
+
+
+
+
+
+
+form.form-edit-email{
+  display: block;
+  font-size: 1rem;
+}
+
+form.form-edit-email p{
+  font-size: 81.25%;
+}
+
+form.form-edit-email label,
+form.form-edit-email input{
+  display: block;
+  font-size: 81.25%;
+}
+
+form.form-edit-email .input-edit-email{
+  margin-bottom: 0.5rem;
+}
+
+form.form-edit-email .btn-edit-email{
+  font-size: 81.25%;
+}
+
+form.form-edit-email a.cancel-edit-email{
+  font-size: 81.25%;
+}
