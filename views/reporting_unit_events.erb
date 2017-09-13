@@ -58,7 +58,8 @@
           <dt>Email address</dt>
         <% if respondent['emailAddress'].present? %>
           <dd><%=h respondent['emailAddress'] %>
-            <!-- edit email address link here after a <br /> -->
+            <br/>
+            <a href="/sampleunitref/<%=h sampleunitref %>/cases/<%=h case_id %>/events/<%=h respondent['id'] %>/update">Edit</a>
             <% if respondent['status'] == 'PENDING' %>
             <br/>
             <a href="/sampleunitref/<%=h sampleunitref %>/cases/<%=h case_id %>/events/<%=h respondent['id'] %>/resend_verification_code">Resend verification email</a>

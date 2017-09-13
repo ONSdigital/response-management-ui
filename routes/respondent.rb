@@ -28,7 +28,7 @@ get '/sampleunitref/:sampleunitref/cases/:case_id/events/:respondent_id/update' 
     respondent = JSON.parse(respondent_response) unless respondent_response.code == 404
 
     erb :respondent, locals: {  title: "Update email for Respondent #{respondent['firstName']} #{respondent['lastName']}",
-                                action: "/sampleunitref/#{sampleunitref}/cases/#{case_id}/events/update",
+                                action: "/#{respondent_id}/update",
                                 method: :post,
                                 page: params[:page],
                                 email_address: '',
@@ -43,10 +43,40 @@ get '/sampleunitref/:sampleunitref/cases/:case_id/events/:respondent_id/update' 
   end
 end
 
-post '/sampleunitref/:sampleunitref/cases/:case_id/events/update' do
+post '/:respondent_id/update' do |respondent_id|
 
   email_address = params[:email_address]
   previous_page_url = params[:previous_page_url]
+  old_email = ''
+
+  RestClient::Request.execute(method: :get,
+                              url: "#{settings.protocol}://#{settings.party_service_host}:#{settings.party_service_port}/party-api/v1/respondents/id/#{respondent_id}",
+                              user: settings.security_user_name,
+                              password: settings.security_user_password,
+                              realm: settings.security_realm) do |respondent_response, _request, _result, &_block|
+    respondent = JSON.parse(respondent_response) unless respondent_response.code == 404
+    old_email = respondent['emailAddress']
+  end
+
+  RestClient::Request.execute(method: :put,
+                              url: "#{settings.protocol}://#{settings.party_service_host}:#{settings.party_service_port}/party-api/v1/respondents/email",
+                              user: settings.security_user_name,
+                              password: settings.security_user_password,
+                              realm: settings.security_realm,
+                              payload: {
+                                email_address: old_email,
+                                new_email_address: email_address
+                              }.to_json,
+                              headers: { 'Content-Type' => 'application/json' },
+                              accept: :json) do |response, _request, _result, &_block|
+    if response.code == 200
+      flash[:notice] = 'Successfully amended email.'
+    else
+      logger.error response
+      error_flash_text('Unable to amend email', response)
+    end
+
+  end
 
   redirect previous_page_url
 
