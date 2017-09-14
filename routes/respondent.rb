@@ -70,14 +70,13 @@ post '/:respondent_id/update' do |respondent_id|
                               headers: { 'Content-Type' => 'application/json' },
                               accept: :json) do |response, _request, _result, &_block|
     if response.code == 200
-      flash[:notice] = 'Successfully amended email.'
+      flash[:notice] = 'Successfully edited email.'
     else
       logger.error response
-      error_flash_text('Unable to amend email', response)
+      error_flash_text('Unable to edit email', response)
     end
 
   end
 
   redirect previous_page_url
-
 end
