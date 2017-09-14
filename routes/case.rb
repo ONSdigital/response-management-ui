@@ -150,7 +150,7 @@ get '/sampleunitref/:sampleunitref/cases/?' do |sampleunitref|
                 respondent['telephone'] = party_respondent['telephone']
                 enrolments = respondent['enrolments']
                 enrolments.each do |enrolment|
-                  if enrolment['SurveyId'] = survey_id
+                  if enrolment['surveyId'] == survey_id
                     respondent['status'] = enrolment['enrolmentStatus']
                   end
                 end
@@ -372,7 +372,6 @@ get '/sampleunitref/:sampleunitref/cases/:case_id/events/:respondent_id/resend_v
             error_flash('Unable to create event', post_response_event)
           end
         end
-
       else
         logger.error get_response
         error_flash_text('Unable to send verification code', get_response)

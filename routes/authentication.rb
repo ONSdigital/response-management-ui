@@ -23,7 +23,8 @@ get '/signin/?' do
 end
 
 post '/signin/?' do
-  if user = User.authenticate(settings.client_user, settings.client_password, settings.oauth_server, params)
+  user = User.authenticate(settings.client_user, settings.client_password, settings.oauth_server, params)
+  if user
     session[:user] = user
     session[:display_name] = params['username'].split('@')[0].tr('.', ' ').gsub(/\b\w/, &:capitalize)
     auth_logger.info "#{session[:display_name]} signed in"
