@@ -22,10 +22,10 @@ $(document).ready(function() {
 });
 
 
-var elems = document.getElementsByClassName('confirm-resend-v-email');
+var elems = document.getElementsByClassName("confirm-resend-v-email");
 var confirmIt = function (e) {
-    if (!confirm('This will send another verification email to this respondent')) e.preventDefault();
+    if (!confirm("This will send another verification email to this respondent")) e.preventDefault();
 };
 for (var i = 0, l = elems.length; i < l; i++) {
-    elems[i].addEventListener('click', confirmIt, false);
+    elems[i].addEventListener("click", confirmIt, false);
 }
