@@ -70,7 +70,7 @@ get '/sampleunitref/:sampleunitref/cases/?' do |sampleunitref|
                                       user: settings.security_user_name,
                                       password: settings.security_user_password,
                                       realm: settings.security_realm) do |cases_response, _request, _result, &_block|
-            cases = JSON.parse(cases_response).paginate(page: params[:page]) unless cases_response.code == 404
+            cases = JSON.parse(cases_response) unless cases_response.code == 404
             cases.each do |kase|
               if kase['sampleUnitType'] == 'BI'
                 caseref = kase['caseRef']
