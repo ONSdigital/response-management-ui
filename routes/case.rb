@@ -209,7 +209,7 @@ get '/sampleunitref/:sampleunitref/cases/:party_id/events?' do |sampleunitref, p
                             password: settings.security_user_password,
                             realm: settings.security_realm) do |kase_response, _request, _result, &_block|
 
- kases = JSON.parse(kase_response).paginate(page: params[:page]) unless kase_response.code == 404
+ kases = JSON.parse(kase_response) unless kase_response.code == 404
 
   kases.each do |kase|
     case_state = kase['state']
@@ -236,16 +236,16 @@ get '/sampleunitref/:sampleunitref/cases/:party_id/events?' do |sampleunitref, p
                             url: "#{settings.protocol}://#{settings.party_service_host}:#{settings.party_service_port}/party-api/v1/parties/type/B/ref/#{sampleunitref}",
                             user: settings.security_user_name,
                             password: settings.security_user_password,
-                            realm: settings.security_realm) do |response, _request, _result, &_block|
-      sampleunit = JSON.parse(response) unless response.code == 404
+                            realm: settings.security_realm) do |response_party, _request, _result, &_block|
+      sampleunit = JSON.parse(response_party) unless response_party.code == 404
     end
 
     RestClient::Request.execute(method: :get,
                             url: "#{settings.protocol}://#{settings.case_service_host}:#{settings.case_service_port}/cases/#{case_id}/events",
                             user: settings.security_user_name,
                             password: settings.security_user_password,
-                            realm: settings.security_realm) do |response, _request, _result, &_block|
-      events = JSON.parse(response).paginate(page: params[:page]) unless response.code == 204
+                            realm: settings.security_realm) do |response_events,_request, _result, &_block|
+      events = JSON.parse(response_events).paginate(page: params[:page]) unless response_events.code == 204
       events.each do |event|
         category_name         = event['category']
         category              = JSON.parse(RestClient::Request.execute(method: :get,
