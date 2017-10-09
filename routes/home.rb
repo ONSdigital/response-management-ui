@@ -11,6 +11,7 @@ require 'yaml'
 require 'open-uri'
 require 'sinatra/formkeeper'
 require 'csv'
+require 'rack/session/redis'
 
 require_relative '../lib/authentication'
 require_relative '../models/user'
@@ -30,6 +31,8 @@ set :client_password,                  ENV['RESPONSE_OPERATIONS_CLIENT_PASSWORD'
 set :client_user,                      ENV['RESPONSE_OPERATIONS_CLIENT_USER']
 set :collection_exercise_service_host, ENV['RESPONSE_OPERATIONS_COLLECTION_EXERCISE_SERVICE_HOST']
 set :collection_exercise_service_port, ENV['RESPONSE_OPERATIONS_COLLECTION_EXERCISE_SERVICE_PORT']
+set :notifygateway_host,               ENV['RESPONSE_OPERATIONS_NOTIFYGATEWAY_SERVICE_HOST']
+set :notifygateway_port,               ENV['RESPONSE_OPERATIONS_NOTIFYGATEWAY_SERVICE_PORT']
 set :oauth_server,                     ENV['RESPONSE_OPERATIONS_OAUTHSERVER_HOST']
 set :party_service_host,               ENV['RESPONSE_OPERATIONS_PARTY_SERVICE_HOST']
 set :party_service_port,               ENV['RESPONSE_OPERATIONS_PARTY_SERVICE_PORT']
@@ -40,10 +43,13 @@ set :security_user_name,               ENV['security_user_name']
 set :security_user_password,           ENV['security_user_password']
 set :security_realm,                   ENV['security_realm']
 
-# Expire sessions after SESSION_EXPIRATION_PERIOD of inactivity
-use Rack::Session::Cookie, key: 'rack.session', path: '/',
-                           secret: 'eb46fa947d8411e5996329c9ef0ba35d',
-                           expire_after: SESSION_EXPIRATION_PERIOD
+# Store Session in Redis
+use Rack::Session::Redis, {
+                            redis_server: 'redis://0.0.0.0:7379/0',
+                            key:    'ras.rm.session',
+                            expire_after: SESSION_EXPIRATION_PERIOD
+                          }
+                          
 # Set global pagination options.
 WillPaginate.per_page = 20
 
