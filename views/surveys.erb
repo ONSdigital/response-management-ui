@@ -1,0 +1,38 @@
+<%= erb :menu, locals: { pageid: 'home' } %>
+
+<% content_for :breadcrumbs do %>
+<a href="/">Home</a> &gt; Surveys
+<% end %>
+
+<h3>Surveys</h3>
+
+<% if surveys.any? %>
+  <table class="secondary">
+    <thead>
+      <tr>
+        <th>Survey Id</th>
+        <th>Survey Name</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+    <% surveys.each_with_index do |survey, i| %>
+      <tr class="<%= i.even? ? 'even' : 'odd ' %>">
+      <% if survey['id'].present? %>
+        <td><%=h survey['id'] %></td>
+        <% else %>
+          <td>-</td>
+        <% end %>
+      <% if survey['shortName'].present? %>
+        <td><%=h survey['shortName'] %></td>
+      <% else %>
+        <td>-</td>
+      <% end %>
+      <td><a href="/collectionexercises/<%=h survey['id'] %>">View</a></td>
+      </tr>
+    <% end %>
+      </tbody>
+    </table>
+<% else %>
+  <p id="information"><strong>There are no action plans for this collection exercise.</strong></p>
+<% end %>

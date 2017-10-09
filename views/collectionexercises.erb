@@ -1,0 +1,44 @@
+<%= erb :menu, locals: { pageid: 'home' } %>
+
+<% content_for :breadcrumbs do %>
+<a href="/">Home</a>  &gt; Collection Exercises
+<% end %>
+
+<h3>Collection Exercises</h3>
+
+<% if collectionexercises.any? %>
+  <table class="secondary">
+    <thead>
+      <tr>
+        <th>Collection Exercise ID</th>
+        <th>Name</th>
+        <th>Scheduled Execution Date</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+    <% collectionexercises.each_with_index do |collectionexercise, i| %>
+      <tr class="<%= i.even? ? 'even' : 'odd ' %>">
+      <% if collectionexercise['id'].present? %>
+        <td><%=h collectionexercise['id'] %></td>
+        <% else %>
+          <td>-</td>
+        <% end %>
+      <% if collectionexercise['name'].present? %>
+        <td><%=h collectionexercise['name'] %></td>
+      <% else %>
+        <td>-</td>
+      <% end %>
+      <% if collectionexercise['scheduledExecutionDateTime'].present? %>
+        <td><%=h collectionexercise['scheduledExecutionDateTime'] %></td>
+      <% else %>
+        <td>-</td>
+      <% end %>
+      <td><a href="/schedule/collectionexercise/<%=h collectionexercise['id'] %>">View</a></td>
+      </tr>
+    <% end %>
+      </tbody>
+    </table>
+<% else %>
+  <p id="information"><strong>There are no collection exercises for this Survey.</strong></p>
+<% end %>
