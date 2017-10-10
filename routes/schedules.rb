@@ -10,6 +10,19 @@ get '/surveys' do
     surveys = JSON.parse(response) unless response.code == 404
   end
 
+  surveys.each do |survey|
+    surveyid      = survey['id']
+
+    RestClient::Request.execute(method: :get,
+                                url: "#{settings.protocol}://#{settings.survey_service_host}:#{settings.survey_service_port}/surveys/#{surveyid}",
+                                user: settings.security_user_name,
+                                password: settings.security_user_password,
+                                realm: settings.security_realm) do |response, _request, _result, &_block|
+      surveydetails = JSON.parse(response) unless response.code == 404
+      survey['longName'] = surveydetails['longName']
+    end
+  end
+
   erb :surveys, locals: { title: "List of Surveys",
                                    surveys: surveys
                                   }
@@ -35,7 +48,6 @@ get '/collectionexercises/:surveyid' do |surveyid|
                               password: settings.security_user_password,
                               realm: settings.security_realm) do |response, _request, _result, &_block|
     survey = JSON.parse(response) unless response.code == 404
-    puts survey
     surveyname = survey['longName']
   end
 
@@ -61,7 +73,6 @@ get '/schedule/collectionexercise/:collectionexercise' do |collectionexerciseid|
 
   actionplans.each do |actionplan|
     actionplanid      = actionplan['actionPlanId']
-    puts "#{settings.protocol}://#{settings.action_service_host}:#{settings.action_service_port}/actionplans/#{actionplanid}"
 
     actionplandetails = JSON.parse(RestClient::Request.execute(method: :get,
                                                                url: "#{settings.protocol}://#{settings.action_service_host}:#{settings.action_service_port}/actionplans/#{actionplanid}",

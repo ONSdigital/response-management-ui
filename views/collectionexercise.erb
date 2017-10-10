@@ -25,12 +25,12 @@
         <td>-</td>
       <% end %>
       <% if collectionexercise['scheduledExecutionDateTime'].present? %>
-        <td><%=h collectionexercise['scheduledExecutionDateTime'] %></td>
+        <td><%=h collectionexercise['scheduledExecutionDateTime'].to_date %></td>
       <% else %>
         <td>-</td>
       <% end %>
       <% if collectionexercise['scheduledStartDateTime'].present? %>
-        <td><%=h collectionexercise['scheduledStartDateTime'] %></td>
+        <td><%=h collectionexercise['scheduledStartDateTime'].to_date %></td>
       <% else %>
         <td>-</td>
       <% end %>
