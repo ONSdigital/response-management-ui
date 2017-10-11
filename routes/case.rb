@@ -44,11 +44,16 @@ get '/sampleunitref/:sampleunitref/cases/?' do |sampleunitref|
   uri                    = ''
   caseref                = ''
 
+
+  puts "#{settings.protocol}://#{settings.party_service_host}:#{settings.party_service_port}/party-api/v1/parties/type/B/ref/#{sampleunitref}"
+
+
   RestClient::Request.execute(method: :get,
                               url: "#{settings.protocol}://#{settings.party_service_host}:#{settings.party_service_port}/party-api/v1/parties/type/B/ref/#{sampleunitref}",
                               user: settings.security_user_name,
                               password: settings.security_user_password,
                               realm: settings.security_realm) do |response, _request, _result, &_block|
+
 
     sampleunit = JSON.parse(response) unless response.code == 404
     if sampleunit.any?

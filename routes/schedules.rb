@@ -34,6 +34,7 @@ get '/collectionexercises/:surveyid' do |surveyid|
   survey              = []
   surveyname          = ""
 
+
   RestClient::Request.execute(method: :get,
                               url: "#{settings.protocol}://#{settings.collection_exercise_service_host}:#{settings.collection_exercise_service_port}/collectionexercises/survey/#{surveyid}",
                               user: settings.security_user_name,
