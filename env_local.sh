@@ -3,7 +3,7 @@
 # Script for setting the required environment variables in development.
 # Adjust as required.
 #
-# Usage: . ./env_dev.sh
+# Usage: . ./env_local.sh
 #
 # Author: Philip Sharland (philip.sharland@ons.gov.uk)
 #

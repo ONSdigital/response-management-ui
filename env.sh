@@ -3,7 +3,7 @@
 # Script for setting the required environment variables in integration.
 # Adjust as required.
 #
-# Usage: . ./env_int.sh
+# Usage: . ./env.sh
 #
 # Author: Philip Sharland (philip.sharland@ons.gov.uk)
 #
