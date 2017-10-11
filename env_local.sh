@@ -28,7 +28,7 @@ if [ "$#" -eq 4 ]; then
   export RESPONSE_OPERATIONS_OAUTHSERVER_HOST="http://ras-django-dev.apps.devtest.onsclofo.uk/api/v1/tokens"
   export RESPONSE_OPERATIONS_PARTY_SERVICE_HOST="localhost"
   export RESPONSE_OPERATIONS_PARTY_SERVICE_PORT="5062"
-  export RESPONSE_OPERATIONS_SECURE_MESSAGE_SERVICE_HOST="localhost"
+  export RESPONSE_OPERATIONS_SECURE_MESSAGE_SERVICE_HOST="ras-backstage-dev.apps.devtest.onsclofo.uk/secure-messages"
   export RESPONSE_OPERATIONS_SECURE_MESSAGE_SERVICE_PORT="80"
   export RESPONSE_OPERATIONS_CLIENT_USER=$1
   export RESPONSE_OPERATIONS_CLIENT_PASSWORD=$2
