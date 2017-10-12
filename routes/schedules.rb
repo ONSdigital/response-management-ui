@@ -1,5 +1,5 @@
 get '/surveys' do
-
+  authenticate!
   surveys = []
 
   RestClient::Request.execute(method: :get,
@@ -29,7 +29,7 @@ get '/surveys' do
 end
 
 get '/collectionexercises/:surveyid' do |surveyid|
-
+  authenticate!
   collectionexercises = []
   survey              = []
   surveyname          = ""
