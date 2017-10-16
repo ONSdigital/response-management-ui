@@ -12,9 +12,8 @@ get '/sample_upload' do
   end
 
   erb :sample_upload, locals: { title: 'Sample Upload',
-  surveys: surveys }
+                                surveys: surveys }
 end
-
 
 post '/sample_upload' do
 
@@ -22,16 +21,26 @@ post '/sample_upload' do
   survey_type = params[:survey_type]
 
   RestClient::Request.execute(method: :post,
-    url: "#{settings.protocol}://#{settings.sample_service_host}:#{settings.sample_service_port}/samples/#{survey_type}/fileupload",
-    user: settings.security_user_name,
-    password: settings.security_user_password,
-    realm: settings.security_realm,
-    payload: {
-      :multipart => true,
-      :file => File.new(sample_file_path, 'r')
-    }) do |post_response_event, _request, _result, &_block|
+                              url: "#{settings.protocol}://#{settings.sample_service_host}:#{settings.sample_service_port}/samples/#{survey_type}/fileupload",
+                              user: settings.security_user_name,
+                              password: settings.security_user_password,
+                              realm: settings.security_realm,
+                              payload: {
+                                multipart: true,
+                                file: File.new(sample_file_path, 'r')
+                              }) do |post_response_event, _request, _result, &_block|
 
-    parsed_response = JSON.parse(post_response_event) unless post_response_event.code == 404
+    if post_response_event.code == 201
+      flash[:notice] = 'Sample successfully uploaded.'
+    else
+
+      puts post_response_event.to_s
+      logger.error post_response_event
+      error_flash('Error uploading sample', post_response_event)
+    end
+
+    event_url = '/sample_upload'
+    redirect event_url
 
   end
 
