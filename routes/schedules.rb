@@ -90,3 +90,26 @@ get '/schedule/collectionexercise/:collectionexercise' do |collectionexerciseid|
                                      actionplans: actionplans
                                     }
 end
+
+get '/schedule/actionplan/:actionplanid' do |actionplanid|
+  authenticate!
+  actionplanrules = []
+
+  actionplanrules = JSON.parse(RestClient::Request.execute(method: :get,
+                                                           url: "#{settings.protocol}://#{settings.action_service_host}:#{settings.action_service_port}/actionplans/actionplanrules/#{actionplanid}",
+                                                           user: settings.security_user_name,
+                                                           password: settings.security_user_password,
+                                                           realm: settings.security_realm))
+
+  actionplandetails = JSON.parse(RestClient::Request.execute(method: :get,
+                                                             url: "#{settings.protocol}://#{settings.action_service_host}:#{settings.action_service_port}/actionplans/#{actionplanid}",
+                                                             user: settings.security_user_name,
+                                                             password: settings.security_user_password,
+                                                             realm: settings.security_realm))
+
+  actionplan['name'] = actionplandetails['name']
+
+  erb :actionplanrules, locals: { title: "Action Plan Rules for Actionplan #{actionplan}",
+                                  actionplanrules: actionplanrules
+                                }
+end

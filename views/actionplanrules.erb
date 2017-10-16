@@ -1,0 +1,44 @@
+<%= erb :menu, locals: { pageid: 'home' } %>
+
+<% content_for :breadcrumbs do %>
+<a href="/">Home</a> &gt; <%=h actionplan %> &gt; Action Plan Rules
+<% end %>
+
+<h3>Action Plan Rules</h3>
+
+<% if actionplanrules.any? %>
+  <table class="primary">
+    <thead>
+      <tr>
+        <th>Rule Name</th>
+        <th>Description</th>
+        <th>Days Offset</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% actionplanrules.each_with_index do |actionplanrule, i| %>
+        <tr class="<%= i.even? ? 'even' : 'odd ' %>">
+          <% if actionplanrule['name'].present? %>
+            <td><%=h actionplanrule['name'] %></td>
+          <% else %>
+            <td>-</td>
+          <% end %>
+          <% if actionplanrule['description'].present? %>
+            <td><%=h actionplanrule['description'] %></td>
+          <% else %>
+            <td>-</td>
+          <% end %>
+          <% if actionplanrule['daysoffset'].present? %>
+            <td><%=h actionplanrule['daysoffset'].to_date %></td>
+          <% else %>
+            <td>-</td>
+          <% end %>
+          <td><a href="">Edit</a></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p id="information"><strong>There are no Action Plan Rules for this Action Plan.</strong></p>
+<% end %>
