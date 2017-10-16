@@ -1,0 +1,26 @@
+<%= erb :menu, locals: { pageid: 'sample_upload' } %>
+
+<% content_for :breadcrumbs do %>
+  <a href="/">Home</a> &gt; Sample Upload
+<% end %>
+
+<% content_for :sub_heading do %>
+  Upload Sample for specified Survey type
+<%end%>
+
+<form action="/sample_upload" enctype="multipart/form-data" method="post" class="form-edit-email">
+  <p>
+    <select name="survey_type">
+      <option value="none">None</option>
+      <% if surveys.any? %>
+        <% surveys.each do |survey| %>
+          <option value="<%=h survey['shortName'] %>"><%=h survey['shortName'] %></option>
+        <% end %>
+      <% end %>
+    </select>
+  </p>
+  <p>
+    <input type="file" name="sample_file" id="sample_file" accept=".csv">
+  </p>
+  <input class="btn btn-upload-sample-file" type="submit" value="Upload Sample File" />
+</form>
