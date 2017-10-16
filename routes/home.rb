@@ -30,6 +30,8 @@ set :client_password,                  ENV['RESPONSE_OPERATIONS_CLIENT_PASSWORD'
 set :client_user,                      ENV['RESPONSE_OPERATIONS_CLIENT_USER']
 set :collection_exercise_service_host, ENV['RESPONSE_OPERATIONS_COLLECTION_EXERCISE_SERVICE_HOST']
 set :collection_exercise_service_port, ENV['RESPONSE_OPERATIONS_COLLECTION_EXERCISE_SERVICE_PORT']
+set :survey_service_host,              ENV['RESPONSE_OPERATIONS_SURVEY_SERVICE_HOST']
+set :survey_service_port,              ENV['RESPONSE_OPERATIONS_SURVEY_SERVICE_PORT']
 set :oauth_server,                     ENV['RESPONSE_OPERATIONS_OAUTHSERVER_HOST']
 set :party_service_host,               ENV['RESPONSE_OPERATIONS_PARTY_SERVICE_HOST']
 set :party_service_port,               ENV['RESPONSE_OPERATIONS_PARTY_SERVICE_PORT']

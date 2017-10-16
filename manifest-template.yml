@@ -30,3 +30,5 @@ applications:
     security_user_name: REPLACE_BA_USERNAME
     security_user_password: REPLACE_BA_PASSWORD
     security_realm: sdc
+    RESPONSE_OPERATIONS_SURVEY_SERVICE_HOST: surveysvc-SPACE.DOMAIN
+    RESPONSE_OPERATIONS_SURVEY_SERVICE_PORT: REPLACE_PORT

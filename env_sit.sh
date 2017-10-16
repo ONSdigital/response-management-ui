@@ -29,3 +29,5 @@ export RESPONSE_OPERATIONS_PARTY_SERVICE_HOST="ras-party-service-sit.apps.devtes
 export RESPONSE_OPERATIONS_PARTY_SERVICE_PORT="80"
 export RESPONSE_OPERATIONS_SECURE_MESSAGE_SERVICE_HOST="ras-backstage-sit.apps.devtest.onsclofo.uk/secure-messages"
 export RESPONSE_OPERATIONS_SECURE_MESSAGE_SERVICE_PORT="80"
+export RESPONSE_OPERATIONS_SURVEY_SERVICE_HOST="surveysvc-sit.apps.devtest.onsclofo.uk"
+export RESPONSE_OPERATIONS_SURVEY_SERVICE_PORT="80"
