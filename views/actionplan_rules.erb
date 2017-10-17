@@ -10,7 +10,8 @@
   <table class="primary">
     <thead>
       <tr>
-        <th>Rule Name</th>
+        <th>Action Plan Rule ID</th>
+        <th>Action Plan Rule Name</th>
         <th>Description</th>
         <th>Days Offset</th>
         <th></th>
@@ -19,6 +20,7 @@
     <tbody>
       <% actionplanrules.each_with_index do |actionplanrule, i| %>
         <tr class="<%= i.even? ? 'even' : 'odd ' %>">
+          <td>REPLACE with Action Plan Rule UUID</td>
           <% if actionplanrule['name'].present? %>
             <td><%=h actionplanrule['name'] %></td>
           <% else %>

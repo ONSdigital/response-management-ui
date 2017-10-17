@@ -53,7 +53,7 @@ get '/collectionexercises/:surveyid' do |surveyid|
   end
 
 
-  erb :collectionexercises, locals: { title: "List of Collection Exercises for #{surveyname}",
+  erb :collection_exercises, locals: { title: "List of Collection Exercises for #{surveyname}",
                                    collectionexercises: collectionexercises
                                   }
 end
@@ -84,7 +84,7 @@ get '/schedule/collectionexercise/:collectionexercise' do |collectionexerciseid|
     actionplan['description'] = actionplandetails['description']
   end
 
-  erb :collectionexercise, locals: { title: "Schedule for Collection Exercise #{collectionexerciseid}",
+  erb :collection_exercise, locals: { title: "Schedule for Collection Exercise #{collectionexerciseid}",
                                      collectionexercise: collectionexercise,
                                      collectionexerciseid: collectionexerciseid,
                                      actionplans: actionplans
@@ -109,7 +109,7 @@ get '/schedule/actionplan/:actionplanid' do |actionplanid|
 
   actionplan['name'] = actionplandetails['name']
 
-  erb :actionplanrules, locals: { title: "Action Plan Rules for Actionplan #{actionplan}",
+  erb :actionplan_rules, locals: { title: "Action Plan Rules for Actionplan #{actionplan}",
                                   actionplanrules: actionplanrules
                                 }
 end
