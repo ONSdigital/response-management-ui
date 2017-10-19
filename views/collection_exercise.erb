@@ -1,36 +1,30 @@
 <%= erb :menu, locals: { pageid: 'home' } %>
 
 <% content_for :breadcrumbs do %>
-<a href="/">Home</a> &gt; <%=h collectionexerciseid %> &gt; Collection Exercise
+<a href="/">Home</a> &gt; <%=h collectionexercise['name'] %> &gt; Collection Exercise
 <% end %>
 
 <table class="primary">
   <thead>
     <tr>
-      <th>Collection Exercise</th>
-      <th>Name</th>
+      <th>Collection Exercise Name</th>
       <th>Scheduled Execution Date</th>
       <th>Scheduled Start Date</th>
     </tr>
   </thead>
   <tbody>
-      <% if collectionexercise['id'].present? %>
-        <td><%=h collectionexercise['id'] %></td>
-      <% else %>
-        <td>-</td>
-      <% end %>
       <% if collectionexercise['name'].present? %>
         <td><%=h collectionexercise['name'] %></td>
       <% else %>
         <td>-</td>
       <% end %>
       <% if collectionexercise['scheduledExecutionDateTime'].present? %>
-        <td><%=h collectionexercise['scheduledExecutionDateTime'].to_date %></td>
+        <td><%=h collectionexercise['scheduledExecutionDateTime'].to_notime_date %></td>
       <% else %>
         <td>-</td>
       <% end %>
       <% if collectionexercise['scheduledStartDateTime'].present? %>
-        <td><%=h collectionexercise['scheduledStartDateTime'].to_date %></td>
+        <td><%=h collectionexercise['scheduledStartDateTime'].to_notime_date %></td>
       <% else %>
         <td>-</td>
       <% end %>
@@ -44,9 +38,8 @@
   <table class="secondary">
     <thead>
       <tr>
-        <th>Action Plan ID</th>
+        <th>Action Plan Name</th>
         <th>Sample Unit Type</th>
-        <th>Name</th>
         <th>Description</th>
         <th></th>
       </tr>
@@ -54,18 +47,13 @@
     <tbody>
     <% actionplans.each_with_index do |actionplan, i| %>
       <tr class="<%= i.even? ? 'even' : 'odd ' %>">
-      <% if actionplan['actionPlanId'].present? %>
-        <td><%=h actionplan['actionPlanId'] %></td>
+        <% if actionplan['name'].present? %>
+          <td><%=h actionplan['name'] %></td>
         <% else %>
           <td>-</td>
         <% end %>
       <% if actionplan['sampleUnitType'].present? %>
         <td><%=h actionplan['sampleUnitType'] %></td>
-      <% else %>
-        <td>-</td>
-      <% end %>
-      <% if actionplan['name'].present? %>
-        <td><%=h actionplan['name'] %></td>
       <% else %>
         <td>-</td>
       <% end %>

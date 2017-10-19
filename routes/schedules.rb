@@ -23,7 +23,7 @@ get '/surveys' do
     end
   end
 
-  erb :surveys, locals: { title: "List of Surveys",
+  erb :surveys, locals: { title: 'Surveys',
                                    surveys: surveys
                                   }
 end
@@ -84,7 +84,7 @@ get '/schedule/collectionexercise/:collectionexercise' do |collectionexerciseid|
     actionplan['description'] = actionplandetails['description']
   end
 
-  erb :collection_exercise, locals: { title: "Schedule for Collection Exercise #{collectionexerciseid}",
+  erb :collection_exercise, locals: { title: "Schedule for Collection Exercise: #{collectionexercise['name']}",
                                      collectionexercise: collectionexercise,
                                      collectionexerciseid: collectionexerciseid,
                                      actionplans: actionplans
@@ -96,7 +96,7 @@ get '/schedule/actionplan/:actionplanid' do |actionplanid|
   actionplanrules = []
 
   actionplanrules = JSON.parse(RestClient::Request.execute(method: :get,
-                                                           url: "#{settings.protocol}://#{settings.action_service_host}:#{settings.action_service_port}/actionplans/actionplanrules/#{actionplanid}",
+                                                           url: "#{settings.protocol}://#{settings.action_service_host}:#{settings.action_service_port}/actionplans/#{actionplanid}/actionplanrules",
                                                            user: settings.security_user_name,
                                                            password: settings.security_user_password,
                                                            realm: settings.security_realm))
@@ -107,9 +107,10 @@ get '/schedule/actionplan/:actionplanid' do |actionplanid|
                                                              password: settings.security_user_password,
                                                              realm: settings.security_realm))
 
-  actionplan['name'] = actionplandetails['name']
+  actionplan = actionplandetails['name']
 
-  erb :actionplan_rules, locals: { title: "Action Plan Rules for Actionplan #{actionplan}",
-                                  actionplanrules: actionplanrules
+  erb :actionplan_rules, locals: { title: "Action Plan Rules for Action Plan: #{actionplan}",
+                                  actionplanrules: actionplanrules,
+                                  actionplan: actionplan
                                 }
 end

@@ -4,13 +4,10 @@
 <a href="/">Home</a> &gt; Surveys
 <% end %>
 
-<h3>Surveys</h3>
-
 <% if surveys.any? %>
   <table class="secondary">
     <thead>
       <tr>
-        <th>Survey ID</th>
         <th>Survey Name</th>
         <th></th>
       </tr>
@@ -18,11 +15,6 @@
     <tbody>
     <% surveys.each_with_index do |survey, i| %>
       <tr class="<%= i.even? ? 'even' : 'odd ' %>">
-      <% if survey['id'].present? %>
-        <td><%=h survey['id'] %></td>
-        <% else %>
-          <td>-</td>
-        <% end %>
       <% if survey['longName'].present? %>
         <td><%=h survey['longName'] %></td>
       <% else %>

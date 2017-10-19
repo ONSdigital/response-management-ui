@@ -21,9 +21,14 @@ class String
     t.localtime.strftime(DATE_FORMAT)
   end
 
+  def to_notime_date
+    t = Time.parse(self)
+    t.localtime.strftime(DATE_NOTIME_FORMAT)
+  end
+
   def to_report_date
     t = Time.parse(self)
-    t.localtime.strftime('%A, %d %b %Y %H:%M')
+    t.localtime.strftime(REPORT_DATE_FORMAT)
   end
 
   # Naive conversion to title case.
