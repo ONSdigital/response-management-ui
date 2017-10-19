@@ -2,5 +2,6 @@
   <% if pageid == 'home' %><li id="active"><% else %><li><% end %><a href="/">Home</a></li>
   <% if pageid == 'reports' %><li id="active"><% else %><li><% end %><a href="/reports">Reports</a></li>
   <li><a href="<%=h @secure_messages_url %>">Secure messages</a></li>
-  <% if pageid == 'sample_upload' %><li id="active"><% else %><li><% end %><a href="/sample_upload">Upload Sample</a></li>
+  <% if pageid == 'sample_upload' %><li id="active"><% else %><li><% end %><a href="/sample_upload">Upload sample</a></li>
+  <% if pageid == 'associate_collection_exercise' %><li id="associate_collection_exercise"><% else %><li><% end %><a href="/associate_collection_exercise">Associate collection exercise</a></li>
 <% end %>
