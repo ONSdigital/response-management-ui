@@ -1,0 +1,23 @@
+<%= erb :menu, locals: { pageid: 'associate_collection_exercise' } %>
+
+<% content_for :breadcrumbs do %>
+  <a href="/">Home</a> &gt; <a href="/sample_upload">Sample Upload</a> &gt; Associate Collection Exercise
+<% end %>
+
+<% content_for :sub_heading do %>
+  Associate Sample with a Collection Exercise
+<%end%>
+
+<form action="/associate_collection_exercise" enctype="multipart/form-data" method="post">
+    <p>
+      <select id="collectionexercise" name="collectionexercise">
+        <option value="none">None</option>
+        <% if collectionexercises.any? %>
+          <% collectionexercises.each do |collectionexercise| %>
+            <option value="<%=h collectionexercise['id'] %>"><%=h collectionexercise['name'] %></option>
+          <% end %>
+        <% end %>
+      </select>
+    </p>
+  <input class="btn btn-upload-sample-file" type="submit" value="Associate Collection Exercise"/>
+</form>
