@@ -5,8 +5,10 @@ get '/sample_upload' do
 
   RestClient::Request.execute(method: :get,
                               url: "#{settings.protocol}://#{settings.survey_service_host}:#{settings.survey_service_port}/surveys",
-                              user: settings.security_user_name,
-                              password: settings.security_user_password,
+                              #user: settings.security_user_name,
+                              #password: settings.security_user_password,
+                              user: 'admin',
+                              password: 'secret',
                               realm: settings.security_realm) do |surveys_response, _request, _result, &_block|
     surveys = JSON.parse(surveys_response) unless surveys_response.code == 404
   end
@@ -23,8 +25,10 @@ post '/sample_upload' do
 
   RestClient::Request.execute(method: :post,
                               url: "#{settings.protocol}://#{settings.sample_service_host}:#{settings.sample_service_port}/samples/#{survey_type}/fileupload",
-                              user: settings.security_user_name,
-                              password: settings.security_user_password,
+                              #user: settings.security_user_name,
+                              #password: settings.security_user_password,
+                              user: 'admin',
+                              password: 'secret',
                               realm: settings.security_realm,
                               payload: {
                                 multipart: true,

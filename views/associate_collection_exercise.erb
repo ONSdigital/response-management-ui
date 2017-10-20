@@ -1,7 +1,7 @@
 <%= erb :menu, locals: { pageid: 'associate_collection_exercise' } %>
 
 <% content_for :breadcrumbs do %>
-  <a href="/">Home</a> &gt; <a href="/sample_upload">Sample Upload</a> &gt; Associate Collection Exercise
+  <a href="/">Home</a> &gt; Associate Collection Exercise
 <% end %>
 
 <% content_for :sub_heading do %>
@@ -9,6 +9,18 @@
 <%end%>
 
 <form action="/associate_collection_exercise" enctype="multipart/form-data" method="post">
+
+    Associate this sample:
+    <p>
+      <select id="sample" name="sample">
+        <% if samples.any? %>
+          <% samples.each do |sample| %>
+            <option value="<%=h sample['id'] %>"><%=h sample['id'] %></option>
+          <% end %>
+        <% end %>
+      </select>
+    </p>
+    with this Collection Exercise:
     <p>
       <select id="collectionexercise" name="collectionexercise">
         <option value="none">None</option>
