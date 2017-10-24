@@ -60,7 +60,9 @@ post '/associate_collection_exercise' do
                               user: 'admin',
                               password: 'secret',
                               realm: settings.security_realm,
-                              payload: samples.to_json,
+                              payload: {
+                                "sampleSummaryIds": samples
+                              }.to_json,
                               headers: { 'Content-Type' => 'application/json' }) do |put_response_event, _request, _result, &_block|
                               puts 'request: ' + _request.to_s
                               puts 'put_response_event: ' + put_response_event.to_s
